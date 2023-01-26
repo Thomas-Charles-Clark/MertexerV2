@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="Current">
+  <!--Project was exported from assembly: C:\Users\tclark\source\repos\MertexerV2\MertexerV2\ExternalDependencies\UODOTNET.dll-->
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{6DEF570F-2E72-42CF-B1F1-0EF109B0298E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AssemblyName>UODOTNET</AssemblyName>
+    <ApplicationVersion>2.1.0.7149</ApplicationVersion>
+    <RootNamespace>IBMU2.UODOTNET</RootNamespace>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.XML" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="UniRoot.cs" />
+    <Compile Include="SupportClass.cs" />
+    <Compile Include="UniCommand.cs" />
+    <Compile Include="UniCommandException.cs" />
+    <Compile Include="UniDataSet.cs" />
+    <Compile Include="UniDataSetException.cs" />
+    <Compile Include="UniFile.cs" />
+    <Compile Include="UniDictionary.cs" />
+    <Compile Include="UniDynArray.cs" />
+    <Compile Include="UniDynArrayException.cs" />
+    <Compile Include="UniErrorMessage.cs" />
+    <Compile Include="UniFileException.cs" />
+    <Compile Include="UniNLSLocale.cs" />
+    <Compile Include="UniNLSLocaleException.cs" />
+    <Compile Include="UniNLSMap.cs" />
+    <Compile Include="UniNLSMapException.cs" />
+    <Compile Include="UniObjects.cs" />
+    <Compile Include="UniObjectsTokens.cs" />
+    <Compile Include="UniPerfCounter.cs" />
+    <Compile Include="UniPool.cs" />
+    <Compile Include="UniRecord.cs" />
+    <Compile Include="UniRPC.cs" />
+    <Compile Include="UniRPCConnection.cs" />
+    <Compile Include="UniRPCConnectionException.cs" />
+    <Compile Include="UniRPCErrorMessage.cs" />
+    <Compile Include="UniRPCPacket.cs" />
+    <Compile Include="UniRPCPacketException.cs" />
+    <Compile Include="UniRPCPMessage.cs" />
+    <Compile Include="UniRPCSocket.cs" />
+    <Compile Include="UniRPCTokens.cs" />
+    <Compile Include="UniSelectList.cs" />
+    <Compile Include="UniSelectListException.cs" />
+    <Compile Include="UniSequentialFile.cs" />
+    <Compile Include="UniSequentialFileException.cs" />
+    <Compile Include="UniSession.cs" />
+    <Compile Include="UniSessionException.cs" />
+    <Compile Include="UniSubroutine.cs" />
+    <Compile Include="UniSubroutineException.cs" />
+    <Compile Include="UniTokens.cs" />
+    <Compile Include="UniTrace.cs" />
+    <Compile Include="UniTransaction.cs" />
+    <Compile Include="UniTransactionException.cs" />
+    <Compile Include="UniXML.cs" />
+    <Compile Include="UniXMLException.cs" />
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="UODOTNET\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="UODOTNET\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="key.snk" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+</Project>

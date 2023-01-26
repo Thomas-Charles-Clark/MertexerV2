@@ -1,0 +1,83 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29102.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MertexerV2", "MertexerV2\MertexerV2.csproj", "{7386A9DF-C273-4FCA-ACC7-B58FB51CA52C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tester", "Tester\Tester.csproj", "{2E24F3A9-09A2-4D94-9A8B-A6171B4D6459}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7386A9DF-C273-4FCA-ACC7-B58FB51CA52C} = {7386A9DF-C273-4FCA-ACC7-B58FB51CA52C}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MertexerV2SQL", "MertexerV2SQL\MertexerV2SQL.csproj", "{F80E2EE8-AA0D-4DA4-9674-F7672D24559F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7386A9DF-C273-4FCA-ACC7-B58FB51CA52C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7386A9DF-C273-4FCA-ACC7-B58FB51CA52C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7386A9DF-C273-4FCA-ACC7-B58FB51CA52C}.Debug|x64.ActiveCfg = Debug|x64
+		{7386A9DF-C273-4FCA-ACC7-B58FB51CA52C}.Debug|x64.Build.0 = Debug|x64
+		{7386A9DF-C273-4FCA-ACC7-B58FB51CA52C}.Debug|x86.ActiveCfg = Debug|x86
+		{7386A9DF-C273-4FCA-ACC7-B58FB51CA52C}.Debug|x86.Build.0 = Debug|x86
+		{7386A9DF-C273-4FCA-ACC7-B58FB51CA52C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7386A9DF-C273-4FCA-ACC7-B58FB51CA52C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7386A9DF-C273-4FCA-ACC7-B58FB51CA52C}.Release|x64.ActiveCfg = Release|x64
+		{7386A9DF-C273-4FCA-ACC7-B58FB51CA52C}.Release|x64.Build.0 = Release|x64
+		{7386A9DF-C273-4FCA-ACC7-B58FB51CA52C}.Release|x86.ActiveCfg = Release|x86
+		{7386A9DF-C273-4FCA-ACC7-B58FB51CA52C}.Release|x86.Build.0 = Release|x86
+		{2E24F3A9-09A2-4D94-9A8B-A6171B4D6459}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E24F3A9-09A2-4D94-9A8B-A6171B4D6459}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E24F3A9-09A2-4D94-9A8B-A6171B4D6459}.Debug|x64.ActiveCfg = Debug|x64
+		{2E24F3A9-09A2-4D94-9A8B-A6171B4D6459}.Debug|x64.Build.0 = Debug|x64
+		{2E24F3A9-09A2-4D94-9A8B-A6171B4D6459}.Debug|x86.ActiveCfg = Debug|x86
+		{2E24F3A9-09A2-4D94-9A8B-A6171B4D6459}.Debug|x86.Build.0 = Debug|x86
+		{2E24F3A9-09A2-4D94-9A8B-A6171B4D6459}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E24F3A9-09A2-4D94-9A8B-A6171B4D6459}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E24F3A9-09A2-4D94-9A8B-A6171B4D6459}.Release|x64.ActiveCfg = Release|x64
+		{2E24F3A9-09A2-4D94-9A8B-A6171B4D6459}.Release|x64.Build.0 = Release|x64
+		{2E24F3A9-09A2-4D94-9A8B-A6171B4D6459}.Release|x86.ActiveCfg = Release|x86
+		{2E24F3A9-09A2-4D94-9A8B-A6171B4D6459}.Release|x86.Build.0 = Release|x86
+		{F80E2EE8-AA0D-4DA4-9674-F7672D24559F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F80E2EE8-AA0D-4DA4-9674-F7672D24559F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F80E2EE8-AA0D-4DA4-9674-F7672D24559F}.Debug|x64.ActiveCfg = Debug|x64
+		{F80E2EE8-AA0D-4DA4-9674-F7672D24559F}.Debug|x64.Build.0 = Debug|x64
+		{F80E2EE8-AA0D-4DA4-9674-F7672D24559F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F80E2EE8-AA0D-4DA4-9674-F7672D24559F}.Debug|x86.Build.0 = Debug|Any CPU
+		{F80E2EE8-AA0D-4DA4-9674-F7672D24559F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F80E2EE8-AA0D-4DA4-9674-F7672D24559F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F80E2EE8-AA0D-4DA4-9674-F7672D24559F}.Release|x64.ActiveCfg = Release|x64
+		{F80E2EE8-AA0D-4DA4-9674-F7672D24559F}.Release|x64.Build.0 = Release|x64
+		{F80E2EE8-AA0D-4DA4-9674-F7672D24559F}.Release|x86.ActiveCfg = Release|Any CPU
+		{F80E2EE8-AA0D-4DA4-9674-F7672D24559F}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A618FB49-C612-4038-9249-CD9A361B13F4}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 4
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://designersg.visualstudio.com/
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = MertexerV2\\MertexerV2.csproj
+		SccProjectName1 = MertexerV2
+		SccLocalPath1 = MertexerV2
+		SccProjectUniqueName2 = Tester\\Tester.csproj
+		SccProjectName2 = Tester
+		SccLocalPath2 = Tester
+		SccProjectUniqueName3 = MertexerV2SQL\\MertexerV2SQL.csproj
+		SccProjectName3 = MertexerV2SQL
+		SccLocalPath3 = MertexerV2SQL
+	EndGlobalSection
+EndGlobal

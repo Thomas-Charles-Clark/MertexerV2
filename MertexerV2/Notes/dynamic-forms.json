@@ -1,0 +1,16 @@
+{
+	"formId": "form-51E3F1BE-D597-4930-AE55-CA4DE9E8CDC2",
+	"saveProcedure": "portal.ProductForm_Save",
+	"panels": [{
+		"panelId": "panel-4CE04FD0-CD5F-4E94-A4C1-E7E8A0E1E195",
+		"heading": "Panel One",
+		"subHeading": "Panel One Subheading",
+		"layout": "flex",
+		"fields": [{
+			"fieldId": "field-83D9A02D-CDD1-4637-9B98-E011DC96E805",
+			"name": "Field One",
+			"order": 0,
+			"postable": true
+		}]
+	}]
+}

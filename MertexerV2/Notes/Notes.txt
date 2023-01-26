@@ -1,0 +1,149 @@
+﻿   _____                 __                               ____   ____________  
+  /     \   ____________/  |_  ____ ___  ___ ___________  \   \ /   /\_____  \ 
+ /  \ /  \_/ __ \_  __ \   __\/ __ \\  \/  // __ \_  __ \  \   Y   /  /  ____/ 
+/    Y    \  ___/|  | \/|  | \  ___/ >    <\  ___/|  | \/   \     /  /       \ 
+\____|__  /\___  >__|   |__|  \___  >__/\_ \\___  >__|       \___/   \_______ \		Tom Clark
+        \/     \/                 \/      \/    \/                           \/		18/07/2019
+
+
+Outstanding questions:
+
+	To B2C_ or not to B2C_?
+	
+		The document from Keith refers to the need to use B2C_ variants "for a B2C customer".
+		Somehow, over the years, I seem to have lost clarity on exactly what determines my need to call the B2C_ variants. How do we define "a B2C customer"? By CUSREF?
+
+		Keith Willis, 19/07/2019
+
+			"For us a B2C Customer is someone who doesn’t have Trade terms with DG, and therefore won’t have their own record on SLCUST.
+			Orders for this type of customer get created against a cash account, these have references like C0996 and C0999.
+			SALES_ORDER_ALLOC and B2C_SALES_ORDER_ALLOC point to the same process at the back end, PG.SALES_ORDER_ALLOC.WI.
+			B2C_SALES_ORDER_ALLOC passes a parameter to the paragraph that SALES_ORDER_ALLOC does not pass.  
+			In the paragraph this parameter being set means that it uses a different method to determine if there is free stock when attempting to auto allocate stock to a line, 
+			this is because B2C lines can allocate stock from special B2C locations where stock transfers are involved.
+ 
+			Initially B2C functionality also meant the ability to set prices and values on the order line.
+			This actually trips if you pass in the value; if you don’t pass it in then Mertex calculates it, regardless of whether you called SALES_ORDER_ALLOC or B2C_SALES_ORDER_ALLOC.
+ 
+			Additionally B2C functionality also meant the ability to pass in an order number, carriage and haulier values when creating an order.
+			However this functionality actually trips when you pass in an order number of 7 or 9 characters beginning with a 9.
+			In the past this is only something you’d do with B2C orders anyway.
+
+		==	Essentially, yes, by CUSREF... It would seem that this remains important when considering allocations - at least automatic allocations.
+
+			Discussion with Sarah. We might not have an infallible, definitive "USE THIS FLAG" to switch upon. But that's okay. 
+			From Flock, we are aware of numerous C0### customer references which should utilise the B2C_ functionality.
+			Sarah has also detailed to me the presence of the RETAIL.TILL.CUST flag, which is present on for example the KR / MHS account numbers...
+
+			Name				Customer Reference
+
+			UK Retail			C0996
+			USA Retail			C0993
+			Sweden Retail		C0916
+			France Retail		C0917
+			Netherlands Retail	C0918
+			German Retail		C0922
+			Spain Retail		C0927
+			Italy Retail		C0929
+			Austria Retail		C0919
+			Belgium Retail		C0920
+			Portugal Retail		C0923
+			Euro Retail			C0925
+			Ireland Retail		C0928
+			Denmark Retail		C0924
+			Norway Retail		C0926
+			Switzerland Retail	C0931
+			Australia Retail	R2277
+			New Zealand Retail	I2188
+
+		   This is still quite a sizeable question mark; it must be keenly watched!
+
+
+
+	Order Lines:
+		
+		9, "PartDeliveryAllowed", vs. 24. "CustomerFullDispatch" - are these... related? even remotely similar? 
+
+		11, "LineMemos" - this was always singular, but in the name column it's plural, but in the description
+			column it's singular... which is it?
+		
+		14, "Autokey" - okay, we don't use it... but what is it?
+
+		16, "SpecificBatchIndicator": is this the actual batch no. to reserve from, if required?
+
+		27, "OrderLineReferences" & 28, "LineMemoType" - great, but... what about 11, LineMemo(s)?
+
+		30, "RetailOrder" - does this signify a retail order of the type which would normally go through the Till 
+			side of Mertex? Does this need setting if we provide Till, Session, Card & Payment information?
+
+		33, "ProcessAnswers" - what are these Process Questions it mentions?
+
+
+	Order Head:
+
+		20, "PromotionCode" - vs 57, "Order Promotion Code" & 58, "Order Promotion Discount" ?
+
+		33, "DeliveryTerms" & 34, "DeliveryType" - discriptions missing.
+			[All those whose discriptions are missing, in fact, should have descriptions. Even the bloody obvious ones.]
+
+
+	!! Changes to the B2C_STOCK_ENQUIRY: the uvSelectStatement must change format in the SSDT package. Need the creation of the bloody great PRODCODE = "" OR PRODCODE = "" thing.
+	... We WERE already passing just a combined string of "", "", "" product codes - why does this no longer work...? Can we not just get that working rather than... hmmm.
+
+
+
+	Rack Location:
+		
+		When allocating through SB at the moment, we can choose from Racks.
+		This becomes important with finished product allocation and we need to know how that stock is allocated behind the scenes.
+		KR - when in a retail scenario, and the stock is e.g. to be taken away, what allocation takes place / is necessary here?
+
+
+	Back Order allocation to a Purchase Order
+		
+		- We want to ask the question: can specify allocation of back ordered lines / quantities to specific purchase orders? Please?
+
+
+	Hard vs Soft Allocation
+	
+		What soft allocation rules are there?
+
+
+	Retail Orders
+		?
+
+
+
+	Allocation fun & games!
+
+		Needs to happen real-time without blocking the user, however all failures need to inform the user.
+
+		We must traffic light all allocations about each line - red if you haven't made the allocation yet, yellow if you have requested it and are awaiting a response, green
+		if you've got an allocation id. 
+
+		We must clean up behind ourselves: if the basket is cancelled or deleted we must release all allocations it holds.
+
+		We probably need portal.Member_Basket_Allocation.
+
+
+
+	Testing Orders
+
+		We need to test a vertiable oodle of scenarios, despite Sarah saying we only need to test three.
+
+		Standard Orders
+			- eCommerce 
+				- Gift Boxing
+			- Trade
+			- Retail (with payments, session & till detail, etc.)
+			
+		Orders using PreAllocations
+			- !
+
+
+
+	Logging
+
+		- Do we event want to write text logging? Hmmm. Maybe not - I haven't had to read any of the current integration's text logs for a very, very long time now...
+			... and they're not all that coherent or helpful when I do, if I recall correctly.
+			So no, no text logging. But... it's useful to have major error alert emails... but SQL can send those.

@@ -1,0 +1,354 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{7386A9DF-C273-4FCA-ACC7-B58FB51CA52C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MertexerV2</RootNamespace>
+    <AssemblyName>MertexerV2</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CsvHelper, Version=8.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>ExternalDependencies\CsvHelper.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="UODOTNET, Version=2.1.0.7149, Culture=neutral, PublicKeyToken=335f3fbd4be82339">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>ExternalDependencies\UODOTNET.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AccountFunctions\AccountBatchSelect.cs" />
+    <Compile Include="AccountFunctions\AccountFunctionsCommon.cs" />
+    <Compile Include="AccountFunctions\AccountListProformaInvoices.cs" />
+    <Compile Include="AccountFunctions\AccountListInvoices.cs" />
+    <Compile Include="AccountFunctions\AccountDocuments.cs" />
+    <Compile Include="AccountFunctions\AccountOrders.cs" />
+    <Compile Include="AccountFunctions\AccountAddresses.cs" />
+    <Compile Include="AccountFunctions\AccountSummaryRecentPayments.cs" />
+    <Compile Include="AccountFunctions\AccountSummary.cs" />
+    <Compile Include="AccountFunctions\AccountUpsert.cs" />
+    <Compile Include="Controllers\AllocationController.cs" />
+    <Compile Include="DAL\MertexConnection.cs" />
+    <Compile Include="EDAReplacement\EDAReplacement.cs" />
+    <Compile Include="GeneralFunctions\MaxFieldLengths.cs" />
+    <Compile Include="Models\Company\Company.cs" />
+    <Compile Include="Models\ExchangeRate\ExchangeRate.cs" />
+    <Compile Include="Models\Pricing\POCost.cs" />
+    <Compile Include="Models\Pricing\POPriceList.cs" />
+    <Compile Include="Models\Product\Additional.cs" />
+    <Compile Include="Models\Product\Buyer.cs" />
+    <Compile Include="Models\Product\Composition.cs" />
+    <Compile Include="Models\Product\Collection.cs" />
+    <Compile Include="Models\Product\ItemType.cs" />
+    <Compile Include="Models\Product\Flame.cs" />
+    <Compile Include="Models\Product\Design.cs" />
+    <Compile Include="Models\Product\OriginCountry.cs" />
+    <Compile Include="Models\Product\ProductGroup.cs" />
+    <Compile Include="Models\Product\Pattern.cs" />
+    <Compile Include="Models\Product\PatternMatch.cs" />
+    <Compile Include="Models\Product\Test.cs" />
+    <Compile Include="Models\Product\ContractFlame.cs" />
+    <Compile Include="Models\Product\MertexType.cs" />
+    <Compile Include="Models\Product\UKFlame.cs" />
+    <Compile Include="Models\Product\Usage.cs" />
+    <Compile Include="Models\Product\AfterCare.cs" />
+    <Compile Include="Models\Product\ProductType.cs" />
+    <Compile Include="Models\Product\Supplier.cs" />
+    <Compile Include="Pricing\QuantityBreakCostPrice.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Models\Accounts\AccountModels.cs" />
+    <Compile Include="Models\Accounts\TradeAccount.cs" />
+    <Compile Include="Models\DataSource\TradeAccountDataSourceInfo.cs" />
+    <Compile Include="Models\EDAReplacement\ProdCode.cs" />
+    <Compile Include="Models\EDAReplacement\SLCustStub.cs" />
+    <Compile Include="Models\EDAReplacement\STProdAftCare.cs" />
+    <Compile Include="Models\EDAReplacement\Additional.cs" />
+    <Compile Include="Models\EDAReplacement\InvSund.cs" />
+    <Compile Include="Models\EDAReplacement\OECarriage.cs" />
+    <Compile Include="Models\EDAReplacement\DelAdd.cs" />
+    <Compile Include="Models\EDAReplacement\TCCHead.cs" />
+    <Compile Include="Models\EDAReplacement\TCCAction.cs" />
+    <Compile Include="Models\EDAReplacement\TCCLine.cs" />
+    <Compile Include="Models\EDAReplacement\XRate.cs" />
+    <Compile Include="Models\EDAReplacement\CLComp.cs" />
+    <Compile Include="Models\EDAReplacement\OEHaulier.cs" />
+    <Compile Include="Models\EDAReplacement\OEDNHead.cs" />
+    <Compile Include="Models\EDAReplacement\OEDNLine.cs" />
+    <Compile Include="Models\EDAReplacement\POHead.cs" />
+    <Compile Include="Models\EDAReplacement\POListPrice.cs" />
+    <Compile Include="Models\EDAReplacement\CLQualDes.cs" />
+    <Compile Include="Models\EDAReplacement\Supplier.cs" />
+    <Compile Include="Models\EDAReplacement\PODetail.cs" />
+    <Compile Include="Models\EDAReplacement\STProdLoc.cs" />
+    <Compile Include="Models\EDAReplacement\STProdMaster.cs" />
+    <Compile Include="Models\EDAReplacement\TOELine.cs" />
+    <Compile Include="Models\EDAReplacement\TOEHead.cs" />
+    <Compile Include="Models\EDAReplacement\PRICECROSS.cs" />
+    <Compile Include="Models\General\General.cs" />
+    <Compile Include="Models\Interfaces\IDeserializeFromUniDynArray.cs" />
+    <Compile Include="Models\OrderImport\ImportLine.cs" />
+    <Compile Include="Models\Product\MakeDetail.cs" />
+    <Compile Include="Models\Product\PatternBook.cs" />
+    <Compile Include="Models\Product\Product.cs" />
+    <Compile Include="Models\Product\OrderFormGroup.cs" />
+    <Compile Include="Models\Product\ProductTemplate.cs" />
+    <Compile Include="Models\Product\Quality.cs" />
+    <Compile Include="Models\Tracking\TrackingModels.cs" />
+    <Compile Include="GeneralFunctions\Selector.cs" />
+    <Compile Include="ProductFunctions\Additional_Select.cs" />
+    <Compile Include="ProductFunctions\Additional_Upsert.cs" />
+    <Compile Include="ProductFunctions\ContractFlame_Select.cs" />
+    <Compile Include="ProductFunctions\Design_Select.cs" />
+    <Compile Include="ProductFunctions\Composition_Select.cs" />
+    <Compile Include="ProductFunctions\Composition_Upsert.cs" />
+    <Compile Include="ProductFunctions\Collection_Select.cs" />
+    <Compile Include="ProductFunctions\Collection_Upsert.cs" />
+    <Compile Include="ProductFunctions\ProductTemplate_Select.cs" />
+    <Compile Include="ProductFunctions\ProductTemplate_Upsert.cs" />
+    <Compile Include="ProductFunctions\PatternBook_Select.cs" />
+    <Compile Include="ProductFunctions\PatternBook_Upsert.cs" />
+    <Compile Include="ProductFunctions\OrderFormGroup_Select.cs" />
+    <Compile Include="ProductFunctions\OrderFormGroup_Upsert.cs" />
+    <Compile Include="ProductFunctions\MakeDetail_Select.cs" />
+    <Compile Include="ProductFunctions\MakeDetail_Upsert.cs" />
+    <Compile Include="ProductFunctions\ProductGroup_Select.cs" />
+    <Compile Include="ProductFunctions\ProductGroup_Upsert.cs" />
+    <Compile Include="ProductFunctions\ItemType_Select.cs" />
+    <Compile Include="ProductFunctions\ItemType_Upsert.cs" />
+    <Compile Include="ProductFunctions\OriginCountry_Select.cs" />
+    <Compile Include="ProductFunctions\OriginCountry_Upsert.cs" />
+    <Compile Include="ProductFunctions\Pattern_Select.cs" />
+    <Compile Include="ProductFunctions\PatternMatch_Select.cs" />
+    <Compile Include="ProductFunctions\Design_Upsert.cs" />
+    <Compile Include="ProductFunctions\Pattern_Upsert.cs" />
+    <Compile Include="ProductFunctions\Supplier_Select.cs" />
+    <Compile Include="ProductFunctions\Supplier_Upsert.cs" />
+    <Compile Include="ProductFunctions\Buyer_Select.cs" />
+    <Compile Include="ProductFunctions\Type_Select.cs" />
+    <Compile Include="ProductFunctions\PatternMatch_Upsert.cs" />
+    <Compile Include="ProductFunctions\Buyer_Upsert.cs" />
+    <Compile Include="ProductFunctions\Type_Upsert.cs" />
+    <Compile Include="ProductFunctions\UKFlame_Select.cs" />
+    <Compile Include="ProductFunctions\ContractFlame_Upsert.cs" />
+    <Compile Include="ProductFunctions\UKFlame_Upsert.cs" />
+    <Compile Include="ProductFunctions\Test_Select.cs" />
+    <Compile Include="ProductFunctions\Test_Upsert.cs" />
+    <Compile Include="ProductFunctions\Flame_Select.cs" />
+    <Compile Include="ProductFunctions\Usage_Select.cs" />
+    <Compile Include="ProductFunctions\Flame_Upsert.cs" />
+    <Compile Include="ProductFunctions\Usage_Upsert.cs" />
+    <Compile Include="ProductFunctions\Product_Select.cs" />
+    <Compile Include="ProductFunctions\ProductType_Select.cs" />
+    <Compile Include="ProductFunctions\ProductType_Upsert.cs" />
+    <Compile Include="ProductFunctions\AfterCare_Select.cs" />
+    <Compile Include="ProductFunctions\AfterCare_Upsert.cs" />
+    <Compile Include="ProductFunctions\Quality_Upsert.cs" />
+    <Compile Include="ProductFunctions\Product_Upsert.cs" />
+    <Compile Include="ProductFunctions\Quality_Select.cs" />
+    <Compile Include="SQLFunctions\AccountSelect.cs" />
+    <Compile Include="SQLFunctions\AccountUpsert.cs" />
+    <Compile Include="SQLFunctions\AddressBookFunctions.cs" />
+    <Compile Include="Models\Address\DeliveryAddress.cs" />
+    <Compile Include="Models\Address\InvoiceAddress.cs" />
+    <Compile Include="Models\Credit\CreditCheckResult.cs" />
+    <Compile Include="Models\EORI\EORINumberLookupResult.cs" />
+    <Compile Include="Models\Keys\Key.cs" />
+    <Compile Include="Models\OldTradeSiteImport\Header.cs" />
+    <Compile Include="Models\OldTradeSiteImport\Line.cs" />
+    <Compile Include="Models\OrderImport\FileValidationResult.cs" />
+    <Compile Include="Models\OrderImport\OrderHeadToImport.cs" />
+    <Compile Include="Models\OrderImport\OrderLineToImport.cs" />
+    <Compile Include="Models\PreAllocation\PreAllocationCreation.cs" />
+    <Compile Include="Models\Order\GiftBox.cs" />
+    <Compile Include="Models\Order\Order.cs" />
+    <Compile Include="Models\Order\OrderLine.cs" />
+    <Compile Include="Controllers\OrderController.cs" />
+    <Compile Include="Parcels\Parcels.cs" />
+    <Compile Include="SQLFunctions\JLProductReference.cs" />
+    <Compile Include="SQLFunctions\QuantityBreakCostPrice.cs" />
+    <Compile Include="Utilities\Cryptography.cs" />
+    <Compile Include="Utilities\MertexConnectionDetails.cs" />
+    <Compile Include="Models\PreAllocation\PreAllocationStatus.cs" />
+    <Compile Include="Models\Status\TrackingResult.cs" />
+    <Compile Include="Models\Status\LineStatusResult.cs" />
+    <Compile Include="Models\Stock\B2CEnquiryDataFetch.cs" />
+    <Compile Include="Models\Stock\B2CEnquiryResult.cs" />
+    <Compile Include="Models\Stock\BatchPieceResult.cs" />
+    <Compile Include="Models\TCL\TCLItemResult.cs" />
+    <Compile Include="Models\VAT\VATNumberLookupResult.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SQLFunctions\Allocation_Status.cs" />
+    <Compile Include="SQLFunctions\Allocation_Update.cs" />
+    <Compile Include="SQLFunctions\Allocation_Delete.cs" />
+    <Compile Include="SQLFunctions\Allocation_Merge.cs" />
+    <Compile Include="SQLFunctions\Allocation_Split.cs" />
+    <Compile Include="SQLFunctions\Allocation_Create.cs" />
+    <Compile Include="SQLFunctions\B2BOrderImport.cs" />
+    <Compile Include="SQLFunctions\Credit_Check.cs" />
+    <Compile Include="SQLFunctions\Dedupe.cs" />
+    <Compile Include="SQLFunctions\DeliveryReference_Search.cs" />
+    <Compile Include="SQLFunctions\KeyFetcher.cs" />
+    <Compile Include="SQLFunctions\LineTracking.cs" />
+    <Compile Include="SQLFunctions\LineStatus.cs" />
+    <Compile Include="SQLFunctions\Order_Submit.cs" />
+    <Compile Include="SQLFunctions\Rack_Check.cs" />
+    <Compile Include="SQLFunctions\Stock_B2C.cs" />
+    <Compile Include="SQLFunctions\Stock_PieceBatchQuantity.cs" />
+    <Compile Include="SQLFunctions\TrackingUpdate.cs" />
+    <Compile Include="SQLFunctions\TradeOrderImport.cs" />
+    <Compile Include="SQLFunctions\EORINumberLookup.cs" />
+    <Compile Include="SQLFunctions\VATNumberLookup.cs" />
+    <Compile Include="Utilities\Framework.cs" />
+    <Compile Include="Utilities\OrderedContractResolver.cs" />
+    <Compile Include="Utilities\OrderTablesBuilder.cs" />
+    <Compile Include="Utilities\SQLCommandExecutor.cs" />
+    <Compile Include="Utilities\CommandExecutor.cs" />
+    <Compile Include="Utilities\QueryExecutor.cs" />
+    <Compile Include="Utilities\UniUpsert.cs" />
+    <Compile Include="Utilities\UniVerseSerializationBase.cs" />
+    <Compile Include="Utilities\UniVerseSerializer.cs" />
+    <Compile Include="Utilities\UniVerseFieldName.cs" />
+    <Compile Include="Utilities\UniVerseFileName.cs" />
+    <Compile Include="Utilities\UniVerseForeignKey.cs" />
+    <Compile Include="Utilities\UniVerseIndexAttribute.cs" />
+    <Compile Include="Utilities\UniVerseConversionAttribute.cs" />
+    <Compile Include="Utilities\UniVerseMultiValueAttribute.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="key.snk">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="NLog.config" />
+    <None Include="Notes\DG Web Integration Documentation v1.1.pdf" />
+    <None Include="Notes\DG Web Integration Documentation v1.10.pdf" />
+    <None Include="Notes\DG Web Integration Documentation v1.11.pdf" />
+    <None Include="Notes\DG Web Integration Documentation v1.12.pdf" />
+    <None Include="Notes\DG Web Integration Documentation v1.13.pdf" />
+    <None Include="Notes\DG Web Integration Documentation v1.14.pdf" />
+    <None Include="Notes\DG Web Integration Documentation v1.15.pdf" />
+    <None Include="Notes\DG Web Integration Documentation v1.2.pdf" />
+    <None Include="Notes\DG Web Integration Documentation v1.3.pdf" />
+    <None Include="Notes\DG Web Integration Documentation v1.4.pdf" />
+    <None Include="Notes\DG Web Integration Documentation v1.5.pdf" />
+    <None Include="Notes\DG Web Integration Documentation v1.6.pdf" />
+    <None Include="Notes\DG Web Integration Documentation v1.7.pdf" />
+    <None Include="Notes\DG Web Integration Documentation v1.8.pdf" />
+    <None Include="Notes\DG Web Integration Documentation v1.9.pdf" />
+    <None Include="Notes\DG Web Integration Documentation v1.pdf" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ExternalDependencies\CsvHelper.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExternalDependencies\UODOTNET.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Notes\AddAssembly.sql" />
+    <Content Include="Notes\AddFunctions.sql" />
+    <None Include="Notes\DropFunctions.sql" />
+    <Content Include="Notes\Notes.txt" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>echo F | xcopy /y $(TargetPath) "C:\Website\Development\wwwDesignersGuild\wwwDesignersGuild\ExternalDependencies\$(TargetFileName)"
+echo F | xcopy /y $(TargetPath) "C:\Website\Preview\wwwDesignersGuild\wwwDesignersGuild\ExternalDependencies\$(TargetFileName)"
+echo F | xcopy /y $(TargetPath) "C:\Website\Production\wwwDesignersGuild\wwwDesignersGuild\ExternalDependencies\$(TargetFileName)"
+echo F | xcopy /y $(TargetPath) "C:\Users\tclark\Documents\Visual Studio 2015\Projects\Portal\Portal\Libraries\$(TargetFileName)"</PostBuildEvent>
+  </PropertyGroup>
+</Project>

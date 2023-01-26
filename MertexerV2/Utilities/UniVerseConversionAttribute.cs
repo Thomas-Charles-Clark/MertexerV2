@@ -1,0 +1,21 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MertexerV2.Utilities
+{
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+    internal class UniVerseConversionAttribute : Attribute
+    {
+        public string Code;
+
+        public UniVerseConversionAttribute(
+            string code
+            )
+        {
+            Code = code;
+        }
+    }
+}

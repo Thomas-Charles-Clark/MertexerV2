@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace MertexerV2.ProductFunctions
 {
-    public class TypeCode
+    public class MertexTypeCode
     {
         public string Code { get; set; }
     }
@@ -26,7 +26,7 @@ namespace MertexerV2.ProductFunctions
     {
         [Microsoft.SqlServer.Server.SqlFunction(
             DataAccess = DataAccessKind.Read,
-            FillRowMethodName = "TypeSelect_FillRow")]
+            FillRowMethodName = "MertexTypeSelect_FillRow")]
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
         public static IEnumerable Select(string UniVerseAccount, string TypeCodes)
         {
@@ -44,7 +44,7 @@ namespace MertexerV2.ProductFunctions
             else
             {
                 var results = Selector<MertexType>.Select(
-                    JsonConvert.DeserializeObject<IEnumerable<TypeCode>>(TypeCodes).Select(p => p.Code),
+                    JsonConvert.DeserializeObject<IEnumerable<MertexTypeCode>>(TypeCodes).Select(p => p.Code),
                     true,
                     false,
                     50,
@@ -58,16 +58,16 @@ namespace MertexerV2.ProductFunctions
             }
         }
 
-        public static void TypeSelect_FillRow(
+        public static void MertexTypeSelect_FillRow(
             object obj,
             out SqlString Code,
-            out SqlString Description
+            out SqlString Name
             )
         {
             var p = (Models.Product.MertexType)obj;
 
-            Code = p.Key?.TrimReduceTruncate(50);
-            Description = p.Description?.TrimReduceTruncate(50);
+            Code = p.Key?.TrimReduceTruncate(10);
+            Name = p.Name?.TrimReduceTruncate(50);
         }
     }
 }

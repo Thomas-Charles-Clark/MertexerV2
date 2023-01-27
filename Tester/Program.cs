@@ -521,7 +521,7 @@ namespace Tester
 
             //Console.WriteLine($"FlameFunctions.Select returned {results.Count} results in {stopwatch.Elapsed}");
 
-            var maxFieldLengths = MaxFieldLengths<MakeDetail>.Execute(null, true, false, 100);
+            var maxFieldLengths = MaxFieldLengths<MertexerV2.Models.Product.Supplier>.Execute(null, true, false, 100);
 
             Console.WriteLine($"MaxFieldLengths returned in {stopwatch.Elapsed}");
 
@@ -531,7 +531,7 @@ namespace Tester
 
             Console.WriteLine();
 
-            var selectResult = Selector<MakeDetail>.Select("MTO", true, false);
+            var selectResult = Selector<MertexerV2.Models.Product.Supplier>.Select("G0033", true, false);
 
             Console.WriteLine(selectResult);
 

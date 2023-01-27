@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace MertexerV2.Models.Product
 {
+    /// <summary>
+    /// Defunct: EMPTY TABLE 26/01/2023
+    /// </summary>
     [UniVerseFileName("STPATBK.DES")]
     public class PatternBook : UniVerseSerializationBase<string>
     {
@@ -41,7 +44,7 @@ namespace MertexerV2.Models.Product
         [UniVerseIndex(1)]
         [UniVerseMultiValue]
         [UniVerseFieldName("SEQ.NO")]
-        public IEnumerable<string> SequenceNumber { get; set; }
+        public IEnumerable<string> SortOrders { get; set; }
 
         /// <summary>
         /// Fabric Code (MV)
@@ -49,6 +52,6 @@ namespace MertexerV2.Models.Product
         [UniVerseIndex(2)]
         [UniVerseMultiValue]
         [UniVerseFieldName("FABCODE")]
-        public IEnumerable<string> FabricCode { get; set; }
+        public IEnumerable<string> FabricCodes { get; set; }
     }
 }

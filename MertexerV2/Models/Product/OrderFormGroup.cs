@@ -42,10 +42,10 @@ namespace MertexerV2.Models.Product
         public string Name { get; set; }
 
         /// <summary>
-        /// Order Form Group Name
+        /// SortOrder
         /// </summary>
         [UniVerseIndex(2)]
         [UniVerseFieldName("SS.SORT")]
-        public string Sort { get; set; }
+        public int? SortOrder { get; set; }
     }
 }

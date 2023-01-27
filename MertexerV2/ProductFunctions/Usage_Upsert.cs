@@ -11,14 +11,14 @@ using System.Linq;
 
 namespace MertexerV2.ProductFunctions
 {
-    public static partial class AfterCareFunctions
+    public static partial class UsageFunctions
     {
         [SqlFunction]
         public static string Upsert(string UniVerseAccount, string AfterCareJSON)
         {
-            var afterCare = JsonConvert.DeserializeObject<AfterCare>(AfterCareJSON);
+            var usage = JsonConvert.DeserializeObject<Usage>(AfterCareJSON);
 
-            var fileName = typeof(AfterCare).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
+            var fileName = typeof(Usage).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
                     .Cast<UniVerseFileNameAttribute>()
                     .Single()
                     .FileName;
@@ -29,7 +29,7 @@ namespace MertexerV2.ProductFunctions
 
                 try
                 {
-                    var extantRecord = uniVerseFile.ReadField(afterCare.Key, 0).StringValue;
+                    var extantRecord = uniVerseFile.ReadField(usage.Key, 0).StringValue;
                 }
                 catch (IBMU2.UODOTNET.UniFileException)
                 {
@@ -39,22 +39,22 @@ namespace MertexerV2.ProductFunctions
                     // then write all the fields
                     // then unlock the record
                     var dataSet = new IBMU2.UODOTNET.UniDataSet(ce.Session);
-                    dataSet.Insert(afterCare.Key);
+                    dataSet.Insert(usage.Key);
 
                     //slcustFile.LockFile();
                     uniVerseFile.WriteRecords(dataSet);
                     //slcustFile.UnlockFile();
                 }
 
-                uniVerseFile.LockRecord(afterCare.Key, 1);
+                uniVerseFile.LockRecord(usage.Key, 1);
 
-                UniUpsert<AfterCare>.Upsert(afterCare, uniVerseFile);
+                UniUpsert<Usage>.Upsert(usage, uniVerseFile);
 
-                uniVerseFile.UnlockRecord(afterCare.Key);
+                uniVerseFile.UnlockRecord(usage.Key);
 
             }
 
-            return afterCare.Key;
+            return usage.Key;
         }
     }
 }

@@ -72,7 +72,7 @@ namespace MertexerV2.ProductFunctions
         {
             var p = (Models.Product.Supplier)obj;
 
-            Code = p.Key?.TrimReduceTruncate(50);
+            Code = p.Key?.TrimReduceTruncate(10);
             Name = p.Name?.TrimReduceTruncate(50);
             Currency = p.Currency?.TrimReduceTruncate(10);
             DutyPercentage = p.DutyPercentage ?? SqlDecimal.Null;

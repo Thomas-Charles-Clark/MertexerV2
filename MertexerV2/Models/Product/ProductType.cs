@@ -39,6 +39,10 @@ namespace MertexerV2.Models.Product
         [UniVerseFieldName("TITLE")]
         public string Name { get; set; }
 
+        /// <summary>
+        /// These multi-valued fields are some crazy BS
+        /// They dictate which fields to lift, separated by "SP" indicating a space.
+        /// </summary>
         [UniVerseIndex(2)]
         [UniVerseMultiValue]
         [UniVerseFieldName("DESC1")]

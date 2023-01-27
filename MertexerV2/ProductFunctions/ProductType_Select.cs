@@ -24,7 +24,7 @@ namespace MertexerV2.ProductFunctions
 
     public static partial class ProductTypeSelect
     {
-        [Microsoft.SqlServer.Server.SqlFunction(
+        [SqlFunction(
             DataAccess = DataAccessKind.Read,
             FillRowMethodName = "ProductTypeSelect_FillRow")]
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]

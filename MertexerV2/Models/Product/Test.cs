@@ -37,11 +37,11 @@ namespace MertexerV2.Models.Product
         }
 
         /// <summary>
-        /// Description
+        /// Name
         /// </summary>
         [UniVerseIndex(1)]
         [UniVerseFieldName("DESCRIPTION")]
-        public string Description { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// Market

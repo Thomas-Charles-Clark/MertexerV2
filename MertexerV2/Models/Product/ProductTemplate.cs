@@ -36,33 +36,18 @@ namespace MertexerV2.Models.Product
         }
 
         /// <summary>
+        /// Description
+        /// </summary>
+        [UniVerseIndex(1, 1)]
+        [UniVerseFieldName("TEMPLATE.DESC")]
+        public string Name { get; set; }
+
+        /// <summary>
         /// No idea
         /// </summary>
         [UniVerseIndex(1,2)]
         [UniVerseFieldName("FIRST.USER.SCREEN")]
         public string FirstUserScreen { get; set; }
-
-        /// <summary>
-        /// Product Type (Largely this just lends formula for various text descriptions)
-        /// </summary>
-        [UniVerseIndex(191)]
-        [UniVerseFieldName("PRODTYPE.DES")]
-        public string ProductType { get; set; }
-
-        /// <summary>
-        /// Length at which to remeasure (fabric)
-        /// </summary>
-        [UniVerseIndex(57,59)]
-        [UniVerseConversion("MR12")]
-        [UniVerseFieldName("QUAL.REMEASURE.LGTH")]
-        public string RemeasureLength { get; set; }
-
-        /// <summary>
-        /// Description
-        /// </summary>
-        [UniVerseIndex(1,1)]
-        [UniVerseFieldName("TEMPLATE.DESC")]
-        public string Description { get; set; }
 
         /// <summary>
         /// Group Code
@@ -118,7 +103,22 @@ namespace MertexerV2.Models.Product
         /// </summary>
         [UniVerseIndex(28)]
         [UniVerseFieldName("BATCH.PROD")]
-        public string MultipleBatches { get; set; }
+        public bool MultipleBatches { get; set; }
+
+        /// <summary>
+        /// Length at which to remeasure (fabric)
+        /// </summary>
+        [UniVerseIndex(57, 59)]
+        [UniVerseConversion("MR12")]
+        [UniVerseFieldName("QUAL.REMEASURE.LGTH")]
+        public decimal? RemeasureLength { get; set; }
+
+        /// <summary>
+        /// Product Type (Largely this just lends formula for various text descriptions)
+        /// </summary>
+        [UniVerseIndex(191)]
+        [UniVerseFieldName("PRODTYPE.DES")]
+        public string ProductType { get; set; }
 
         /// <summary>
         /// Sales Analysis (D)
@@ -139,7 +139,7 @@ namespace MertexerV2.Models.Product
         /// </summary>
         [UniVerseIndex(218)]
         [UniVerseFieldName("ALLOC.AT.BATCH")]
-        public string AllocateAtBatchLevel { get; set; }
+        public bool AllocateAtBatchLevel { get; set; }
 
         /// <summary>
         /// Valuation cost to use
@@ -160,7 +160,7 @@ namespace MertexerV2.Models.Product
         /// </summary>
         [UniVerseIndex(287)]
         [UniVerseFieldName("MAXREMLENGTH")]
-        public string MaximumRemnantLength { get; set; }
+        public decimal? MaximumRemnantLength { get; set; }
 
         /// <summary>
         /// Current Status
@@ -174,7 +174,7 @@ namespace MertexerV2.Models.Product
         /// </summary>
         [UniVerseIndex(300)]
         [UniVerseFieldName("PIECE.ALLOC")]
-        public string PieceAllocation { get; set; }
+        public bool PieceAllocation { get; set; }
 
         /// <summary>
         /// Repetitive Batches? "Is it the same batch number"? Repeating batch means "same batch number again and again", or:
@@ -185,14 +185,14 @@ namespace MertexerV2.Models.Product
         /// </summary>
         [UniVerseIndex(302)]
         [UniVerseFieldName("REPETATIVE.BATCHES")]
-        public string RepetitiveBatches { get; set; }
+        public bool RepetitiveBatches { get; set; }
 
         /// <summary>
         /// Sample Product
         /// </summary>
         [UniVerseIndex(328)]
         [UniVerseFieldName("SAMPLE.PROD")]
-        public string SampleProduct { get; set; }
+        public bool SampleProduct { get; set; }
 
         /// <summary>
         /// Print Pieces...? 
@@ -200,14 +200,14 @@ namespace MertexerV2.Models.Product
         /// </summary>
         [UniVerseIndex(341)]
         [UniVerseFieldName("PRINTPIECES")]
-        public string PieceBatchOnPickList { get; set; }
+        public bool PieceBatchOnPickList { get; set; }
 
         /// <summary>
         /// Piece Only Orders?
         /// </summary>
         [UniVerseIndex(462)]
         [UniVerseFieldName("PIECE.ONLY.ORD")]
-        public string PieceOnlyOrders { get; set; }
+        public bool PieceOnlyOrders { get; set; }
 
         /// <summary>
         /// Product Class 2
@@ -222,14 +222,14 @@ namespace MertexerV2.Models.Product
         [UniVerseIndex(610)]
         [UniVerseConversion("MR23")]
         [UniVerseFieldName("CUTTING.LEN.DES")]
-        public string CuttingLength { get; set; }
+        public decimal? CuttingLength { get; set; }
 
         /// <summary>
         /// Minimum Replenishment
         /// </summary>
         [UniVerseIndex(612)]
         [UniVerseFieldName("PICK.MIN.STOCK.TDW")]
-        public string MinimumReplenishment { get; set; }
+        public decimal? MinimumReplenishment { get; set; }
 
         /// <summary>
         /// Bulk Rack
@@ -243,7 +243,7 @@ namespace MertexerV2.Models.Product
         /// </summary>
         [UniVerseIndex(653)]
         [UniVerseFieldName("AUTO.ALLOC.MULT")]
-        public string AutoAllocateMultipleTimes { get; set; }
+        public bool AutoAllocateMultipleTimes { get; set; }
 
         /// <summary> 
         /// Order Type 
@@ -264,7 +264,7 @@ namespace MertexerV2.Models.Product
         /// </summary>
         [UniVerseIndex(735)]
         [UniVerseFieldName("SO.ALLOC.FULL.DES")]
-        public string FullOrderOnly { get; set; }
+        public bool FullOrderOnly { get; set; }
 
         /// <summary>
         /// Charge On
@@ -292,7 +292,7 @@ namespace MertexerV2.Models.Product
         /// </summary>
         [UniVerseIndex(811)]
         [UniVerseFieldName("BESPOKE.RUG.DES")]
-        public string BespokeRug { get; set; }
+        public bool BespokeRug { get; set; }
 
         /// <summary>
         /// Part Number Range Start
@@ -327,6 +327,6 @@ namespace MertexerV2.Models.Product
         /// </summary>
         [UniVerseIndex(1009)]
         [UniVerseFieldName("GEN.BARCODE")]
-        public string CreateEANCodes { get; set; }
+        public bool CreateEANCodes { get; set; }
     }
 }

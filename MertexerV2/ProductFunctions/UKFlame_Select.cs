@@ -67,7 +67,7 @@ namespace MertexerV2.ProductFunctions
         {
             var p = (UKFlame)obj;
 
-            Code = p.Key?.TrimReduceTruncate(50);
+            Code = p.Key?.TrimReduceTruncate(2);
             Description = p.Description?.TrimReduceTruncate(50);
             ImageName = p.ImageName?.TrimReduceTruncate(50);
             ImageFont = p.ImageFont ?? SqlByte.Null;

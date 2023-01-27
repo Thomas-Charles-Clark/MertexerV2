@@ -16,7 +16,7 @@ namespace MertexerV2.ProductFunctions
         [SqlFunction]
         public static string Upsert(string UniVerseAccount, string SupplierJSON)
         {
-            var usage = JsonConvert.DeserializeObject<Supplier>(SupplierJSON);
+            var supplier = JsonConvert.DeserializeObject<Supplier>(SupplierJSON);
 
             var fileName = typeof(Supplier).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
                     .Cast<UniVerseFileNameAttribute>()
@@ -29,7 +29,7 @@ namespace MertexerV2.ProductFunctions
 
                 try
                 {
-                    var extantRecord = uniVerseFile.ReadField(usage.Key, 0).StringValue;
+                    var extantRecord = uniVerseFile.ReadField(supplier.Key, 0).StringValue;
                 }
                 catch (IBMU2.UODOTNET.UniFileException)
                 {
@@ -39,129 +39,22 @@ namespace MertexerV2.ProductFunctions
                     // then write all the fields
                     // then unlock the record
                     var dataSet = new IBMU2.UODOTNET.UniDataSet(ce.Session);
-                    dataSet.Insert(usage.Key);
+                    dataSet.Insert(supplier.Key);
 
                     //slcustFile.LockFile();
                     uniVerseFile.WriteRecords(dataSet);
                     //slcustFile.UnlockFile();
                 }
 
-                uniVerseFile.LockRecord(usage.Key, 1);
+                uniVerseFile.LockRecord(supplier.Key, 1);
 
-                typeof(Supplier).GetProperties().ToList().ForEach(pi =>
-                {
-                    var indices = pi.GetCustomAttributesData().Where(p => p.AttributeType == typeof(UniVerseIndexAttribute))
-                                                    .SingleOrDefault()?
-                                                    .ConstructorArguments;
+                UniUpsert<Supplier>.Upsert(supplier, uniVerseFile);
 
-                    // if no UniVerseIndexAttribute was given, the field is not intended to be submitted.
-                    if (indices != null)
-                    {
-                        var multiValue = pi.GetCustomAttributes(typeof(UniVerseMultiValueAttribute), false)
-                            .Cast<UniVerseMultiValueAttribute>()
-                            .SingleOrDefault() != null;
-
-                        var conversion = pi.GetCustomAttributes(typeof(UniVerseConversionAttribute), false)
-                            .Cast<UniVerseConversionAttribute>()
-                            .SingleOrDefault();
-
-                        string value = "";
-
-                        if (multiValue)
-                        {
-                            List<string> values = (List<string>)pi.GetValue(usage) ?? new List<string>();
-
-                            if (conversion != null && values.Any())
-                            {
-                                for (var i = 0; i < values.Count; i++)
-                                {
-                                    var val = values[i];
-
-                                    if (Decimal.TryParse(val, out decimal v))
-                                    {
-                                        var match = Framework.UniVerseScalingRegex.Match(conversion.Code);
-
-                                        if (match.Success)
-                                        {
-                                            if (match.Groups.Count == 3)
-                                            {
-                                                double scalingFactor = Convert.ToDouble(match.Groups[2].Value);
-
-                                                var scaled = $"{v * (decimal)Math.Pow(10, scalingFactor):0.}";
-
-                                                values[i] = scaled;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-                            value = String.Join($"{Framework.ValueMark}", values);
-                        }
-                        else
-                        {
-                            value = (string)pi.GetValue(usage);
-
-                            if (conversion != null )
-                            {
-                                if (Decimal.TryParse(value, out decimal v))
-                                {
-                                    var match = Framework.UniVerseScalingRegex.Match(conversion.Code);
-
-                                    if (match.Success)
-                                    {
-                                        if (match.Groups.Count == 3)
-                                        {
-                                            double scalingFactor = Convert.ToDouble(match.Groups[2].Value);
-
-                                            var scaled = $"{v * (decimal)Math.Pow(10, scalingFactor):0.}";
-
-                                            value = scaled;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        // the UniDynArray throws when given null values: we should present with empty strings
-                        // so as to be sure that the field receives some value
-                        // or not, because... that's not working right.
-                        if (value == null)
-                        {
-                            value = "";
-                        }
-
-                        var fieldIndex = (int)indices[0].Value;
-
-                        var valueIndex = (int)indices[1].Value;
-
-                        var subValueIndex = (int)indices[2].Value;
-
-                        var fieldArray = uniVerseFile.ReadField(usage.Key, fieldIndex);// new IBMU2.UODOTNET.UniDynArray(ce.Session);
-
-                        if (valueIndex != 0 &&
-                            subValueIndex != 0)
-                        {
-                            fieldArray.Replace(1, valueIndex, subValueIndex, value);
-                        }
-                        else if (valueIndex != 0)
-                        {
-                            fieldArray.Replace(1, valueIndex, value);
-                        }
-                        else
-                        {
-                            fieldArray.Replace(1, value);
-                        }
-
-                        uniVerseFile.WriteField(usage.Key, fieldIndex, fieldArray);
-                    }
-                });
-
-                uniVerseFile.UnlockRecord(usage.Key);
+                uniVerseFile.UnlockRecord(supplier.Key);
 
             }
 
-            return usage.Key;
+            return supplier.Key;
         }
     }
 }

@@ -24,7 +24,7 @@ namespace MertexerV2.ProductFunctions
 
     public static partial class UsageFunctions    
     {
-        [Microsoft.SqlServer.Server.SqlFunction(
+        [SqlFunction(
             DataAccess = DataAccessKind.Read,
             FillRowMethodName = "UsageSelect_FillRow")]
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
@@ -73,7 +73,7 @@ namespace MertexerV2.ProductFunctions
         {
             var p = (Usage)obj;
 
-            Code = p.Key?.TrimReduceTruncate(50);
+            Code = p.Key?.TrimReduceTruncate(2);
             Descriptions = p.Descriptions.Any() ? JsonConvert.SerializeObject(p.Descriptions) : SqlString.Null;
             QuickDescription = p.QuickDescription?.TrimReduceTruncate(50);
             ImageName = p.ImageName?.TrimReduceTruncate(50);

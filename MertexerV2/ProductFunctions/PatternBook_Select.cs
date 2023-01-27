@@ -61,13 +61,15 @@ namespace MertexerV2.ProductFunctions
         public static void PatternBookSelect_FillRow(
             object obj,
             out SqlString Code,
-            out SqlString FabricCode
+            out SqlString SortOrders,
+            out SqlString FabricCodes
             )
         {
             var p = (PatternBook)obj;
 
-            Code = p.Key?.TrimReduceTruncate(50);
-            FabricCode = p.FabricCode.Any() ? JsonConvert.SerializeObject(p.FabricCode) : SqlString.Null;
+            Code = p.Key?.TrimReduceTruncate(20);
+            SortOrders = p.SortOrders.Any() ? JsonConvert.SerializeObject(p.SortOrders) : SqlString.Null;
+            FabricCodes = p.FabricCodes.Any() ? JsonConvert.SerializeObject(p.FabricCodes) : SqlString.Null;
         }
     }
 }

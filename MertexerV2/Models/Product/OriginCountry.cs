@@ -27,7 +27,7 @@ namespace MertexerV2.Models.Product
 
         public override void InitialiseFromEmptyConstructor()
         {
-            typeof(Buyer).GetProperties().ToList().ForEach(p => Framework.InitialiseUniProperty(this, p));
+            typeof(OriginCountry).GetProperties().ToList().ForEach(p => Framework.InitialiseUniProperty(this, p));
         }
 
         public void Upsert(string uniVerseAccount = "MERTEX")
@@ -36,7 +36,7 @@ namespace MertexerV2.Models.Product
         }
 
         /// <summary>
-        /// Description
+        /// Name
         /// </summary>
         [UniVerseIndex(1)]
         [UniVerseFieldName("NAME")]

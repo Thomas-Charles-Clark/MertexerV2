@@ -40,7 +40,7 @@ namespace MertexerV2.Models.Product
         /// </summary>
         [UniVerseIndex(1)]
         [UniVerseFieldName("DESCRIPTION")]
-        public string Description { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// Image Name

@@ -52,7 +52,7 @@ namespace MertexerV2.Models.Product
         public decimal? DutyPercentage { get; set; }
 
         /// <summary>
-        /// Anti-Dumping Percentage
+        /// Inland Charges Percentage
         /// </summary>
         [UniVerseIndex(81)]
         [UniVerseConversion("MR11")]

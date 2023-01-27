@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Data.SqlTypes;
 using System.Linq;
 using System.Text;
@@ -62,13 +63,15 @@ namespace MertexerV2.ProductFunctions
         public static void OrderFormGroupSelect_FillRow(
             object obj,
             out SqlString Code,
-            out SqlString Name
+            out SqlString Name,
+            out SqlInt32 SortOrder
             )
         {
             var p = (OrderFormGroup)obj;
 
             Code = p.Key?.TrimReduceTruncate(50);
             Name = p.Name?.TrimReduceTruncate(50);
+            SortOrder = p.SortOrder ?? SqlInt32.Null;
         }
     }
 }

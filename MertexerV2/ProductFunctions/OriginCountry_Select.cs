@@ -58,7 +58,7 @@ namespace MertexerV2.ProductFunctions
             }
         }
 
-        public static void AfterCareSelect_FillRow(
+        public static void OriginCountrySelect_FillRow(
             object obj,
             out SqlString Code,
             out SqlString Name
@@ -66,7 +66,7 @@ namespace MertexerV2.ProductFunctions
         {
             var p = (OriginCountry)obj;
 
-            Code = p.Key?.TrimReduceTruncate(50);
+            Code = p.Key?.TrimReduceTruncate(10);
             Name = p.Name?.TrimReduceTruncate(50);
         }
     }

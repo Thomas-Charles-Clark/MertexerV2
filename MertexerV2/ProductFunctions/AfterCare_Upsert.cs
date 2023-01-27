@@ -5,20 +5,18 @@ using Microsoft.SqlServer.Server;
 
 using Newtonsoft.Json;
 
-using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace MertexerV2.ProductFunctions
 {
-    public static partial class UsageFunctions
+    public static partial class AfterCareFunctions
     {
         [SqlFunction]
         public static string Upsert(string UniVerseAccount, string AfterCareJSON)
         {
-            var afterCare = JsonConvert.DeserializeObject<Usage>(AfterCareJSON);
+            var afterCare = JsonConvert.DeserializeObject<AfterCare>(AfterCareJSON);
 
-            var fileName = typeof(Usage).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
+            var fileName = typeof(AfterCare).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
                     .Cast<UniVerseFileNameAttribute>()
                     .Single()
                     .FileName;

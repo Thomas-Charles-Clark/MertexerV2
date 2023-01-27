@@ -24,7 +24,7 @@ namespace MertexerV2.ProductFunctions
 
     public static partial class TestFunctions    
     {
-        [Microsoft.SqlServer.Server.SqlFunction(
+        [SqlFunction(
             DataAccess = DataAccessKind.Read,
             FillRowMethodName = "TestSelect_FillRow")]
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
@@ -61,15 +61,15 @@ namespace MertexerV2.ProductFunctions
         public static void TestSelect_FillRow(
             object obj,
             out SqlString Code,
-            out SqlString Description,
+            out SqlString Name,
             out SqlString Market
             )
         {
             var p = (Test)obj;
 
-            Code = p.Key?.TrimReduceTruncate(50);
-            Description = p.Description?.TrimReduceTruncate(50);
-            Market = p.Market?.TrimReduceTruncate(50);
+            Code = p.Key?.TrimReduceTruncate(10);
+            Name = p.Name?.TrimReduceTruncate(20);
+            Market = p.Market?.TrimReduceTruncate(30);
         }
     }
 }

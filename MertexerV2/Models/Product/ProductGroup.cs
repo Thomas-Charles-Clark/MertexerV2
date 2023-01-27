@@ -36,7 +36,7 @@ namespace MertexerV2.Models.Product
         }
 
         /// <summary>
-        /// Description
+        /// Name
         /// </summary>
         [UniVerseIndex(1)]
         [UniVerseFieldName("TITLE")]

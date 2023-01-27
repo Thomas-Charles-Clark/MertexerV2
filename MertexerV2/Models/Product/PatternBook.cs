@@ -18,17 +18,17 @@ namespace MertexerV2.Models.Product
     public class PatternBook : UniVerseSerializationBase<string>
     {
         [JsonConstructor]
-        public PatternBook(string key) : base(key) 
+        public PatternBook(string key) : base(key)
         {
-
+            Initialise();
         }
 
         public PatternBook() : base()
         {
-            InitialiseFromEmptyConstructor();
+            Initialise();
         }
 
-        public override void InitialiseFromEmptyConstructor()
+        public override void Initialise()
         {
             typeof(PatternBook).GetProperties().ToList().ForEach(p => Framework.InitialiseUniProperty(this, p));
         }

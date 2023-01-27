@@ -14,15 +14,15 @@ namespace MertexerV2.Models.Product
         [JsonConstructor]
         public Usage(string key) : base(key)
         {
-
+            Initialise();
         }
 
         public Usage() : base()
         {
-            InitialiseFromEmptyConstructor();
+            Initialise();
         }
 
-        public override void InitialiseFromEmptyConstructor()
+        public override void Initialise()
         {
             typeof(Usage).GetProperties().ToList().ForEach(p => Framework.InitialiseUniProperty(this, p));
         }

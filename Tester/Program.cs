@@ -521,36 +521,97 @@ namespace Tester
 
             //Console.WriteLine($"FlameFunctions.Select returned {results.Count} results in {stopwatch.Elapsed}");
 
-            var maxFieldLengths = MaxFieldLengths<MertexerV2.Models.Product.Supplier>.Execute(null, true, false, 100);
 
-            Console.WriteLine($"MaxFieldLengths returned in {stopwatch.Elapsed}");
 
-            Console.WriteLine();
 
-            Console.WriteLine(maxFieldLengths);
 
-            Console.WriteLine();
 
-            var selectResult = Selector<MertexerV2.Models.Product.Supplier>.Select("G0033", true, false);
 
-            Console.WriteLine(selectResult);
 
-            Console.WriteLine();
 
-            Console.WriteLine($"Selector returned in {stopwatch.Elapsed}");
 
-            //selectResult.Descriptions = new List<string>() { $"{selectResult.Descriptions.First().Replace("HALF A", "PRAISE THE")}" };
-            //selectResult.LabelDescription = $"{selectResult.LabelDescription} TEST";
-            //selectResult.Description = $"{selectResult.Description} TEST";
-            //selectResult.Name = $"{selectResult.Name} TEST";
 
-            Console.WriteLine();
 
-            //selectResult.Upsert();
 
-            //Console.WriteLine($"Upsert returned in {stopwatch.Elapsed}");
 
-            stopwatch.Stop();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            //var results = Selector<MakeDetail>.SelectAll(true, false).ToList();
+
+            //results.ForEach(r =>
+            //{
+            //    var productProcessId = SqlString.Null;
+            //    var productCode = SqlString.Null;
+            //    var processCode = SqlString.Null;
+            //    var productCodes = SqlString.Null;
+            //    var quantities = SqlString.Null;
+            //    var units = SqlString.Null;
+            //    var comments = SqlString.Null;
+            //    var hiddenReadField = SqlString.Null;
+            //    var agreedPercentageLoss = SqlString.Null;
+            //    var expectedPercentageLoss = SqlString.Null;
+
+            //    MakeDetailFunctions.MakeDetailSelect_FillRow(r,
+            //        out productProcessId,
+            //        out productCode,
+            //        out processCode,
+            //        out productCodes,
+            //        out quantities,
+            //        out units,
+            //        out comments,
+            //        out hiddenReadField,
+            //        out agreedPercentageLoss,
+            //        out expectedPercentageLoss);
+            //});
+
+
+
+
+            //var uniVerseAccount = "PLAY";
+
+            //var maxFieldLengths = MaxFieldLengths<MarketRestriction>.Execute(null, true, false, 100, uniVerseAccount);
+
+            //Console.WriteLine($"MaxFieldLengths returned in {stopwatch.Elapsed}");
+
+            //Console.WriteLine();
+
+            //Console.WriteLine(maxFieldLengths);
+
+            //Console.WriteLine();
+
+            //var selectResult = Selector<MarketRestriction>.Select("N", true, false, 1000, uniVerseAccount);
+
+            //Console.WriteLine(selectResult);
+
+            //Console.WriteLine();
+
+            //Console.WriteLine($"Selector returned in {stopwatch.Elapsed}");
+
+            ////selectResult.Descriptions = new List<string>() { $"{selectResult.Descriptions.First().Replace("HALF A", "PRAISE THE")}" };
+            ////selectResult.LabelDescription = $"{selectResult.LabelDescription} TEST";
+            ////selectResult.LabelDescription = selectResult.LabelDescription.Replace(" TEST", "");
+            ////selectResult.Description = $"{selectResult.Description} TEST";
+            ////selectResult.Name = $"{selectResult.Name} TEST";
+
+            //Console.WriteLine();
+
+            ////selectResult.Upsert(uniVerseAccount);
+
+            ////Console.WriteLine($"Upsert returned in {stopwatch.Elapsed}");
+
+            //stopwatch.Stop();
 
             Console.WriteLine();
 

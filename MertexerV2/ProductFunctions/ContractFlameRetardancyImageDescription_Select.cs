@@ -17,7 +17,12 @@ using System.Threading.Tasks;
 
 namespace MertexerV2.ProductFunctions
 {
-    public static partial class ContractFlameFunctions
+    public class ContractFlameRetardancyImageDescriptionCode
+    {
+        public string Code { get; set; }
+    }
+
+    public static partial class ContractFlameRetardancyImageDescriptionFunctions
     {
         [Microsoft.SqlServer.Server.SqlFunction(
             DataAccess = DataAccessKind.Read,
@@ -27,7 +32,7 @@ namespace MertexerV2.ProductFunctions
         {
             if (String.IsNullOrEmpty(ContractFlameCodes))
             {
-                foreach (var q in Selector<ContractFlame>.SelectAllNonParallel(
+                foreach (var q in Selector<ContractFlameRetardancyImageDescription>.SelectAllNonParallel(
                    true,
                    false,
                    50,
@@ -38,8 +43,8 @@ namespace MertexerV2.ProductFunctions
             }
             else
             {
-                var results = Selector<ContractFlame>.Select(
-                    JsonConvert.DeserializeObject<IEnumerable<FlameCode>>(ContractFlameCodes).Select(p => p.Code),
+                var results = Selector<ContractFlameRetardancyImageDescription>.Select(
+                    JsonConvert.DeserializeObject<IEnumerable<ContractFlameRetardancyImageDescriptionCode>>(ContractFlameCodes).Select(p => p.Code),
                     true,
                     false,
                     50,
@@ -65,7 +70,7 @@ namespace MertexerV2.ProductFunctions
             out SqlString ImageCharacter
             )
         {
-            var p = (ContractFlame)obj;
+            var p = (ContractFlameRetardancyImageDescription)obj;
 
             Code = p.Key?.TrimReduceTruncate(2);
             Description = p.Description?.TrimReduceTruncate(50);

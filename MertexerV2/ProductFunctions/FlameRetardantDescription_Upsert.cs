@@ -11,14 +11,14 @@ using System.Linq;
 
 namespace MertexerV2.ProductFunctions
 {
-    public static partial class UKFlameFunctions
+    public static partial class FlameRetardantDescriptionFunctions
     {
         [SqlFunction]
-        public static string Upsert(string UniVerseAccount, string UKFlameJSON)
+        public static string Upsert(string UniVerseAccount, string FlameRetardantDescriptionJSON)
         {
-            var ukFlame = JsonConvert.DeserializeObject<UKFlame>(UKFlameJSON);
+            var FlameRetardantDescription = JsonConvert.DeserializeObject<FlameRetardantDescription>(FlameRetardantDescriptionJSON);
 
-            var fileName = typeof(UKFlame).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
+            var fileName = typeof(FlameRetardantDescription).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
                     .Cast<UniVerseFileNameAttribute>()
                     .Single()
                     .FileName;
@@ -29,7 +29,7 @@ namespace MertexerV2.ProductFunctions
 
                 try
                 {
-                    var extantRecord = uniVerseFile.ReadField(ukFlame.Key, 0).StringValue;
+                    var extantRecord = uniVerseFile.ReadField(FlameRetardantDescription.Key, 0).StringValue;
                 }
                 catch (IBMU2.UODOTNET.UniFileException)
                 {
@@ -39,22 +39,22 @@ namespace MertexerV2.ProductFunctions
                     // then write all the fields
                     // then unlock the record
                     var dataSet = new IBMU2.UODOTNET.UniDataSet(ce.Session);
-                    dataSet.Insert(ukFlame.Key);
+                    dataSet.Insert(FlameRetardantDescription.Key);
 
                     //slcustFile.LockFile();
                     uniVerseFile.WriteRecords(dataSet);
                     //slcustFile.UnlockFile();
                 }
 
-                uniVerseFile.LockRecord(ukFlame.Key, 1);
+                uniVerseFile.LockRecord(FlameRetardantDescription.Key, 1);
 
-                UniUpsert<UKFlame>.Upsert(ukFlame, uniVerseFile);
+                UniUpsert<FlameRetardantDescription>.Upsert(FlameRetardantDescription, uniVerseFile);
 
-                uniVerseFile.UnlockRecord(ukFlame.Key);
+                uniVerseFile.UnlockRecord(FlameRetardantDescription.Key);
 
             }
 
-            return ukFlame.Key;
+            return FlameRetardantDescription.Key;
         }
     }
 }

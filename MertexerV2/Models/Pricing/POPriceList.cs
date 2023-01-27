@@ -21,10 +21,10 @@ namespace MertexerV2.Models.Pricing
 
         public POPriceList() : base()
         {
-            InitialiseFromEmptyConstructor();
+            Initialise();
         }
 
-        public override void InitialiseFromEmptyConstructor()
+        public override void Initialise()
         {
             typeof(POPriceList).GetProperties().ToList().ForEach(p => Framework.InitialiseUniProperty(this, p));
         }

@@ -17,15 +17,15 @@ namespace MertexerV2.Models.Product
         [JsonConstructor]
         public ProductType(string key) : base(key)
         {
-
+            Initialise();
         }
 
         public ProductType() : base()
         {
-            InitialiseFromEmptyConstructor();
+            Initialise();
         }
 
-        public override void InitialiseFromEmptyConstructor()
+        public override void Initialise()
         {
             typeof(ProductType).GetProperties().ToList().ForEach(p => Framework.InitialiseUniProperty(this, p));
         }
@@ -85,7 +85,7 @@ namespace MertexerV2.Models.Product
 
         [UniVerseIndex(30)]
         [UniVerseFieldName("FILENAME")]
-        public string Filename { get; set; }
+        public string FileName { get; set; }
 
         [UniVerseIndex(31)]
         [UniVerseMultiValue]

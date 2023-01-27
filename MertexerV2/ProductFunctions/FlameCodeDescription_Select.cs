@@ -17,22 +17,22 @@ using System.Threading.Tasks;
 
 namespace MertexerV2.ProductFunctions
 {
-    public class FlameCode
+    public class FlameCodeDescriptionCode
     {
         public string Code { get; set; }
     }
 
-    public static partial class FlameFunctions
+    public static partial class FlameCodeDescriptionFunctions    
     {
         [Microsoft.SqlServer.Server.SqlFunction(
             DataAccess = DataAccessKind.Read,
-            FillRowMethodName = "FlameSelect_FillRow")]
+            FillRowMethodName = "FlameCodeDescriptionSelect_FillRow")]
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
-        public static IEnumerable Select(string UniVerseAccount, string FlameCodes)
+        public static IEnumerable Select(string UniVerseAccount, string FlameCodeDescriptionCodes)
         {
-            if (String.IsNullOrEmpty(FlameCodes))
+            if (String.IsNullOrEmpty(FlameCodeDescriptionCodes))
             {
-                foreach (var q in Selector<Flame>.SelectAllNonParallel(
+                foreach (var q in Selector<FlameCodeDescription>.SelectAllNonParallel(
                    true,
                    false,
                    50,
@@ -43,8 +43,8 @@ namespace MertexerV2.ProductFunctions
             }
             else
             {
-                var results = Selector<Flame>.Select(
-                    JsonConvert.DeserializeObject<IEnumerable<FlameCode>>(FlameCodes).Select(p => p.Code),
+                var results = Selector<FlameCodeDescription>.Select(
+                    JsonConvert.DeserializeObject<IEnumerable<FlameCodeDescriptionCode>>(FlameCodeDescriptionCodes).Select(p => p.Code),
                     true,
                     false,
                     50,
@@ -58,16 +58,22 @@ namespace MertexerV2.ProductFunctions
             }
         }
 
-        public static void AfterCareSelect_FillRow(
+        public static void FlameCodeDescriptionSelect_FillRow(
             object obj,
             out SqlString Code,
-            out SqlString Name
+            out SqlString Detail,
+            out SqlString BackCoating,
+            out SqlString BackCoatingRequired,
+            out SqlString LabelDescription
             )
         {
-            var p = (Flame)obj;
+            var p = (FlameCodeDescription)obj;
 
-            Code = p.Key?.TrimReduceTruncate(50);
-            Name = p.Name?.TrimReduceTruncate(50);
+            Code = p.Key?.TrimReduceTruncate(10);
+            Detail = p.Detail?.TrimReduceTruncate(100);
+            BackCoating = p.BackCoating?.TrimReduceTruncate(50);
+            BackCoatingRequired = p.BackCoatingRequired?.TrimReduceTruncate(1);
+            LabelDescription = p.LabelDescription?.TrimReduceTruncate(100);
         }
     }
 }

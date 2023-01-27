@@ -42,7 +42,7 @@ namespace MertexerV2.Utilities
 
         }
 
-        public abstract void InitialiseFromEmptyConstructor();
+        public abstract void Initialise();
 
         public string ToStringInOrder()
         {

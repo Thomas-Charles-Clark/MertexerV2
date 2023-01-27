@@ -17,22 +17,22 @@ using System.Threading.Tasks;
 
 namespace MertexerV2.ProductFunctions
 {
-    public class AdditionalCode
+    public class MarketRestrictionCode
     {
         public string Code { get; set; }
     }
 
-    public static partial class AdditionalFunctions    
+    public static partial class MarketRestrictionFunctions
     {
         [Microsoft.SqlServer.Server.SqlFunction(
             DataAccess = DataAccessKind.Read,
-            FillRowMethodName = "AdditionalSelect_FillRow")]
+            FillRowMethodName = "MarketRestrictionSelect_FillRow")]
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
-        public static IEnumerable Select(string UniVerseAccount, string AdditionalCodes)
+        public static IEnumerable Select(string UniVerseAccount, string MarketRestrictionCodes)
         {
-            if (String.IsNullOrEmpty(AdditionalCodes))
+            if (String.IsNullOrEmpty(MarketRestrictionCodes))
             {
-                foreach (var q in Selector<Additional>.SelectAllNonParallel(
+                foreach (var q in Selector<MarketRestriction>.SelectAllNonParallel(
                    true,
                    false,
                    50,
@@ -43,8 +43,8 @@ namespace MertexerV2.ProductFunctions
             }
             else
             {
-                var results = Selector<Additional>.Select(
-                    JsonConvert.DeserializeObject<IEnumerable<AdditionalCode>>(AdditionalCodes).Select(p => p.Code),
+                var results = Selector<MarketRestriction>.Select(
+                    JsonConvert.DeserializeObject<IEnumerable<MarketRestrictionCode>>(MarketRestrictionCodes).Select(p => p.Code),
                     true,
                     false,
                     50,
@@ -58,22 +58,16 @@ namespace MertexerV2.ProductFunctions
             }
         }
 
-        public static void AdditionalSelect_FillRow(
+        public static void MarketRestrictionSelect_FillRow(
             object obj,
             out SqlString Code,
-            out SqlString Detail,
-            out SqlString BackCoating,
-            out SqlString BackCoatingRequired,
-            out SqlString LabelDescription
+            out SqlString Name
             )
         {
-            var p = (Additional)obj;
+            var p = (MarketRestriction)obj;
 
-            Code = p.Key?.TrimReduceTruncate(10);
-            Detail = p.Detail?.TrimReduceTruncate(100);
-            BackCoating = p.BackCoating?.TrimReduceTruncate(50);
-            BackCoatingRequired = p.BackCoatingRequired?.TrimReduceTruncate(1);
-            LabelDescription = p.LabelDescription?.TrimReduceTruncate(100);
+            Code = p.Key?.TrimReduceTruncate(20);
+            Name = p.Name?.TrimReduceTruncate(50);
         }
     }
 }

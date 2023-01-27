@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -36,6 +37,8 @@ namespace MertexerV2.Utilities
         public static readonly char[] AsteriskDelimiter = new char[] { '*' };
         public static readonly char[] ValueMarkDelimiter = new char[] { (char)253 };
         public static readonly char[] SubValueMarkDelimiter = new char[] { (char)252 };
+
+        public static readonly List<char> YN = new List<char>() { 'Y', 'N' };
 
         public static readonly string WavyLineBreak = $"\r\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\r\n";
 
@@ -451,13 +454,61 @@ namespace MertexerV2.Utilities
         {
             if (p.CanWrite)
             {
-                if (p.PropertyType == typeof(string))
-                {
-                    p.SetValue(o, "");
-                }
-                else if (p.PropertyType == typeof(IEnumerable<string>))
+                //if (p.PropertyType == typeof(string))
+                //{
+                //    p.SetValue(o, ""); // why do we want to be initialising strings to empty...
+                //}
+                if (p.PropertyType == typeof(IEnumerable<string>))
                 {
                     p.SetValue(o, new List<string>());
+                }
+                else if (p.PropertyType == typeof(IEnumerable<decimal?>))
+                {
+                    p.SetValue(o, new List<decimal?>());
+                }
+                else if (p.PropertyType == typeof(IEnumerable<decimal>))
+                {
+                    p.SetValue(o, new List<decimal>());
+                }
+                else if (p.PropertyType == typeof(IEnumerable<long?>))
+                {
+                    p.SetValue(o, new List<long?>());
+                }
+                else if (p.PropertyType == typeof(IEnumerable<long>))
+                {
+                    p.SetValue(o, new List<long>());
+                }
+                else if (p.PropertyType == typeof(IEnumerable<int?>))
+                {
+                    p.SetValue(o, new List<int?>());
+                }
+                else if (p.PropertyType == typeof(IEnumerable<int>))
+                {
+                    p.SetValue(o, new List<int>());
+                }
+                else if (p.PropertyType == typeof(IEnumerable<short?>))
+                {
+                    p.SetValue(o, new List<short?>());
+                }
+                else if (p.PropertyType == typeof(IEnumerable<short>))
+                {
+                    p.SetValue(o, new List<short>());
+                }
+                else if (p.PropertyType == typeof(IEnumerable<byte?>))
+                {
+                    p.SetValue(o, new List<byte?>());
+                }
+                else if (p.PropertyType == typeof(IEnumerable<byte>))
+                {
+                    p.SetValue(o, new List<byte>());
+                }
+                else if (p.PropertyType == typeof(IEnumerable<bool?>))
+                {
+                    p.SetValue(o, new List<bool?>());
+                }
+                else if (p.PropertyType == typeof(IEnumerable<bool>))
+                {
+                    p.SetValue(o, new List<bool>());
                 }
                 else if (p.PropertyType == typeof(decimal?))
                 {
@@ -498,6 +549,14 @@ namespace MertexerV2.Utilities
                 else if (p.PropertyType == typeof(byte))
                 {
                     p.SetValue(o, (byte)0);
+                }
+                else if (p.PropertyType == typeof(bool?))
+                {
+                    p.SetValue(o, (bool?)null);
+                }
+                else if (p.PropertyType == typeof(bool))
+                {
+                    p.SetValue(o, false);
                 }
             }
         }

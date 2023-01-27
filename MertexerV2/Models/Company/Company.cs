@@ -18,10 +18,10 @@ namespace MertexerV2.Models.Company
 
         public Company() :base()
         {
-            InitialiseFromEmptyConstructor();
+            Initialise();
         }
 
-        public override void InitialiseFromEmptyConstructor()
+        public override void Initialise()
         {
             typeof(Company).GetProperties().ToList().ForEach(p => Framework.InitialiseUniProperty(this, p));
         }

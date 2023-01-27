@@ -69,7 +69,7 @@ namespace MertexerV2.ProductFunctions
         {
             var p = (OrderFormGroup)obj;
 
-            Code = p.Key?.TrimReduceTruncate(50);
+            Code = p.Key?.TrimReduceTruncate(10);
             Name = p.Name?.TrimReduceTruncate(50);
             SortOrder = p.SortOrder ?? SqlInt32.Null;
         }

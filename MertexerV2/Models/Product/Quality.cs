@@ -13,15 +13,15 @@ namespace MertexerV2.Models.Product
         [JsonConstructor]
         public Quality(string key) : base(key)
         {
-
+            Initialise();
         }
 
         public Quality() : base()
         {
-            InitialiseFromEmptyConstructor();
+            Initialise();
         }
 
-        public override void InitialiseFromEmptyConstructor()
+        public override void Initialise()
         {
             typeof(Quality).GetProperties().ToList().ForEach(p => Framework.InitialiseUniProperty(this, p));
         }
@@ -37,7 +37,7 @@ namespace MertexerV2.Models.Product
 
         [UniVerseIndex(2)]
         [UniVerseFieldName("COMPCODE")]
-        public string Composition { get; set; }
+        public string CompositionCode { get; set; }
 
         [UniVerseIndex(3)]
         [UniVerseFieldName("WIDTH")]
@@ -45,11 +45,11 @@ namespace MertexerV2.Models.Product
 
         [UniVerseIndex(4)]
         [UniVerseFieldName("APPGMS")]
-        public decimal? WeightGSM { get; set; }
+        public decimal? WeightGramsPerSquareMetre { get; set; }
 
         [UniVerseIndex(6)]
         [UniVerseFieldName("DESC")]
-        public string Description { get; set; }
+        public string Name { get; set; }
 
         [UniVerseIndex(9)]
         [UniVerseConversion("MR11")]
@@ -91,7 +91,7 @@ namespace MertexerV2.Models.Product
 
         [UniVerseIndex(25)]
         [UniVerseFieldName("GMSLIN")]
-        public decimal? GramsPerLinearMetre { get; set; }
+        public decimal? WeightGramsPerLinearMetre { get; set; }
 
         [UniVerseIndex(59)]
         [UniVerseConversion("MR12")]

@@ -11,14 +11,14 @@ using System.Linq;
 
 namespace MertexerV2.ProductFunctions
 {
-    public static partial class FlameFunctions
+    public static partial class ProductDeveloperFunctions
     {
         [SqlFunction]
-        public static string Upsert(string UniVerseAccount, string FlameJSON)
+        public static string Upsert(string UniVerseAccount, string ProductDeveloperJSON)
         {
-            var flame = JsonConvert.DeserializeObject<Flame>(FlameJSON);
+            var ProductDeveloper = JsonConvert.DeserializeObject<ProductDeveloper>(ProductDeveloperJSON);
 
-            var fileName = typeof(Flame).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
+            var fileName = typeof(ProductDeveloper).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
                     .Cast<UniVerseFileNameAttribute>()
                     .Single()
                     .FileName;
@@ -29,7 +29,7 @@ namespace MertexerV2.ProductFunctions
 
                 try
                 {
-                    var extantRecord = uniVerseFile.ReadField(flame.Key, 0).StringValue;
+                    var extantRecord = uniVerseFile.ReadField(ProductDeveloper.Key, 0).StringValue;
                 }
                 catch (IBMU2.UODOTNET.UniFileException)
                 {
@@ -39,22 +39,22 @@ namespace MertexerV2.ProductFunctions
                     // then write all the fields
                     // then unlock the record
                     var dataSet = new IBMU2.UODOTNET.UniDataSet(ce.Session);
-                    dataSet.Insert(flame.Key);
+                    dataSet.Insert(ProductDeveloper.Key);
 
                     //slcustFile.LockFile();
                     uniVerseFile.WriteRecords(dataSet);
                     //slcustFile.UnlockFile();
                 }
 
-                uniVerseFile.LockRecord(flame.Key, 1);
+                uniVerseFile.LockRecord(ProductDeveloper.Key, 1);
 
-                UniUpsert<Flame>.Upsert(flame, uniVerseFile);
+                UniUpsert<ProductDeveloper>.Upsert(ProductDeveloper, uniVerseFile);
 
-                uniVerseFile.UnlockRecord(flame.Key);
+                uniVerseFile.UnlockRecord(ProductDeveloper.Key);
 
             }
 
-            return flame.Key;
+            return ProductDeveloper.Key;
         }
     }
 }

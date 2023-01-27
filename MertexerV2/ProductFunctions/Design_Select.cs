@@ -61,14 +61,14 @@ namespace MertexerV2.ProductFunctions
         public static void DesignSelect_FillRow(
             object obj,
             out SqlString Code,
-            out SqlString Description,
+            out SqlString Name,
             out SqlInt32 SortOrder
             )
         {
             var p = (Design)obj;
 
             Code = p.Key?.TrimReduceTruncate(10);
-            Description = p.Description?.TrimReduceTruncate(30);
+            Name = p.Name?.TrimReduceTruncate(30);
             SortOrder = p.SortOrder ?? SqlInt32.Null;
         }
     }

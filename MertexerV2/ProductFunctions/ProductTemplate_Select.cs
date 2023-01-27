@@ -69,12 +69,12 @@ namespace MertexerV2.ProductFunctions
             out SqlString UnitOfStock,
             out SqlString VATCode,
             out SqlString PieceLevelStock,
-            out SqlString SalesAnalysisA,
+            out SqlInt32 SalesAnalysisA,
             out SqlBoolean MultipleBatches,
             out SqlDecimal RemeasureLength,
             out SqlString ProductType,
-            out SqlString SalesAnalysisD,
-            out SqlString StockAnalysisD,
+            out SqlInt32 SalesAnalysisD,
+            out SqlInt32 StockAnalysisD,
             out SqlBoolean AllocateAtBatchLevel,
             out SqlString ValuationCostToUse,
             out SqlString FormCode,
@@ -107,45 +107,45 @@ namespace MertexerV2.ProductFunctions
         {
             var p = (ProductTemplate)obj;
 
-            Code = p.Key?.TrimReduceTruncate(50);
+            Code = p.Key?.TrimReduceTruncate(10);
             Name = p.Name?.TrimReduceTruncate(50);
-            FirstUserScreen = p.FirstUserScreen?.TrimReduceTruncate(50);
-            GroupCode = p.GroupCode?.TrimReduceTruncate(50);
-            ItemType = p.ItemType?.TrimReduceTruncate(50);
-            UnitOfPurchase = p.UnitOfPurchase?.TrimReduceTruncate(50);
-            UnitOfStock = p.UnitOfStock?.TrimReduceTruncate(50);
-            VATCode = p.VATCode?.TrimReduceTruncate(50);
-            PieceLevelStock = p.PieceLevelStock?.TrimReduceTruncate(50);
-            SalesAnalysisA = p.SalesAnalysisA?.TrimReduceTruncate(1);
+            FirstUserScreen = p.FirstUserScreen?.TrimReduceTruncate(20);
+            GroupCode = p.GroupCode?.TrimReduceTruncate(2);
+            ItemType = p.ItemType?.TrimReduceTruncate(3);
+            UnitOfPurchase = p.UnitOfPurchase?.TrimReduceTruncate(10);
+            UnitOfStock = p.UnitOfStock?.TrimReduceTruncate(10);
+            VATCode = p.VATCode?.TrimReduceTruncate(10);
+            PieceLevelStock = p.PieceLevelStock?.TrimReduceTruncate(20);
+            SalesAnalysisA = p.SalesAnalysisA ?? SqlInt32.Null;
             MultipleBatches = p.MultipleBatches;
             RemeasureLength = p.RemeasureLength ?? SqlDecimal.Null;
             ProductType = p.ProductType?.TrimReduceTruncate(10);
-            SalesAnalysisD = p.SalesAnalysisD?.TrimReduceTruncate(50);
-            StockAnalysisD = p.StockAnalysisD?.TrimReduceTruncate(50);
+            SalesAnalysisD = p.SalesAnalysisD ?? SqlInt32.Null;
+            StockAnalysisD = p.StockAnalysisD ?? SqlInt32.Null;
             AllocateAtBatchLevel = p.AllocateAtBatchLevel;
-            ValuationCostToUse = p.ValuationCostToUse?.TrimReduceTruncate(50);
-            FormCode = p.FormCode?.TrimReduceTruncate(10);
+            ValuationCostToUse = p.ValuationCostToUse?.TrimReduceTruncate(1);
+            FormCode = p.FormCode?.TrimReduceTruncate(5);
             MaximumRemnantLength = p.MaximumRemnantLength ?? SqlDecimal.Null;
-            CurrentStatus = p.CurrentStatus?.TrimReduceTruncate(5);
+            CurrentStatus = p.CurrentStatus?.TrimReduceTruncate(1);
             PieceAllocation = p.PieceAllocation;
             RepetitiveBatches = p.RepetitiveBatches;
             SampleProduct = p.SampleProduct;
             PieceBatchOnPickList = p.PieceBatchOnPickList;
             PieceOnlyOrders = p.PieceOnlyOrders;
-            ProductClass2 = p.ProductClass2.TrimReduceTruncate(10);
+            ProductClass2 = p.ProductClass2.TrimReduceTruncate(20);
             CuttingLength = p.CuttingLength ?? SqlDecimal.Null;
             MinimumReplenishment = p.MinimumReplenishment ?? SqlDecimal.Null;
-            BulkRack = p.BulkRack?.TrimReduceTruncate(10);
+            BulkRack = p.BulkRack?.TrimReduceTruncate(20);
             AutoAllocateMultipleTimes = p.AutoAllocateMultipleTimes;
             OrderType = p.OrderType?.TrimReduceTruncate(10);
             Logo = p.Logo?.TrimReduceTruncate(1);
             FullOrderOnly = p.FullOrderOnly;
             ChargeOn = p.ChargeOn?.TrimReduceTruncate(1);
-            Brand = p.Brand?.TrimReduceTruncate(10);
-            PickingListGroupCode = p.PickingListGroupCode?.TrimReduceTruncate(10);
+            Brand = p.Brand?.TrimReduceTruncate(3);
+            PickingListGroupCode = p.PickingListGroupCode?.TrimReduceTruncate(5);
             BespokeRug = p.BespokeRug;
-            PartNumberRangeStart = p.PartNumberRangeStart?.TrimReduceTruncate(10);
-            PartNumberRangeEnd = p.PartNumberRangeEnd?.TrimReduceTruncate(10);
+            PartNumberRangeStart = p.PartNumberRangeStart?.TrimReduceTruncate(5);
+            PartNumberRangeEnd = p.PartNumberRangeEnd?.TrimReduceTruncate(5);
             RangeName = p.RangeName?.TrimReduceTruncate(10);
             LastRange = p.LastRange?.TrimReduceTruncate(10);
             CreateEANCode = p.CreateEANCodes;

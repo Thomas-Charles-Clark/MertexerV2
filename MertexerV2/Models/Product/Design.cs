@@ -17,15 +17,15 @@ namespace MertexerV2.Models.Product
         [JsonConstructor]
         public Design(string key) : base(key)
         {
-
+            Initialise();
         }
 
         public Design() : base()
         {
-            InitialiseFromEmptyConstructor();
+            Initialise();
         }
 
-        public override void InitialiseFromEmptyConstructor()
+        public override void Initialise()
         {
             typeof(Design).GetProperties().ToList().ForEach(p => Framework.InitialiseUniProperty(this, p));
         }
@@ -40,7 +40,7 @@ namespace MertexerV2.Models.Product
         /// </summary>
         [UniVerseIndex(1)]
         [UniVerseFieldName("CODEDESC")]
-        public string Description { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// Sort Order

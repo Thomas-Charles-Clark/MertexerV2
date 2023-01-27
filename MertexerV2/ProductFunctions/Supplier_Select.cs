@@ -72,6 +72,8 @@ namespace MertexerV2.ProductFunctions
         {
             var p = (Models.Product.Supplier)obj;
 
+            // ADD ADDRESS DETAILS AND REMOVE EXTANT EDAREPLACEMENT VERSION
+
             Code = p.Key?.TrimReduceTruncate(10);
             Name = p.Name?.TrimReduceTruncate(50);
             Currency = p.Currency?.TrimReduceTruncate(10);

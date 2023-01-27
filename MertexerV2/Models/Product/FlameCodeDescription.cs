@@ -12,22 +12,22 @@ using System.Threading.Tasks;
 namespace MertexerV2.Models.Product
 {
     [UniVerseFileName("STADDITIONAL")]
-    public class Additional : UniVerseSerializationBase<string>
+    public class FlameCodeDescription : UniVerseSerializationBase<string>
     {
         [JsonConstructor]
-        public Additional(string key) : base(key)
+        public FlameCodeDescription(string key) : base(key)
         {
-
+            Initialise();
         }
 
-        public Additional() : base()
+        public FlameCodeDescription() : base()
         {
-            InitialiseFromEmptyConstructor();
+            Initialise();
         }
 
-        public override void InitialiseFromEmptyConstructor()
+        public override void Initialise()
         {
-            typeof(Additional).GetProperties().ToList().ForEach(p => Framework.InitialiseUniProperty(this, p));
+            typeof(FlameCodeDescription).GetProperties().ToList().ForEach(p => Framework.InitialiseUniProperty(this, p));
         }
 
         public void Upsert(string uniVerseAccount = "MERTEX")

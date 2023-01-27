@@ -15,7 +15,7 @@ using System.Linq;
 
 namespace MertexerV2.ProductFunctions
 {
-    public static partial class QualitySelect
+    public static partial class QualityFunctions
     {
         [Microsoft.SqlServer.Server.SqlFunction(
             DataAccess = DataAccessKind.Read,
@@ -56,11 +56,11 @@ namespace MertexerV2.ProductFunctions
             object obj,
             out SqlString Quality,
             out SqlString Design,
-            out SqlString Composition,
-            out SqlString Description,
+            out SqlString CompositionCode,
+            out SqlString Name,
             out SqlDecimal Width,
-            out SqlDecimal WeightGSM,
-            out SqlDecimal GramsPerLinearMetre,
+            out SqlDecimal WeightGramsPerSquareMetre,
+            out SqlDecimal WeightGramsPerLinearMetre,
             out SqlDecimal FinishedWidth,
             out SqlDecimal RemeasureLength,
             out SqlBoolean SeparateMaterialLength,
@@ -72,11 +72,11 @@ namespace MertexerV2.ProductFunctions
 
             Quality = p.Key?.TrimReduceTruncate(50);
             Design = p.Design?.TrimReduceTruncate(100);
-            Composition = p.Design?.TrimReduceTruncate(10);
-            Description = p.Description?.TrimReduceTruncate(100);
+            CompositionCode = p.CompositionCode?.TrimReduceTruncate(10);
+            Name = p.Name?.TrimReduceTruncate(100);
             Width = p.Width ?? SqlDecimal.Null;
-            WeightGSM = p.WeightGSM ?? SqlDecimal.Null;
-            GramsPerLinearMetre = p.GramsPerLinearMetre ?? SqlDecimal.Null;
+            WeightGramsPerSquareMetre = p.WeightGramsPerSquareMetre ?? SqlDecimal.Null;
+            WeightGramsPerLinearMetre = p.WeightGramsPerLinearMetre ?? SqlDecimal.Null;
             FinishedWidth = p.FinishedWidth ?? SqlDecimal.Null;
             RemeasureLength = p.RemeasureLength ?? SqlDecimal.Null;
             SeparateMaterialLength = p.SeparateMaterialLength;

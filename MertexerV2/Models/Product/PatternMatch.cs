@@ -17,15 +17,15 @@ namespace MertexerV2.Models.Product
         [JsonConstructor]
         public PatternMatch(string key) : base(key)
         {
-
+            Initialise();
         }
 
         public PatternMatch() : base()
         {
-            InitialiseFromEmptyConstructor();
+            Initialise();
         }
 
-        public override void InitialiseFromEmptyConstructor()
+        public override void Initialise()
         {
             typeof(PatternMatch).GetProperties().ToList().ForEach(p => Framework.InitialiseUniProperty(this, p));
         }

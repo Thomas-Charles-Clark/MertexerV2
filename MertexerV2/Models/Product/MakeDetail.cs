@@ -17,15 +17,15 @@ namespace MertexerV2.Models.Product
         [JsonConstructor]
         public MakeDetail(string key) : base(key)
         {
-
+            Initialise();
         }
 
         public MakeDetail() : base()
         {
-            InitialiseFromEmptyConstructor();
+            Initialise();
         }
 
-        public override void InitialiseFromEmptyConstructor()
+        public override void Initialise()
         {
             typeof(MakeDetail).GetProperties().ToList().ForEach(p => Framework.InitialiseUniProperty(this, p));
         }

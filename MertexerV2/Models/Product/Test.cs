@@ -17,16 +17,16 @@ namespace MertexerV2.Models.Product
         [JsonConstructor]
         public Test(string key) : base(key)
         {
-
+            Initialise();
         }
 
         public Test() : base()
         {
-            InitialiseFromEmptyConstructor();
+            Initialise();
         }
 
 
-        public override void InitialiseFromEmptyConstructor()
+        public override void Initialise()
         {
             typeof(Test).GetProperties().ToList().ForEach(p => Framework.InitialiseUniProperty(this, p));
         }

@@ -61,13 +61,23 @@ namespace MertexerV2.ProductFunctions
         public static void PatternMatchSelect_FillRow(
             object obj,
             out SqlString Code,
-            out SqlString Description
+            out SqlString Name,
+            out SqlString Full,
+            out SqlString Half,
+            out SqlString Straight,
+            out SqlString Match,
+            out SqlString Random
             )
         {
             var p = (Models.Product.PatternMatch)obj;
 
-            Code = p.Key?.TrimReduceTruncate(50);
-            Description = p.Name?.TrimReduceTruncate(50);
+            Code = p.Key?.TrimReduceTruncate(10);
+            Name = p.Name?.TrimReduceTruncate(50);
+            Full = p.Full?.TrimReduceTruncate(50);
+            Half = p.Half?.TrimReduceTruncate(50);
+            Straight = p.Straight?.TrimReduceTruncate(50);
+            Match = p.Match?.TrimReduceTruncate(50);
+            Random = p.Random?.TrimReduceTruncate(50);
         }
     }
 }

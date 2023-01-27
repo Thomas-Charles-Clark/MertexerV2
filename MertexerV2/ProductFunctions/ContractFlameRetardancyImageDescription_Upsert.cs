@@ -11,14 +11,14 @@ using System.Linq;
 
 namespace MertexerV2.ProductFunctions
 {
-    public static partial class ContractFlameFunctions
+    public static partial class ContractFlameRetardancyImageDescriptionFunctions
     {
         [SqlFunction]
         public static string Upsert(string UniVerseAccount, string ContractFlameJSON)
         {
-            var contractFlame = JsonConvert.DeserializeObject<ContractFlame>(ContractFlameJSON);
+            var contractFlame = JsonConvert.DeserializeObject<ContractFlameRetardancyImageDescription>(ContractFlameJSON);
 
-            var fileName = typeof(ContractFlame).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
+            var fileName = typeof(ContractFlameRetardancyImageDescription).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
                     .Cast<UniVerseFileNameAttribute>()
                     .Single()
                     .FileName;
@@ -48,7 +48,7 @@ namespace MertexerV2.ProductFunctions
 
                 uniVerseFile.LockRecord(contractFlame.Key, 1);
 
-                UniUpsert<ContractFlame>.Upsert(contractFlame, uniVerseFile);
+                UniUpsert<ContractFlameRetardancyImageDescription>.Upsert(contractFlame, uniVerseFile);
 
                 uniVerseFile.UnlockRecord(contractFlame.Key);
 

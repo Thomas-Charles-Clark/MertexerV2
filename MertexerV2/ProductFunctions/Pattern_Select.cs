@@ -61,13 +61,13 @@ namespace MertexerV2.ProductFunctions
         public static void PatternSelect_FillRow(
             object obj,
             out SqlString Code,
-            out SqlString Description
+            out SqlString Name
             )
         {
             var p = (Models.Product.Pattern)obj;
 
-            Code = p.Key?.TrimReduceTruncate(50);
-            Description = p.Name?.TrimReduceTruncate(50);
+            Code = p.Key?.TrimReduceTruncate(10);
+            Name = p.Name?.TrimReduceTruncate(50);
         }
     }
 }

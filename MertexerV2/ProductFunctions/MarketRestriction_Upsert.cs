@@ -5,18 +5,20 @@ using Microsoft.SqlServer.Server;
 
 using Newtonsoft.Json;
 
+using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace MertexerV2.ProductFunctions
 {
-    public static partial class AdditionalFunctions
+    public static partial class MarketRestrictionFunctions
     {
         [SqlFunction]
-        public static string Upsert(string UniVerseAccount, string AdditionalJSON)
+        public static string Upsert(string UniVerseAccount, string MarketRestrictionJSON)
         {
-            var additional = JsonConvert.DeserializeObject<Additional>(AdditionalJSON);
+            var marketRestriction = JsonConvert.DeserializeObject<MarketRestriction>(MarketRestrictionJSON);
 
-            var fileName = typeof(Additional).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
+            var fileName = typeof(MarketRestriction).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
                     .Cast<UniVerseFileNameAttribute>()
                     .Single()
                     .FileName;
@@ -27,7 +29,7 @@ namespace MertexerV2.ProductFunctions
 
                 try
                 {
-                    var extantRecord = uniVerseFile.ReadField(additional.Key, 0).StringValue;
+                    var extantRecord = uniVerseFile.ReadField(marketRestriction.Key, 0).StringValue;
                 }
                 catch (IBMU2.UODOTNET.UniFileException)
                 {
@@ -37,22 +39,22 @@ namespace MertexerV2.ProductFunctions
                     // then write all the fields
                     // then unlock the record
                     var dataSet = new IBMU2.UODOTNET.UniDataSet(ce.Session);
-                    dataSet.Insert(additional.Key);
+                    dataSet.Insert(marketRestriction.Key);
 
                     //slcustFile.LockFile();
                     uniVerseFile.WriteRecords(dataSet);
                     //slcustFile.UnlockFile();
                 }
 
-                uniVerseFile.LockRecord(additional.Key, 1);
+                uniVerseFile.LockRecord(marketRestriction.Key, 1);
 
-                UniUpsert<Additional>.Upsert(additional, uniVerseFile);
+                UniUpsert<MarketRestriction>.Upsert(marketRestriction, uniVerseFile);
 
-                uniVerseFile.UnlockRecord(additional.Key);
+                uniVerseFile.UnlockRecord(marketRestriction.Key);
 
             }
 
-            return additional.Key;
+            return marketRestriction.Key;
         }
     }
 }

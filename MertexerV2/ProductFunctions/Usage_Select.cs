@@ -58,7 +58,7 @@ namespace MertexerV2.ProductFunctions
             }
         }
 
-        public static void AfterCareSelect_FillRow(
+        public static void UsageSelect_FillRow(
             object obj,
             out SqlString Code,
             out SqlString Descriptions,

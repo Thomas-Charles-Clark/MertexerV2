@@ -17,15 +17,15 @@ namespace MertexerV2.Models.Product
         [JsonConstructor]
         public ProductTemplate(string key) : base(key)
         {
-
+            Initialise();
         }
 
         public ProductTemplate() : base()
         {
-            InitialiseFromEmptyConstructor();
+            Initialise();
         }
 
-        public override void InitialiseFromEmptyConstructor()
+        public override void Initialise()
         {
             typeof(ProductTemplate).GetProperties().ToList().ForEach(p => Framework.InitialiseUniProperty(this, p));
         }
@@ -96,7 +96,7 @@ namespace MertexerV2.Models.Product
         /// </summary>
         [UniVerseIndex(21)]
         [UniVerseFieldName("PRODACC.MNT")]
-        public string SalesAnalysisA { get; set; }
+        public int? SalesAnalysisA { get; set; }
 
         /// <summary>
         /// Multiple Batches? -- No idea -- Y/N
@@ -125,14 +125,14 @@ namespace MertexerV2.Models.Product
         /// </summary>
         [UniVerseIndex(202)]
         [UniVerseFieldName("PRODALYS")]
-        public string SalesAnalysisD { get; set; }
+        public int? SalesAnalysisD { get; set; }
 
         /// <summary>
         /// Stock Analysis (D)
         /// </summary>
         [UniVerseIndex(203)]
         [UniVerseFieldName("STOCKALYS")]
-        public string StockAnalysisD { get; set; }
+        public int? StockAnalysisD { get; set; }
 
         /// <summary>
         /// Allocate at Batch Level? Y/N

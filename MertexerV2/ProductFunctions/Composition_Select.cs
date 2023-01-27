@@ -58,20 +58,26 @@ namespace MertexerV2.ProductFunctions
             }
         }
 
-        public static void AfterCareSelect_FillRow(
+        public static void CompositionSelect_FillRow(
             object obj,
             out SqlString Code,
-            out SqlString DescriptionOne,
-            out SqlString DescriptionTwo,
-            out SqlString DescriptionThree
+            out SqlString Description1,
+            out SqlString Description2,
+            out SqlString Description3,
+            out SqlString Description4,
+            out SqlString Description5,
+            out SqlString Description
             )
         {
             var p = (Composition)obj;
 
             Code = p.Key?.TrimReduceTruncate(20);
-            DescriptionOne = p.DescriptionOne?.TrimReduceTruncate(50);
-            DescriptionTwo = p.DescriptionTwo?.TrimReduceTruncate(50);
-            DescriptionThree = p.DescriptionThree?.TrimReduceTruncate(50);
+            Description1 = p.DescriptionOne?.TrimReduceTruncate(50);
+            Description2 = p.DescriptionTwo?.TrimReduceTruncate(50);
+            Description3 = p.DescriptionThree?.TrimReduceTruncate(50);
+            Description4 = p.DescriptionFour?.TrimReduceTruncate(50);
+            Description5 = p.DescriptionFive?.TrimReduceTruncate(50);
+            Description = p.Description?.TrimReduceTruncate(250);
         }
     }
 }

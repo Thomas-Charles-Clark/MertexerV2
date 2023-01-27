@@ -24,10 +24,10 @@ namespace MertexerV2.GeneralFunctions.Pricing
 
         public ProductStub() : base()
         {
-            InitialiseFromEmptyConstructor();
+            Initialise();
         }
 
-        public override void InitialiseFromEmptyConstructor()
+        public override void Initialise()
         {
             typeof(ProductStub).GetProperties().ToList().ForEach(p => Framework.InitialiseUniProperty(this, p));
         }

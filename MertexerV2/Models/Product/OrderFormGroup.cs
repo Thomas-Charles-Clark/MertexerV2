@@ -16,15 +16,15 @@ namespace MertexerV2.Models.Product
         [JsonConstructor]
         public OrderFormGroup(string key) : base(key)
         {
-
+            Initialise();
         }
 
         public OrderFormGroup() : base()
         {
-            InitialiseFromEmptyConstructor();
+            Initialise();
         }
 
-        public override void InitialiseFromEmptyConstructor()
+        public override void Initialise()
         {
             typeof(OrderFormGroup).GetProperties().ToList().ForEach(p => Framework.InitialiseUniProperty(this, p));
         }

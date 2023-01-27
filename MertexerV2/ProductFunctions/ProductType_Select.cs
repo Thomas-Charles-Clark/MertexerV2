@@ -12,8 +12,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MertexerV2.ProductFunctions
 {
@@ -22,7 +20,7 @@ namespace MertexerV2.ProductFunctions
         public string Code { get; set; }
     }
 
-    public static partial class ProductTypeSelect
+    public static partial class ProductTypeFunctions
     {
         [SqlFunction(
             DataAccess = DataAccessKind.Read,
@@ -71,7 +69,7 @@ namespace MertexerV2.ProductFunctions
             out SqlString DisplayNameBasket,
             out SqlString MertexSearchDescription,
             out SqlString DisplayNameSort,
-            out SqlString Filename,
+            out SqlString FileName,
             out SqlString PriceListDescription2
             )
         {
@@ -87,7 +85,7 @@ namespace MertexerV2.ProductFunctions
             DisplayNameBasket = p.DisplayNameBasket == null ? SqlString.Null : JsonConvert.SerializeObject(p.DisplayNameBasket);
             MertexSearchDescription = p.MertexSearchDescription == null ? SqlString.Null : JsonConvert.SerializeObject(p.MertexSearchDescription);
             DisplayNameSort = p.DisplayNameSort == null ? SqlString.Null : JsonConvert.SerializeObject(p.DisplayNameSort);
-            Filename = p.Filename?.TrimReduceTruncate(50);
+            FileName = p.FileName?.TrimReduceTruncate(50);
             PriceListDescription2 = p.PriceListDescription2 == null ? SqlString.Null : JsonConvert.SerializeObject(p.PriceListDescription2);
         }
     }

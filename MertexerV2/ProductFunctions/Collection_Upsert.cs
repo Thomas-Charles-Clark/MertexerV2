@@ -46,7 +46,7 @@ namespace MertexerV2.ProductFunctions
 
                 uniVerseFile.LockRecord(collection.Key, 1);
 
-                UniUpsert<Collection>.Upsert(collection, uniVerseFile);
+                UniUpsert<Collection>.Upsert(collection, uniVerseFile, UniVerseAccount);
 
                 uniVerseFile.UnlockRecord(collection.Key);
 

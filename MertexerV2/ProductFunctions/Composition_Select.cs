@@ -72,12 +72,12 @@ namespace MertexerV2.ProductFunctions
             var p = (Composition)obj;
 
             Code = p.Key?.TrimReduceTruncate(20);
-            Description1 = p.DescriptionOne?.TrimReduceTruncate(50);
-            Description2 = p.DescriptionTwo?.TrimReduceTruncate(50);
-            Description3 = p.DescriptionThree?.TrimReduceTruncate(50);
-            Description4 = p.DescriptionFour?.TrimReduceTruncate(50);
-            Description5 = p.DescriptionFive?.TrimReduceTruncate(50);
-            Description = p.Description?.TrimReduceTruncate(250);
+            Description1 = p.DescriptionOne?.TrimReduceTruncate(100);
+            Description2 = p.DescriptionTwo?.TrimReduceTruncate(100);
+            Description3 = p.DescriptionThree?.TrimReduceTruncate(100);
+            Description4 = p.DescriptionFour?.TrimReduceTruncate(100);
+            Description5 = p.DescriptionFive?.TrimReduceTruncate(100);
+            Description = p.Description?.TrimReduceTruncate(500);
         }
     }
 }

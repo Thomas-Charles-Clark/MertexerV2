@@ -62,6 +62,12 @@ namespace MertexerV2.ProductFunctions
             object obj,
             out SqlString Code,
             out SqlString Name,
+            out SqlString AddressLine1,
+            out SqlString AddressLine2,
+            out SqlString Town,
+            out SqlString County,
+            out SqlString Postcode,
+            out SqlString CountryCode,
             out SqlString Currency,
             out SqlDecimal DutyPercentage,
             out SqlDecimal InlandChargesPercentage,
@@ -75,7 +81,13 @@ namespace MertexerV2.ProductFunctions
             // ADD ADDRESS DETAILS AND REMOVE EXTANT EDAREPLACEMENT VERSION
 
             Code = p.Key?.TrimReduceTruncate(10);
-            Name = p.Name?.TrimReduceTruncate(50);
+            Name = p.Name?.TrimReduceTruncate(100);
+            AddressLine1 = p.AddressLine1?.TrimReduceTruncate(60);
+            AddressLine2 = p.AddressLine2?.TrimReduceTruncate(60);
+            Town = p.Town?.TrimReduceTruncate(50);
+            County = p.County?.TrimReduceTruncate(40);
+            Postcode = p.Postcode?.TrimReduceTruncate(20);
+            CountryCode = p.CountryCode?.TrimReduceTruncate(3);
             Currency = p.Currency?.TrimReduceTruncate(10);
             DutyPercentage = p.DutyPercentage ?? SqlDecimal.Null;
             InlandChargesPercentage = p.InlandChargesPercentage ?? SqlDecimal.Null;

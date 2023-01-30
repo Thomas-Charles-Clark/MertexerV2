@@ -889,14 +889,14 @@ namespace MertexerV2.Models.Product
         /// </summary>
         [UniVerseIndex(1007)]
         [UniVerseFieldName("RANGE.NAME")]
-        public string RangeName { get; set; }
+        public string PartNumberRangeName { get; set; }
 
         /// <summary> *new*
         /// Last Range Used
         /// </summary>
         [UniVerseIndex(1008)]
         [UniVerseFieldName("RANGE.LAST")]
-        public string LastRange { get; set; }
+        public string PartNumberLastRange { get; set; }
 
         /// <summary> *new*
         /// Generate EANs?

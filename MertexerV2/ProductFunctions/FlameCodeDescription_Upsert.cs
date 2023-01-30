@@ -38,7 +38,7 @@ namespace MertexerV2.ProductFunctions
 
                 uniVerseFile.LockRecord(additional.Key, 1);
 
-                UniUpsert<FlameCodeDescription>.Upsert(additional, uniVerseFile);
+                UniUpsert<FlameCodeDescription>.Upsert(additional, uniVerseFile, UniVerseAccount);
 
                 uniVerseFile.UnlockRecord(additional.Key);
 

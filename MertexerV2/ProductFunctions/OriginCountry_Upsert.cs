@@ -49,7 +49,7 @@ namespace MertexerV2.ProductFunctions
 
                 uniVerseFile.LockRecord(originCountry.Key, 1);
 
-                UniUpsert<OriginCountry>.Upsert(originCountry, uniVerseFile);
+                UniUpsert<OriginCountry>.Upsert(originCountry, uniVerseFile, UniVerseAccount);
 
                 uniVerseFile.UnlockRecord(originCountry.Key);
 

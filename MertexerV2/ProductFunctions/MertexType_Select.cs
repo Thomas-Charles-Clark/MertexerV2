@@ -64,9 +64,9 @@ namespace MertexerV2.ProductFunctions
             out SqlString Name
             )
         {
-            var p = (Models.Product.MertexType)obj;
+            var p = (MertexType)obj;
 
-            Code = p.Key?.TrimReduceTruncate(10);
+            Code = p.Key?.TrimReduceTruncate(5);
             Name = p.Name?.TrimReduceTruncate(50);
         }
     }

@@ -12,8 +12,16 @@ namespace MertexerV2.Utilities
 {
     public static class UniVerseSerializer
     {
-        public static string Serialize(PropertyInfo pi, object source)
+        public static string Serialize(PropertyInfo pi, object source, string uniVerseAccount = "MERTEX")
         {
+            var indices = pi.GetCustomAttributesData().Where(cad => cad.AttributeType == typeof(UniVerseIndexAttribute))
+                .SingleOrDefault()?
+                .ConstructorArguments;
+            
+            var uniVerseFieldName = pi.GetCustomAttributesData().Where(cad => cad.AttributeType == typeof(UniVerseFieldNameAttribute))
+                .SingleOrDefault()?
+                .ConstructorArguments;
+
             // UniVerse always returns me an empty string if a field is null, so I'll give one back.
             var result = ""; 
 
@@ -84,6 +92,23 @@ namespace MertexerV2.Utilities
                     }
                 }
 
+                #if DEBUG
+
+                if (uniVerseAccount != "MERTEX" && indices != null && uniVerseFieldName != null)
+                {
+                    var fieldName = (string)uniVerseFieldName[0].Value;
+
+                    var fieldIndex = (int)indices[0].Value;
+
+                    var valueIndex = (int)indices[1].Value;
+
+                    var subValueIndex = (int)indices[2].Value;
+
+                    values = values.Select((v, i) => $"<{fieldIndex},{i}> \"{fieldName}\"").ToList(); 
+                }
+    
+                #endif
+
                 // Squish our MV field values back into UniVerse format
                 result = String.Join($"{Framework.ValueMark}", values);
             }
@@ -138,6 +163,36 @@ namespace MertexerV2.Utilities
                         }
                     }
                 }
+
+                #if DEBUG
+
+                if (uniVerseAccount != "MERTEX" && indices != null && uniVerseFieldName != null)
+                {
+                    var fieldName = (string)uniVerseFieldName[0].Value;
+
+                    var fieldIndex = (int)indices[0].Value;
+
+                    var valueIndex = (int)indices[1].Value;
+
+                    var subValueIndex = (int)indices[2].Value;
+
+                    result = $"<{fieldIndex}> ";
+
+                    if (valueIndex > 0)
+                    {
+                        result = $"<{fieldIndex},{valueIndex}>";
+                    }
+
+                    if (subValueIndex > 0)
+                    {
+                        result = $"<{fieldIndex},{valueIndex},{subValueIndex}>";
+                    }
+
+                    result += $" \"{fieldName}\"";
+                }
+
+                #endif
+
             }
 
             // sanity check

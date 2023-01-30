@@ -48,7 +48,7 @@ namespace MertexerV2.ProductFunctions
 
                 uniVerseFile.LockRecord(makeDetail.Key, 1);
 
-                UniUpsert<MakeDetail>.Upsert(makeDetail, uniVerseFile);
+                UniUpsert<MakeDetail>.Upsert(makeDetail, uniVerseFile, UniVerseAccount);
 
                 uniVerseFile.UnlockRecord(makeDetail.Key);
 

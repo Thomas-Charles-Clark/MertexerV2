@@ -46,7 +46,7 @@ namespace MertexerV2.ProductFunctions
 
                 uniVerseFile.LockRecord(afterCare.Key, 1);
 
-                UniUpsert<AfterCare>.Upsert(afterCare, uniVerseFile);
+                UniUpsert<AfterCare>.Upsert(afterCare, uniVerseFile, UniVerseAccount);
 
                 uniVerseFile.UnlockRecord(afterCare.Key);
 

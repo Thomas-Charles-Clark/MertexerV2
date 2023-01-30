@@ -63,12 +63,12 @@ namespace MertexerV2.ProductFunctions
             out SqlString Code,
             out SqlString Name,
             out SqlString FirstUserScreen,
-            out SqlString GroupCode,
-            out SqlString ItemType,
+            out SqlString ProductGroupCode,
+            out SqlString ItemTypeCode,
             out SqlString UnitOfPurchase,
             out SqlString UnitOfStock,
             out SqlString VATCode,
-            out SqlString PieceLevelStock,
+            out SqlBoolean PieceLevelStock,
             out SqlInt32 SalesAnalysisA,
             out SqlBoolean MultipleBatches,
             out SqlDecimal RemeasureLength,
@@ -107,15 +107,15 @@ namespace MertexerV2.ProductFunctions
         {
             var p = (ProductTemplate)obj;
 
-            Code = p.Key?.TrimReduceTruncate(10);
+            Code = p.Key?.TrimReduceTruncate(50);
             Name = p.Name?.TrimReduceTruncate(50);
             FirstUserScreen = p.FirstUserScreen?.TrimReduceTruncate(20);
-            GroupCode = p.GroupCode?.TrimReduceTruncate(2);
-            ItemType = p.ItemType?.TrimReduceTruncate(3);
+            ProductGroupCode = p.ProductGroupCode?.TrimReduceTruncate(5);
+            ItemTypeCode = p.ItemTypeCode?.TrimReduceTruncate(5);
             UnitOfPurchase = p.UnitOfPurchase?.TrimReduceTruncate(10);
             UnitOfStock = p.UnitOfStock?.TrimReduceTruncate(10);
             VATCode = p.VATCode?.TrimReduceTruncate(10);
-            PieceLevelStock = p.PieceLevelStock?.TrimReduceTruncate(20);
+            PieceLevelStock = p.PieceLevelStock;
             SalesAnalysisA = p.SalesAnalysisA ?? SqlInt32.Null;
             MultipleBatches = p.MultipleBatches;
             RemeasureLength = p.RemeasureLength ?? SqlDecimal.Null;

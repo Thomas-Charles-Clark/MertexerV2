@@ -12,7 +12,7 @@ namespace MertexerV2.Utilities
 {
     static class UniUpsert<T> where T : UniVerseSerializationBase<string>
     {
-        public static void Upsert(object source, UniFile uniVerseFile)
+        public static void Upsert(object source, UniFile uniVerseFile, string uniVerseAccount = "MERTEX")
         {
             var key = ((UniVerseSerializationBase<string>)source).Key;
 
@@ -25,7 +25,7 @@ namespace MertexerV2.Utilities
                 // if no UniVerseIndexAttribute was given, the field is not intended to be submitted.
                 if (indices != null)
                 {
-                    var value = UniVerseSerializer.Serialize(pi, source);
+                    var value = UniVerseSerializer.Serialize(pi, source, uniVerseAccount);
 
                     var fieldIndex = (int)indices[0].Value;
 

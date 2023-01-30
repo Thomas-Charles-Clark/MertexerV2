@@ -48,7 +48,7 @@ namespace MertexerV2.ProductFunctions
 
                 uniVerseFile.LockRecord(buyer.Key, 1);
 
-                UniUpsert<Buyer>.Upsert(buyer, uniVerseFile);
+                UniUpsert<Buyer>.Upsert(buyer, uniVerseFile, UniVerseAccount);
 
                 uniVerseFile.UnlockRecord(buyer.Key);
 

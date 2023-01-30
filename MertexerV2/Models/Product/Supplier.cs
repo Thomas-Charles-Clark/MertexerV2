@@ -44,6 +44,48 @@ namespace MertexerV2.Models.Product
         public string Name { get; set; }
 
         /// <summary>
+        /// AddressLine1
+        /// </summary>
+        [UniVerseIndex(1, 2)]
+        [UniVerseFieldName("SUPADD1")]
+        public string AddressLine1 { get; set; }
+
+        /// <summary>
+        /// AddressLine2
+        /// </summary>
+        [UniVerseIndex(1, 3)]
+        [UniVerseFieldName("SUPADD2")]
+        public string AddressLine2 { get; set; }
+
+        /// <summary>
+        /// Town
+        /// </summary>
+        [UniVerseIndex(1, 4)]
+        [UniVerseFieldName("SUPADD3")]
+        public string Town { get; set; }
+
+        /// <summary>
+        /// County
+        /// </summary>
+        [UniVerseIndex(1, 5)]
+        [UniVerseFieldName("SUPADD4")]
+        public string County { get; set; }
+
+        /// <summary>
+        /// Postcode
+        /// </summary>
+        [UniVerseIndex(1, 6)]
+        [UniVerseFieldName("Postcode")]
+        public string Postcode { get; set; }
+
+        /// <summary>
+        /// CountryCode
+        /// </summary>
+        [UniVerseIndex(41)]
+        [UniVerseFieldName("CountryCode")]
+        public string CountryCode { get; set; }
+
+        /// <summary>
         /// Duty Percentage
         /// </summary>
         [UniVerseIndex(80)]

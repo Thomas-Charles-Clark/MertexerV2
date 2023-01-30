@@ -50,18 +50,18 @@ namespace MertexerV2.Models.Product
         public string FirstUserScreen { get; set; }
 
         /// <summary>
-        /// Group Code
+        /// Product Group Code
         /// </summary>
         [UniVerseIndex(2)]
         [UniVerseFieldName("GROUPCODE")]
-        public string GroupCode { get; set; }
+        public string ProductGroupCode { get; set; }
 
         /// <summary>
         /// Item Type
         /// </summary>
         [UniVerseIndex(3)]
         [UniVerseFieldName("ITEMTYPE")]
-        public string ItemType { get; set; }
+        public string ItemTypeCode { get; set; }
 
         /// <summary>
         /// Unit of Purchase
@@ -89,7 +89,7 @@ namespace MertexerV2.Models.Product
         /// </summary>
         [UniVerseIndex(13)]
         [UniVerseFieldName("PIECE.LEVEL")]
-        public string PieceLevelStock { get; set; }
+        public bool PieceLevelStock { get; set; }
 
         /// <summary>
         /// Sales Analysis (A) -- No idea

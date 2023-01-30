@@ -1,0 +1,622 @@
+﻿
+            var tradeAccountNumber = "K0098";
+
+            var tradeDataSourceJson = TesterFramework.FetchAccountDataSourceJson(tradeAccountNumber);
+
+            #region Validate CSV
+
+            //Tests.ValidateCSV.ValidateCSV.Run(tradeOrderImportFileId: 16500);
+
+            #endregion
+
+            #region PreAlloc Tests
+
+            //Tester.Tests.PreAllocation.PreAllocationTestSuite.Run("MERTEX");
+
+            #endregion
+
+            #region TOEHEAD Search Test
+
+            //OrderSearchTestSuite.OtherRun();
+
+            //OrderSearchTestSuite.UpdateCustomTrackingTest("993275601-1", "", "https://tracking.dpd.de/status/en_NL/parcel/05168962317667");
+
+            //OrderSearchTestSuite.UpdateCustomTrackingTest("999890801-1", "FL/024374", "https://tracking.dpd.de/status/{CULTURE}/parcel/05168962322215");
+
+            //DictionaryVertical("OEPLHEAD");
+
+            #endregion
+
+            //Console.WriteLine(String.Join(Environment.NewLine, Dedupe.CheckLine(tradeDataSourceJson, "CCDG1229/A", 1, "NAKAMURAYA acc", 6).OfType<string>()));
+
+            #region AccountTestSuite
+
+            //var proformaInvoices = Tests.Account.AccountTestSuite.ProformaInvoices(
+            //    json,
+            //    new MertexerV2.Models.Accounts.PassProformaInvoiceSearch()
+            //    {
+            //        dateRange = 12, // 1 / 6 / 12 months (-1 == custom)
+            //        fromDate = null,
+            //        toDate = null,
+            //        searchTerm = "geary",
+            //        orderStatus = null, //"released", //null,// "outstanding" // "released"
+            //    });
+
+            //var invoiceSearchResults = Tests.Account.AccountTestSuite.InvoiceSearch(
+            //    json,
+            //    new MertexerV2.Models.Accounts.PassInvoiceSearch()
+            //    {
+            //        dateRange = 6,
+            //        fromDate = null,
+            //        toDate = null,
+            //        searchTerm = null,
+            //        dateRangeType = 2, // 1 = WI.DESPDATE, 2 = DOCDATE, 3 = DUEDATE
+            //    });
+
+            //var addressBookResults = Tests.Account.AccountTestSuite.AddressBookSearch(json, new MertexerV2.Models.Accounts.PassPCAPredictFind()
+            //{
+
+            //});
+
+            //var accountSummary = Tests.Account.AccountTestSuite.AccountSummary(json);
+
+            //var criteria = "CUSREF = 'J0650' AND WI.OSAMOUNT # '0' AND WI.DUEDATE LT '01/04/2021' AND WI.DUEDATE # ''";
+            //var accountBalanceSummary = Tests.Account.AccountTestSuite.AccountBalanceSummary(json, criteria);
+
+            //Console.WriteLine($"Invoice Total: {accountBalanceSummary.OnAccountTotal}");
+
+            //Tests.Account.AccountTestSuite.TradeAccountList("MERTEX", null, DateTime.Parse("2022/11/01"), null);
+
+            //Tests.Account.AccountTestSuite.UpsertAccount(tradeDataSourceJson, TesterFramework.FetchTradeAccountUpsertJSON(tradeAccountNumber));
+
+
+            //var codes = TesterFramework.FetchTradeAccountListJson(1, "K0098");
+
+            //Tests.Account.AccountTestSuite.AccountBatchSelect("MERTEX", codes);
+
+            #endregion
+
+            #region Credit Test Suite
+
+            //Tester.Tests.Credit.CreditTestSuite.Run(tradeDataSourceJson);
+
+            #endregion
+
+            #region Line Status Test Suite
+
+            //Tester.Tests.LineStatus.LineStatusTestSuite.Run(7, DateTime.Now.AddMonths(-1));
+
+            #endregion
+
+            #region Line Tracking Test Suite
+
+            //Tester.Tests.Tracking.TrackingTestSuite.Run(7, DateTime.Now.AddMonths(-1));
+
+            #endregion
+
+            #region Order Siphon Testing 
+
+            //using (var qe = new QueryExecutor())
+            //{
+            //    
+            //    //var headersDoc = XDocument.Parse(MertexerV2.Utilities.Framework.RemoveInvalidXmlChars(qe.Run("B2B_GET_BASKET_HEADERS", "")));
+
+            //    //var linesDoc = XDocument.Parse(MertexerV2.Utilities.Framework.RemoveInvalidXmlChars(qe.Run("B2B_GET_BASKET_LINES", "")));
+            //}
+
+
+
+            //B2BOrderImport.SiphonOldTradeSiteOrders("MERTEX");
+
+            //B2BOrderImport.ProcessOldTradeSiteOrders();
+
+            //int resultantOrderHeadId = -1;
+            //int orderHeadId = 1001475901;
+
+            //MertexerV2.SQLFunctions.Order.Submit(orderHeadId, "portal.Mertex_Order_Select", out resultantOrderHeadId);
+
+            #endregion
+
+            #region Framework - Get List Testing
+
+            //Tests.Framework.FrameworkTestSuite.CodeGroups();
+            //Tests.Framework.FrameworkTestSuite.Markets();
+            //Tests.Framework.FrameworkTestSuite.CustomerTypes();
+            //Tests.Framework.FrameworkTestSuite.CustomerClasses();
+            //Tests.Framework.FrameworkTestSuite.SalesRepresentatives();
+            //Tests.Framework.FrameworkTestSuite.SalesAgents();
+            //Tests.Framework.FrameworkTestSuite.SalesAreas();
+            //Tests.Framework.FrameworkTestSuite.SalesDivisions();
+            //Tests.Framework.FrameworkTestSuite.VATCodes();
+            //Tests.Framework.FrameworkTestSuite.Currencies();
+            //Tests.Framework.FrameworkTestSuite.PriceLists();
+            //Tests.Framework.FrameworkTestSuite.Banks();
+            //Tests.Framework.FrameworkTestSuite.CreditControllers(); // SL.CONTROLLERS is empty!
+            //Tests.Framework.FrameworkTestSuite.PaymentTerms();
+            //Tests.Framework.FrameworkTestSuite.Hauliers();
+            //Tests.Framework.FrameworkTestSuite.CarriageServices();
+            //Tests.Framework.FrameworkTestSuite.DeliveryAddresses("K0098", "MERTEX");
+            //Tests.Framework.FrameworkTestSuite.StockLocations();
+            //Tests.Framework.FrameworkTestSuite.PromotionCodes();
+            //Tests.Framework.FrameworkTestSuite.SellingCompanies();
+            //Tests.Framework.FrameworkTestSuite.Distributors();
+            //Tests.Framework.FrameworkTestSuite.Languages();
+            //Tests.Framework.FrameworkTestSuite.ProductExclusionLists();
+            //Tests.Framework.FrameworkTestSuite.StockUnits();
+            //Tests.Framework.FrameworkTestSuite.OrderCategories();
+            //Tests.Framework.FrameworkTestSuite.StockistCategories();
+
+            #endregion
+
+            //var tills = MertexerV2SQL.MiscFunctions.MiscellaneousFunctions.FetchRetailTills();
+            //var creditCheck = MertexerV2.SQLFunctions.Credit.Check(tradeDataSourceJson);
+
+            //var results = MertexerV2.Accounts.AccountFunctions.ReserveOrders(tradeDataSourceJson, new MertexerV2.Models.Accounts.PassOutstandingOrdersSearch()
+            //{
+            //    dateRange = 12,
+            //    fromDate = null,
+            //    orderStatus = "reserve",
+            //    searchTerm = "jas",
+            //    sampleOrders = false
+            //});
+
+            //Console.WriteLine($"Saw {results.Results.Count} results");
+
+            //Item("SLCUST", "K0098-TESTING", false, "PLAY");
+
+
+            //using (var ce = new CommandExecutor())
+            //{
+            //    var results = ce.Arbitrary("LIST.INDEX TOELINE ALL");
+            //    Console.WriteLine(results);
+            //}
+
+            //Console.WriteLine(TesterFramework.ModifyReserveLine(tradeDataSourceJson, new MertexerV2.Models.Accounts.PassReserveLine()
+            //{
+            //    action = "Q",
+            //    batch = null,
+            //    code = "PDG1063/09",
+            //    isDateExtension = false,
+            //    isLineQuantityIncrease = false,
+            //    languageId = 1,
+            //    lineKey = "1004874401*2",
+            //    lineMemo = "",
+            //    lineReference = "2342323",
+            //    quantity = 0.5M,
+            //    requestedExtension = null,
+            //    requestedIncreasedQuantity = null,
+            //    universeAccount = "MERTEX"
+            //}));
+
+            //using (var ce = new CommandExecutor("MERTEX"))
+            //{
+            //    var result = ce.Arbitrary("LIST.INDEX STPIECES ALL");
+            //}
+
+            //EDAReplacementTestSuite.TOEHEADSearchTest("MERTEX", null, DateTime.Now.AddDays(-1), null);
+
+            //EDAReplacementTestSuite.TOEHEADSearchTest("MERTEX", @"[{ ""OrderID"": ""4440592"" }]", null, null, null);
+
+            //EDAReplacementTestSuite.TOEHEADSearchTest("MERTEX", null, DateTime.Parse("2022/02/01"), null, null);
+
+            //EDAReplacementTestSuite.TOEHEADSearchTest("MERTEX", TesterFramework.FetchInterestingOrderHeadIDs(), null, null, null);
+
+            //"1004521301*1"
+
+            //EDAReplacementTestSuite.TOELINESearchTest("MERTEX", null, null, null, DateTime.Now.AddDays(-1), DateTime.Now);
+
+            //EDAReplacementTestSuite.TOELINESearchTest("MERTEX", "4621379*3", null, null, null, null);
+
+            //EDAReplacementTestSuite.TOELINESearchByOrderNumbersTest("MERTEX", TesterFramework.FetchOrderHeadIDs(10));
+
+            //EDAReplacementTestSuite.STPRODLOCSearchByProductCodeLocationCodeTest("MERTEX", TesterFramework.FetchProductCodes(100), TesterFramework.FetchLocationCodes(2));
+
+            //EDAReplacementTestSuite.STPRODLOCSearchByProductCodeLocationCodeTest("MERTEX", TesterFramework.FetchProductCodes(100), null);
+
+            //EDAReplacementTestSuite.STPRODLOCSearchByProductCodeLocationCodeTest("MERTEX", "[{ Code: \"A/B835/01J\" }, { Code: \"A/BF02/01Q\" }]", "[{ Code: \"WH\" }]");
+
+            //EDAReplacementTestSuite.POHEADSearch("MERTEX", TesterFramework.FetchPurchaseOrderHeads(100));
+
+            //var poheads = EDAReplacementTestSuite.POHEADSearch("MERTEX", @"[{ ""PurchaseOrderHeadID"": ""P215268"" }]", null, null);
+
+            //var heads = JsonConvert.SerializeObject(poheads.Select(p => new { p.PurchaseOrderHeadID }).ToList());
+
+            //var polines = EDAReplacementTestSuite.PODETAILSearch("MERTEX", heads);
+
+            //var ccrs = EDAReplacementTestSuite.FetchCCRHeaders("MERTEX", null, @"[{ ""SalesMarketCode"": ""U"" }]", null);
+
+            //var ccrs = EDAReplacementTestSuite.FetchCCRHeaders("MERTEX", null, null, null, null);
+
+            //var ccrs = EDAReplacementTestSuite.FetchCCRHeaders("MERTEX", "[{ \"ClaimID\": \"561196\" }]", null, null, null);
+
+            //var ccrs = EDAReplacementTestSuite.FetchCCRHeaders("MERTEX", null, null, null, null);
+
+            //ccrs = EDAReplacementTestSuite.FetchCCRHeaders("MERTEX", null, null, DateTime.Parse("17/12/2021"), DateTime.Parse("29/12/2021"));
+
+            //var lines = EDAReplacementTestSuite.FetchCCRLines("MERTEX", JsonConvert.SerializeObject(ccrs.Select(p => new { p.ClaimID }).ToList()));
+
+            //var lines = EDAReplacementTestSuite.FetchCCRLines("MERTEX", "[{ \"ClaimID\": \"562087\" }]");
+
+            //var actions = EDAReplacementTestSuite.FetchCCRActions("MERTEX", "[{ \"ClaimID\": \"562087\" }]");
+
+            //var actions = EDAReplacementTestSuite.FetchCCRActions("MERTEX", null);
+
+            //var lines = EDAReplacementTestSuite.FetchCCRLines("MERTEX", null);
+
+            //EDAReplacementTestSuite.POHEADSearch("MERTEX", @"[{ 
+            //        ""PurchaseOrderHeadID"": ""p113797"" 
+            //    }, {
+            //        ""PurchaseOrderHeadID"": ""P113797"" 
+            //    }]", null, null);
+
+            //EDAReplacementTestSuite.PODETAILSearch("MERTEX", TesterFramework.FetchPurchaseOrderHeads(100));
+
+            //EDAReplacementTestSuite.PODETAILSearch("MERTEX", "[{ PurchaseOrderHeadID: \"P113797\" }]");
+
+            ////EDAReplacementTestSuite.STPRODMASTERSearch("MERTEX", null);
+
+            //EDAReplacementTestSuite.FetchProducts("MERTEX", "[{ \"Code\": \"CCDG1160\" }, { \"Code\": \"QUDG0154\" }]");
+
+            //var products = EDAReplacementTestSuite.FetchProducts("MERTEX", TesterFramework.FetchInterestingProductCodes());
+
+            //var products = EDAReplacementTestSuite.FetchProducts("MERTEX", null);
+
+            //var products = EDAReplacementTestSuite.FetchProductCodes("MERTEX");
+
+            //products.ForEach(p =>
+            //{
+            //    //if (p.PaintColourNumber?.Length > 10)
+            //    //{
+            //    //    Console.ForegroundColor = ConsoleColor.Red;
+            //    //    Console.WriteLine($"PAINTCOLNO: {p.Code} - {p.PaintColourNumber}");
+            //    //}
+            //    //if (p.PaintFinish?.Length > 100)
+            //    //{
+            //    //    Console.ForegroundColor = ConsoleColor.Red;
+            //    //    Console.WriteLine($"PAINTFINISH: {p.Code} - {p.PaintFinish}");
+            //    //}
+            //    //if (p.CLRDiscDesc?.Length > 8)
+            //    //{
+            //    //    Console.ForegroundColor = ConsoleColor.Red;
+            //    //    Console.WriteLine($"CLR.DISC.DESC: {p.Code} - {p.CLRDiscDesc}");
+            //    //}
+            //    if (p.SSDesign?.Length > 20)
+            //    {
+            //        Console.ForegroundColor = ConsoleColor.Red;
+            //        Console.WriteLine($"SS.DESIGN: {p.Code} - {p.SSDesign}");
+            //    }
+            //});
+
+            //EDAReplacementTestSuite.POPRICELISTList("MERTEX");
+
+            //{ ""OrderID""
+            //: ""1004346101""  }, { ""OrderID"": ""987139301"" }, 
+
+            //var toelineResults = EDAReplacementTestSuite.TOELINESearchByOrderNumbersTest("MERTEX", @"[{ ""OrderID"": ""4390641"" }]");
+
+            //var toelineResults = EDAReplacementTestSuite.TOELINESearchByOrderNumbersTest("MERTEX", @"[{ ""OrderID"": ""4312243"" }]");
+
+            //var toelineResults = EDAReplacementTestSuite.TOELINESearchByOrderNumbersTest("MERTEX", TesterFramework.FetchOrderHeadIDs(100));
+
+            //var headresults = EDAReplacementTestSuite.FetchDespatchNoteHeads("MERTEX", JsonConvert.SerializeObject(toelineResults.Select(p => new { DespatchHeadID = p.DespatchNoteNumber }).Distinct().ToList()));
+
+            //EDAReplacementTestSuite.FetchDespatchNoteLines("MERTEX", JsonConvert.SerializeObject(toelineResults.Select(p => new
+            //{
+            //    DespatchLineID = p.DespatchNoteLineKey,
+            //    HaulierCode = headresults.Where(q => q.DespatchHeadID == p.DespatchNoteNumber).Select(q => q.HaulierCode).FirstOrDefault()
+            //}).Distinct().ToList()));
+
+            //EDAReplacementTestSuite.FetchDespatchNoteLines("MERTEX", JsonConvert.SerializeObject(new[] { new { DespatchLineID = "1011625901-1*1", HaulierCode = "FL" } }));
+
+            // test with:
+
+            /*
+                995437501-1
+                and other interesting order numbers
+            //// */
+
+            //EDAReplacementTestSuite.FetchDespatchNoteHeads("MERTEX", JsonConvert.SerializeObject(new[] { new { DespatchHeadID = "1000053401-1" } }));
+
+            //EDAReplacementTestSuite.FetchDespatchNoteLines("MERTEX", JsonConvert.SerializeObject(new[] { new { DespatchLineID = "1000053401-1*1", HaulierCode = "UCP" } }));
+
+
+            //var tuffDespatchHeadIDs = TesterFramework.FetchTuffnellsDespatchHeadIDs(null);
+
+            //EDAReplacementTestSuite.FetchDespatchStationsForDespatches(tuffDespatchHeadIDs);
+
+
+            //var tuff = EDAReplacementTestSuite.FetchTuffnellsOrderHeads("MERTEX", DateTime.Parse("01/02/2022"));
+
+            //var tuff = EDAReplacementTestSuite.FetchTuffnellsDespatchHeads("MERTEX", null, DateTime.Parse("01/01/2022"));
+
+            //var tuff = EDAReplacementTestSuite.FetchDespatchNoteLines("MERTEX", @"[{ ""DespatchLineID"": ""1016049702-1*1"", ""HaulierCode"": ""TUF"" }]");
+
+            //DictionaryVertical("OEPLHEAD");
+
+            //var tuff = EDAReplacementTestSuite.FetchTuffnellsDespatchHeads("MERTEX", null, DateTime.Parse("01/01/2022"));
+
+            //var stns = EDAReplacementTestSuite.FetchDespatchStationsForDespatches("MERTEX", JsonConvert.SerializeObject(tuff.Select(p => new { p.DespatchHeadID, p.OrderID })));
+
+
+
+            //EDAReplacementTestSuite.FetchDespatchNoteLines("MERTEX", JsonConvert.SerializeObject(new[] { new { DespatchLineID = "1012292801-1*1", HaulierCode = "FL" } }));
+
+            //EDAReplacementTestSuite.FetchDespatchNoteLines("MERTEX", JsonConvert.SerializeObject(new[] { new { DespatchLineID = "040698*2", HaulierCode = "FL" } }));
+            //EDAReplacementTestSuite.FetchDespatchNoteLines("MERTEX", JsonConvert.SerializeObject(new[] { new { DespatchLineID = "040698*3", HaulierCode = "FL" } }));
+            //EDAReplacementTestSuite.FetchDespatchNoteLines("MERTEX", JsonConvert.SerializeObject(new[] { new { DespatchLineID = "040698*4", HaulierCode = "FL" } }));
+            //EDAReplacementTestSuite.FetchDespatchNoteLines("MERTEX", JsonConvert.SerializeObject(new[] { new { DespatchLineID = "040698*5", HaulierCode = "FL" } }));
+            //EDAReplacementTestSuite.FetchDespatchNoteLines("MERTEX", JsonConvert.SerializeObject(new[] { new { DespatchLineID = "040698*6", HaulierCode = "FL" } }));
+
+            //var despatchIds = TesterFramework.FetchInterestingDespatchIDs(5000);
+
+            //var despatchList = JsonConvert.DeserializeObject<List<Despatch>>(despatchIds);
+
+            //var despatchBatches = ListExtension.Split(despatchList, 1000);
+
+            //despatchBatches.ForEach(batch =>
+            //{
+            //    EDAReplacementTestSuite.FetchDespatchNoteHeads("MERTEX", JsonConvert.SerializeObject(batch));
+            //});
+
+
+
+            //EDAReplacementTestSuite.FetchDespatchNoteHeads("MERTEX", JsonConvert.SerializeObject(new[] { new { DespatchHeadID = "1006726601-3" } }));
+
+
+
+            //EDAReplacementTestSuite.CLQUALDESList("MERTEX");
+
+            //EDAReplacementTestSuite.CLCOMPList("MERTEX");
+
+            //EDAReplacementTestSuite.STPRODMASTERSearch("MERTEX", TesterFramework.FetchProductCodes(5000));
+
+
+            //EDAReplacementTestSuite.FetchProducts("MERTEX", TesterFramework.FetchProductCodes(100));
+
+            //EDAReplacementTestSuite.FetchQualities("MERTEX");
+
+            //EDAReplacementTestSuite.FetchCompositionCodes("MERTEX");
+
+            //EDAReplacementTestSuite.FetchFlamCodes("MERTEX");
+
+            //EDAReplacementTestSuite.FetchAftercares("MERTEX");
+
+
+            //var products = EDAReplacementTestSuite.STPRODMASTERSearch("MERTEX", null);
+
+            //var beds = products.Where(p => p.Code == "BEDDG3007").ToList();
+            //var otherBeds = products.Where(p => p.Code == "BEDDG3007").ToList();
+
+            //EDAReplacementTestSuite.OECarriages("MERTEX");
+
+            //EDAReplacementTestSuite.STLocation("MERTEX");
+            //EDAReplacementTestSuite.SalesMarkets("MERTEX");
+            //EDAReplacementTestSuite.ItemTypes("MERTEX");
+
+            //var stockResults = MertexerV2.SQLFunctions.Stock.B2CEnquiry_Singular("MISC-CUSHION", "WH");
+
+            //var stockResults = MertexerV2.SQLFunctions.Stock.BatchPiece("F1190FR/06", "WH", "S");
+
+            //Item("OEDNHHIST", "1007188601-1", false);
+
+            //EDAReplacementTestSuite.FetchHauliers("MERTEX");
+
+            //EDAReplacementTestSuite.FetchSuppliers("MERTEX");
+
+            //EDAReplacementTestSuite.FetchPurchaseOrderPrices("MERTEX", @"[{ ""Key"": ""M0043*FLCF-65600/H""  }]");
+
+            //EDAReplacementTestSuite.FetchExchangeRates("MERTEX");
+
+            //EDAReplacementTestSuite.FetchPurchaseOrderPrices("MERTEX", null);
+
+            //EDAReplacementTestSuite.FetchDeliveryAddresses("MERTEX", @"[{ ""Code"": ""K0098"" }]", null);
+
+            //var sundryResults = EDAReplacementTestSuite.FetchSundries("MERTEX", @"[{ ""SundryCode"": ""D32MEDIAUK"" }]");
+
+            //var jlProdRef = EDAReplacementTestSuite.JohnLewisProductReference("MERTEX", "313270/695", 1);
+
+            //var priceCrossResults = EDAReplacementTestSuite.FetchPriceCrosses("MERTEX");
+
+            //var result = WTAccessInternalImportDenial("MERTEX");
+
+            //var outstandingOrdersResult = MertexerV2.Accounts.AccountFunctions.OutstandingOrders(tradeDataSourceJson, new MertexerV2.Models.Accounts.PassOutstandingOrdersSearch()
+            //{
+            //    dateRange = 6,
+            //    fromDate = null,
+            //    orderStatus = "outstanding",
+            //    sampleOrders = false,
+            //    searchTerm = "7771354",
+            //    toDate = null
+            //});
+
+            //var interrogator = new FieldInterrogator("STPRODTEMPLATE.DES", $"{AppDomain.CurrentDomain.BaseDirectory}\\..\\..\\STPRODTEMPLATE.DES - SCREEN EXPLORER - TEMPLATE1");
+
+            //var interrogator2 = new FieldInterrogator("STPRODMASTER", $"{AppDomain.CurrentDomain.BaseDirectory}\\..\\..\\STPRODMASTER - SCREEN EXPLORER - PMU.CLOTH.MASS.DES1");
+
+            //var interrogator = new FieldInterrogator("POCOSTS", $"{AppDomain.CurrentDomain.BaseDirectory}\\..\\..\\POCOSTS - SCREEN EXPLORER - MAINT1");
+
+
+
+
+
+            //var product = Selector<Product>.Select("MERTEX", "RUGDG0560");
+
+            //product.Description = "Potato!";
+
+            //var result = ProductFunctions.Upsert("MERTEX", JsonConvert.SerializeObject(product));
+
+
+
+            //var results = Selector<Product>.Select("MERTEX", new List<string>() {
+            //    "RUGDG0560",
+            //    "CCDG1151"
+            //});
+
+            //var results = Selector<Product>.Select(new[] { "FRL5033/01", "F317/09" }, true, false).ToList();
+
+            //Console.Write(Selector<ProductStub>.SelectAll(true, false, 50).Select(p => p.Key.Length).Max());
+
+            //var results = Selector<Product>.Search("VARE", new string[] { "@ID", "BASKET.NAME", "DESIGN.DES" }, "contains").ToList();
+
+            //var result = MaxFieldLengths<Product>.Execute(null, true, false, 50);
+
+            //var qualities = Selector<Quality>.SelectAll(true, false).OfType<Quality>().ToList();
+
+            //Console.WriteLine($"Selector<Quality>.SelectAll returned {qualities.Count} results in {stopwatch.Elapsed}");
+
+
+            //var results = MertexerV2.SQLFunctions.QuantityBreakCostPrice.Select("MERTEX", null, "PA", "RL").OfType<QuantityBreakCostPriceResult>().ToList();
+
+            //Console.WriteLine($"QuantityBreakCostPrice.Select returned {results.Count} results in {stopwatch.Elapsed}");
+
+
+            //var result = MaxFieldLengths<MertexerV2.Models.Product.MertexType>.Execute(null, true, false, 100);
+
+            //Console.WriteLine(result);
+
+            ////var results = ProductFunctions.Select("MERTEX", null).OfType<Product>().ToList();
+
+            ////var results = MertexerV2.SQLFunctions.QuantityBreakCostPrice.Select("MERTEX", null, "PA", "RL").OfType<QuantityBreakCostPriceResult>().ToList();
+
+            //var results = TypeFunctions.Select("MERTEX", null).OfType<MertexerV2.Models.Product.MertexType>().ToList();
+
+            //Console.WriteLine($"FlameFunctions.Select returned {results.Count} results in {stopwatch.Elapsed}");
+
+
+
+
+
+            
+            //Console.WriteLine(comp);
+            //Console.WriteLine("AfterCare");
+            //Console.WriteLine(MaxFieldLengths<AfterCare>.Execute(null, true, false));
+            //Console.WriteLine();
+            //Console.WriteLine();
+
+            //Console.WriteLine("Buyer");
+            //Console.WriteLine(MaxFieldLengths<Buyer>.Execute(null, true, false));
+            //Console.WriteLine();
+            //Console.WriteLine();
+
+            //Console.WriteLine("Collection");
+            //Console.WriteLine(MaxFieldLengths<Collection>.Execute(null, true, false));
+            //Console.WriteLine();
+            //Console.WriteLine();
+
+            //Console.WriteLine("Composition");
+            //Console.WriteLine(MaxFieldLengths<Composition>.Execute(null, true, false));
+            //Console.WriteLine();
+            //Console.WriteLine();
+
+            //Console.WriteLine("ContractFlameRetardancyImageDescription");
+            //Console.WriteLine(MaxFieldLengths<ContractFlameRetardancyImageDescription>.Execute(null, true, false));
+            //Console.WriteLine();
+            //Console.WriteLine();
+
+            //Console.WriteLine("Design");
+            //Console.WriteLine(MaxFieldLengths<Design>.Execute(null, true, false));
+            //Console.WriteLine();
+            //Console.WriteLine();
+
+            //Console.WriteLine("FlameCodeDescription");
+            //Console.WriteLine(MaxFieldLengths<FlameCodeDescription>.Execute(null, true, false));
+            //Console.WriteLine();
+            //Console.WriteLine();
+
+            //Console.WriteLine("FlameRetardantDescription");
+            //Console.WriteLine(MaxFieldLengths<FlameRetardantDescription>.Execute(null, true, false));
+            //Console.WriteLine();
+            //Console.WriteLine();
+
+            //Console.WriteLine("ItemType");
+            //Console.WriteLine(MaxFieldLengths<ItemType>.Execute(null, true, false));
+            //Console.WriteLine();
+            //Console.WriteLine();
+
+            //Console.WriteLine("MakeDetail");
+            //Console.WriteLine(MaxFieldLengths<MakeDetail>.Execute(null, true, false));
+            //Console.WriteLine();
+            //Console.WriteLine();
+
+            //Console.WriteLine("MarketRestriction");
+            //Console.WriteLine(MaxFieldLengths<MarketRestriction>.Execute(null, true, false));
+            //Console.WriteLine();
+            //Console.WriteLine();
+
+            //Console.WriteLine("MertexType");
+            //Console.WriteLine(MaxFieldLengths<MertexType>.Execute(null, true, false));
+            //Console.WriteLine();
+            //Console.WriteLine();
+
+            //Console.WriteLine("OrderFormGroup");
+            //Console.WriteLine(MaxFieldLengths<OrderFormGroup>.Execute(null, true, false));
+            //Console.WriteLine();
+            //Console.WriteLine();
+
+            //Console.WriteLine("OriginCountry");
+            //Console.WriteLine(MaxFieldLengths<OriginCountry>.Execute(null, true, false));
+            //Console.WriteLine();
+            //Console.WriteLine();
+
+            //Console.WriteLine("Pattern");
+            //Console.WriteLine(MaxFieldLengths<Pattern>.Execute(null, true, false));
+            //Console.WriteLine();
+            //Console.WriteLine();
+
+            //Console.WriteLine("PatternBook");
+            //Console.WriteLine(MaxFieldLengths<PatternBook>.Execute(null, true, false));
+            //Console.WriteLine();
+            //Console.WriteLine();
+
+            //Console.WriteLine("PatternMatch");
+            //Console.WriteLine(MaxFieldLengths<PatternMatch>.Execute(null, true, false));
+            //Console.WriteLine();
+            //Console.WriteLine();
+
+            //Console.WriteLine("ProductDeveloper");
+            //Console.WriteLine(MaxFieldLengths<ProductDeveloper>.Execute(null, true, false));
+            //Console.WriteLine();
+            //Console.WriteLine();
+
+            //Console.WriteLine("ProductGroup");
+            //Console.WriteLine(MaxFieldLengths<ProductGroup>.Execute(null, true, false));
+            //Console.WriteLine();
+            //Console.WriteLine();
+
+            //Console.WriteLine("ProductTemplate");
+            //Console.WriteLine(MaxFieldLengths<ProductTemplate>.Execute(null, true, false));
+            //Console.WriteLine();
+            //Console.WriteLine();
+
+            //Console.WriteLine("ProductType");
+            //Console.WriteLine(MaxFieldLengths<ProductType>.Execute(null, true, false));
+            //Console.WriteLine();
+            //Console.WriteLine();
+
+            //Console.WriteLine("Supplier");
+            //Console.WriteLine(MaxFieldLengths<MertexerV2.Models.Product.Supplier>.Execute(null, true, false));
+            //Console.WriteLine();
+            //Console.WriteLine();
+
+            //Console.WriteLine("Test");
+            //Console.WriteLine(MaxFieldLengths<Test>.Execute(null, true, false));
+            //Console.WriteLine();
+            //Console.WriteLine();
+
+            //Console.WriteLine("UKFlameRetardancyImageDescription");
+            //Console.WriteLine(MaxFieldLengths<UKFlameRetardancyImageDescription>.Execute(null, true, false));
+            //Console.WriteLine();
+            //Console.WriteLine();
+
+            //Console.WriteLine("Usage");
+            //Console.WriteLine(MaxFieldLengths<Usage>.Execute(null, true, false));
+            //Console.WriteLine();
+            //Console.WriteLine();
+
+            //Console.WriteLine("Quality");
+            //Console.WriteLine(MaxFieldLengths<Quality>.Execute(null, true, false));
+            //Console.WriteLine();
+            //Console.WriteLine();
+
+            //Console.WriteLine("Product");
+            //Console.WriteLine(MaxFieldLengths<Product>.Execute(null, true, false, 50));

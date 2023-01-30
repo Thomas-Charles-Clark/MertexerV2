@@ -48,7 +48,7 @@ namespace MertexerV2.ProductFunctions
 
                 uniVerseFile.LockRecord(marketRestriction.Key, 1);
 
-                UniUpsert<MarketRestriction>.Upsert(marketRestriction, uniVerseFile);
+                UniUpsert<MarketRestriction>.Upsert(marketRestriction, uniVerseFile, UniVerseAccount);
 
                 uniVerseFile.UnlockRecord(marketRestriction.Key);
 

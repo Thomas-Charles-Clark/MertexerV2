@@ -66,7 +66,7 @@ namespace MertexerV2.ProductFunctions
         {
             var p = (MarketRestriction)obj;
 
-            Code = p.Key?.TrimReduceTruncate(20);
+            Code = p.Key?.TrimReduceTruncate(5);
             Name = p.Name?.TrimReduceTruncate(50);
         }
     }

@@ -67,7 +67,7 @@ namespace MertexerV2.ProductFunctions
             var p = (Collection)obj;
 
             Code = p.Key?.TrimReduceTruncate(10);
-            Name = p.Name?.TrimReduceTruncate(50);
+            Name = p.Name?.TrimReduceTruncate(100);
         }
     }
 }

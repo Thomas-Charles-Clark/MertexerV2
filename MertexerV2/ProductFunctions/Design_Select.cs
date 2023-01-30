@@ -68,7 +68,7 @@ namespace MertexerV2.ProductFunctions
             var p = (Design)obj;
 
             Code = p.Key?.TrimReduceTruncate(10);
-            Name = p.Name?.TrimReduceTruncate(30);
+            Name = p.Name?.TrimReduceTruncate(20);
             SortOrder = p.SortOrder ?? SqlInt32.Null;
         }
     }

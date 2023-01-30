@@ -1,11 +1,13 @@
 ﻿using IBMU2.UODOTNET;
 
+using MertexerV2.Models.Product;
 using MertexerV2.Utilities;
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MertexerV2.GeneralFunctions
@@ -58,12 +60,6 @@ namespace MertexerV2.GeneralFunctions
 
             var dummy = Activator.CreateInstance<T>();
 
-            typeof(T).GetProperties().ToList().ForEach(p =>
-            {
-                if (p.CanWrite && p.PropertyType == typeof(string))
-                    p.SetValue(dummy, "");
-            });
-
             results.ForEach(r =>
             {
                 typeof(T).GetProperties().ToList().ForEach(p =>
@@ -72,25 +68,13 @@ namespace MertexerV2.GeneralFunctions
                     {
                         if (p.PropertyType == typeof(string))
                         {
-                            var rv = p.GetValue(r) as string;
-                            var dv = p.GetValue(dummy) as string;
+                            var currentValue = p.GetValue(r)?.ToString() ?? "";
 
-                            var rvi = 0;
-                            var dvi = 0;
+                            var dummyValue = p.GetValue(dummy)?.ToString() ?? "";
 
-                            if (Int32.TryParse(rv, out int i))
+                            if (currentValue.Length > dummyValue.Length)
                             {
-                                rvi = i;
-                            }
-
-                            if (Int32.TryParse(dv, out int j))
-                            {
-                                dvi = j;
-                            }
-
-                            if (rvi > dvi)
-                            {
-                                p.SetValue(dummy, $"{rvi}");
+                                p.SetValue(dummy, currentValue);
                             }
                         }
                         else if (p.PropertyType == typeof(IEnumerable<string>))
@@ -199,8 +183,22 @@ namespace MertexerV2.GeneralFunctions
                 });
             });
 
+            typeof(T).GetProperties().ToList().ForEach(p =>
+            {
+                if (p.CanWrite)
+                {
+                    if (p.PropertyType == typeof(string))
+                    {
+                        if (p.GetValue(dummy) != null)
+                        {
+                            p.SetValue(dummy, $"{((string)p.GetValue(dummy)).Length}");
+                        }
+                    }
+                }
+            });
+
 #if DEBUG
-            sw.Stop();
+                sw.Stop();
 
             Console.ForegroundColor = ConsoleColor.Yellow;
 
@@ -286,18 +284,27 @@ namespace MertexerV2.GeneralFunctions
                         thisBatchResults.ForEach(r =>
                         {
                             typeof(T).GetProperties().ToList().ForEach(p =>
-                            {
+                            { 
                                 if (p.CanWrite)
                                 {
                                     if (p.PropertyType == typeof(string))
                                     {
-                                        var rv = p.GetValue(r) as string;
-                                        var dv = p.GetValue(dummy) as string;
+                                        var currentValue = p.GetValue(r)?.ToString() ?? "";
 
-                                        if (rv != null && rv.Length > dv?.Length)
+                                        var dummyValue = p.GetValue(dummy)?.ToString() ?? "";
+
+                                        if (currentValue.Length > dummyValue.Length)
                                         {
-                                            p.SetValue(dummy, $"{rv.Length}");
+                                            p.SetValue(dummy, currentValue);
                                         }
+
+                                        //var rv = p.GetValue(r) as string;
+                                        //var dv = p.GetValue(dummy) as string;
+
+                                        //if (rv != null && (rv.Length > (dv?.Length ?? 0)))
+                                        //{
+                                        //    p.SetValue(dummy, $"{rv.Length}");
+                                        //}
                                     }
                                     else if (p.PropertyType == typeof(IEnumerable<string>))
                                     {

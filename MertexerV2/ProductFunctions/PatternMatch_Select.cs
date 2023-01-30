@@ -71,7 +71,7 @@ namespace MertexerV2.ProductFunctions
         {
             var p = (Models.Product.PatternMatch)obj;
 
-            Code = p.Key?.TrimReduceTruncate(10);
+            Code = p.Key?.TrimReduceTruncate(5);
             Name = p.Name?.TrimReduceTruncate(50);
             Full = p.Full?.TrimReduceTruncate(50);
             Half = p.Half?.TrimReduceTruncate(50);

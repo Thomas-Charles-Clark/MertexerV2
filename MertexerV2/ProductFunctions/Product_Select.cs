@@ -295,7 +295,7 @@ namespace MertexerV2.ProductFunctions
             MultipleBatches = p.MultipleBatches;
             LastCostPrices = p.LastCostPrices == null ? SqlString.Null : JsonConvert.SerializeObject(p.LastCostPrices);
             LatestCostPrice = p.LatestCostPrice ?? SqlDecimal.Null;
-            Quality = p.Quality?.TrimReduceTruncate(20);
+            Quality = p.Quality?.TrimReduceTruncate(50);
             Composition = p.Composition?.TrimReduceTruncate(20);
             FinishedWidth = p.FinishedWidth ?? SqlDecimal.Null;
             SupplierCodes = p.SupplierCodes == null ? SqlString.Null : JsonConvert.SerializeObject(p.SupplierCodes);
@@ -317,14 +317,14 @@ namespace MertexerV2.ProductFunctions
             StockAnalysisD = p.StockAnalysisD?.TrimReduceTruncate(20);
             FullDescriptions = p.FullDescriptions == null ? SqlString.Null :  JsonConvert.SerializeObject(p.FullDescriptions);
             AllocateAtBatchLevel = p.AllocateAtBatchLevel;
-            ValuationCostToUse = p.ValuationCostToUse;
+            ValuationCostToUse = p.ValuationCostToUse?.TrimReduceTruncate(1);
             PatternMatchCode = p.PatternMatchCode?.TrimReduceTruncate(50);
             UKFlameRetardancy = p.UKFlameRetardancy?.TrimReduceTruncate(5);
             ContractFlameRetardancy = p.ContractFlameRetardancy?.TrimReduceTruncate(5);
             FormCode = p.FormCode?.TrimReduceTruncate(5);
             PatternBook = p.PatternBook?.TrimReduceTruncate(20);
             LaunchDT = p.LaunchDT ?? SqlDateTime.Null;
-            ManufacturersID = p.ManufacturersID?.TrimReduceTruncate(20);
+            ManufacturersID = p.ManufacturersID?.TrimReduceTruncate(50);
             StockCode = p.StockCode?.TrimReduceTruncate(20);
             UpholsteryGrade = p.UpholsteryGrade?.TrimReduceTruncate(300);
             UsageCodes = p.UsageCodes == null ? SqlString.Null : JsonConvert.SerializeObject(p.UsageCodes);
@@ -346,7 +346,7 @@ namespace MertexerV2.ProductFunctions
             TestCodes = p.TestCodes == null ? SqlString.Null : JsonConvert.SerializeObject(p.TestCodes);
             Type = p.Type?.TrimReduceTruncate(30);
             Supplier = p.Supplier?.TrimReduceTruncate(20);
-            MylandsProductCode = p.MylandsProductCode?.TrimReduceTruncate(20);
+            MylandsProductCode = p.MylandsProductCode?.TrimReduceTruncate(50);
             ProductClass2 = p.ProductClass2?.TrimReduceTruncate(20);
             CuttingLength = p.CuttingLength ?? SqlDecimal.Null;
             MinimumReplenishment = p.MinimumReplenishment ?? SqlDecimal.Null;
@@ -361,7 +361,7 @@ namespace MertexerV2.ProductFunctions
             WebProduct = p.WebProduct;
             LabelLogo = p.LabelLogo?.TrimReduceTruncate(1);
             FullOrderOnly = p.FullOrderOnly;
-            ChargeOn = p.ChargeOn;
+            ChargeOn = p.ChargeOn?.TrimReduceTruncate(1);
             Brand = p.Brand?.TrimReduceTruncate(3);
             Collection = p.Collection?.TrimReduceTruncate(10);
             PickListGroup = p.PickListGroup?.TrimReduceTruncate(1);
@@ -386,8 +386,8 @@ namespace MertexerV2.ProductFunctions
             Market = p.Market?.TrimReduceTruncate(3);
             PartNumberRangeStart = p.PartNumberRangeStart?.TrimReduceTruncate(10);
             PartNumberRangeEnd = p.PartNumberRangeEnd?.TrimReduceTruncate(10);
-            RangeName = p.RangeName?.TrimReduceTruncate(10);
-            LastRange = p.LastRange?.TrimReduceTruncate(10);
+            RangeName = p.PartNumberRangeName?.TrimReduceTruncate(10);
+            LastRange = p.PartNumberLastRange?.TrimReduceTruncate(10);
             CreateEANCodes = p.CreateEANCodes;
             PurchaseOrderEmailAddress = p.PurchaseOrderEmailAddress?.TrimReduceTruncate(254);
             BasketName = p.BasketName?.TrimReduceTruncate(200);
@@ -442,7 +442,7 @@ namespace MertexerV2.ProductFunctions
             VerticalPatternRepeatInches = p.VerticalPatternRepeatInches ?? SqlDecimal.Null;
             HorizontalPatternRepeatInches = p.HorizontalPatternRepeatInches ?? SqlDecimal.Null;
             AdditionalProductCostSterling = p.AdditionalProductCostSterling ?? SqlDecimal.Null;
-            WebPattern = p.WebPattern;
+            WebPattern = p.WebPattern?.TrimReduceTruncate(1);
             MaximumFoldSize = p.MaximumFoldSize ?? SqlByte.Null;
             BespokeHanger = p.BespokeHanger;
             BespokeWaterfall = p.BespokeWaterfall;
@@ -492,7 +492,7 @@ namespace MertexerV2.ProductFunctions
             VolumetricHeightCM = p.VolumetricHeightCM ?? SqlDecimal.Null;
             PaintType = p.PaintType?.TrimReduceTruncate(50);
             PoleSize = p.PoleSize?.TrimReduceTruncate(1);
-            CustomsCommodityDescription = p.CustomsCommodityDescription?.TrimReduceTruncate(50);
+            CustomsCommodityDescription = p.CustomsCommodityDescription?.TrimReduceTruncate(100);
             JLStockCodeMTM = p.JLStockCodeMTM?.TrimReduceTruncate(50);
             FRLPartNumber = p.FRLPartNumber?.TrimReduceTruncate(50);
             FoliaPartNumber = p.FoliaPartNumber?.TrimReduceTruncate(50);

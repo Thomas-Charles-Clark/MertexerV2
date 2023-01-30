@@ -66,7 +66,7 @@ namespace MertexerV2.ProductFunctions
         {
             var p = (Models.Product.Pattern)obj;
 
-            Code = p.Key?.TrimReduceTruncate(10);
+            Code = p.Key?.TrimReduceTruncate(5);
             Name = p.Name?.TrimReduceTruncate(50);
         }
     }

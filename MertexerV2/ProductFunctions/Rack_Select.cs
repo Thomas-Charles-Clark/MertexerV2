@@ -17,22 +17,22 @@ using System.Threading.Tasks;
 
 namespace MertexerV2.ProductFunctions
 {
-    public class GeneralLedgerDiscountCodeGroupCode
+    public class RackCode
     {
         public string Code { get; set; }
     }
 
-    public static partial class GeneralLedgerDiscountCodeGroupFunctions    
+    public static partial class RackFunctions    
     {
         [SqlFunction(
             DataAccess = DataAccessKind.Read,
-            FillRowMethodName = "GeneralLedgerDiscountCodeGroupSelect_FillRow")]
+            FillRowMethodName = "RackSelect_FillRow")]
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
-        public static IEnumerable Select(string UniVerseAccount, string GeneralLedgerDiscountCodeGroupCodes)
+        public static IEnumerable Select(string UniVerseAccount, string RackCodes)
         {
-            if (String.IsNullOrEmpty(GeneralLedgerDiscountCodeGroupCodes))
+            if (String.IsNullOrEmpty(RackCodes))
             {
-                foreach (var q in Selector<GeneralLedgerDiscountCodeGroup>.SelectAllNonParallel(
+                foreach (var q in Selector<Rack>.SelectAllNonParallel(
                    true,
                    false,
                    50,
@@ -43,8 +43,8 @@ namespace MertexerV2.ProductFunctions
             }
             else
             {
-                var results = Selector<GeneralLedgerDiscountCodeGroup>.Select(
-                    JsonConvert.DeserializeObject<IEnumerable<GeneralLedgerDiscountCodeGroupCode>>(GeneralLedgerDiscountCodeGroupCodes).Select(p => p.Code),
+                var results = Selector<Rack>.Select(
+                    JsonConvert.DeserializeObject<IEnumerable<RackCode>>(RackCodes).Select(p => p.Code),
                     true,
                     false,
                     50,
@@ -58,16 +58,22 @@ namespace MertexerV2.ProductFunctions
             }
         }
 
-        public static void GeneralLedgerDiscountCodeGroupSelect_FillRow(
+        public static void RackSelect_FillRow(
             object obj,
             out SqlString Code,
-            out SqlString Name
+            out SqlString Name,
+            out SqlString WarehouseRoute,
+            out SqlBoolean Pickable,
+            out SqlString Type
             )
         {
-            var p = (GeneralLedgerDiscountCodeGroup)obj;
+            var p = (Rack)obj;
 
             Code = p.Key?.TrimReduceTruncate(10);
             Name = p.Name?.TrimReduceTruncate(50);
+            WarehouseRoute = p.WarehouseRoute?.TrimReduceTruncate(50);
+            Pickable = p.Pickable;
+            Type = p.Type?.TrimReduceTruncate(1);
         }
     }
 }

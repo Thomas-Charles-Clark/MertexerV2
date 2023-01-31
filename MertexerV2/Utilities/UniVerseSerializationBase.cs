@@ -13,12 +13,13 @@ namespace MertexerV2.Utilities
     public abstract class UniVerseSerializationBase<T> : IDeserializeFromUniDynArray
     {
         /// <summary>
-        /// Product Code
+        /// Key
         /// </summary>
         private T _key { get; set; }
 
         //[UniVerseIndex(0)]
         //[UniVerseFieldName("@ID")]
+        [JsonProperty("Code")]
         public string Key
         {
             get

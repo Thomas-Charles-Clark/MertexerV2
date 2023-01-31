@@ -85,7 +85,7 @@ namespace MertexerV2.ProductFunctions
             out SqlBoolean SampleProduct,
             out SqlBoolean PieceBatchOnPickList,
             out SqlBoolean PieceOnlyOrders,
-            out SqlString ProductClass2,
+            out SqlString GeneralLedgerDiscountGroupCode,
             out SqlDecimal CuttingLength,
             out SqlDecimal MinimumReplenishment,
             out SqlString BulkRack,
@@ -99,8 +99,8 @@ namespace MertexerV2.ProductFunctions
             out SqlBoolean BespokeRug,
             out SqlString PartNumberRangeStart,
             out SqlString PartNumberRangeEnd,
-            out SqlString RangeName,
-            out SqlString LastRange,
+            out SqlString PartNumberPrefix,
+            out SqlString PartNumberRangeLastUsed,
             out SqlBoolean CreateEANCode
 
             )
@@ -132,7 +132,7 @@ namespace MertexerV2.ProductFunctions
             SampleProduct = p.SampleProduct;
             PieceBatchOnPickList = p.PieceBatchOnPickList;
             PieceOnlyOrders = p.PieceOnlyOrders;
-            ProductClass2 = p.ProductClass2.TrimReduceTruncate(20);
+            GeneralLedgerDiscountGroupCode = p.GeneralLedgerDiscountGroupCode.TrimReduceTruncate(20);
             CuttingLength = p.CuttingLength ?? SqlDecimal.Null;
             MinimumReplenishment = p.MinimumReplenishment ?? SqlDecimal.Null;
             BulkRack = p.BulkRack?.TrimReduceTruncate(20);
@@ -146,8 +146,8 @@ namespace MertexerV2.ProductFunctions
             BespokeRug = p.BespokeRug;
             PartNumberRangeStart = p.PartNumberRangeStart?.TrimReduceTruncate(5);
             PartNumberRangeEnd = p.PartNumberRangeEnd?.TrimReduceTruncate(5);
-            RangeName = p.RangeName?.TrimReduceTruncate(10);
-            LastRange = p.LastRange?.TrimReduceTruncate(10);
+            PartNumberPrefix = p.PartNumberPrefix?.TrimReduceTruncate(10);
+            PartNumberRangeLastUsed = p.PartNumberRangeLastUsed?.TrimReduceTruncate(10);
             CreateEANCode = p.CreateEANCodes;
         }
     }

@@ -44,6 +44,7 @@ namespace MertexerV2.Models.Product
         [UniVerseIndex(1)]
         [UniVerseMultiValue]
         [UniVerseFieldName("SEQ.NO")]
+        [JsonConverter(typeof(StringToArrayConverter<IEnumerable<string>>))]
         public IEnumerable<string> SortOrders { get; set; }
 
         /// <summary>
@@ -52,6 +53,7 @@ namespace MertexerV2.Models.Product
         [UniVerseIndex(2)]
         [UniVerseMultiValue]
         [UniVerseFieldName("FABCODE")]
+        [JsonConverter(typeof(StringToArrayConverter<IEnumerable<string>>))]
         public IEnumerable<string> FabricCodes { get; set; }
     }
 }

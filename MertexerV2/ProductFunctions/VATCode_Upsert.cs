@@ -1,4 +1,4 @@
-﻿using MertexerV2.Models.Product;
+﻿using MertexerV2.Models.Pricing;
 using MertexerV2.Utilities;
 
 using Microsoft.SqlServer.Server;
@@ -11,14 +11,14 @@ using System.Linq;
 
 namespace MertexerV2.ProductFunctions
 {
-    public static partial class ContractFlameRetardancyImageDescriptionFunctions
+    public static partial class VATCodeFunctions
     {
         [SqlFunction]
-        public static string Upsert(string UniVerseAccount, string ContractFlameJSON)
+        public static string Upsert(string UniVerseAccount, string VATCodeJSON)
         {
-            var contractFlame = JsonConvert.DeserializeObject<ContractFlameRetardancyImageDescription>(ContractFlameJSON);
+            var VATCode = JsonConvert.DeserializeObject<VATCode>(VATCodeJSON);
 
-            var fileName = typeof(ContractFlameRetardancyImageDescription).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
+            var fileName = typeof(VATCode).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
                     .Cast<UniVerseFileNameAttribute>()
                     .Single()
                     .FileName;
@@ -29,7 +29,7 @@ namespace MertexerV2.ProductFunctions
 
                 try
                 {
-                    var extantRecord = uniVerseFile.ReadField(contractFlame.Key, 0).StringValue;
+                    var extantRecord = uniVerseFile.ReadField(VATCode.Key, 0).StringValue;
                 }
                 catch (IBMU2.UODOTNET.UniFileException)
                 {
@@ -39,22 +39,22 @@ namespace MertexerV2.ProductFunctions
                     // then write all the fields
                     // then unlock the record
                     var dataSet = new IBMU2.UODOTNET.UniDataSet(ce.Session);
-                    dataSet.Insert(contractFlame.Key);
+                    dataSet.Insert(VATCode.Key);
 
                     //slcustFile.LockFile();
                     uniVerseFile.WriteRecords(dataSet);
                     //slcustFile.UnlockFile();
                 }
 
-                uniVerseFile.LockRecord(contractFlame.Key, 1);
+                uniVerseFile.LockRecord(VATCode.Key, 1);
 
-                UniUpsert<ContractFlameRetardancyImageDescription>.Upsert(contractFlame, uniVerseFile, UniVerseAccount);
+                UniUpsert<VATCode>.Upsert(VATCode, uniVerseFile, UniVerseAccount);
 
-                uniVerseFile.UnlockRecord(contractFlame.Key);
+                uniVerseFile.UnlockRecord(VATCode.Key);
 
             }
 
-            return contractFlame.Key;
+            return VATCode.Key;
         }
     }
 }

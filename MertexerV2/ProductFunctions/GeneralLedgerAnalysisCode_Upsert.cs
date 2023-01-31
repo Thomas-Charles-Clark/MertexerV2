@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace MertexerV2.ProductFunctions
 {
-    public static partial class GeneralLedgerAnalysisFunctions
+    public static partial class GeneralLedgerAnalysisCodeFunctions
     {
         [SqlFunction]
         public static string Upsert(string UniVerseAnalysis, string GeneralLedgerAnalysisJSON)

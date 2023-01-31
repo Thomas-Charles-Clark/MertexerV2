@@ -69,8 +69,8 @@ namespace MertexerV2.ProductFunctions
             out SqlString Units,
             out SqlString Comments,
             out SqlString HiddenReadField,
-            out SqlString AgreedPercentageLoss,
-            out SqlString ExpectedPercentageLoss
+            out SqlString AgreedPercentageLosses,
+            out SqlString ExpectedPercentageLosses
             )
         {
             var p = (MakeDetail)obj;
@@ -83,8 +83,8 @@ namespace MertexerV2.ProductFunctions
             Units = p.Units.Any() ? JsonConvert.SerializeObject(p.Units) : SqlString.Null;
             Comments = p.Comments.Any() ? JsonConvert.SerializeObject(p.Comments) : SqlString.Null;
             HiddenReadField = p.HiddenReadField?.TrimReduceTruncate(1);
-            AgreedPercentageLoss = p.AgreedPercentageLoss.Any() ? JsonConvert.SerializeObject(p.AgreedPercentageLoss) : SqlString.Null;
-            ExpectedPercentageLoss = p.ExpectedPercentageLoss.Any() ? JsonConvert.SerializeObject(p.ExpectedPercentageLoss) : SqlString.Null;
+            AgreedPercentageLosses = p.AgreedPercentageLosses.Any() ? JsonConvert.SerializeObject(p.AgreedPercentageLosses) : SqlString.Null;
+            ExpectedPercentageLosses = p.ExpectedPercentageLosses.Any() ? JsonConvert.SerializeObject(p.ExpectedPercentageLosses) : SqlString.Null;
         }
     }
 }

@@ -17,22 +17,22 @@ using System.Threading.Tasks;
 
 namespace MertexerV2.ProductFunctions
 {
-    public class FlameRetardancyImageDescriptionCode
+    public class FlameRetardancyImageCode
     {
         public string Code { get; set; }
     }
 
-    public static partial class UKFlameRetardancyImageDescriptionFunctions
+    public static partial class UKFlameRetardancyImageFunctions
     {
         [Microsoft.SqlServer.Server.SqlFunction(
             DataAccess = DataAccessKind.Read,
-            FillRowMethodName = "UKFlameRetardancyImageDescriptionSelect_FillRow")]
+            FillRowMethodName = "UKFlameRetardancyImageSelect_FillRow")]
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
         public static IEnumerable Select(string UniVerseAccount, string UKFlameRetardancyImageDescriptionCodes)
         {
             if (String.IsNullOrEmpty(UKFlameRetardancyImageDescriptionCodes))
             {
-                foreach (var q in Selector<UKFlameRetardancyImageDescription>.SelectAllNonParallel(
+                foreach (var q in Selector<UKFlameRetardancyImage>.SelectAllNonParallel(
                    true,
                    false,
                    50,
@@ -43,8 +43,8 @@ namespace MertexerV2.ProductFunctions
             }
             else
             {
-                var results = Selector<UKFlameRetardancyImageDescription>.Select(
-                    JsonConvert.DeserializeObject<IEnumerable<FlameRetardancyImageDescriptionCode>>(UKFlameRetardancyImageDescriptionCodes).Select(p => p.Code),
+                var results = Selector<UKFlameRetardancyImage>.Select(
+                    JsonConvert.DeserializeObject<IEnumerable<FlameRetardancyImageCode>>(UKFlameRetardancyImageDescriptionCodes).Select(p => p.Code),
                     true,
                     false,
                     50,
@@ -58,7 +58,7 @@ namespace MertexerV2.ProductFunctions
             }
         }
 
-        public static void UKFlameRetardancyImageDescriptionSelect_FillRow(
+        public static void UKFlameRetardancyImageSelect_FillRow(
             object obj,
             out SqlString Code,
             out SqlString Description,
@@ -70,7 +70,7 @@ namespace MertexerV2.ProductFunctions
             out SqlString ImageCharacter
             )
         {
-            var p = (UKFlameRetardancyImageDescription)obj;
+            var p = (UKFlameRetardancyImage)obj;
 
             Code = p.Key?.TrimReduceTruncate(2);
             Description = p.Description?.TrimReduceTruncate(50);

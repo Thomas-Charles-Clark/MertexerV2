@@ -17,22 +17,22 @@ using System.Threading.Tasks;
 
 namespace MertexerV2.ProductFunctions
 {
-    public class FlameCodeDescriptionCode
+    public class FlameCodeCode
     {
         public string Code { get; set; }
     }
 
-    public static partial class FlameCodeDescriptionFunctions    
+    public static partial class FlameCodeFunctions    
     {
         [Microsoft.SqlServer.Server.SqlFunction(
             DataAccess = DataAccessKind.Read,
-            FillRowMethodName = "FlameCodeDescriptionSelect_FillRow")]
+            FillRowMethodName = "FlameCodeSelect_FillRow")]
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
         public static IEnumerable Select(string UniVerseAccount, string FlameCodeDescriptionCodes)
         {
             if (String.IsNullOrEmpty(FlameCodeDescriptionCodes))
             {
-                foreach (var q in Selector<FlameCodeDescription>.SelectAllNonParallel(
+                foreach (var q in Selector<FlameCode>.SelectAllNonParallel(
                    true,
                    false,
                    50,
@@ -43,8 +43,8 @@ namespace MertexerV2.ProductFunctions
             }
             else
             {
-                var results = Selector<FlameCodeDescription>.Select(
-                    JsonConvert.DeserializeObject<IEnumerable<FlameCodeDescriptionCode>>(FlameCodeDescriptionCodes).Select(p => p.Code),
+                var results = Selector<FlameCode>.Select(
+                    JsonConvert.DeserializeObject<IEnumerable<FlameCodeCode>>(FlameCodeDescriptionCodes).Select(p => p.Code),
                     true,
                     false,
                     50,
@@ -58,7 +58,7 @@ namespace MertexerV2.ProductFunctions
             }
         }
 
-        public static void FlameCodeDescriptionSelect_FillRow(
+        public static void FlameCodeSelect_FillRow(
             object obj,
             out SqlString Code,
             out SqlString Detail,
@@ -67,7 +67,7 @@ namespace MertexerV2.ProductFunctions
             out SqlString LabelDescription
             )
         {
-            var p = (FlameCodeDescription)obj;
+            var p = (FlameCode)obj;
 
             Code = p.Key?.TrimReduceTruncate(10);
             Detail = p.Detail?.TrimReduceTruncate(100);

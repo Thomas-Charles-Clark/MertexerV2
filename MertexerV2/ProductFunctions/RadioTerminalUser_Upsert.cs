@@ -1,4 +1,4 @@
-﻿using MertexerV2.Models.Product;
+﻿using MertexerV2.Models.General;
 using MertexerV2.Utilities;
 
 using Microsoft.SqlServer.Server;
@@ -11,14 +11,14 @@ using System.Linq;
 
 namespace MertexerV2.ProductFunctions
 {
-    public static partial class UKFlameRetardancyImageDescriptionFunctions
+    public static partial class RadioTerminalUserFunctions
     {
         [SqlFunction]
-        public static string Upsert(string UniVerseAccount, string UKFlameJSON)
+        public static string Upsert(string UniVerseAccount, string RadioTerminalUserJSON)
         {
-            var ukFlame = JsonConvert.DeserializeObject<UKFlameRetardancyImageDescription>(UKFlameJSON);
+            var RadioTerminalUser = JsonConvert.DeserializeObject<RadioTerminalUser>(RadioTerminalUserJSON);
 
-            var fileName = typeof(UKFlameRetardancyImageDescription).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
+            var fileName = typeof(RadioTerminalUser).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
                     .Cast<UniVerseFileNameAttribute>()
                     .Single()
                     .FileName;
@@ -29,7 +29,7 @@ namespace MertexerV2.ProductFunctions
 
                 try
                 {
-                    var extantRecord = uniVerseFile.ReadField(ukFlame.Key, 0).StringValue;
+                    var extantRecord = uniVerseFile.ReadField(RadioTerminalUser.Key, 0).StringValue;
                 }
                 catch (IBMU2.UODOTNET.UniFileException)
                 {
@@ -39,22 +39,22 @@ namespace MertexerV2.ProductFunctions
                     // then write all the fields
                     // then unlock the record
                     var dataSet = new IBMU2.UODOTNET.UniDataSet(ce.Session);
-                    dataSet.Insert(ukFlame.Key);
+                    dataSet.Insert(RadioTerminalUser.Key);
 
                     //slcustFile.LockFile();
                     uniVerseFile.WriteRecords(dataSet);
                     //slcustFile.UnlockFile();
                 }
 
-                uniVerseFile.LockRecord(ukFlame.Key, 1);
+                uniVerseFile.LockRecord(RadioTerminalUser.Key, 1);
 
-                UniUpsert<UKFlameRetardancyImageDescription>.Upsert(ukFlame, uniVerseFile, UniVerseAccount);
+                UniUpsert<RadioTerminalUser>.Upsert(RadioTerminalUser, uniVerseFile, UniVerseAccount);
 
-                uniVerseFile.UnlockRecord(ukFlame.Key);
+                uniVerseFile.UnlockRecord(RadioTerminalUser.Key);
 
             }
 
-            return ukFlame.Key;
+            return RadioTerminalUser.Key;
         }
     }
 }

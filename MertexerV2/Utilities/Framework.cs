@@ -1,6 +1,7 @@
 ﻿using MertexerV2.Models.General;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using System.IO;
 
 namespace MertexerV2.Utilities
 {
@@ -680,6 +682,26 @@ namespace MertexerV2.Utilities
         {
             var o = serializer.Deserialize(reader);
             return JsonConvert.SerializeObject(o);
+        }
+    }
+
+    public class StringToArrayConverter<T> : JsonConverter
+    {
+        public override bool CanConvert(Type t)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            var o = JsonConvert.DeserializeObject<T>(value.ToString());
+
+            serializer.Serialize(writer, o);
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            return JsonConvert.DeserializeObject<T>(reader.Value?.ToString() ?? "[]");// JArray.Parse(reader.Value?.ToString() ?? "[]");
         }
     }
 

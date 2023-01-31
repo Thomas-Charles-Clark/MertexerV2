@@ -3,36 +3,32 @@ using MertexerV2.Utilities;
 
 using Newtonsoft.Json;
 
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MertexerV2.Models.Product
 {
-    [UniVerseFileName("STCONTRACT.FLAME")]
-    public class ContractFlameRetardancyImageDescription : UniVerseSerializationBase<string>
+    [UniVerseFileName("STUK.FLAME")]
+    public class UKFlameRetardancyImage : UniVerseSerializationBase<string>
     {
         [JsonConstructor]
-        public ContractFlameRetardancyImageDescription(string key) : base(key)
+        public UKFlameRetardancyImage(string key) : base(key)
         {
             Initialise();
         }
 
-        public ContractFlameRetardancyImageDescription() : base()
+        public UKFlameRetardancyImage() : base()
         {
             Initialise();
         }
 
         public override void Initialise()
         {
-            typeof(ContractFlameRetardancyImageDescription).GetProperties().ToList().ForEach(p => Framework.InitialiseUniProperty(this, p));
+            typeof(UKFlameRetardancyImage).GetProperties().ToList().ForEach(p => Framework.InitialiseUniProperty(this, p));
         }
 
         public void Upsert(string uniVerseAccount = "MERTEX")
         {
-            ContractFlameRetardancyImageDescriptionFunctions.Upsert(uniVerseAccount, JsonConvert.SerializeObject(this));
+            UKFlameRetardancyImageFunctions.Upsert(uniVerseAccount, JsonConvert.SerializeObject(this));
         }
 
         /// <summary>
@@ -78,7 +74,7 @@ namespace MertexerV2.Models.Product
         public decimal? OffsetY { get; set; }
 
         /// <summary>
-        /// Image Character (No idea what this is)
+        /// Image Character
         /// </summary>
         [UniVerseIndex(8)]
         [UniVerseFieldName("IM.CHAR")]

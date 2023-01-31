@@ -23,11 +23,11 @@ namespace MertexerV2.ProductFunctions
         public string Code { get; set; }
     }
 
-    public static partial class GeneralLedgerAnalysisFunctions    
+    public static partial class GeneralLedgerAnalysisCodeFunctions    
     {
         [SqlFunction(
             DataAccess = DataAccessKind.Read,
-            FillRowMethodName = "GeneralLedgerAnalysisSelect_FillRow")]
+            FillRowMethodName = "GeneralLedgerAnalysisCodeSelect_FillRow")]
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
         public static IEnumerable Select(string UniVerseAnalysis, string GeneralLedgerAnalysisCodes)
         {
@@ -59,7 +59,7 @@ namespace MertexerV2.ProductFunctions
             }
         }
 
-        public static void GeneralLedgerAnalysisSelect_FillRow(
+        public static void GeneralLedgerAnalysisCodeSelect_FillRow(
             object obj,
             out SqlInt32 Code,
             out SqlString Name
@@ -67,8 +67,8 @@ namespace MertexerV2.ProductFunctions
         {
             var p = (GeneralLedgerAnalysisCode)obj;
 
-            Code = Convert.ToInt16(p.Key);
-            Name = p.Name?.TrimReduceTruncate(30);
+            Code = Convert.ToInt32(p.Key);
+            Name = p.Name?.TrimReduceTruncate(50);
         }
     }
 }

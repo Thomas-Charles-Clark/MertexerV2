@@ -1,4 +1,4 @@
-﻿using MertexerV2.Models.Product;
+﻿using MertexerV2.Models.Pricing;
 using MertexerV2.Utilities;
 
 using Microsoft.SqlServer.Server;
@@ -11,14 +11,14 @@ using System.Linq;
 
 namespace MertexerV2.ProductFunctions
 {
-    public static partial class FlameRetardantDescriptionFunctions
+    public static partial class GeneralLedgerDiscountGroupFunctions
     {
         [SqlFunction]
-        public static string Upsert(string UniVerseAccount, string FlameRetardantDescriptionJSON)
+        public static string Upsert(string UniVerseAccount, string GeneralLedgerDiscountCodeGroupJSON)
         {
-            var FlameRetardantDescription = JsonConvert.DeserializeObject<FlameRetardantDescription>(FlameRetardantDescriptionJSON);
+            var GeneralLedgerDiscountCodeGroup = JsonConvert.DeserializeObject<GeneralLedgerDiscountGroup>(GeneralLedgerDiscountCodeGroupJSON);
 
-            var fileName = typeof(FlameRetardantDescription).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
+            var fileName = typeof(GeneralLedgerDiscountGroup).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
                     .Cast<UniVerseFileNameAttribute>()
                     .Single()
                     .FileName;
@@ -29,32 +29,32 @@ namespace MertexerV2.ProductFunctions
 
                 try
                 {
-                    var extantRecord = uniVerseFile.ReadField(FlameRetardantDescription.Key, 0).StringValue;
+                    var extantRecord = uniVerseFile.ReadField(GeneralLedgerDiscountCodeGroup.Key, 0).StringValue;
                 }
                 catch (IBMU2.UODOTNET.UniFileException)
                 {
                     // extant record was not found: this is a creation request
                     // create first (lock the entire file for as little time as possible)
-                    // then lock the specific record
+                    // then lock the specific record2
                     // then write all the fields
                     // then unlock the record
                     var dataSet = new IBMU2.UODOTNET.UniDataSet(ce.Session);
-                    dataSet.Insert(FlameRetardantDescription.Key);
+                    dataSet.Insert(GeneralLedgerDiscountCodeGroup.Key);
 
                     //slcustFile.LockFile();
                     uniVerseFile.WriteRecords(dataSet);
                     //slcustFile.UnlockFile();
                 }
 
-                uniVerseFile.LockRecord(FlameRetardantDescription.Key, 1);
+                uniVerseFile.LockRecord(GeneralLedgerDiscountCodeGroup.Key, 1);
 
-                UniUpsert<FlameRetardantDescription>.Upsert(FlameRetardantDescription, uniVerseFile, UniVerseAccount);
+                UniUpsert<GeneralLedgerDiscountGroup>.Upsert(GeneralLedgerDiscountCodeGroup, uniVerseFile, UniVerseAccount);
 
-                uniVerseFile.UnlockRecord(FlameRetardantDescription.Key);
+                uniVerseFile.UnlockRecord(GeneralLedgerDiscountCodeGroup.Key);
 
             }
 
-            return FlameRetardantDescription.Key;
+            return GeneralLedgerDiscountCodeGroup.Key;
         }
     }
 }

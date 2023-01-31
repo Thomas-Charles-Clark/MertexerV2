@@ -11,14 +11,14 @@ using System.Linq;
 
 namespace MertexerV2.ProductFunctions
 {
-    public static partial class ProductStatusFunctions
+    public static partial class StatusFunctions
     {
         [SqlFunction]
         public static string Upsert(string UniVerseAccount, string ProductStatusJSON)
         {
-            var ProductStatus = JsonConvert.DeserializeObject<ProductStatus>(ProductStatusJSON);
+            var status = JsonConvert.DeserializeObject<Status>(ProductStatusJSON);
 
-            var fileName = typeof(ProductStatus).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
+            var fileName = typeof(Status).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
                     .Cast<UniVerseFileNameAttribute>()
                     .Single()
                     .FileName;
@@ -29,7 +29,7 @@ namespace MertexerV2.ProductFunctions
 
                 try
                 {
-                    var extantRecord = uniVerseFile.ReadField(ProductStatus.Key, 0).StringValue;
+                    var extantRecord = uniVerseFile.ReadField(status.Key, 0).StringValue;
                 }
                 catch (IBMU2.UODOTNET.UniFileException)
                 {
@@ -39,22 +39,22 @@ namespace MertexerV2.ProductFunctions
                     // then write all the fields
                     // then unlock the record
                     var dataSet = new IBMU2.UODOTNET.UniDataSet(ce.Session);
-                    dataSet.Insert(ProductStatus.Key);
+                    dataSet.Insert(status.Key);
 
                     //slcustFile.LockFile();
                     uniVerseFile.WriteRecords(dataSet);
                     //slcustFile.UnlockFile();
                 }
 
-                uniVerseFile.LockRecord(ProductStatus.Key, 1);
+                uniVerseFile.LockRecord(status.Key, 1);
 
-                UniUpsert<ProductStatus>.Upsert(ProductStatus, uniVerseFile, UniVerseAccount);
+                UniUpsert<Status>.Upsert(status, uniVerseFile, UniVerseAccount);
 
-                uniVerseFile.UnlockRecord(ProductStatus.Key);
+                uniVerseFile.UnlockRecord(status.Key);
 
             }
 
-            return ProductStatus.Key;
+            return status.Key;
         }
     }
 }

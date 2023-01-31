@@ -135,6 +135,7 @@ namespace MertexerV2.Models.Product
         [UniVerseMultiValue]
         [UniVerseConversion("MR44")]
         [UniVerseFieldName("LAST.COST.P")]
+        [JsonConverter(typeof(StringToArrayConverter<IEnumerable<decimal?>>))]
         public IEnumerable<decimal?> LastCostPrices { get; set; }
 
         /// <summary>
@@ -173,6 +174,7 @@ namespace MertexerV2.Models.Product
         [UniVerseIndex(70)]
         [UniVerseMultiValue]
         [UniVerseFieldName("SUPPREF")]
+        [JsonConverter(typeof(StringToArrayConverter<IEnumerable<string>>))]
         public IEnumerable<string> SupplierCodes { get; set; }
 
         /// <summary>
@@ -202,6 +204,7 @@ namespace MertexerV2.Models.Product
         [UniVerseIndex(90)]
         [UniVerseMultiValue]
         [UniVerseFieldName("PRODDATA1")]
+        [JsonConverter(typeof(StringToArrayConverter<IEnumerable<string>>))]
         public IEnumerable<string> CustomerServiceNotes { get; set; }
 
         /// <summary>
@@ -262,6 +265,7 @@ namespace MertexerV2.Models.Product
         [UniVerseIndex(178)]
         [UniVerseMultiValue]
         [UniVerseFieldName("AFTCARECODES")]
+        [JsonConverter(typeof(StringToArrayConverter<IEnumerable<string>>))]
         public IEnumerable<string> AftercareCodes { get; set; }
 
         /// <summary> *new*
@@ -298,6 +302,7 @@ namespace MertexerV2.Models.Product
         [UniVerseIndex(216)]
         [UniVerseMultiValue]
         [UniVerseFieldName("FULL.DESC")]
+        [JsonConverter(typeof(StringToArrayConverter<IEnumerable<string>>))]
         public IEnumerable<string> FullDescriptions { get; set; }
 
         /// <summary> *new*
@@ -414,6 +419,7 @@ namespace MertexerV2.Models.Product
         [UniVerseIndex(285)]
         [UniVerseMultiValue]
         [UniVerseFieldName("USECODE")]
+        [JsonConverter(typeof(StringToArrayConverter<IEnumerable<string>>))]
         public IEnumerable<string> UsageCodes { get; set; }
 
         /// <summary> *new*
@@ -520,6 +526,7 @@ namespace MertexerV2.Models.Product
         [UniVerseIndex(520)]
         [UniVerseMultiValue]
         [UniVerseFieldName("LINK.DOCS")]
+        [JsonConverter(typeof(StringToArrayConverter<IEnumerable<string>>))]
         public IEnumerable<string> LinkedDocuments { get; set; }
 
         /// <summary>
@@ -528,6 +535,7 @@ namespace MertexerV2.Models.Product
         [UniVerseIndex(521)]
         [UniVerseMultiValue]
         [UniVerseFieldName("LINK.DOCS.DESC")]
+        [JsonConverter(typeof(StringToArrayConverter<IEnumerable<string>>))]
         public IEnumerable<string> LinkedDocumentDescriptions { get; set; }
 
         /// <summary>
@@ -536,6 +544,7 @@ namespace MertexerV2.Models.Product
         [UniVerseIndex(532)]
         [UniVerseMultiValue]
         [UniVerseFieldName("MISC1FLD")]
+        [JsonConverter(typeof(StringToArrayConverter<IEnumerable<string>>))]
         public IEnumerable<string> TestCodes { get; set; }
 
         /// <summary>
@@ -710,6 +719,7 @@ namespace MertexerV2.Models.Product
         [UniVerseIndex(786)]
         [UniVerseMultiValue]
         [UniVerseFieldName("CUTTERS.MESS.DES")]
+        [JsonConverter(typeof(StringToArrayConverter<IEnumerable<string>>))]
         public IEnumerable<string> CutterInstructions { get; set; }
 
         /// <summary>
@@ -739,6 +749,7 @@ namespace MertexerV2.Models.Product
         [UniVerseIndex(806)]
         [UniVerseMultiValue]
         [UniVerseFieldName("SUP.DESIGN")]
+        [JsonConverter(typeof(StringToArrayConverter<IEnumerable<string>>))]
         public IEnumerable<string> SupplierDesignCodes { get; set; }
 
         /// <summary>
@@ -747,6 +758,7 @@ namespace MertexerV2.Models.Product
         [UniVerseIndex(807)]
         [UniVerseMultiValue]
         [UniVerseFieldName("SUP.COLOUR")]
+        [JsonConverter(typeof(StringToArrayConverter<IEnumerable<string>>))]
         public IEnumerable<string> SupplierColourNames { get; set; }
 
         /// <summary>

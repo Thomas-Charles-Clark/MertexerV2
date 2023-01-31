@@ -68,7 +68,7 @@ namespace MertexerV2.ProductFunctions
             var p = (GeneralLedgerCodeList)obj;
 
             Code = Convert.ToInt16(p.Key);
-            Name = p.Name?.TrimReduceTruncate(30);
+            Name = p.Name?.TrimReduceTruncate(50);
         }
     }
 }

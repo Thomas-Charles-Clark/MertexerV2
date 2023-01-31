@@ -46,41 +46,49 @@ namespace MertexerV2.Models.Product
         [UniVerseIndex(2)]
         [UniVerseMultiValue]
         [UniVerseFieldName("DESC1")]
+        [JsonConverter(typeof(StringToArrayConverter<IEnumerable<string>>))]
         public IEnumerable<string> MertexDescription { get; set; }
 
         [UniVerseIndex(3)]
         [UniVerseMultiValue]
         [UniVerseFieldName("PRICE1")]
+        [JsonConverter(typeof(StringToArrayConverter<IEnumerable<string>>))]
         public IEnumerable<string> PriceListDescription { get; set; }
 
         [UniVerseIndex(4)]
         [UniVerseMultiValue]
         [UniVerseFieldName("ONLINE.BASK")]
+        [JsonConverter(typeof(StringToArrayConverter<IEnumerable<string>>))]
         public IEnumerable<string> OnlineProductDescription { get; set; }
 
         [UniVerseIndex(7)]
         [UniVerseMultiValue]
         [UniVerseFieldName("DISP.NAME")]
+        [JsonConverter(typeof(StringToArrayConverter<IEnumerable<string>>))]
         public IEnumerable<string> DisplayName { get; set; }
 
         [UniVerseIndex(8)]
         [UniVerseMultiValue]
         [UniVerseFieldName("DISP.NAME.PRICE")]
+        [JsonConverter(typeof(StringToArrayConverter<IEnumerable<string>>))]
         public IEnumerable<string> DisplayNamePriceList { get; set; }
 
         [UniVerseIndex(9)]
         [UniVerseMultiValue]
         [UniVerseFieldName("DISP.NAME.BASK")]
+        [JsonConverter(typeof(StringToArrayConverter<IEnumerable<string>>))]
         public IEnumerable<string> DisplayNameBasket { get; set; }
 
         [UniVerseIndex(10)]
         [UniVerseMultiValue]
         [UniVerseFieldName("SORTNAME")]
+        [JsonConverter(typeof(StringToArrayConverter<IEnumerable<string>>))]
         public IEnumerable<string> MertexSearchDescription { get; set; }
 
         [UniVerseIndex(11)]
         [UniVerseMultiValue]
         [UniVerseFieldName("DISP.SORT")]
+        [JsonConverter(typeof(StringToArrayConverter<IEnumerable<string>>))]
         public IEnumerable<string> DisplayNameSort { get; set; }
 
         [UniVerseIndex(30)]
@@ -90,6 +98,7 @@ namespace MertexerV2.Models.Product
         [UniVerseIndex(31)]
         [UniVerseMultiValue]
         [UniVerseFieldName("PRICE.TD")]
+        [JsonConverter(typeof(StringToArrayConverter<IEnumerable<string>>))]
         public IEnumerable<string> PriceListDescription2 { get; set; }
     }
 }

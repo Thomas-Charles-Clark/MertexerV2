@@ -12,27 +12,27 @@ using System.Threading.Tasks;
 namespace MertexerV2.Models.Product
 {
     [UniVerseFileName("STADDITIONAL")]
-    public class FlameCodeDescription : UniVerseSerializationBase<string>
+    public class FlameCode : UniVerseSerializationBase<string>
     {
         [JsonConstructor]
-        public FlameCodeDescription(string key) : base(key)
+        public FlameCode(string key) : base(key)
         {
             Initialise();
         }
 
-        public FlameCodeDescription() : base()
+        public FlameCode() : base()
         {
             Initialise();
         }
 
         public override void Initialise()
         {
-            typeof(FlameCodeDescription).GetProperties().ToList().ForEach(p => Framework.InitialiseUniProperty(this, p));
+            typeof(FlameCode).GetProperties().ToList().ForEach(p => Framework.InitialiseUniProperty(this, p));
         }
 
         public void Upsert(string uniVerseAccount = "MERTEX")
         {
-            AdditionalFunctions.Upsert(uniVerseAccount, JsonConvert.SerializeObject(this));
+            FlameCodeFunctions.Upsert(uniVerseAccount, JsonConvert.SerializeObject(this));
         }
 
         /// <summary>

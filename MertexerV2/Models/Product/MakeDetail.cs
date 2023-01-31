@@ -8,12 +8,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.UI.WebControls;
 
 namespace MertexerV2.Models.Product
 {
     [UniVerseFileName("STMAKE")]
     public class MakeDetail : UniVerseSerializationBase<string>
     {
+        [JsonProperty("ProductProcessID")]
+        new public string Key
+        {
+            get
+            {
+                return base.Key;
+            }
+        }
+
         [JsonConstructor]
         public MakeDetail(string key) : base(key)
         {
@@ -55,6 +65,7 @@ namespace MertexerV2.Models.Product
         [UniVerseIndex(3)]
         [UniVerseMultiValue]
         [UniVerseFieldName("PRODCODES")]
+        [JsonConverter(typeof(StringToArrayConverter<IEnumerable<string>>))]
         public IEnumerable<string> ProductCodes { get; set; }
 
         /// <summary>
@@ -64,6 +75,7 @@ namespace MertexerV2.Models.Product
         [UniVerseMultiValue]
         [UniVerseFieldName("QUANTITY")]
         [UniVerseConversion("MR33")]
+        [JsonConverter(typeof(StringToArrayConverter<IEnumerable<decimal?>>))]
         public IEnumerable<decimal?> Quantities { get; set; }
 
         /// <summary>
@@ -72,6 +84,7 @@ namespace MertexerV2.Models.Product
         [UniVerseIndex(5)]
         [UniVerseMultiValue]
         [UniVerseFieldName("UNIT")]
+        [JsonConverter(typeof(StringToArrayConverter<IEnumerable<string>>))]
         public IEnumerable<string> Units { get; set; }
 
         /// <summary>
@@ -80,6 +93,7 @@ namespace MertexerV2.Models.Product
         [UniVerseIndex(10)]
         [UniVerseMultiValue]
         [UniVerseFieldName("COMMENTS")]
+        [JsonConverter(typeof(StringToArrayConverter<IEnumerable<string>>))]
         public IEnumerable<string> Comments { get; set; }
 
         /// <summary>
@@ -96,7 +110,8 @@ namespace MertexerV2.Models.Product
         [UniVerseMultiValue]
         [UniVerseFieldName("AGREED")]
         [UniVerseConversion("MR22")]
-        public IEnumerable<decimal?> AgreedPercentageLoss { get; set; }
+        [JsonConverter(typeof(StringToArrayConverter<IEnumerable<decimal?>>))]
+        public IEnumerable<decimal?> AgreedPercentageLosses { get; set; }
 
         /// <summary>
         /// Expected Percentage Loss (MV)
@@ -105,6 +120,7 @@ namespace MertexerV2.Models.Product
         [UniVerseMultiValue]
         [UniVerseFieldName("EXPECTED")]
         [UniVerseConversion("MR22")]
-        public IEnumerable<decimal?> ExpectedPercentageLoss { get; set; }
+        [JsonConverter(typeof(StringToArrayConverter<IEnumerable<decimal?>>))]
+        public IEnumerable<decimal?> ExpectedPercentageLosses { get; set; }
     }
 }

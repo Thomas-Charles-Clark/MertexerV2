@@ -41,6 +41,7 @@ namespace MertexerV2.Models.Product
         [UniVerseIndex(1)]
         [UniVerseMultiValue]
         [UniVerseFieldName("DESC")]
+        [JsonConverter(typeof(StringToArrayConverter<IEnumerable<string>>))]
         public IEnumerable<string> Descriptions { get; set; }
         
         /// <summary>

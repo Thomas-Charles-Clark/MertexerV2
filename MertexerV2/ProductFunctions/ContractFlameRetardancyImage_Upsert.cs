@@ -11,14 +11,14 @@ using System.Linq;
 
 namespace MertexerV2.ProductFunctions
 {
-    public static partial class GeneralLedgerDiscountCodeGroupFunctions
+    public static partial class ContractFlameRetardancyImageFunctions
     {
         [SqlFunction]
-        public static string Upsert(string UniVerseAccount, string GeneralLedgerDiscountCodeGroupJSON)
+        public static string Upsert(string UniVerseAccount, string ContractFlameJSON)
         {
-            var GeneralLedgerDiscountCodeGroup = JsonConvert.DeserializeObject<GeneralLedgerDiscountCodeGroup>(GeneralLedgerDiscountCodeGroupJSON);
+            var contractFlame = JsonConvert.DeserializeObject<ContractFlameRetardancyImage>(ContractFlameJSON);
 
-            var fileName = typeof(GeneralLedgerDiscountCodeGroup).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
+            var fileName = typeof(ContractFlameRetardancyImage).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
                     .Cast<UniVerseFileNameAttribute>()
                     .Single()
                     .FileName;
@@ -29,32 +29,32 @@ namespace MertexerV2.ProductFunctions
 
                 try
                 {
-                    var extantRecord = uniVerseFile.ReadField(GeneralLedgerDiscountCodeGroup.Key, 0).StringValue;
+                    var extantRecord = uniVerseFile.ReadField(contractFlame.Key, 0).StringValue;
                 }
                 catch (IBMU2.UODOTNET.UniFileException)
                 {
                     // extant record was not found: this is a creation request
                     // create first (lock the entire file for as little time as possible)
-                    // then lock the specific record2
+                    // then lock the specific record
                     // then write all the fields
                     // then unlock the record
                     var dataSet = new IBMU2.UODOTNET.UniDataSet(ce.Session);
-                    dataSet.Insert(GeneralLedgerDiscountCodeGroup.Key);
+                    dataSet.Insert(contractFlame.Key);
 
                     //slcustFile.LockFile();
                     uniVerseFile.WriteRecords(dataSet);
                     //slcustFile.UnlockFile();
                 }
 
-                uniVerseFile.LockRecord(GeneralLedgerDiscountCodeGroup.Key, 1);
+                uniVerseFile.LockRecord(contractFlame.Key, 1);
 
-                UniUpsert<GeneralLedgerDiscountCodeGroup>.Upsert(GeneralLedgerDiscountCodeGroup, uniVerseFile, UniVerseAccount);
+                UniUpsert<ContractFlameRetardancyImage>.Upsert(contractFlame, uniVerseFile, UniVerseAccount);
 
-                uniVerseFile.UnlockRecord(GeneralLedgerDiscountCodeGroup.Key);
+                uniVerseFile.UnlockRecord(contractFlame.Key);
 
             }
 
-            return GeneralLedgerDiscountCodeGroup.Key;
+            return contractFlame.Key;
         }
     }
 }

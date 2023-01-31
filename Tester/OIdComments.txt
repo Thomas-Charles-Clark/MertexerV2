@@ -620,3 +620,45 @@
 
             //Console.WriteLine("Product");
             //Console.WriteLine(MaxFieldLengths<Product>.Execute(null, true, false, 50));
+
+
+            
+            var record = Selector<MakeDetail>.Select(recordKey);
+
+            var ProductProcessID = new SqlString();
+            var ProductCode = new SqlString();
+            var ProcessCode = new SqlString();
+            var ProductCodes = new SqlString();
+            var Quantities = new SqlString();
+            var Units = new SqlString();
+            var Comments = new SqlString();
+            var HiddenReadField = new SqlString();
+            var AgreedPercentageLosses = new SqlString();
+            var ExpectedPercentageLosses = new SqlString();
+
+            MakeDetailFunctions.MakeDetailSelect_FillRow(
+                record, 
+                out ProductProcessID, 
+                out ProductCode,
+                out ProcessCode,
+                out ProductCodes,
+                out Quantities,
+                out Units,
+                out Comments,
+                out HiddenReadField,
+                out AgreedPercentageLosses,
+                out ExpectedPercentageLosses);
+
+            var resultantRecord = JsonConvert.DeserializeObject<MakeDetail>(JsonConvert.SerializeObject(new 
+                {
+                    ProductProcessID = ProductProcessID.IsNull ? null : ProductProcessID.Value,
+                    ProductCode = ProductCode.IsNull ? null : ProductCode.Value,
+                    ProcessCode = ProcessCode.IsNull ? null : ProcessCode.Value,
+                    ProductCodes = ProductCodes.IsNull ? null : ProductCodes.Value,  
+                    Quantities = Quantities.IsNull ? null : Quantities.Value,  
+                    Units = Units.IsNull ? null : Units.Value,
+                    Comments = Comments.IsNull ? null : Comments.Value,
+                    HiddenReadField = HiddenReadField.IsNull ? null : HiddenReadField.Value,
+                    AgreedPercentageLosses = AgreedPercentageLosses.IsNull ? null : AgreedPercentageLosses.Value,
+                    ExpectedPercentageLosses = ExpectedPercentageLosses.IsNull ? null : ExpectedPercentageLosses.Value
+                }));

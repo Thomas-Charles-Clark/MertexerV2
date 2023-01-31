@@ -22,6 +22,8 @@ using MertexerV2.GeneralFunctions.Pricing;
 using MertexerV2.ProductFunctions;
 using MertexerV2.Models.Product;
 using MertexerV2.Models.Pricing;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using MertexerV2.Models.General;
 
 namespace Tester
 {
@@ -35,20 +37,17 @@ namespace Tester
 
             var stopwatch = new System.Diagnostics.Stopwatch();
 
-            Console.WriteLine(MaxFieldLengths<GeneralLedgerDiscountCodeGroup>.Execute(null, true, false));
-            Console.WriteLine(MaxFieldLengths<ProductStatus>.Execute(null, true, false));
-           
-            //var uniVerseAccount = "PLAY";
+            var uniVerseAccount = "PLAY";
 
-            //var recordKey = "THISISATEST";
+            stopwatch.Start();
 
-            //stopwatch.Start();
+            var recordKey = "THISISATEST";
 
-            //var record = new MertexerV2.Models.Product.Supplier(recordKey);
+            var record = new Product(recordKey);
 
-            //UniTestRecordBuilder.InitialiseTestRecord(record.GetType(), record);
+            UniTestRecordBuilder.InitialiseTestRecord(typeof(Product), record);
 
-            //record.Upsert(uniVerseAccount);
+            record.Upsert(uniVerseAccount);
 
             stopwatch.Stop();
 

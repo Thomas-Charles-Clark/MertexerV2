@@ -9,14 +9,14 @@ using System.Linq;
 
 namespace MertexerV2.ProductFunctions
 {
-    public static partial class AdditionalFunctions
+    public static partial class FlameCodeFunctions
     {
         [SqlFunction]
         public static string Upsert(string UniVerseAccount, string AdditionalJSON)
         {
-            var additional = JsonConvert.DeserializeObject<FlameCodeDescription>(AdditionalJSON);
+            var additional = JsonConvert.DeserializeObject<FlameCode>(AdditionalJSON);
 
-            var fileName = typeof(FlameCodeDescription).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
+            var fileName = typeof(FlameCode).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
                     .Cast<UniVerseFileNameAttribute>()
                     .Single()
                     .FileName;
@@ -38,7 +38,7 @@ namespace MertexerV2.ProductFunctions
 
                 uniVerseFile.LockRecord(additional.Key, 1);
 
-                UniUpsert<FlameCodeDescription>.Upsert(additional, uniVerseFile, UniVerseAccount);
+                UniUpsert<FlameCode>.Upsert(additional, uniVerseFile, UniVerseAccount);
 
                 uniVerseFile.UnlockRecord(additional.Key);
 

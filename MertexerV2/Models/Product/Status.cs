@@ -1,6 +1,5 @@
 ﻿using MertexerV2.ProductFunctions;
 using MertexerV2.Utilities;
-
 using Newtonsoft.Json;
 
 using System;
@@ -11,35 +10,36 @@ using System.Threading.Tasks;
 
 namespace MertexerV2.Models.Product
 {
-    [UniVerseFileName("STPRODCLASS2")]
-    public class GeneralLedgerDiscountCodeGroup : UniVerseSerializationBase<string>
+    [UniVerseFileName("STPRODSTATUS")]
+    public class Status : UniVerseSerializationBase<string>
     {
         [JsonConstructor]
-        public GeneralLedgerDiscountCodeGroup(string key) : base(key)
+        public Status(string key) : base(key)
         {
             Initialise();
         }
 
-        public GeneralLedgerDiscountCodeGroup() : base()
+        public Status() : base()
         {
             Initialise();
         }
+
 
         public override void Initialise()
         {
-            typeof(GeneralLedgerDiscountCodeGroup).GetProperties().ToList().ForEach(p => Framework.InitialiseUniProperty(this, p));
+            typeof(Status).GetProperties().ToList().ForEach(p => Framework.InitialiseUniProperty(this, p));
         }
 
         public void Upsert(string uniVerseAccount = "MERTEX")
         {
-            GeneralLedgerDiscountCodeGroupFunctions.Upsert(uniVerseAccount, JsonConvert.SerializeObject(this));
+            StatusFunctions.Upsert(uniVerseAccount, JsonConvert.SerializeObject(this));
         }
 
         /// <summary>
         /// Name
         /// </summary>
         [UniVerseIndex(1)]
-        [UniVerseFieldName("CODEDESC")]
+        [UniVerseFieldName("DESCRIPTION")]
         public string Name { get; set; }
     }
 }

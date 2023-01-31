@@ -1,6 +1,6 @@
 ﻿using MertexerV2.GeneralFunctions;
 using MertexerV2.Models.EDAReplacement;
-using MertexerV2.Models.Product;
+using MertexerV2.Models.Pricing;
 using MertexerV2.Utilities;
 
 using Microsoft.SqlServer.Server;
@@ -17,22 +17,22 @@ using System.Threading.Tasks;
 
 namespace MertexerV2.ProductFunctions
 {
-    public class FlameRetardantDescriptionCode
+    public class VATCodeCode
     {
         public string Code { get; set; }
     }
 
-    public static partial class FlameRetardantDescriptionFunctions
+    public static partial class VATCodeFunctions    
     {
-        [Microsoft.SqlServer.Server.SqlFunction(
+        [SqlFunction(
             DataAccess = DataAccessKind.Read,
-            FillRowMethodName = "FlameRetardantDescriptionSelect_FillRow")]
+            FillRowMethodName = "VATCodeSelect_FillRow")]
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
-        public static IEnumerable Select(string UniVerseAccount, string FlameRetardantDescriptionCodes)
+        public static IEnumerable Select(string UniVerseAccount, string VATCodeCodes)
         {
-            if (String.IsNullOrEmpty(FlameRetardantDescriptionCodes))
+            if (String.IsNullOrEmpty(VATCodeCodes))
             {
-                foreach (var q in Selector<FlameRetardantDescription>.SelectAllNonParallel(
+                foreach (var q in Selector<VATCode>.SelectAllNonParallel(
                    true,
                    false,
                    50,
@@ -43,8 +43,8 @@ namespace MertexerV2.ProductFunctions
             }
             else
             {
-                var results = Selector<FlameRetardantDescription>.Select(
-                    JsonConvert.DeserializeObject<IEnumerable<FlameRetardantDescriptionCode>>(FlameRetardantDescriptionCodes).Select(p => p.Code),
+                var results = Selector<VATCode>.Select(
+                    JsonConvert.DeserializeObject<IEnumerable<VATCodeCode>>(VATCodeCodes).Select(p => p.Code),
                     true,
                     false,
                     50,
@@ -58,16 +58,22 @@ namespace MertexerV2.ProductFunctions
             }
         }
 
-        public static void FlameRetardantDescriptionSelect_FillRow(
+        public static void VATCodeSelect_FillRow(
             object obj,
             out SqlString Code,
-            out SqlString Name
+            out SqlString Name,
+            out SqlDecimal Rate,
+            out SqlString ReportIndicator,
+            out SqlByte SortOrder
             )
         {
-            var p = (FlameRetardantDescription)obj;
+            var p = (VATCode)obj;
 
             Code = p.Key?.TrimReduceTruncate(10);
             Name = p.Name?.TrimReduceTruncate(50);
+            Rate = p.Rate ?? SqlDecimal.Null;
+            ReportIndicator = p.ReportIndicator?.TrimReduceTruncate(1);
+            SortOrder = p.SortOrder ?? SqlByte.Null;
         }
     }
 }

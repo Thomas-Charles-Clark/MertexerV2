@@ -43,6 +43,7 @@ namespace MertexerV2.Models.Pricing
         [UniVerseMultiValue]
         [UniVerseConversion("MR23")]
         [UniVerseFieldName("QUANTITY")]
+        [JsonConverter(typeof(StringToArrayConverter<IEnumerable<string>>))]
         public IEnumerable<string> Quantity { get; set; }
 
         /// <summary>
@@ -52,6 +53,7 @@ namespace MertexerV2.Models.Pricing
         [UniVerseMultiValue]
         [UniVerseConversion("MR44")]
         [UniVerseFieldName("PRICE")]
+        [JsonConverter(typeof(StringToArrayConverter<IEnumerable<string>>))]
         public IEnumerable<string> Price { get; set; }
 
         /// <summary>
@@ -60,6 +62,7 @@ namespace MertexerV2.Models.Pricing
         [UniVerseIndex(5)]
         [UniVerseMultiValue]
         [UniVerseFieldName("LAST.AMEND")]
+        [JsonConverter(typeof(StringToArrayConverter<IEnumerable<string>>))]
         public IEnumerable<string> LastAmended { get; set; }
 
         /// <summary>

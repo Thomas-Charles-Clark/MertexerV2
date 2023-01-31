@@ -17,22 +17,22 @@ using System.Threading.Tasks;
 
 namespace MertexerV2.ProductFunctions
 {
-    public class ProductStatusCode
+    public class StatusCode
     {
         public string Code { get; set; }
     }
 
-    public static partial class ProductStatusFunctions
+    public static partial class StatusFunctions
     {
         [Microsoft.SqlServer.Server.SqlFunction(
             DataAccess = DataAccessKind.Read,
-            FillRowMethodName = "ProductStatusSelect_FillRow")]
+            FillRowMethodName = "StatusSelect_FillRow")]
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
         public static IEnumerable Select(string UniVerseAccount, string ProductStatusCodes)
         {
             if (String.IsNullOrEmpty(ProductStatusCodes))
             {
-                foreach (var q in Selector<ProductStatus>.SelectAllNonParallel(
+                foreach (var q in Selector<Status>.SelectAllNonParallel(
                    true,
                    false,
                    50,
@@ -43,8 +43,8 @@ namespace MertexerV2.ProductFunctions
             }
             else
             {
-                var results = Selector<ProductStatus>.Select(
-                    JsonConvert.DeserializeObject<IEnumerable<ProductStatusCode>>(ProductStatusCodes).Select(p => p.Code),
+                var results = Selector<Status>.Select(
+                    JsonConvert.DeserializeObject<IEnumerable<StatusCode>>(ProductStatusCodes).Select(p => p.Code),
                     true,
                     false,
                     50,
@@ -58,15 +58,15 @@ namespace MertexerV2.ProductFunctions
             }
         }
 
-        public static void ProductStatusSelect_FillRow(
+        public static void StatusSelect_FillRow(
             object obj,
             out SqlString Code,
             out SqlString Name
             )
         {
-            var p = (ProductStatus)obj;
+            var p = (Status)obj;
 
-            Code = p.Key?.TrimReduceTruncate(5);
+            Code = p.Key?.TrimReduceTruncate(1);
             Name = p.Name?.TrimReduceTruncate(50);
         }
     }

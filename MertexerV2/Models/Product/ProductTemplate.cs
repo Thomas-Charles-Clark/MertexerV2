@@ -214,7 +214,7 @@ namespace MertexerV2.Models.Product
         /// </summary>
         [UniVerseIndex(564)]
         [UniVerseFieldName("PRODCLASS2")]
-        public string ProductClass2 { get; set; }
+        public string GeneralLedgerDiscountGroupCode { get; set; }
 
         /// <summary>
         /// Cutting Length
@@ -313,14 +313,14 @@ namespace MertexerV2.Models.Product
         /// </summary>
         [UniVerseIndex(1007)]
         [UniVerseFieldName("RANGE.NAME")]
-        public string RangeName { get; set; }
+        public string PartNumberPrefix { get; set; }
 
         /// <summary>
         /// Last Range Used
         /// </summary>
         [UniVerseIndex(1008)]
         [UniVerseFieldName("LAST.RANGE")]
-        public string LastRange { get; set; }
+        public string PartNumberRangeLastUsed { get; set; }
 
         /// <summary>
         /// Generate EANs?

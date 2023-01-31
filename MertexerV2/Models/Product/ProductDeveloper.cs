@@ -24,7 +24,7 @@ namespace MertexerV2.Models.Product
         {
             Initialise();
         }
-
+        
         public override void Initialise()
         {
             typeof(ProductDeveloper).GetProperties().ToList().ForEach(p => Framework.InitialiseUniProperty(this, p));

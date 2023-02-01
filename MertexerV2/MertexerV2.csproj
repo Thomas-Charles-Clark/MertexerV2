@@ -219,6 +219,8 @@
     <Compile Include="ProductFunctions\GeneralLedgerAnalysisCode_Select.cs" />
     <Compile Include="ProductFunctions\GeneralLedgerSubCode_Upsert.cs" />
     <Compile Include="ProductFunctions\GeneralLedgerAnalysisCode_Upsert.cs" />
+    <Compile Include="ProductFunctions\POPriceList_Select.cs" />
+    <Compile Include="ProductFunctions\POPriceList_Upsert.cs" />
     <Compile Include="ProductFunctions\Status_Select.cs" />
     <Compile Include="ProductFunctions\Status_Upsert.cs" />
     <Compile Include="ProductFunctions\MarketRestriction_Select.cs" />
@@ -263,6 +265,8 @@
     <Compile Include="ProductFunctions\Brand_Upsert.cs" />
     <Compile Include="ProductFunctions\Rack_Select.cs" />
     <Compile Include="ProductFunctions\Rack_Upsert.cs" />
+    <Compile Include="ProductFunctions\POCost_Select.cs" />
+    <Compile Include="ProductFunctions\POCost_Upsert.cs" />
     <Compile Include="ProductFunctions\VATCode_Select.cs" />
     <Compile Include="ProductFunctions\VATCode_Upsert.cs" />
     <Compile Include="ProductFunctions\Unit_Select.cs" />

@@ -1,4 +1,5 @@
 ﻿using MertexerV2.Models.Interfaces;
+using MertexerV2.ProductFunctions;
 using MertexerV2.Utilities;
 using Newtonsoft.Json;
 
@@ -27,6 +28,11 @@ namespace MertexerV2.Models.Pricing
         public override void Initialise()
         {
             typeof(POCost).GetProperties().ToList().ForEach(p => Framework.InitialiseUniProperty(this, p));
+        }
+
+        public void Upsert(string uniVerseAccount = "MERTEX")
+        {
+            POCostFunctions.Upsert(uniVerseAccount, JsonConvert.SerializeObject(this));
         }
 
         /// <summary>

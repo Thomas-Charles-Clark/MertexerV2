@@ -618,6 +618,16 @@
             //Console.WriteLine();
             //Console.WriteLine();
 
+            //Console.WriteLine("POCost");
+            //Console.WriteLine(MaxFieldLengths<POCost>.Execute(null, true, false));
+            //Console.WriteLine();
+            //Console.WriteLine();
+
+            //Console.WriteLine("POPriceList");
+            //Console.WriteLine(MaxFieldLengths<POPriceList>.Execute(null, true, false));
+            //Console.WriteLine();
+            //Console.WriteLine();
+
             //Console.WriteLine("Product");
             //Console.WriteLine(MaxFieldLengths<Product>.Execute(null, true, false, 50));
 

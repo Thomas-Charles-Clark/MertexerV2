@@ -563,8 +563,9 @@ namespace MertexerV2.Utilities
             }
         }
     }
-        // Cheers
-        // https://stackoverflow.com/questions/37954376/ignore-jsonignore-attribute-on-serialization-deserialization#answer-37954657
+
+    // Cheers
+    // https://stackoverflow.com/questions/37954376/ignore-jsonignore-attribute-on-serialization-deserialization#answer-37954657
     public class JsonIgnoreAttributeIgnorerContractResolver : DefaultContractResolver
     {
         protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
@@ -694,9 +695,20 @@ namespace MertexerV2.Utilities
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            var o = JsonConvert.DeserializeObject<T>(value.ToString());
+            // we're either going to be processing an IEnumerable<T> or a string representing an IEnumerable<T>.
 
-            serializer.Serialize(writer, o);
+            var type = value.GetType();
+
+            if (type == typeof(string))
+            {
+                var o = JsonConvert.DeserializeObject<T>(value.ToString());
+
+                serializer.Serialize(writer, o);
+            }
+            else
+            {
+                serializer.Serialize(writer, value);
+            }
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)

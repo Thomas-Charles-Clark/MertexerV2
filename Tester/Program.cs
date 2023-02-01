@@ -41,13 +41,25 @@ namespace Tester
 
             stopwatch.Start();
 
-            var recordKey = "THISISATEST";
+            Console.WriteLine("POCost");
+            Console.WriteLine(MaxFieldLengths<POCost>.Execute(null, true, false));
+            Console.WriteLine();
+            Console.WriteLine();
 
-            var record = new Product(recordKey);
+            Console.WriteLine("POPriceList");
+            Console.WriteLine(MaxFieldLengths<POPriceList>.Execute(null, true, false));
+            Console.WriteLine();
+            Console.WriteLine();
 
-            UniTestRecordBuilder.InitialiseTestRecord(typeof(Product), record);
+            //var recordKey = "RUGDG0394*\\U0016";
 
-            record.Upsert(uniVerseAccount);
+            //var record = Selector<POCost>.Select(recordKey, true);
+
+            //var record = new Product(recordKey);
+
+            //UniTestRecordBuilder.InitialiseTestRecord(typeof(Product), record);
+
+            //record.Upsert(uniVerseAccount);
 
             stopwatch.Stop();
 

@@ -1,4 +1,5 @@
 ﻿using MertexerV2.Models.Interfaces;
+using MertexerV2.ProductFunctions;
 using MertexerV2.Utilities;
 using Newtonsoft.Json;
 
@@ -29,6 +30,11 @@ namespace MertexerV2.Models.Pricing
             typeof(POPriceList).GetProperties().ToList().ForEach(p => Framework.InitialiseUniProperty(this, p));
         }
 
+        public void Upsert(string uniVerseAccount = "MERTEX")
+        {
+            POPriceListFunctions.Upsert(uniVerseAccount, JsonConvert.SerializeObject(this));
+        }
+
         /// <summary>
         /// Purchase Unit
         /// </summary>
@@ -44,7 +50,7 @@ namespace MertexerV2.Models.Pricing
         [UniVerseConversion("MR23")]
         [UniVerseFieldName("QUANTITY")]
         [JsonConverter(typeof(StringToArrayConverter<IEnumerable<string>>))]
-        public IEnumerable<string> Quantity { get; set; }
+        public IEnumerable<string> Quantities { get; set; }
 
         /// <summary>
         /// Price (MV)
@@ -54,7 +60,7 @@ namespace MertexerV2.Models.Pricing
         [UniVerseConversion("MR44")]
         [UniVerseFieldName("PRICE")]
         [JsonConverter(typeof(StringToArrayConverter<IEnumerable<string>>))]
-        public IEnumerable<string> Price { get; set; }
+        public IEnumerable<string> Prices { get; set; }
 
         /// <summary>
         /// Last Amended (MV)
@@ -63,20 +69,20 @@ namespace MertexerV2.Models.Pricing
         [UniVerseMultiValue]
         [UniVerseFieldName("LAST.AMEND")]
         [JsonConverter(typeof(StringToArrayConverter<IEnumerable<string>>))]
-        public IEnumerable<string> LastAmended { get; set; }
+        public IEnumerable<string> LastAmendedDates { get; set; }
 
         /// <summary>
         /// Open Order Price
         /// </summary>
         [UniVerseIndex(6)]
         [UniVerseFieldName("SS.OPEN.ORD.PRICE")]
-        public string OpenOrderPrice { get; set; }
+        public decimal? OpenOrderPrice { get; set; }
 
         /// <summary>
         /// Future Order Price
         /// </summary>
         [UniVerseIndex(7)]
         [UniVerseFieldName("SS.FUT.ORD.PRICE")]
-        public string FutureOrderPrice { get; set; }
+        public decimal? FutureOrderPrice { get; set; }
     }
 }

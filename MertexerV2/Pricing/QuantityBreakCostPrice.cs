@@ -344,15 +344,15 @@ namespace MertexerV2.GeneralFunctions.Pricing
 
                                 // sanity check - you'd be surprised, honestly.
                                 // we can live without the amended date and there are numerous instances where this is missing / not in step with the other MVs
-                                if (poPriceListRec.Quantity != null &&
-                                    poPriceListRec.Price != null &&
-                                    poPriceListRec.Quantity.Count() == poPriceListRec.Price.Count())
+                                if (poPriceListRec.Quantities != null &&
+                                    poPriceListRec.Prices != null &&
+                                    poPriceListRec.Quantities.Count() == poPriceListRec.Prices.Count())
                                 {
-                                    for (var i = 0; i < poPriceListRec.Quantity.Count(); i++)
+                                    for (var i = 0; i < poPriceListRec.Quantities.Count(); i++)
                                     {
-                                        var quantityBreak = Convert.ToDecimal(poPriceListRec.Quantity.ElementAt(i)) / 1000;
+                                        var quantityBreak = Convert.ToDecimal(poPriceListRec.Quantities.ElementAt(i)) / 1000;
 
-                                        priceCurrency = Convert.ToDecimal(poPriceListRec.Price.ElementAt(i));
+                                        priceCurrency = Convert.ToDecimal(poPriceListRec.Prices.ElementAt(i));
 
                                         priceSterling = priceCurrency / exchangeRate;
 
@@ -368,7 +368,7 @@ namespace MertexerV2.GeneralFunctions.Pricing
                                         // as above
                                         try
                                         {
-                                            amended = poPriceListRec.LastAmended?.ElementAt(i);
+                                            amended = poPriceListRec.LastAmendedDates?.ElementAt(i);
                                         }
                                         catch (ArgumentOutOfRangeException)
                                         {

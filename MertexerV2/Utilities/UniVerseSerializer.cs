@@ -94,18 +94,18 @@ namespace MertexerV2.Utilities
 
                 #if DEBUG
 
-                if (uniVerseAccount != "MERTEX" && indices != null && uniVerseFieldName != null)
-                {
-                    var fieldName = (string)uniVerseFieldName[0].Value;
+                //if (uniVerseAccount != "MERTEX" && indices != null && uniVerseFieldName != null)
+                //{
+                //    var fieldName = (string)uniVerseFieldName[0].Value;
 
-                    var fieldIndex = (int)indices[0].Value;
+                //    var fieldIndex = (int)indices[0].Value;
 
-                    var valueIndex = (int)indices[1].Value;
+                //    var valueIndex = (int)indices[1].Value;
 
-                    var subValueIndex = (int)indices[2].Value;
+                //    var subValueIndex = (int)indices[2].Value;
 
-                    values = values.Select((v, i) => $"<{fieldIndex},{i}> \"{fieldName}\"").ToList(); 
-                }
+                //    values = values.Select((v, i) => $"<{fieldIndex},{i}> \"{fieldName}\"").ToList(); 
+                //}
     
                 #endif
 
@@ -166,30 +166,30 @@ namespace MertexerV2.Utilities
 
                 #if DEBUG
 
-                if (uniVerseAccount != "MERTEX" && indices != null && uniVerseFieldName != null)
-                {
-                    var fieldName = (string)uniVerseFieldName[0].Value;
+                //if (uniVerseAccount != "MERTEX" && indices != null && uniVerseFieldName != null)
+                //{
+                //    var fieldName = (string)uniVerseFieldName[0].Value;
 
-                    var fieldIndex = (int)indices[0].Value;
+                //    var fieldIndex = (int)indices[0].Value;
 
-                    var valueIndex = (int)indices[1].Value;
+                //    var valueIndex = (int)indices[1].Value;
 
-                    var subValueIndex = (int)indices[2].Value;
+                //    var subValueIndex = (int)indices[2].Value;
 
-                    result = $"<{fieldIndex}> ";
+                //    result = $"<{fieldIndex}> ";
 
-                    if (valueIndex > 0)
-                    {
-                        result = $"<{fieldIndex},{valueIndex}>";
-                    }
+                //    if (valueIndex > 0)
+                //    {
+                //        result = $"<{fieldIndex},{valueIndex}>";
+                //    }
 
-                    if (subValueIndex > 0)
-                    {
-                        result = $"<{fieldIndex},{valueIndex},{subValueIndex}>";
-                    }
+                //    if (subValueIndex > 0)
+                //    {
+                //        result = $"<{fieldIndex},{valueIndex},{subValueIndex}>";
+                //    }
 
-                    result += $" \"{fieldName}\"";
-                }
+                //    result += $" \"{fieldName}\"";
+                //}
 
                 #endif
 

@@ -33,7 +33,7 @@ namespace MertexerV2.Models.Product
 
         [UniVerseIndex(1)]
         [UniVerseFieldName("DESIGN")]
-        public string Design { get; set; }
+        public string Name { get; set; }
 
         [UniVerseIndex(2)]
         [UniVerseFieldName("COMPCODE")]
@@ -46,10 +46,6 @@ namespace MertexerV2.Models.Product
         [UniVerseIndex(4)]
         [UniVerseFieldName("APPGMS")]
         public decimal? WeightGramsPerSquareMetre { get; set; }
-
-        [UniVerseIndex(6)]
-        [UniVerseFieldName("DESC")]
-        public string Name { get; set; }
 
         [UniVerseIndex(9)]
         [UniVerseConversion("MR11")]

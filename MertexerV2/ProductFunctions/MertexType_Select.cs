@@ -22,7 +22,7 @@ namespace MertexerV2.ProductFunctions
         public string Code { get; set; }
     }
 
-    public static partial class TypeFunctions    
+    public static partial class MertexTypeFunctions
     {
         [Microsoft.SqlServer.Server.SqlFunction(
             DataAccess = DataAccessKind.Read,

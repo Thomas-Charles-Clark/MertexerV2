@@ -55,9 +55,8 @@ namespace MertexerV2.ProductFunctions
         public static void QualitySelect_FillRow(
             object obj,
             out SqlString Quality,
-            out SqlString Design,
-            out SqlString CompositionCode,
             out SqlString Name,
+            out SqlString CompositionCode,
             out SqlDecimal Width,
             out SqlDecimal WeightGramsPerSquareMetre,
             out SqlDecimal WeightGramsPerLinearMetre,
@@ -71,9 +70,8 @@ namespace MertexerV2.ProductFunctions
             var p = (Quality)obj;
 
             Quality = p.Key?.TrimReduceTruncate(50);
-            Design = p.Design?.TrimReduceTruncate(100);
-            CompositionCode = p.CompositionCode?.TrimReduceTruncate(10);
             Name = p.Name?.TrimReduceTruncate(100);
+            CompositionCode = p.CompositionCode?.TrimReduceTruncate(10);
             Width = p.Width ?? SqlDecimal.Null;
             WeightGramsPerSquareMetre = p.WeightGramsPerSquareMetre ?? SqlDecimal.Null;
             WeightGramsPerLinearMetre = p.WeightGramsPerLinearMetre ?? SqlDecimal.Null;

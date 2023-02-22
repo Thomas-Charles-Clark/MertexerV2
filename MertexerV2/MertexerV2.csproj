@@ -127,6 +127,7 @@
     <Compile Include="EDAReplacement\EDAReplacement.cs" />
     <Compile Include="GeneralFunctions\MaxFieldLengths.cs" />
     <Compile Include="Models\Company\Company.cs" />
+    <Compile Include="Models\DelayLetter\DelayLetter.cs" />
     <Compile Include="Models\ExchangeRate\ExchangeRate.cs" />
     <Compile Include="Models\General\RadioTerminalUser.cs" />
     <Compile Include="Models\Pricing\GeneralLedgerCodeList.cs" />
@@ -136,6 +137,7 @@
     <Compile Include="Models\Pricing\POCost.cs" />
     <Compile Include="Models\Pricing\POPriceList.cs" />
     <Compile Include="Models\Pricing\VATCode.cs" />
+    <Compile Include="Models\ProductExclusion\ProductExclusion.cs" />
     <Compile Include="Models\Product\FlameCode.cs" />
     <Compile Include="Models\Product\Buyer.cs" />
     <Compile Include="Models\Product\Composition.cs" />
@@ -205,6 +207,8 @@
     <Compile Include="Models\Product\Quality.cs" />
     <Compile Include="Models\Tracking\TrackingModels.cs" />
     <Compile Include="GeneralFunctions\Selector.cs" />
+    <Compile Include="ProductFunctions\DelayLetter_Select.cs" />
+    <Compile Include="ProductFunctions\DelayLetter_Upsert.cs" />
     <Compile Include="ProductFunctions\FlameCode_Select.cs" />
     <Compile Include="ProductFunctions\FlameCode_Upsert.cs" />
     <Compile Include="ProductFunctions\ContractFlameRetardancyImage_Select.cs" />
@@ -219,6 +223,8 @@
     <Compile Include="ProductFunctions\GeneralLedgerAnalysisCode_Select.cs" />
     <Compile Include="ProductFunctions\GeneralLedgerSubCode_Upsert.cs" />
     <Compile Include="ProductFunctions\GeneralLedgerAnalysisCode_Upsert.cs" />
+    <Compile Include="ProductFunctions\ProductExclusion_Select.cs" />
+    <Compile Include="ProductFunctions\ProductExclusion_Upsert.cs" />
     <Compile Include="ProductFunctions\POPriceList_Select.cs" />
     <Compile Include="ProductFunctions\POPriceList_Upsert.cs" />
     <Compile Include="ProductFunctions\Status_Select.cs" />
@@ -396,9 +402,13 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>echo F | xcopy /y $(TargetPath) "C:\Website\Development\wwwDesignersGuild\wwwDesignersGuild\ExternalDependencies\$(TargetFileName)"
-echo F | xcopy /y $(TargetPath) "C:\Website\Preview\wwwDesignersGuild\wwwDesignersGuild\ExternalDependencies\$(TargetFileName)"
-echo F | xcopy /y $(TargetPath) "C:\Website\Production\wwwDesignersGuild\wwwDesignersGuild\ExternalDependencies\$(TargetFileName)"
-echo F | xcopy /y $(TargetPath) "C:\Users\tclark\Documents\Visual Studio 2015\Projects\Portal\Portal\Libraries\$(TargetFileName)"</PostBuildEvent>
+    <PostBuildEvent>echo F | xcopy /y $(TargetPath) "C:\Users\tclark\source\repos\www\Development\wwwDesignersGuild\wwwDesignersGuild\ExternalDependencies\$(TargetFileName)"
+echo F | xcopy /y "$(ProjectDir)$(OutDir)\MertexerV2.pdb" "C:\Users\tclark\source\repos\www\Development\wwwDesignersGuild\wwwDesignersGuild\ExternalDependencies\MertexerV2.pdb"
+echo F | xcopy /y $(TargetPath) "C:\Users\tclark\source\repos\www\Preview\wwwDesignersGuild\wwwDesignersGuild\ExternalDependencies\$(TargetFileName)"
+echo F | xcopy /y "$(ProjectDir)$(OutDir)\MertexerV2.pdb" "C:\Users\tclark\source\repos\www\Preview\wwwDesignersGuild\wwwDesignersGuild\ExternalDependencies\MertexerV2.pdb"
+echo F | xcopy /y $(TargetPath) "C:\Users\tclark\source\repos\www\Production\wwwDesignersGuild\wwwDesignersGuild\ExternalDependencies\$(TargetFileName)"
+echo F | xcopy /y "$(ProjectDir)$(OutDir)\MertexerV2.pdb" "C:\Users\tclark\source\repos\www\Production\wwwDesignersGuild\wwwDesignersGuild\ExternalDependencies\MertexerV2.pdb"
+echo F | xcopy /y $(TargetPath) "C:\Users\tclark\Documents\Visual Studio 2015\Projects\Portal\Portal\Libraries\$(TargetFileName)"
+echo F | xcopy /y "$(ProjectDir)\$(OutDir)\MertexerV2.pdb" "C:\Users\tclark\Documents\Visual Studio 2015\Projects\Portal\Portal\Libraries\MertexerV2.pdb"</PostBuildEvent>
   </PropertyGroup>
 </Project>

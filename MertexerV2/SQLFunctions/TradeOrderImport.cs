@@ -1958,7 +1958,14 @@ For further assistance, please contact <a href=""mailto:itsupport@designersguild
                                 type = "RESERVE";
                             }
 
-                            thisHead.OrderLines.Add(new OrderLineToImport(i, fields[1], Convert.ToDecimal(fields[2]), type, fields[7], fields[6]));
+                            thisHead.OrderLines.Add(item: new OrderLineToImport(fileLineNumber: i,
+                                                                                productCode: fields[1],
+                                                                                quantity: Convert.ToDecimal(fields[2]),
+                                                                                type: type,
+                                                                                lineReference: fields[7],
+                                                                                memo: fields[6],
+                                                                                promoCode: null,
+                                                                                discountPercentage: null));
                         }
                         else
                         {

@@ -35,25 +35,56 @@ namespace Tester
 
             Console.ForegroundColor = ConsoleColor.Yellow;
 
+            var tradeAccountNumber = "J0650";
+
+            var tradeDataSourceJson = TesterFramework.FetchAccountDataSourceJson(tradeAccountNumber);
+
             var stopwatch = new System.Diagnostics.Stopwatch();
 
             var uniVerseAccount = "PLAY";
 
             stopwatch.Start();
 
-            Console.WriteLine("POCost");
-            Console.WriteLine(MaxFieldLengths<POCost>.Execute(null, true, false));
-            Console.WriteLine();
-            Console.WriteLine();
+            //EDAReplacementTestSuite.OECarriages("MERTEX");
 
-            Console.WriteLine("POPriceList");
-            Console.WriteLine(MaxFieldLengths<POPriceList>.Execute(null, true, false));
-            Console.WriteLine();
-            Console.WriteLine();
+            //Console.WriteLine("POCost");
+            //Console.WriteLine(MaxFieldLengths<POCost>.Execute(null, true, false));
+            //Console.WriteLine();
+            //Console.WriteLine();
+
+            //Console.WriteLine("POPriceList");
+            //Console.WriteLine(MaxFieldLengths<POPriceList>.Execute(null, true, false));
+            //Console.WriteLine();
+            //Console.WriteLine();
+
+            //var results = MertexerV2.SQLFunctions.QuantityBreakCostPrice.Select("MERTEX", "[{ \"Code\": \"FDG2749/31\" }]", "FA", "DG").OfType<QuantityBreakCostPriceResult>().ToList();
+
+            //results.ForEach(r => Console.WriteLine(r));
+
+            //MertexerV2.Accounts.AccountFunctions.AccountSummary(tradeDataSourceJson);
 
             //var recordKey = "RUGDG0394*\\U0016";
 
-            //var record = Selector<POCost>.Select(recordKey, true);
+            //var records = ProductExclusionFunctions.Select("MERTEX", null).OfType<ProductExclusionDerivation>().ToList();
+
+            //records.ForEach(r => 
+            //{
+            //    Console.WriteLine(r);
+
+            //    var Key = new SqlString();
+            //    var ProductCode = new SqlString();
+
+            //    ProductExclusionFunctions.ProductExclusionSelect_FillRow(
+            //        r,
+            //        out Key,
+            //        out ProductCode);
+            //});
+
+            var result = ProductExclusionFunctions.Upsert("PLAY", @"{
+	            ""Key"": ""POTATO"",
+	            ""ProductsExcluded"": [""FDG2345/01"", ""FDG2345/02""],
+	            ""Description"": ""This potato intentionally left blank""
+            }");
 
             //var record = new Product(recordKey);
 

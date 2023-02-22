@@ -1783,7 +1783,8 @@ namespace MertexerV2.EDAReplacement
 
             string[] fields = new string[] {
                 "CODE",
-                "DESC50"
+                "DESC50",
+                "ADDITIONAL.LABEL.DES"
             };
 
             using (var ce = new CommandExecutor(UniVerseAccount))
@@ -1813,7 +1814,8 @@ namespace MertexerV2.EDAReplacement
                         theseResults.Add(new OECarriage(
                             code: record.Record.Extract(1).StringValue,
                             description: record.Record.Extract(2).StringValue,
-                            priorityOrder: record.Record.Extract(3).StringValue
+                            despatchPathway: record.Record.Extract(3).StringValue,
+                            priorityOrder: record.Record.Extract(4).StringValue
                         ));
                     });
 
@@ -1834,6 +1836,7 @@ namespace MertexerV2.EDAReplacement
             out SqlString CarriageCode,
             out SqlString HaulierCode,
             out SqlString Description,
+            out SqlString DespatchPathway,
             out SqlBoolean PriorityOrder
             )
         {
@@ -1843,6 +1846,7 @@ namespace MertexerV2.EDAReplacement
             CarriageCode = result.CarriageCode?.TrimReduceTruncate(20) ?? SqlString.Null;
             HaulierCode = result.HaulierCode?.TrimReduceTruncate(20) ?? SqlString.Null;
             Description = result.Description?.TrimReduceTruncate(100) ?? SqlString.Null;
+            DespatchPathway = result.DespatchPathway?.TrimReduceTruncate(100) ?? SqlString.Null;
             PriorityOrder = result.PriorityOrder;
         }
 

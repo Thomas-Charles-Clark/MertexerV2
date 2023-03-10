@@ -310,7 +310,7 @@ namespace MertexerV2.GeneralFunctions
 
                 var query = $"LIST @ID FMT\"60L\" {fileName} ";
 
-                query += $"WITH {String.Join(" AND ", fieldsAndValues.Select(f => $"{f.Item1} {f.Item2} \"{f.Item3}\""))} ";
+                query += $"WITH {String.Join(" AND ", fieldsAndValues.Select(f => $"{f.Item1} {f.Item2} {f.Item3}"))} ";
 
                 query += "ID.SUPP COL.HDR.SUPP COUNT.SUP";
 

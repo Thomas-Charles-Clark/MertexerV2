@@ -31,13 +31,20 @@ namespace MertexerV2.Models.EDAReplacement
 
         public bool PriorityOrder { get; set; }
 
-        public OECarriage(string code, string description, string despatchPathway, string priorityOrder) : base(code, description) 
+        public bool GBIndicator { get; set; }
+
+        public OECarriage(string code, string description, string despatchPathway, string priorityOrder, string gbIndicator) : base(code, description) 
         {
             DespatchPathway = despatchPathway;
 
             if (priorityOrder == "Y")
             {
                 PriorityOrder = true;
+            }
+
+            if (gbIndicator == "Y")
+            {
+                GBIndicator = true;
             }
         }
 

@@ -193,7 +193,13 @@ namespace MertexerV2.EDAReplacement
                     "XRATE",
                     "HEADER.REF32",
                     "HEADER.REF22",
-                    "DELPHONE"
+                    "DELPHONE",
+                    "CUSNAME.FF",
+                    "CUSADDR1.FF",
+                    "CUSADDR2.FF",
+                    "CUSADDR3.FF",
+                    "CUSADDR4.FF",
+                    "CUSPCODE.FF",
                 };
 
                 using (var ce = new CommandExecutor(UniVerseAccount))
@@ -267,7 +273,13 @@ namespace MertexerV2.EDAReplacement
                                 record.Record.Extract(31).StringValue,
                                 record.Record.Extract(32).StringValue,
                                 record.Record.Extract(33).StringValue,
-                                record.Record.Extract(34).StringValue
+                                record.Record.Extract(34).StringValue,
+                                record.Record.Extract(35).StringValue,
+                                record.Record.Extract(36).StringValue,
+                                record.Record.Extract(37).StringValue,
+                                record.Record.Extract(38).StringValue,
+                                record.Record.Extract(39).StringValue,
+                                record.Record.Extract(40).StringValue
                             ));
                         });
 
@@ -345,7 +357,13 @@ namespace MertexerV2.EDAReplacement
                     "XRATE",
                     "HEADER.REF32",
                     "HEADER.REF22",
-                    "DELPHONE"
+                    "DELPHONE",
+                    "CUSNAME.FF",
+                    "CUSADDR1.FF",
+                    "CUSADDR2.FF",
+                    "CUSADDR3.FF",
+                    "CUSADDR4.FF",
+                    "CUSPCODE.FF",
                 };
 
                 using (var ce = new CommandExecutor(UniVerseAccount))
@@ -412,7 +430,13 @@ namespace MertexerV2.EDAReplacement
                                     record.Record.Extract(31).StringValue,
                                     record.Record.Extract(32).StringValue,
                                     record.Record.Extract(33).StringValue,
-                                    record.Record.Extract(34).StringValue
+                                    record.Record.Extract(34).StringValue,
+                                    record.Record.Extract(35).StringValue,
+                                    record.Record.Extract(36).StringValue,
+                                    record.Record.Extract(37).StringValue,
+                                    record.Record.Extract(38).StringValue,
+                                    record.Record.Extract(39).StringValue,
+                                    record.Record.Extract(40).StringValue
                                 ));
                             });
 
@@ -468,7 +492,13 @@ namespace MertexerV2.EDAReplacement
             out SqlDecimal SterlingExchangeRate,
             out SqlString DeliveryGroup,
             out SqlString EORINumber,
-            out SqlString DeliveryPhone)
+            out SqlString DeliveryPhone,
+            out SqlString InvoiceAddressName,
+            out SqlString InvoiceAddressLine1,
+            out SqlString InvoiceAddressLine2,
+            out SqlString InvoiceAddressTown,
+            out SqlString InvoiceAddressCounty,
+            out SqlString InvoiceAddressPostcode)
         {
             var result = (TOEHead)obj;
 
@@ -506,6 +536,12 @@ namespace MertexerV2.EDAReplacement
             DeliveryGroup = String.IsNullOrEmpty(result.DeliveryGroup) ? SqlString.Null : result.DeliveryGroup.TrimReduceTruncate(100);
             EORINumber = String.IsNullOrEmpty(result.EORINumber) ? SqlString.Null : result.EORINumber.TrimReduceTruncate(20);
             DeliveryPhone = String.IsNullOrEmpty(result.DeliveryPhone) ? SqlString.Null : result.DeliveryPhone.TrimReduceTruncate(20); 
+            InvoiceAddressName = String.IsNullOrEmpty(result.InvoiceAddressName) ? SqlString.Null : result.InvoiceAddressName.TrimReduceTruncate(50);
+            InvoiceAddressLine1 = String.IsNullOrEmpty(result.InvoiceAddressLine1) ? SqlString.Null : result.InvoiceAddressLine1.TrimReduceTruncate(60);
+            InvoiceAddressLine2 = String.IsNullOrEmpty(result.InvoiceAddressLine2) ? SqlString.Null : result.InvoiceAddressLine2.TrimReduceTruncate(60);
+            InvoiceAddressTown = String.IsNullOrEmpty(result.InvoiceAddressTown) ? SqlString.Null : result.InvoiceAddressTown.TrimReduceTruncate(50);
+            InvoiceAddressCounty = String.IsNullOrEmpty(result.InvoiceAddressCounty) ? SqlString.Null : result.InvoiceAddressCounty.TrimReduceTruncate(40);
+            InvoiceAddressPostcode = String.IsNullOrEmpty(result.InvoiceAddressPostcode) ? SqlString.Null : result.InvoiceAddressPostcode.TrimReduceTruncate(20);
         }
 
 
@@ -1784,7 +1820,9 @@ namespace MertexerV2.EDAReplacement
             string[] fields = new string[] {
                 "CODE",
                 "DESC50",
-                "ADDITIONAL.LABEL.DES"
+                "ADDITIONAL.LABEL.DES",
+                "PRTY.ORDER.DES",
+                "DISP.GB.IND.DES"
             };
 
             using (var ce = new CommandExecutor(UniVerseAccount))
@@ -1815,7 +1853,8 @@ namespace MertexerV2.EDAReplacement
                             code: record.Record.Extract(1).StringValue,
                             description: record.Record.Extract(2).StringValue,
                             despatchPathway: record.Record.Extract(3).StringValue,
-                            priorityOrder: record.Record.Extract(4).StringValue
+                            priorityOrder: record.Record.Extract(4).StringValue,
+                            gbIndicator: record.Record.Extract(5).StringValue
                         ));
                     });
 
@@ -1837,7 +1876,8 @@ namespace MertexerV2.EDAReplacement
             out SqlString HaulierCode,
             out SqlString Description,
             out SqlString DespatchPathway,
-            out SqlBoolean PriorityOrder
+            out SqlBoolean PriorityOrder,
+            out SqlBoolean GBIndicator
             )
         {
             var result = (OECarriage)obj;
@@ -1848,6 +1888,7 @@ namespace MertexerV2.EDAReplacement
             Description = result.Description?.TrimReduceTruncate(100) ?? SqlString.Null;
             DespatchPathway = result.DespatchPathway?.TrimReduceTruncate(100) ?? SqlString.Null;
             PriorityOrder = result.PriorityOrder;
+            GBIndicator = result.GBIndicator;
         }
 
 

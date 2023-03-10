@@ -126,10 +126,15 @@
     <Compile Include="DAL\MertexConnection.cs" />
     <Compile Include="EDAReplacement\EDAReplacement.cs" />
     <Compile Include="GeneralFunctions\MaxFieldLengths.cs" />
+    <Compile Include="InvoiceFunctions\InvoiceLine_Select.cs" />
+    <Compile Include="InvoiceFunctions\InvoiceLine_Upsert.cs" />
+    <Compile Include="InvoiceFunctions\InvoiceHead_Upsert.cs" />
     <Compile Include="Models\Company\Company.cs" />
     <Compile Include="Models\DelayLetter\DelayLetter.cs" />
     <Compile Include="Models\ExchangeRate\ExchangeRate.cs" />
     <Compile Include="Models\General\RadioTerminalUser.cs" />
+    <Compile Include="Models\Invoices\InvoiceLine.cs" />
+    <Compile Include="Models\Invoices\InvoiceHead.cs" />
     <Compile Include="Models\Pricing\GeneralLedgerCodeList.cs" />
     <Compile Include="Models\Pricing\GeneralLedgerSubCode.cs" />
     <Compile Include="Models\Pricing\GeneralLedgerAnalysisCode.cs" />
@@ -223,6 +228,7 @@
     <Compile Include="ProductFunctions\GeneralLedgerAnalysisCode_Select.cs" />
     <Compile Include="ProductFunctions\GeneralLedgerSubCode_Upsert.cs" />
     <Compile Include="ProductFunctions\GeneralLedgerAnalysisCode_Upsert.cs" />
+    <Compile Include="InvoiceFunctions\InvoiceHead_Select.cs" />
     <Compile Include="ProductFunctions\ProductExclusion_Select.cs" />
     <Compile Include="ProductFunctions\ProductExclusion_Upsert.cs" />
     <Compile Include="ProductFunctions\POPriceList_Select.cs" />

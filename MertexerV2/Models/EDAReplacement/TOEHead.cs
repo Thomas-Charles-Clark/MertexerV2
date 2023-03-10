@@ -43,6 +43,13 @@ namespace MertexerV2.Models.EDAReplacement
         public string DeliveryAlertMobilePhoneNumber { get; set; }
         public string DeliveryAlertEmail { get; set; }
 
+        public string InvoiceAddressName { get; set; }
+        public string InvoiceAddressLine1 { get; set; }
+        public string InvoiceAddressLine2 { get; set; }
+        public string InvoiceAddressTown { get; set; }
+        public string InvoiceAddressCounty { get; set; }
+        public string InvoiceAddressPostcode { get; set; }
+
         public DateTime? OrderDT 
         { 
             get 
@@ -119,7 +126,13 @@ namespace MertexerV2.Models.EDAReplacement
             string sterlingExchangeRate,
             string deliveryGroup,
             string eoriNumber,
-            string deliveryPhone)
+            string deliveryPhone,
+            string invoiceAddressName,
+            string invoiceAddressLine1,
+            string invoiceAddressLine2,
+            string invoiceAddressTown,
+            string invoiceAddressCounty,
+            string invoiceAddressPostcode)
         {
             TradeAccountCode = String.IsNullOrEmpty(tradeAccountCode) ? null : tradeAccountCode;
 
@@ -240,6 +253,18 @@ namespace MertexerV2.Models.EDAReplacement
             EORINumber = String.IsNullOrEmpty(eoriNumber) ? null : eoriNumber;
 
             DeliveryPhone = String.IsNullOrEmpty(deliveryPhone) ? null : deliveryPhone;
+
+            InvoiceAddressName = invoiceAddressName;
+
+            InvoiceAddressLine1 = invoiceAddressLine1;
+
+            InvoiceAddressLine2 = invoiceAddressLine2;
+
+            InvoiceAddressTown = invoiceAddressTown;
+
+            InvoiceAddressCounty = invoiceAddressCounty;
+
+            InvoiceAddressPostcode = invoiceAddressPostcode;
         }
 
         public override string ToString()

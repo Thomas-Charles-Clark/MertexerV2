@@ -88,6 +88,7 @@ namespace MertexerV2.InvoiceFunctions
             object obj,
             out SqlString InvoiceLineID,
             out SqlString InvoiceID,
+            out SqlString OrderLineID,
             out SqlString ProductCode,
             out SqlDecimal QuantityOrdered,
             out SqlDecimal QuantityDespatched,
@@ -114,6 +115,7 @@ namespace MertexerV2.InvoiceFunctions
 
             InvoiceLineID = p.Key?.TrimReduceTruncate(25);
             InvoiceID = p.InvoiceNo?.TrimReduceTruncate(25);
+            OrderLineID = p.OrderLineID?.TrimReduceTruncate(30);
             ProductCode = p.ProductCode?.TrimReduceTruncate(50);
             QuantityOrdered = p.QuantityOrdered ?? SqlDecimal.Null;
             QuantityDespatched = p.QuantityDespatched ?? SqlDecimal.Null;

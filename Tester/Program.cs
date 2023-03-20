@@ -1,4 +1,4 @@
-﻿using MertexerV2.Models.Status;
+using MertexerV2.Models.Status;
 using MertexerV2.Models.VAT;
 using MertexerV2.Models.EORI;
 using MertexerV2.SQLFunctions;
@@ -27,6 +27,7 @@ using MertexerV2.Models.General;
 using MertexerV2.Models.Invoices;
 using System.Globalization;
 using MertexerV2.InvoiceFunctions;
+using MertexerV2.Models.Stock;
 
 namespace Tester
 {
@@ -60,74 +61,77 @@ namespace Tester
             //Console.WriteLine();
             //Console.WriteLine();
 
-            Console.WriteLine("OEINVHEAD");
-            var headResults = InvoiceHeadFunctions.InitialiseSelect(uniVerseAccount, DateTime.ParseExact("01/11/2021", "dd/MM/yyyy", new CultureInfo("en-GB")), DateTime.ParseExact("03/03/2023", "dd/MM/yyyy", new CultureInfo("en-GB"))).OfType<InvoiceHead>().ToList();
-            Console.WriteLine();
-            Console.WriteLine();
+            //Console.WriteLine("OEINVHEAD");
+            //var headResults = InvoiceHeadFunctions.InitialiseSelect(uniVerseAccount, DateTime.ParseExact("01/11/2021", "dd/MM/yyyy", new CultureInfo("en-GB")), DateTime.ParseExact("03/03/2023", "dd/MM/yyyy", new CultureInfo("en-GB"))).OfType<InvoiceHead>().ToList();
+            //Console.WriteLine();
+            //Console.WriteLine();
 
-            Console.WriteLine($"Saw {headResults.Count} results in {stopwatch.Elapsed}");
+            //Console.WriteLine($"Saw {headResults.Count} results in {stopwatch.Elapsed}");
 
-            var documentNumbers = headResults.OrderBy(hr => hr.InvoiceDate).ThenBy(hr => hr.Key).Select(r => new InvoiceIDWrapper() { InvoiceID = r.Key });
+            //var documentNumbers = headResults.OrderBy(hr => hr.InvoiceDate).ThenBy(hr => hr.Key).Select(r => new InvoiceIDWrapper() { InvoiceID = r.Key });
 
-            Console.WriteLine("OEINVLINE");
-            var lineResults = InvoiceLineFunctions.Select(uniVerseAccount, null, JsonConvert.SerializeObject(documentNumbers)).OfType<InvoiceLine>().ToList();
-            Console.WriteLine();
-            Console.WriteLine();
+            //Console.WriteLine("OEINVLINE");
+            //var lineResults = InvoiceLineFunctions.Select(uniVerseAccount, null, JsonConvert.SerializeObject(documentNumbers)).OfType<InvoiceLine>().ToList();
+            //Console.WriteLine();
+            //Console.WriteLine();
 
-            lineResults.ForEach(r =>
-            {
-                Console.WriteLine(r);
+            //lineResults.ForEach(r =>
+            //{
+            //    Console.WriteLine(r);
 
-                var InvoiceLineKey = new SqlString();
-                var InvoiceNo = new SqlString();
-                var ProductCode = new SqlString();
-                var QuantityOrdered = new SqlDecimal();
-                var QuantityDespatched = new SqlDecimal();
-                var QuantityInvoiced = new SqlDecimal();
-                var UnitPriceExVAT = new SqlDecimal();
-                var LineValueExVAT = new SqlDecimal();
-                var DiscountPercentage = new SqlDecimal();
-                var VATCode = new SqlString();
-                var VATRate = new SqlDecimal();
-                var DiscountValue = new SqlDecimal();
-                var VATValue = new SqlDecimal();
-                var StockUnit = new SqlString();
-                var UnitCost = new SqlDecimal();
-                var UnitCostCurrency = new SqlDecimal();
-                var LineCost = new SqlDecimal();
-                var LineCostCurrency = new SqlDecimal();
-                var UnitPriceExVATCurrency = new SqlDecimal();
-                var LineValueExVATCurrency = new SqlDecimal();
-                var VATValueCurrency = new SqlDecimal();
-                var GeneralLedgerCode = new SqlString();
+            //    var InvoiceLineKey = new SqlString();
+            //    var InvoiceNo = new SqlString();
+            //    var ProductCode = new SqlString();
+            //    var QuantityOrdered = new SqlDecimal();
+            //    var QuantityDespatched = new SqlDecimal();
+            //    var QuantityInvoiced = new SqlDecimal();
+            //    var UnitPriceExVAT = new SqlDecimal();
+            //    var LineValueExVAT = new SqlDecimal();
+            //    var DiscountPercentage = new SqlDecimal();
+            //    var VATCode = new SqlString();
+            //    var VATRate = new SqlDecimal();
+            //    var DiscountValue = new SqlDecimal();
+            //    var VATValue = new SqlDecimal();
+            //    var StockUnit = new SqlString();
+            //    var UnitCost = new SqlDecimal();
+            //    var UnitCostCurrency = new SqlDecimal();
+            //    var LineCost = new SqlDecimal();
+            //    var LineCostCurrency = new SqlDecimal();
+            //    var UnitPriceExVATCurrency = new SqlDecimal();
+            //    var LineValueExVATCurrency = new SqlDecimal();
+            //    var VATValueCurrency = new SqlDecimal();
+            //    var GeneralLedgerCode = new SqlString();
 
-                InvoiceLineFunctions.InvoiceLineSelect_FillRow(
-                    r,
-                    out InvoiceLineKey,
-                    out InvoiceNo,
-                    out ProductCode,
-                    out QuantityOrdered,
-                    out QuantityDespatched,
-                    out QuantityInvoiced,
-                    out UnitPriceExVAT,
-                    out LineValueExVAT,
-                    out DiscountPercentage,
-                    out VATCode,
-                    out VATRate,
-                    out DiscountValue,
-                    out VATValue,
-                    out StockUnit,
-                    out UnitCost,
-                    out UnitCostCurrency,
-                    out LineCost,
-                    out LineCostCurrency,
-                    out UnitPriceExVATCurrency,
-                    out LineValueExVATCurrency,
-                    out VATValueCurrency,
-                    out GeneralLedgerCode);
-            });
+            //    InvoiceLineFunctions.InvoiceLineSelect_FillRow(
+            //        r,
+            //        out InvoiceLineKey,
+            //        out InvoiceNo,
+            //        out ProductCode,
+            //        out QuantityOrdered,
+            //        out QuantityDespatched,
+            //        out QuantityInvoiced,
+            //        out UnitPriceExVAT,
+            //        out LineValueExVAT,
+            //        out DiscountPercentage,
+            //        out VATCode,
+            //        out VATRate,
+            //        out DiscountValue,
+            //        out VATValue,
+            //        out StockUnit,
+            //        out UnitCost,
+            //        out UnitCostCurrency,
+            //        out LineCost,
+            //        out LineCostCurrency,
+            //        out UnitPriceExVATCurrency,
+            //        out LineValueExVATCurrency,
+            //        out VATValueCurrency,
+            //        out GeneralLedgerCode);
+            //});
+            //
+            
+            var stockResults = Stock.BatchPiece("PDG1131/02", "WH", "S").OfType<BatchPieceResult>().ToList();
 
-            Console.WriteLine($"Saw {lineResults.Count} results in {stopwatch.Elapsed}");
+            Console.WriteLine($"Saw {stockResults.Count} results in {stopwatch.Elapsed}");
 
             //var results = MertexerV2.SQLFunctions.QuantityBreakCostPrice.Select("MERTEX", "[{ \"Code\": \"FDG2749/31\" }]", "FA", "DG").OfType<QuantityBreakCostPriceResult>().ToList();
 
@@ -254,7 +258,7 @@ namespace Tester
 
                 //Parallel.ForEach(batches, (batch) =>
                 //{
-                foreach(var batch in batches)
+                foreach (var batch in batches)
                 {
                     try
                     {

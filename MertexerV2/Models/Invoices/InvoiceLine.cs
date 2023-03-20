@@ -193,6 +193,13 @@ namespace MertexerV2.Models.Invoices
         public decimal? VATValueCurrency { get; set; }
 
         /// <summary>
+        /// Order Line Pointer
+        /// </summary>
+        [UniVerseIndex(81)]
+        [UniVerseFieldName("TOELINEP")]
+        public string OrderLineID { get; set; }
+
+        /// <summary>
         /// General Ledger Code
         /// </summary>
         [UniVerseIndex(136)]

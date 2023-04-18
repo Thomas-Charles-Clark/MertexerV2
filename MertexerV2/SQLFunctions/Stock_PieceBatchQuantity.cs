@@ -52,7 +52,6 @@ namespace MertexerV2.SQLFunctions
                     returnType: "XML"));
             }
 
-
             /*
 <fd UV_fieldname="PRODCODE" field_id="0.0" num_chars="15" type="text" name="Product_Code" id="C1"/>
 <fd UV_fieldname="PSE.PICKABLE.WI" field_id="0.0" num_chars="20" type="text" name="Pickable" id="C2"/>

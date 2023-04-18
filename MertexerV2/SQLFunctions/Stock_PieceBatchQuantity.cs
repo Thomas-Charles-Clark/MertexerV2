@@ -29,7 +29,7 @@ namespace MertexerV2.SQLFunctions
         {
             var results = new List<BatchPieceResult>();
 
-            var productCodesArray = ProductCodes.Split(new string[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
+            var productCodesArray = ProductCodes.Split(pipeDelimiter, StringSplitOptions.RemoveEmptyEntries);
 
             var uvSelectStatement = $"PRODCODE = \"{String.Join("\" OR PRODCODE = \"", productCodesArray)}\"";
 
@@ -39,7 +39,7 @@ namespace MertexerV2.SQLFunctions
 
             if (StockLocations != null)
             {
-                checkingLocations = StockLocations.Split(new char[] { '|' }).ToList();
+                checkingLocations = StockLocations.Split(pipeDelimiter).ToList();
             }
 
             using (var queryExecutor = new QueryExecutor())

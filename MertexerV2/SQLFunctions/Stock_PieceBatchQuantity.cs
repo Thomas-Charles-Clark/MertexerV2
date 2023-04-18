@@ -5,7 +5,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
+using System.Diagnostics;
 using System.Linq;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -15,6 +17,9 @@ namespace MertexerV2.SQLFunctions
 {
     public partial class Stock
     {
+        private readonly char[] pipeDelimiter = new [] { '|' };
+        private readonly char[] secondDelimiter = new char[] { '*' };
+
         [SqlFunction(DataAccess = DataAccessKind.Read,
             SystemDataAccess = SystemDataAccessKind.Read,
             FillRowMethodName = "BatchPiece_FillRow",
@@ -47,9 +52,6 @@ namespace MertexerV2.SQLFunctions
                     returnType: "XML"));
             }
 
-            var delimiter = new char[] { '|' };
-
-            var secondDelimiter = new char[] { '*' };
 
             /*
 <fd UV_fieldname="PRODCODE" field_id="0.0" num_chars="15" type="text" name="Product_Code" id="C1"/>
@@ -93,8 +95,8 @@ namespace MertexerV2.SQLFunctions
                 var purchaseOrderStatuses = c.XPathSelectElement("descendant::fd[@id='C11']").Attribute("value").Value;
 
 
-                var pickableFlagArray = pickableFlags.Split(delimiter, StringSplitOptions.None).ToArray();
-                var racksArray = racks.Split(delimiter, StringSplitOptions.None).ToArray();
+                var pickableFlagArray = pickableFlags.Split(pipeDelimiter, StringSplitOptions.None).ToArray();
+                var racksArray = racks.Split(pipeDelimiter, StringSplitOptions.None).ToArray();
                 var stockLocations = new List<string>();
                 var batches = new List<string>();
                 var pieces = new List<string>();
@@ -118,17 +120,17 @@ namespace MertexerV2.SQLFunctions
                     rackNames.Add(rackBreakdown[3]);
                 }
 
-                var rackFreeLengthsArray = rackFreeLengths.Split(delimiter, StringSplitOptions.None).ToList().ConvertAll<decimal>(x => { 
+                var rackFreeLengthsArray = rackFreeLengths.Split(pipeDelimiter, StringSplitOptions.None).ToList().ConvertAll<decimal>(x => { 
                     return Convert.ToDecimal(String.IsNullOrEmpty(x) ? "0" : x);
                 });
 
-                var rackTypesArray = rackTypes.Split(delimiter, StringSplitOptions.None).ToArray();
-                var reservesArray = reserves.Split(delimiter, StringSplitOptions.None).ToArray();
-                var purchaseOrderDueDateArray = purchaseOrderDueDates.Split(delimiter, StringSplitOptions.None).ToArray();
-                var purchaseOrderNumberArray = purchaseOrderNumbers.Split(delimiter, StringSplitOptions.None).ToArray();
-                var purchaseOrderQuantityArray = purchaseOrderQuantities.Split(delimiter, StringSplitOptions.None).ToArray();
-                var purchaseOrderStockLocationArray = purchaseOrderStockLocations.Split(delimiter, StringSplitOptions.None).ToArray();
-                var purchaseOrderStatusArray = purchaseOrderStatuses.Split(delimiter, StringSplitOptions.None).ToArray();
+                var rackTypesArray = rackTypes.Split(pipeDelimiter, StringSplitOptions.None).ToArray();
+                var reservesArray = reserves.Split(pipeDelimiter, StringSplitOptions.None).ToArray();
+                var purchaseOrderDueDateArray = purchaseOrderDueDates.Split(pipeDelimiter, StringSplitOptions.None).ToArray();
+                var purchaseOrderNumberArray = purchaseOrderNumbers.Split(pipeDelimiter, StringSplitOptions.None).ToArray();
+                var purchaseOrderQuantityArray = purchaseOrderQuantities.Split(pipeDelimiter, StringSplitOptions.None).ToArray();
+                var purchaseOrderStockLocationArray = purchaseOrderStockLocations.Split(pipeDelimiter, StringSplitOptions.None).ToArray();
+                var purchaseOrderStatusArray = purchaseOrderStatuses.Split(pipeDelimiter, StringSplitOptions.None).ToArray();
 
                 if (String.IsNullOrEmpty(EnquiryType) || EnquiryType == "S")
                 {
@@ -239,6 +241,27 @@ namespace MertexerV2.SQLFunctions
                 }
             });
 
+            var overLength = results.Where(p => p.Rack?.Length > 20).ToList();
+
+            if (overLength.Any())
+            {
+                var currentcolour = Console.ForegroundColor;
+
+                Console.ForegroundColor = ConsoleColor.Red;
+
+                Console.WriteLine($"Found {overLength.Count} bad records:");
+
+                Console.WriteLine();
+
+                overLength.ForEach(r => Console.WriteLine(r));
+
+                SendProblemEmail(overLength);
+
+                Console.ForegroundColor = currentcolour;
+            }
+
+            results = results.Except(overLength).ToList();
+
             return new ArrayList(results.ToList());
         }
 
@@ -274,6 +297,40 @@ namespace MertexerV2.SQLFunctions
             PODate = batchPiece.PurchaseOrderDate ?? SqlDateTime.Null;
             POMessage = batchPiece.PurchaseOrderMessage;
             POStatus = batchPiece.PurchaseOrderStatus ?? SqlBoolean.Null;
+        }
+
+        public static void SendProblemEmail(List<BatchPieceResult> discards, string subject = "MertexerV2 Stock Record(s) Discarded", string body = "Muppets wielding scanners? Possibly...")
+        {
+            using (var client = new SmtpClient("smtp.office365.com", 587))
+            {
+                // set smtp-client with basicAuthentication
+                client.EnableSsl = true;
+                client.UseDefaultCredentials = false;
+                var basicAuthenticationInfo = new
+                    System.Net.NetworkCredential("portal.noreply@designersguild.com", "TheCakeIsALi3");
+                client.Credentials = basicAuthenticationInfo;
+
+                var from = new MailAddress("portal.noreply@designersguild.com", "Designers Guild Portal");
+                var to = new MailAddress("itsupport@designersguild.com", "IT Support");
+
+                var mail = new MailMessage(from, to);
+
+                mail.CC.Add("tclark@designersguild.com,mchristie@designersguild.com");
+                mail.Subject = subject;
+                mail.SubjectEncoding = System.Text.Encoding.UTF8;
+
+                discards.ForEach(c =>
+                {
+                    body += "<br/></br>" + c.ToString().Replace(System.Environment.NewLine, "<br/>");
+                });
+
+                mail.Body = body;
+                mail.BodyEncoding = System.Text.Encoding.UTF8;
+
+                mail.IsBodyHtml = true;
+
+                client.Send(mail);
+            }
         }
     }
 }

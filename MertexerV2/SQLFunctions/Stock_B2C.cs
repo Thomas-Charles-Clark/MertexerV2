@@ -231,7 +231,7 @@ namespace MertexerV2.SQLFunctions
             {
                 SendProblemEmail(overLength);
             }
-            
+
             finalResults = finalResults.Except(overLength).ToList();
 
             return new ArrayList(finalResults);
@@ -331,7 +331,7 @@ namespace MertexerV2.SQLFunctions
             PurchaseOrderStatus = enquiryResult.PurchaseOrderStatus ?? SqlBoolean.Null;
         }
 
-        public static void SendProblemEmail(List<B2CEnquiryResult> discards, string subject = "MertexerV2 Stock Record(s) Discarded")
+        public static void SendProblemEmail(List<B2CEnquiryResult> discards, string subject = "MertexerV2 Stock Record(s) Discarded", string body = "Muppets wielding scanners? Possibly...")
         {
             using (var client = new SmtpClient("smtp.office365.com", 587))
             {
@@ -350,8 +350,6 @@ namespace MertexerV2.SQLFunctions
                 mail.CC.Add("tclark@designersguild.com,mchristie@designersguild.com");
                 mail.Subject = subject;
                 mail.SubjectEncoding = System.Text.Encoding.UTF8;
-
-                var body = "Muppets wielding scanners? Possibly...";
 
                 discards.ForEach(c => 
                 { 

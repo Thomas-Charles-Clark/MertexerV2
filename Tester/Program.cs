@@ -45,7 +45,7 @@ namespace Tester
 
             var stopwatch = new System.Diagnostics.Stopwatch();
 
-            var uniVerseAccount = "PLAY";
+            var uniVerseAccount = "MERTEX";
 
             stopwatch.Start();
 
@@ -128,10 +128,14 @@ namespace Tester
             //        out GeneralLedgerCode);
             //});
             //
-            
+
             var stockResults = Stock.BatchPiece("PDG1131/02", "WH", "S").OfType<BatchPieceResult>().ToList();
 
-            Console.WriteLine($"Saw {stockResults.Count} results in {stopwatch.Elapsed}");
+            //Console.ForegroundColor = ConsoleColor.Yellow;
+
+            //stockResults.ForEach(r => Console.WriteLine(r));
+
+            //Console.WriteLine($"Saw {stockResults.Count} results in {stopwatch.Elapsed}");
 
             //var results = MertexerV2.SQLFunctions.QuantityBreakCostPrice.Select("MERTEX", "[{ \"Code\": \"FDG2749/31\" }]", "FA", "DG").OfType<QuantityBreakCostPriceResult>().ToList();
 
@@ -142,6 +146,10 @@ namespace Tester
             //var recordKey = "RUGDG0394*\\U0016";
 
             //var records = ProductExclusionFunctions.Select("MERTEX", null).OfType<ProductExclusionDerivation>().ToList();
+
+            //var records = ProductGroupFunctions.Select("MERTEX", null).OfType<ProductGroup>().ToList();
+
+            //Console.WriteLine($"Saw {records.Count} results in {stopwatch.Elapsed}");
 
             //records.ForEach(r => 
             //{

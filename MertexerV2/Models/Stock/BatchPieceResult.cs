@@ -1,4 +1,7 @@
-﻿using System;
+﻿using MertexerV2.Utilities;
+using Newtonsoft.Json;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -68,17 +71,7 @@ namespace MertexerV2.Models.Stock
 
         public override string ToString()
         {
-            return $@"Query Type: {Type}
-Product Code: {ProductCode}
-Batch: {Batch}
-Piece: {Piece}
-Pickable: {Pickable}
-Rack: {Rack}
-RackType: {RackType}
-Quantity: {Quantity}
-OnReserve: {OnReserve}
-PurchaseOrderNo: {PurchaseOrderNumber}
-PurchaseOrderStatus: {PurchaseOrderStatus}";
+            return JsonConvert.SerializeObject(this, Framework.JsonSettingsIndentedIgnoreNullsAlphabetical);
         }
     }
 }

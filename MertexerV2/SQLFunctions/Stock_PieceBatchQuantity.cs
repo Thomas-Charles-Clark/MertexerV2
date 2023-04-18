@@ -15,7 +15,7 @@ namespace MertexerV2.SQLFunctions
     public partial class Stock
     {
         private static readonly char[] pipeDelimiter = new [] { '|' };
-        private static readonly char[] secondDelimiter = new char[] { '*' };
+        private static readonly char[] asteriskDelimiter = new char[] { '*' };
 
         [SqlFunction(DataAccess = DataAccessKind.Read,
             SystemDataAccess = SystemDataAccessKind.Read,
@@ -108,7 +108,7 @@ namespace MertexerV2.SQLFunctions
                         rackData = "***";
                     }
 
-                    var rackBreakdown = rackData.Split(secondDelimiter, StringSplitOptions.None);
+                    var rackBreakdown = rackData.Split(asteriskDelimiter, StringSplitOptions.None);
 
                     stockLocations.Add(rackBreakdown[0]);
                     batches.Add(rackBreakdown[1]);

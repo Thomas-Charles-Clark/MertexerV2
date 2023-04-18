@@ -17,8 +17,8 @@ namespace MertexerV2.SQLFunctions
 {
     public partial class Stock
     {
-        private readonly char[] pipeDelimiter = new [] { '|' };
-        private readonly char[] secondDelimiter = new char[] { '*' };
+        private static readonly char[] pipeDelimiter = new [] { '|' };
+        private static readonly char[] secondDelimiter = new char[] { '*' };
 
         [SqlFunction(DataAccess = DataAccessKind.Read,
             SystemDataAccess = SystemDataAccessKind.Read,

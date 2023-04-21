@@ -129,7 +129,9 @@ namespace Tester
             //});
             //
 
-            var stockResults = Stock.BatchPiece("PDG1131/02", "WH", "S").OfType<BatchPieceResult>().ToList();
+            EDAReplacementTestSuite.FetchPurchaseOrderPrices(uniVerseAccount, @"[{ ""Key"": ""A0091*P462/01""  }]");
+
+            //var stockResults = Stock.BatchPiece("PDG1131/02", "WH", "S").OfType<BatchPieceResult>().ToList();
 
             //Console.ForegroundColor = ConsoleColor.Yellow;
 

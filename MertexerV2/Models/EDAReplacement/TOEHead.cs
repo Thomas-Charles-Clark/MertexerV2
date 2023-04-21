@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace MertexerV2.Models.EDAReplacement
 {
     public class OrderHead
-    {
+    { 
         public string OrderID { get; set; }
     }
 
@@ -91,6 +91,8 @@ namespace MertexerV2.Models.EDAReplacement
 
         public string DeliveryPhone { get; set; }
 
+        public string OrderType { get; set; } 
+
         public TOEHead(
             string orderId,
             string tradeAccountCode,
@@ -132,7 +134,8 @@ namespace MertexerV2.Models.EDAReplacement
             string invoiceAddressLine2,
             string invoiceAddressTown,
             string invoiceAddressCounty,
-            string invoiceAddressPostcode)
+            string invoiceAddressPostcode,
+            string orderType)
         {
             TradeAccountCode = String.IsNullOrEmpty(tradeAccountCode) ? null : tradeAccountCode;
 
@@ -265,6 +268,8 @@ namespace MertexerV2.Models.EDAReplacement
             InvoiceAddressCounty = invoiceAddressCounty;
 
             InvoiceAddressPostcode = invoiceAddressPostcode;
+
+            OrderType = orderType;
         }
 
         public override string ToString()

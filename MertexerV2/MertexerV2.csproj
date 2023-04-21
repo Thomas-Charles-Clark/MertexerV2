@@ -147,6 +147,7 @@
     <Compile Include="Models\Product\Buyer.cs" />
     <Compile Include="Models\Product\Composition.cs" />
     <Compile Include="Models\Product\Collection.cs" />
+    <Compile Include="Models\Product\MadeToMeasureType.cs" />
     <Compile Include="Models\Product\MarketRestriction.cs" />
     <Compile Include="Models\Pricing\GeneralLedgerDiscountGroup.cs" />
     <Compile Include="Models\Product\ProductDeveloper.cs" />
@@ -154,6 +155,7 @@
     <Compile Include="Models\Product\FlameRetardant.cs" />
     <Compile Include="Models\Product\Design.cs" />
     <Compile Include="Models\Product\OriginCountry.cs" />
+    <Compile Include="Models\Product\PickingListGroup.cs" />
     <Compile Include="Models\Product\ProductGroup.cs" />
     <Compile Include="Models\Product\Pattern.cs" />
     <Compile Include="Models\Product\PatternMatch.cs" />
@@ -229,10 +231,14 @@
     <Compile Include="ProductFunctions\GeneralLedgerSubCode_Upsert.cs" />
     <Compile Include="ProductFunctions\GeneralLedgerAnalysisCode_Upsert.cs" />
     <Compile Include="InvoiceFunctions\InvoiceHead_Select.cs" />
+    <Compile Include="ProductFunctions\MadeToMeasureType_Select.cs" />
+    <Compile Include="ProductFunctions\MadeToMeasureType_Upsert.cs" />
     <Compile Include="ProductFunctions\ProductExclusion_Select.cs" />
     <Compile Include="ProductFunctions\ProductExclusion_Upsert.cs" />
     <Compile Include="ProductFunctions\POPriceList_Select.cs" />
     <Compile Include="ProductFunctions\POPriceList_Upsert.cs" />
+    <Compile Include="ProductFunctions\PickingListGroup_Select.cs" />
+    <Compile Include="ProductFunctions\PickingListGroup_Upsert.cs" />
     <Compile Include="ProductFunctions\Status_Select.cs" />
     <Compile Include="ProductFunctions\Status_Upsert.cs" />
     <Compile Include="ProductFunctions\MarketRestriction_Select.cs" />

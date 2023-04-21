@@ -200,6 +200,7 @@ namespace MertexerV2.EDAReplacement
                     "CUSADDR3.FF",
                     "CUSADDR4.FF",
                     "CUSPCODE.FF",
+                    "ORDERTYPE"
                 };
 
                 using (var ce = new CommandExecutor(UniVerseAccount))
@@ -279,7 +280,8 @@ namespace MertexerV2.EDAReplacement
                                 record.Record.Extract(37).StringValue,
                                 record.Record.Extract(38).StringValue,
                                 record.Record.Extract(39).StringValue,
-                                record.Record.Extract(40).StringValue
+                                record.Record.Extract(40).StringValue,
+                                record.Record.Extract(41).StringValue
                             ));
                         });
 
@@ -364,6 +366,7 @@ namespace MertexerV2.EDAReplacement
                     "CUSADDR3.FF",
                     "CUSADDR4.FF",
                     "CUSPCODE.FF",
+                    "ORDERTYPE"
                 };
 
                 using (var ce = new CommandExecutor(UniVerseAccount))
@@ -436,7 +439,8 @@ namespace MertexerV2.EDAReplacement
                                     record.Record.Extract(37).StringValue,
                                     record.Record.Extract(38).StringValue,
                                     record.Record.Extract(39).StringValue,
-                                    record.Record.Extract(40).StringValue
+                                    record.Record.Extract(40).StringValue,
+                                    record.Record.Extract(41).StringValue
                                 ));
                             });
 
@@ -498,7 +502,8 @@ namespace MertexerV2.EDAReplacement
             out SqlString InvoiceAddressLine2,
             out SqlString InvoiceAddressTown,
             out SqlString InvoiceAddressCounty,
-            out SqlString InvoiceAddressPostcode)
+            out SqlString InvoiceAddressPostcode,
+            out SqlString OrderType)
         {
             var result = (TOEHead)obj;
 
@@ -542,6 +547,7 @@ namespace MertexerV2.EDAReplacement
             InvoiceAddressTown = String.IsNullOrEmpty(result.InvoiceAddressTown) ? SqlString.Null : result.InvoiceAddressTown.TrimReduceTruncate(50);
             InvoiceAddressCounty = String.IsNullOrEmpty(result.InvoiceAddressCounty) ? SqlString.Null : result.InvoiceAddressCounty.TrimReduceTruncate(40);
             InvoiceAddressPostcode = String.IsNullOrEmpty(result.InvoiceAddressPostcode) ? SqlString.Null : result.InvoiceAddressPostcode.TrimReduceTruncate(20);
+            OrderType = String.IsNullOrEmpty(result.OrderType) ? SqlString.Null : result.OrderType.TrimReduceTruncate(5);
         }
 
 
@@ -3799,7 +3805,7 @@ namespace MertexerV2.EDAReplacement
                                 supplierReference: supplierReference,
                                 productCode: productCode,
                                 purchasePrice: thesePrices[i],
-                                quantityBreak: theseQuantities.Length < i ? theseQuantities[i] : null,
+                                quantityBreak: theseQuantities.Length == thesePrices.Length ? theseQuantities[i] : null,
                                 mertexCurrencyCode: mertexCurrencyCode
                             ));
                         }

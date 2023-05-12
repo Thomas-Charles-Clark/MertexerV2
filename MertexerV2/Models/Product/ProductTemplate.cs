@@ -250,7 +250,7 @@ namespace MertexerV2.Models.Product
         /// </summary>
         [UniVerseIndex(682)]
         [UniVerseFieldName("ORDER.TYPE.DES")]
-        public string OrderType { get; set; }
+        public string MadeToMeasureType { get; set; }
 
         /// <summary>
         /// Label Logo

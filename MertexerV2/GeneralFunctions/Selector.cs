@@ -1,11 +1,16 @@
 ﻿using IBMU2.UODOTNET;
+
 using MertexerV2.Models.Product;
 using MertexerV2.Utilities;
+
 using Newtonsoft.Json;
+
 using System;
 using System.CodeDom;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.ServiceModel.Description;
 using System.Text;
 using System.Threading.Tasks;
@@ -47,26 +52,16 @@ namespace MertexerV2.GeneralFunctions
 
                     if (selectChildEntities)
                     {
-                        foreach (var fkProp in typeof(T).GetProperties().Where(p => Attribute.IsDefined(p, typeof(UniVerseForeignKeyAttribute))))
-                        {
-                            if (fkProp.PropertyType.BaseType == typeof(UniVerseSerializationBase<string>))
-                            {
-                                var fkAttr = fkProp.GetCustomAttributes(typeof(UniVerseForeignKeyAttribute), false).Cast<UniVerseForeignKeyAttribute>().Single();
-
-                                var entity = SelectChildEntity(fkAttr.PropertyType, (string)typeof(T).GetProperty(fkAttr.PropertyName).GetValue(result), applyConversions, selectChildEntities, batchSize, uniVerseAccount);
-
-                                fkProp.SetValue(result, entity);
-                            }
-                        }
+                        ProcessForeignKeys(typeof(T).GetProperties().Where(p => Attribute.IsDefined(p, typeof(UniVerseForeignKeyAttribute))), ref result, applyConversions, selectChildEntities, batchSize, uniVerseAccount);
                     }
 
-//#if DEBUG
-//                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    //#if DEBUG
+                    //                    Console.ForegroundColor = ConsoleColor.Yellow;
 
-//                    Console.WriteLine(result);
+                    //                    Console.WriteLine(result);
 
-//                    Console.ForegroundColor = ConsoleColor.Green;
-//#endif
+                    //                    Console.ForegroundColor = ConsoleColor.Green;
+                    //#endif
 
                     return (T)result;
                 }
@@ -110,17 +105,7 @@ namespace MertexerV2.GeneralFunctions
 
                             if (selectChildEntities)
                             {
-                                foreach (var fkProp in typeof(T).GetProperties().Where(p => Attribute.IsDefined(p, typeof(UniVerseForeignKeyAttribute))))
-                                {
-                                    if (fkProp.PropertyType.BaseType == typeof(UniVerseSerializationBase<string>))
-                                    {
-                                        var fkAttr = fkProp.GetCustomAttributes(typeof(UniVerseForeignKeyAttribute), false).Cast<UniVerseForeignKeyAttribute>().Single();
-
-                                        var entity = SelectChildEntity(fkAttr.PropertyType, (string)typeof(T).GetProperty(fkAttr.PropertyName).GetValue(result), applyConversions, selectChildEntities);
-
-                                        fkProp.SetValue(result, entity);
-                                    }
-                                }
+                                ProcessForeignKeys(typeof(T).GetProperties().Where(p => Attribute.IsDefined(p, typeof(UniVerseForeignKeyAttribute))), ref result, applyConversions, selectChildEntities, batchSize, uniVerseAccount);
                             }
 
                             results.Add((T)result);
@@ -132,8 +117,8 @@ namespace MertexerV2.GeneralFunctions
                        .Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
                        .Distinct()
                        .ToList();
-                        
- #if DEBUG
+
+#if DEBUG
                         sw.Stop();
 
                         Console.WriteLine($"SelectAll<{typeof(T).Name}>.Execute Stage One returned in {sw.Elapsed}");
@@ -170,17 +155,7 @@ namespace MertexerV2.GeneralFunctions
 
                                 if (selectChildEntities)
                                 {
-                                    foreach (var fkProp in typeof(T).GetProperties().Where(p => Attribute.IsDefined(p, typeof(UniVerseForeignKeyAttribute))))
-                                    {
-                                        if (fkProp.PropertyType.BaseType == typeof(UniVerseSerializationBase<string>))
-                                        {
-                                            var fkAttr = fkProp.GetCustomAttributes(typeof(UniVerseForeignKeyAttribute), false).Cast<UniVerseForeignKeyAttribute>().Single();
-
-                                            var entity = SelectChildEntity(fkAttr.PropertyType, (string)typeof(T).GetProperty(fkAttr.PropertyName).GetValue(result), applyConversions, selectChildEntities);
-
-                                            fkProp.SetValue(result, entity);
-                                        }
-                                    }
+                                    ProcessForeignKeys(typeof(T).GetProperties().Where(p => Attribute.IsDefined(p, typeof(UniVerseForeignKeyAttribute))), ref result, applyConversions, selectChildEntities, batchSize, uniVerseAccount);
                                 }
 
                                 thisBatchResults.Add((T)result);
@@ -199,13 +174,13 @@ namespace MertexerV2.GeneralFunctions
                         });
                     }
 
-//#if DEBUG
-//                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    //#if DEBUG
+                    //                    Console.ForegroundColor = ConsoleColor.Yellow;
 
-//                    Console.WriteLine($"SelectAll<{typeof(T).Name}>.Execute read {results.Count} x {typeof(T).AssemblyQualifiedName} from {fileName}");
+                    //                    Console.WriteLine($"SelectAll<{typeof(T).Name}>.Execute read {results.Count} x {typeof(T).AssemblyQualifiedName} from {fileName}");
 
-//                    Console.ForegroundColor = ConsoleColor.Green;
-//#endif
+                    //                    Console.ForegroundColor = ConsoleColor.Green;
+                    //#endif
 
                     return results;
                 }
@@ -267,17 +242,7 @@ namespace MertexerV2.GeneralFunctions
 
                         if (selectChildEntities)
                         {
-                            foreach (var fkProp in typeof(T).GetProperties().Where(p => Attribute.IsDefined(p, typeof(UniVerseForeignKeyAttribute))))
-                            {
-                                if (fkProp.PropertyType.BaseType == typeof(UniVerseSerializationBase<string>))
-                                {
-                                    var fkAttr = fkProp.GetCustomAttributes(typeof(UniVerseForeignKeyAttribute), false).Cast<UniVerseForeignKeyAttribute>().Single();
-
-                                    var entity = SelectChildEntity(fkAttr.PropertyType, (string)typeof(T).GetProperty(fkAttr.PropertyName).GetValue(result), applyConversions, selectChildEntities);
-
-                                    fkProp.SetValue(result, entity);
-                                }
-                            }
+                            ProcessForeignKeys(typeof(T).GetProperties().Where(p => Attribute.IsDefined(p, typeof(UniVerseForeignKeyAttribute))), ref result, applyConversions, selectChildEntities, batchSize, uniVerseAccount);
                         }
 
                         lock (locker)
@@ -286,7 +251,7 @@ namespace MertexerV2.GeneralFunctions
                         }
                     }
                 });
-                    
+
 
 #if DEBUG
                 Console.ForegroundColor = ConsoleColor.Yellow;
@@ -300,7 +265,7 @@ namespace MertexerV2.GeneralFunctions
             }
         }
 
-        public static IEnumerable<T> Filter(IEnumerable<Tuple<string, string, string>> fieldsAndValues, bool applyConversions = true, bool selectChildEntities = true, short batchSize = 1000, string uniVerseAccount = "MERTEX")
+        public static IEnumerable<T> Filter(IEnumerable<Tuple<string, string, string>> fieldsAndValues, bool applyConversions = true, bool selectChildEntities = true, short batchSize = 1000, string uniVerseAccount = "MERTEX", int? sampleSize = null)
         {
             using (var ce = new CommandExecutor(uniVerseAccount))
             {
@@ -311,6 +276,11 @@ namespace MertexerV2.GeneralFunctions
                 var query = $"LIST @ID FMT\"60L\" {fileName} ";
 
                 query += $"WITH {String.Join(" AND ", fieldsAndValues.Select(f => $"{f.Item1} {f.Item2} {f.Item3}"))} ";
+
+                if (sampleSize != null)
+                {
+                    query += $"SAMPLE {sampleSize} ";
+                }
 
                 query += "ID.SUPP COL.HDR.SUPP COUNT.SUP";
 
@@ -334,17 +304,7 @@ namespace MertexerV2.GeneralFunctions
 
                         if (selectChildEntities)
                         {
-                            foreach (var fkProp in typeof(T).GetProperties().Where(p => Attribute.IsDefined(p, typeof(UniVerseForeignKeyAttribute))))
-                            {
-                                if (fkProp.PropertyType.BaseType == typeof(UniVerseSerializationBase<string>))
-                                {
-                                    var fkAttr = fkProp.GetCustomAttributes(typeof(UniVerseForeignKeyAttribute), false).Cast<UniVerseForeignKeyAttribute>().Single();
-
-                                    var entity = SelectChildEntity(fkAttr.PropertyType, (string)typeof(T).GetProperty(fkAttr.PropertyName).GetValue(result), applyConversions, selectChildEntities);
-
-                                    fkProp.SetValue(result, entity);
-                                }
-                            }
+                            ProcessForeignKeys(typeof(T).GetProperties().Where(p => Attribute.IsDefined(p, typeof(UniVerseForeignKeyAttribute))), ref result, applyConversions, selectChildEntities, batchSize, uniVerseAccount);
                         }
 
                         lock (locker)
@@ -375,7 +335,7 @@ namespace MertexerV2.GeneralFunctions
 
             sw.Start();
 #endif
-         
+
             var results = Select(new string[] { }, applyConversions, selectChildEntities, batchSize, uniVerseAccount);
 
 #if DEBUG
@@ -396,7 +356,7 @@ namespace MertexerV2.GeneralFunctions
             return results;
         }
 
-        public static IEnumerable<T> SelectAllNonParallel(bool applyConversions = true, bool selectChildEntities = true, short batchSize = 1000, string uniVerseAccount = "MERTEX")
+        public static IEnumerable<T> SelectAllNonParallel(bool applyConversions = true, bool selectChildEntities = true, short batchSize = 1000, string uniVerseAccount = "MERTEX", int? sampleSize = null)
         {
 #if DEBUG
             var previousColour = Console.ForegroundColor;
@@ -414,7 +374,14 @@ namespace MertexerV2.GeneralFunctions
 
                 var results = new List<T>();
 
-                var keys = ce.Arbitrary($"LIST {fileName} @ID FMT\"60L\" ID.SUPP COL.HDR.SUPP COUNT.SUP")
+                var keysCommand = $"LIST {fileName} @ID FMT\"60L\" ID.SUPP COL.HDR.SUPP COUNT.SUP";
+
+                if (sampleSize != null)
+                {
+                    keysCommand = $"LIST {fileName} @ID FMT\"60L\" SAMPLE {sampleSize} ID.SUPP COL.HDR.SUPP COUNT.SUP";
+                }
+
+                var keys = ce.Arbitrary(keysCommand)
                 .Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
                 .Distinct()
                 .ToList();
@@ -455,17 +422,7 @@ namespace MertexerV2.GeneralFunctions
 
                         if (selectChildEntities)
                         {
-                            foreach (var fkProp in typeof(T).GetProperties().Where(p => Attribute.IsDefined(p, typeof(UniVerseForeignKeyAttribute))))
-                            {
-                                if (fkProp.PropertyType.BaseType == typeof(UniVerseSerializationBase<string>))
-                                {
-                                    var fkAttr = fkProp.GetCustomAttributes(typeof(UniVerseForeignKeyAttribute), false).Cast<UniVerseForeignKeyAttribute>().Single();
-
-                                    var entity = SelectChildEntity(fkAttr.PropertyType, (string)typeof(T).GetProperty(fkAttr.PropertyName).GetValue(result), applyConversions, selectChildEntities);
-
-                                    fkProp.SetValue(result, entity);
-                                }
-                            }
+                            ProcessForeignKeys(typeof(T).GetProperties().Where(p => Attribute.IsDefined(p, typeof(UniVerseForeignKeyAttribute))), ref result, applyConversions, selectChildEntities, batchSize, uniVerseAccount);
                         }
 
                         thisBatchResults.Add((T)result);
@@ -493,26 +450,79 @@ namespace MertexerV2.GeneralFunctions
             }
         }
 
-        static T ProcessItem(string key, UniDynArray extantRecord, bool applyConversions, bool selectChildEntities)
+        public static void ProcessForeignKeys(IEnumerable<PropertyInfo> foreignKeyPropertyInfos, ref object result, bool applyConversions = true, bool selectChildEntities = false, short batchSize = 1000, string uniVerseAccount = "MERTEX")
         {
-            var result = UniVerseSerializer.Deserialize(typeof(T).AssemblyQualifiedName, key, extantRecord, applyConversions);
-
-            if (selectChildEntities)
+            foreach (var fkProp in foreignKeyPropertyInfos)
             {
-                foreach (var fkProp in typeof(T).GetProperties().Where(p => Attribute.IsDefined(p, typeof(UniVerseForeignKeyAttribute))))
+                var fkAttr = fkProp.GetCustomAttributes(typeof(UniVerseForeignKeyAttribute), false).Cast<UniVerseForeignKeyAttribute>().Single();
+
+                if (typeof(IEnumerable).IsAssignableFrom(fkProp.PropertyType))
+                {
+                    var genericType = fkProp.PropertyType.GetGenericArguments().First();
+                    var genericListType = typeof(List<>).MakeGenericType(genericType);
+                    var instance = (IList)Activator.CreateInstance(genericListType);
+
+                    if (genericType.BaseType == typeof(UniVerseSerializationBase<string>))
+                    {
+                        var foreignKeys = (IEnumerable<string>)typeof(T).GetProperty(fkAttr.PropertyName).GetValue(result);
+
+                        var foreignKeyCount = foreignKeys.Count();
+
+                        if (foreignKeyCount > 0)
+                        {
+                            //#if DEBUG
+                            //                            var prevColour = Console.ForegroundColor;
+
+                            //                            Console.ForegroundColor = ConsoleColor.Yellow;
+
+                            //                            Console.WriteLine($"\r\nSaw {foreignKeyCount} foreign keys to process on {fkAttr.PropertyName}");
+
+                            //                            Console.ForegroundColor = prevColour;
+                            //#endif
+
+                            var processedCount = 0;
+
+//#if DEBUG
+                            var locker = new object();
+
+                            Parallel.ForEach(foreignKeys, (fk) =>
+                            {
+                                var foreignEntity = SelectChildEntity(fkAttr.PropertyType, fk, applyConversions, selectChildEntities, batchSize, uniVerseAccount);
+
+                                lock (locker)
+                                {
+                                    instance.Add(foreignEntity);
+                                    //Console.SetCursorPosition(0, Console.CursorTop);
+                                    //Console.Write($"Processed {++processedCount} of {foreignKeyCount}");
+                                }
+                            });
+//#else
+
+//                            foreach(var fk in foreignKeys)
+//                            {
+//                                var foreignEntity = SelectChildEntity(fkAttr.PropertyType, fk, applyConversions, selectChildEntities, batchSize, uniVerseAccount);
+
+//                                instance.Add(foreignEntity);
+//                            }
+
+//#endif
+                            fkProp.SetValue(result, instance);
+
+                            //Console.WriteLine();
+                            //Console.WriteLine();
+                        }
+                    }
+                }
+                else
                 {
                     if (fkProp.PropertyType.BaseType == typeof(UniVerseSerializationBase<string>))
                     {
-                        var fkAttr = fkProp.GetCustomAttributes(typeof(UniVerseForeignKeyAttribute), false).Cast<UniVerseForeignKeyAttribute>().Single();
-
-                        var entity = SelectChildEntity(fkAttr.PropertyType, (string)typeof(T).GetProperty(fkAttr.PropertyName).GetValue(result), applyConversions, selectChildEntities);
+                        var entity = SelectChildEntity(fkAttr.PropertyType, (string)typeof(T).GetProperty(fkAttr.PropertyName).GetValue(result), applyConversions, selectChildEntities, batchSize, uniVerseAccount);
 
                         fkProp.SetValue(result, entity);
                     }
                 }
             }
-
-            return (T)result;
         }
 
         internal static object SelectChildEntity(string typeName, string key = null, bool applyConversions = true, bool selectChildEntities = true, short batchSize = 1000, string uniVerseAccount = "MERTEX")
@@ -537,26 +547,16 @@ namespace MertexerV2.GeneralFunctions
 
                     if (selectChildEntities)
                     {
-                        foreach (var fkProp in Type.GetType(typeName).GetProperties().Where(p => Attribute.IsDefined(p, typeof(UniVerseForeignKeyAttribute))))
-                        {
-                            if (fkProp.PropertyType.BaseType == typeof(UniVerseSerializationBase<string>))
-                            {
-                                var fkAttr = fkProp.GetCustomAttributes(typeof(UniVerseForeignKeyAttribute), false).Cast<UniVerseForeignKeyAttribute>().Single();
-
-                                var entity = SelectChildEntity(fkAttr.PropertyType, (string)typeof(T).GetProperty(fkAttr.PropertyName).GetValue(result), applyConversions, selectChildEntities);
-
-                                fkProp.SetValue(result, entity);
-                            }
-                        }
+                        ProcessForeignKeys(Type.GetType(typeName).GetProperties().Where(p => Attribute.IsDefined(p, typeof(UniVerseForeignKeyAttribute))), ref result, applyConversions, selectChildEntities, batchSize, uniVerseAccount);
                     }
 
-#if DEBUG
-                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    //#if DEBUG
+                    //                    Console.ForegroundColor = ConsoleColor.Yellow;
 
-                    Console.WriteLine(result);
+                    //                    Console.WriteLine(result);
 
-                    Console.ForegroundColor = ConsoleColor.Green;
-#endif
+                    //                    Console.ForegroundColor = ConsoleColor.Green;
+                    //#endif
 
                     return result;
                 }

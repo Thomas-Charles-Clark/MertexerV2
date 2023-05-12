@@ -8,17 +8,6 @@ using System.Threading.Tasks;
 
 namespace MertexerV2.Models.Accounts
 {
-    public class SSLPostDocument
-    {
-        //[UniVerseIndex(0)]
-        //[UniVerseFieldName("CONTACTS.KEY")]
-        public string W_SSLPOST_DOCTYPE { get; set; }
-
-        [UniVerseIndex(1)]
-        [UniVerseFieldName("CONTACT.EMAIL")]
-        public string W_SSLPOST_EMAIL { get; set; }
-    }
-
     public class SSLPostDocumentRead
     {
         public string W_SSLPOST_DOCTYPE { get; set; }

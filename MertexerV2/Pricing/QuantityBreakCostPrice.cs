@@ -269,7 +269,7 @@ namespace MertexerV2.GeneralFunctions.Pricing
 
                             var priceKey = $"{supplierCode}*{productCode}";
 
-                            var exchangeRate = Decimal.Parse(supplier.ExchangeRate.Rate);
+                            var exchangeRate = supplier.ExchangeRate.Rate;
 
                             var poPriceListRec = selectPriceListRecordsIndividually 
                                 ? Selector<POPriceList>.Select(priceKey, false, false) 

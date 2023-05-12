@@ -198,7 +198,6 @@ namespace MertexerV2SQL.Models.Misc
         public string eoriNumber { get; set; }
     }
 
-
     public class TradeAccountAddressReturn
     {
         public TradeAccountInvoiceAddress InvoiceAddress { get; set; }

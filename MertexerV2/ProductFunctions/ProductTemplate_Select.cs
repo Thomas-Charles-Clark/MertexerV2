@@ -90,7 +90,7 @@ namespace MertexerV2.ProductFunctions
             out SqlDecimal MinimumReplenishment,
             out SqlString BulkRack,
             out SqlBoolean AutoAllocateMultipleTimes,
-            out SqlString OrderType,
+            out SqlString MadeToMeasureType,
             out SqlString Logo,
             out SqlBoolean FullOrderOnly,
             out SqlString ChargeOn,
@@ -137,7 +137,7 @@ namespace MertexerV2.ProductFunctions
             MinimumReplenishment = p.MinimumReplenishment ?? SqlDecimal.Null;
             BulkRack = p.BulkRack?.TrimReduceTruncate(20);
             AutoAllocateMultipleTimes = p.AutoAllocateMultipleTimes;
-            OrderType = p.OrderType?.TrimReduceTruncate(10);
+            MadeToMeasureType = p.MadeToMeasureType?.TrimReduceTruncate(1);
             Logo = p.Logo?.TrimReduceTruncate(1);
             FullOrderOnly = p.FullOrderOnly;
             ChargeOn = p.ChargeOn?.TrimReduceTruncate(1);

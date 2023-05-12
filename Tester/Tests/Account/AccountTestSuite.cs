@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 using Tester.Utilities;
 using Newtonsoft.Json;
 using MertexerV2.Models.EDAReplacement;
+using MertexerV2.GeneralFunctions;
+using MertexerV2.Models;
+using MertexerV2.TradeAccountFunctions;
 
 namespace Tester.Tests.Account
 {
@@ -210,7 +213,7 @@ namespace Tester.Tests.Account
 
                 sw.Start();
 
-                var results = MertexerV2.AccountFunctions.AccountFunctions.BatchSelectTradeAccounts(uniVerseAccount, tradeAccountListJson);
+                var results = TradeAccountFunctions.Select(uniVerseAccount, tradeAccountListJson).OfType<TradeAccount>().ToList();
 
                 Console.WriteLine(TesterFramework.WavyLineBreak);
 
@@ -246,7 +249,7 @@ namespace Tester.Tests.Account
 
                 Console.WriteLine(TesterFramework.WavyLineBreak);
 
-                var accountCode = MertexerV2.Accounts.AccountFunctions.Upsert(tradeDataSourceJson, tradeAccountJson);
+                var accountCode = MertexerV2.TradeAccountFunctions.TradeAccountFunctions.Upsert(tradeDataSourceJson, tradeAccountJson);
 
                 Console.WriteLine(TesterFramework.WavyLineBreak);
 

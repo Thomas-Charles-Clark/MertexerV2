@@ -69,7 +69,7 @@ namespace MertexerV2.ProductFunctions
         {
             var p = (Rack)obj;
 
-            Code = p.Key?.TrimReduceTruncate(10);
+            Code = p.Key?.TrimReduceTruncate(20);
             Name = p.Name?.TrimReduceTruncate(50);
             WarehouseRoute = p.WarehouseRoute?.TrimReduceTruncate(50);
             Pickable = p.Pickable;

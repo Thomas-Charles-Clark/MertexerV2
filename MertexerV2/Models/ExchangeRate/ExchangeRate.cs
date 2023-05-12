@@ -1,4 +1,8 @@
-﻿using MertexerV2.Utilities;
+﻿using MertexerV2.AccountFunctions;
+using MertexerV2.GeneralFunctions;
+using MertexerV2.Utilities;
+
+using Newtonsoft.Json;
 
 using System;
 using System.Collections.Generic;
@@ -26,12 +30,10 @@ namespace MertexerV2.Models.ExchangeRate
             typeof(ExchangeRate).GetProperties().ToList().ForEach(p => Framework.InitialiseUniProperty(this, p));
         }
 
-        /// <summary>
-        /// Description
-        /// </summary>
-        [UniVerseIndex(1)]
-        [UniVerseFieldName("DESC")]
-        public string Description { get; set; }
+        public void Upsert(string uniVerseAccount = "MERTEX")
+        {
+            ExchangeRateFunctions.Upsert(uniVerseAccount, JsonConvert.SerializeObject(this));
+        }
 
         /// <summary>
         /// Rate
@@ -39,6 +41,14 @@ namespace MertexerV2.Models.ExchangeRate
         [UniVerseIndex(2)]
         [UniVerseConversion("MR66")]
         [UniVerseFieldName("RATE")]
-        public string Rate { get; set; }
+        public decimal Rate { get; set; }
+
+        /// <summary>
+        /// Description
+        /// </summary>
+        [UniVerseIndex(12)]
+        [UniVerseFieldName("WEB.DESC")]
+        public string Description { get; set; }
+
     }
 }

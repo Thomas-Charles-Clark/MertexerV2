@@ -251,7 +251,7 @@ namespace MertexerV2.SQLFunctions
         {
             var Address = (DeliveryAddress)obj;
 
-            DeliveryReference = Address.DeliveryReference;
+            DeliveryReference = Address.Key;
             CompanyName = String.IsNullOrEmpty(Address.CompanyName) ? SqlString.Null : Address.CompanyName.TrimReduceTruncate(35);
             ContactName = String.IsNullOrEmpty(Address.ContactName) ? SqlString.Null : Address.ContactName.TrimReduceTruncate(50);
             AddressLine1 = String.IsNullOrEmpty(Address.AddressLine1) ? SqlString.Null : Address.AddressLine1.TrimReduceTruncate(60);

@@ -19,7 +19,7 @@ namespace MertexerV2.SQLFunctions
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
         public static string Upsert(string TradeDataSourceJSON, string TradeAccountJSON)
         {
-            return Accounts.AccountFunctions.Upsert(TradeDataSourceJSON, TradeAccountJSON);
+            return "";// Accounts.AccountFunctions.Upsert(TradeDataSourceJSON, TradeAccountJSON);
         }
     }
 }

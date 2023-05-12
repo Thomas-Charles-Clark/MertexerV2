@@ -7,11 +7,6 @@ using System.Threading.Tasks;
 
 namespace MertexerV2.Models.EDAReplacement
 {
-    public class TradeAccountCode
-    {
-        public string Code { get; set; }
-    }
-
     public class Market
     {
         public string Code { get; set; }

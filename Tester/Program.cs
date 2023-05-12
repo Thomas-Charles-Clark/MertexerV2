@@ -28,6 +28,11 @@ using MertexerV2.Models.Invoices;
 using System.Globalization;
 using MertexerV2.InvoiceFunctions;
 using MertexerV2.Models.Stock;
+using MertexerV2.Models;
+using MertexerV2.Models.Accounts;
+using MertexerV2.AccountFunctions;
+using MertexerV2.TradeAccountFunctions;
+using System.CodeDom;
 
 namespace Tester
 {
@@ -35,13 +40,15 @@ namespace Tester
     {
         static void Main()
         {
-            Console.ForegroundColor = ConsoleColor.Green;
+            Console.ForegroundColor = ConsoleColor.Green; 
 
             Console.ForegroundColor = ConsoleColor.Yellow;
 
-            var tradeAccountNumber = "J0650";
+            var tradeAccountNumber = "M2830";
 
             var tradeDataSourceJson = TesterFramework.FetchAccountDataSourceJson(tradeAccountNumber);
+
+            tradeDataSourceJson = @"{""enquiryTypes"":[{""enquiryType"":""Account"",""dataSources"":[{""uniVerseAccount"":""MERTEX"",""customerReference"":""M2830""}]},{""enquiryType"":""Address"",""dataSources"":[{""uniVerseAccount"":""MERTEX"",""customerReference"":""M2830""}]},{""enquiryType"":""CheckOrders"",""dataSources"":[{""uniVerseAccount"":""MERTEX"",""customerReference"":""M2830""}]},{""enquiryType"":""Contact"",""dataSources"":[{""uniVerseAccount"":""MERTEX"",""customerReference"":""M2830""}]},{""enquiryType"":""CreditControls"",""dataSources"":[{""uniVerseAccount"":""MERTEX"",""customerReference"":""M2830""}]},{""enquiryType"":""CreditStatus"",""dataSources"":[{""uniVerseAccount"":""MERTEX"",""customerReference"":""M2830""}]},{""enquiryType"":""EndCustomers"",""dataSources"":[{""uniVerseAccount"":""MERTEX"",""customerReference"":""M2830""}]},{""enquiryType"":""General"",""dataSources"":[{""uniVerseAccount"":""MERTEX"",""customerReference"":""M2830""}]},{""enquiryType"":""Invoice"",""dataSources"":[{""uniVerseAccount"":""MERTEX"",""customerReference"":""M2830""}]},{""enquiryType"":""PlaceOrder"",""dataSources"":[{""uniVerseAccount"":""MERTEX"",""customerReference"":""M2830""}]}]}";
 
             var stopwatch = new System.Diagnostics.Stopwatch();
 
@@ -51,15 +58,26 @@ namespace Tester
 
             //EDAReplacementTestSuite.OECarriages("MERTEX");
 
-            //Console.WriteLine("POCost");
-            //Console.WriteLine(MaxFieldLengths<POCost>.Execute(null, true, false));
+            //Console.WriteLine("TradeAccount");
+            //var result = MaxFieldLengths<TradeAccount>.Execute(null, true, false, 50);
+            //Console.WriteLine(result);
             //Console.WriteLine();
             //Console.WriteLine();
 
-            //Console.WriteLine("OEINVHEAD");
-            //Console.WriteLine(MaxFieldLengths<InvoiceHead>.Execute(null, true, false, 50));
-            //Console.WriteLine();
-            //Console.WriteLine();
+            //Console.WriteLine(Selector<TradeAccount>.Select("C4103", true, false));
+
+            //var endCustomerResults = TradeAccountFunctions.EndCustomerSelect(tradeDataSourceJson, "Jaberi").OfType<string>().ToList();
+
+            //Console.WriteLine($"Saw {endCustomerResults.Count()} invoice accounts in {stopwatch.Elapsed}");
+
+            var results = DeliveryAddressFunctions.Exists(uniVerseAccount, "K0098", "COMPANY NAME", "COMPANY NAME", "ADDRESS LINE 1", "ADDRESS LINE 2", "TOWN", "COUNTY", "POSTCODE", "GB").OfType<string>().ToList();
+
+            foreach (var r in results)
+            {
+                Console.WriteLine(r);
+            }
+
+
 
             //Console.WriteLine("OEINVHEAD");
             //var headResults = InvoiceHeadFunctions.InitialiseSelect(uniVerseAccount, DateTime.ParseExact("01/11/2021", "dd/MM/yyyy", new CultureInfo("en-GB")), DateTime.ParseExact("03/03/2023", "dd/MM/yyyy", new CultureInfo("en-GB"))).OfType<InvoiceHead>().ToList();
@@ -129,7 +147,17 @@ namespace Tester
             //});
             //
 
-            EDAReplacementTestSuite.FetchPurchaseOrderPrices(uniVerseAccount, @"[{ ""Key"": ""A0091*P462/01""  }]");
+            //EDAReplacementTestSuite.FetchPurchaseOrderPrices(uniVerseAccount, @"[{ ""Key"": ""A0091*P462/01""  }]");
+
+            //var result = Selector<TradeAccount>.Select("M2830");
+
+            //Console.WriteLine(result);
+
+            //var results = MertexerV2.AccountFunctions.DeliveryAddressFunctions.Search(uniVerseAccount, "K0098", "123").OfType<DeliveryAddress>().ToList();
+
+            //results.ForEach(r => Console.WriteLine(r));
+
+
 
             //var stockResults = Stock.BatchPiece("PDG1131/02", "WH", "S").OfType<BatchPieceResult>().ToList();
 

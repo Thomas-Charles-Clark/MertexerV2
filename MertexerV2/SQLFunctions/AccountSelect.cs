@@ -13,371 +13,371 @@ namespace MertexerV2.SQLFunctions
 {
     public static partial class AccountFunctions
     {
-        [SqlFunction(DataAccess = DataAccessKind.Read,
-            SystemDataAccess = SystemDataAccessKind.Read,
-            FillRowMethodName = "AccountBatchSelect_FillRow",
-            TableDefinition = "")]
-        [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
-        public static IEnumerable BatchSelect(string UniVerseAccount, string TradeAccountList)
-        {
-            // Are we going to need to specify which UniVerse account to read from?
-            // Almost definitely!
+        //[SqlFunction(DataAccess = DataAccessKind.Read,
+        //    SystemDataAccess = SystemDataAccessKind.Read,
+        //    FillRowMethodName = "AccountBatchSelect_FillRow",
+        //    TableDefinition = "")]
+        //[System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
+        //public static IEnumerable BatchSelect(string UniVerseAccount, string TradeAccountList)
+        //{
+        //    // Are we going to need to specify which UniVerse account to read from?
+        //    // Almost definitely!
 
-            // Are we going to want to read a zillion accounts in a great big batch as quickly as possible?
-            // Very definitely!
+        //    // Are we going to want to read a zillion accounts in a great big batch as quickly as possible?
+        //    // Very definitely!
 
-            var results = MertexerV2.AccountFunctions.AccountFunctions.BatchSelectTradeAccounts(UniVerseAccount, TradeAccountList);
+        //    //var results = MertexerV2.AccountFunctions.AccountFunctions.BatchSelectTradeAccounts(UniVerseAccount, TradeAccountList);
 
-            return new ArrayList((ICollection)results);
-        }
+        //    //return new ArrayList((ICollection)results);
+        //}
 
-        public static void AccountBatchSelect_FillRow(
-            object obj,
-            out SqlString CUSREF,
-            out SqlString CUSNAME,
-            out SqlString OPEN,
-            out SqlString SORTNAME_EXP,
-            out SqlDateTime ONFILE_DT,
-            out SqlDateTime AMENDED_DT,
-            out SqlString CODE_GROUP,
-            out SqlString SS_CONTACT_NAME,
-            out SqlString CUSADD1X,
-            out SqlString CUSADD2X,
-            out SqlString CUSADD3X,
-            out SqlString CUSADD4X,
-            out SqlString CUSPCODE,
-            out SqlString COUNTRY,
-            out SqlString TOWN,
-            out SqlString COUNTY,
-            out SqlString STATEMENT_AC,
-            out SqlString STNAME,
-            out SqlString STADD1,
-            out SqlString STADD2,
-            out SqlString STADD3,
-            out SqlString STADD4,
-            out SqlString STPCODE,
-            out SqlString STCONTACT,
-            out SqlString STPHONE,
-            out SqlString STD_TELEPHONE,
-            out SqlString EMAIL,
-            out SqlString SS_MARKET_EMAIL,
-            out SqlString WEB_SITE,
-            out SqlString SSLPOSTJSON,
-            out SqlString MARKTYPE_DES,
-            out SqlString CUSTYPE,
-            out SqlString CLASS_CODE,
-            out SqlString SEL1,
-            out SqlString SEL2,
-            out SqlString SEL3,
-            out SqlString DIVISION_CODE,
-            out SqlString COMPANY_REGNO,
-            out SqlString EORI_NUMBER,
-            out SqlString TAXID,
-            out SqlString VATREG_DES,
-            out SqlString VATCOUNTRY,
-            out SqlString VATNORM,
-            out SqlString VATDATLASTCHK,
-            out SqlString VALIDVATNO,
-            out SqlString INVALIDVATNO,
-            out SqlString CURRENCY,
-            out SqlString SELLPRICE,
-            out SqlString BANKNO,
-            out SqlString CREDCONT_DES,
-            out SqlString CRLIMIT,
-            out SqlDateTime CRLIMIT_EXPIRY_DT,
-            out SqlString HIGH_VALUE_EXEMPT_DES,
-            out SqlString INS_CRLIM_SL_DES,
-            out SqlString CRSTOP,
-            out SqlString CL_CHECK_AGAINST_DES,
-            out SqlDateTime INS_EXPDT_SL_DES_DT,
-            out SqlString BANKRUPT,
-            out SqlString STTERMS,
-            out SqlString POREQ,
-            out SqlString HAULIER,
-            out SqlString SERVICE,
-            out SqlString UPS_ACCOUNT_NO_DES,
-            out SqlString DUTY_ACC_NO,
-            out SqlString DHL_ACCOUNT_NO_DES,
-            out SqlString TNT_BILLING_DES,
-            out SqlString DELTERMS,
-            out SqlString EXCLUDE_INVOICE,
-            out SqlString INVVATDISPLAY,
-            out SqlString INV_ODUE_POG,
-            out SqlString EDI_INVOICE,
-            out SqlString EXTENDEDMEMO_NV,
-            out SqlString PARTNER_CO,
-            out SqlString CUSACC1,
-            out SqlString CUSALYS,
-            out SqlString CUSSUB,
-            out SqlString SUNDRY_ACCPT,
-            out SqlString OD_LETTER1,
-            out SqlString OD_LETTER2,
-            out SqlString OD_LETTER3,
-            out SqlString OD_LETTER4,
-            out SqlString OD_LETTER5,
-            out SqlString DEF_DELREF,
-            out SqlString COMM_INV_DES,
-            out SqlString ORDER_LOC,
-            out SqlString EXPORT_DES,
-            out SqlString EXP_NO_PN_DES,
-            out SqlString DEF_CONSOLIDATE,
-            out SqlString CARR_EXEM_SL,
-            out SqlString CONF_REQ_SL,
-            out SqlString PF_TRADING,
-            out SqlString FOC_CODE_DES,
-            out SqlString INV_DETAILS,
-            out SqlString SELLCO,
-            out SqlString GROUPAGE_TYPE,
-            out SqlString DIR_DEL,
-            out SqlString PACKLIST_SL,
-            out SqlString CRD_COPY,
-            out SqlString ABC_PRICING_DES,
-            out SqlString STD_ROLLEN,
-            out SqlString MIN_VALUE_SUR,
-            out SqlString DELCHANGE,
-            out SqlString PF_SURCHARGE,
-            out SqlString INV_COPIES,
-            out SqlString DISTREF,
-            out SqlString TRANS_ACCNT_DES,
-            out SqlString STOCK_ONLY_DES,
-            out SqlString RECEIVE_LOC_DES,
-            out SqlString CONT_PRICING,
-            out SqlString PROD_SCREEN,
-            out SqlString MINORDQTY_SL,
-            out SqlString OVERDUE_LETTERS,
-            out SqlString OVERDUE_TOTALS,
-            out SqlString CUT_VERIFY,
-            out SqlString CCARD_DETAILS,
-            out SqlString OOS_LETTER,
-            out SqlString STAT_PRINT,
-            out SqlString INT_EXT,
-            out SqlString EDI_DIRECT_CUST,
-            out SqlString FILE_PROTOCOL,
-            out SqlString TRAN_USER,
-            out SqlString TILL_CREDITS,
-            out SqlString TITLE_TRANS_DES,
-            out SqlString END_CUST_INV_DES,
-            out SqlString WEBTEX_EXCLUDE_LIST,
-            out SqlString MISC_ACCNT_DES,
-            out SqlString PRICECODE,
-            out SqlString DELDATE_SL,
-            out SqlString MINORDVAL_SL,
-            out SqlString CHKDUPLICATE,
-            out SqlString TILLID_CODE,
-            out SqlString USUAL_ORD_UNIT,
-            out SqlString CANX_LETTS_DES,
-            out SqlString STMNT_CREDACT,
-            out SqlString INFORM_DATE_DES,
-            out SqlString STORE_NAME,
-            out SqlString MEASURE_PIECE,
-            out SqlString TRAN_ADDR,
-            out SqlString TRAN_PWD,
-            out SqlString RETAIL_TILL_CUST,
-            out SqlString END_CUST_REQ_DES,
-            out SqlString DEF_ORDER_PRIORITY,
-            out SqlString SO_ALLOC_FULL,
-            out SqlString INV_TO_DELIVERY,
-            out SqlString DELNOTE_PRICES,
-            out SqlString ORDER_CATAGORY_DES,
-            out SqlString RET_CONT_DES,
-            out SqlString HAULIER_CONSOLIDATE_DES,
-            out SqlString NEWPL_FOR_GIPROB_DES,
-            out SqlString MTM_CARR_CHARGED_DES,
-            out SqlString CUT_OFF_VALUE_DES,
-            out SqlString UPS_ADD_ON_DES,
-            out SqlString ALLOC_PROFORMA_DES,
-            out SqlString PRINT_INV_AT_CONF_DES,
-            out SqlString RESERVE_DAYS_DES,
-            out SqlString JLP_LABELS_DES,
-            out SqlString RF_SCANNER_MEMO_DES,
-            out SqlString CONFIRMATION_MEMO_DES,
-            out SqlString SS_FIELD1,
-            out SqlString SS_FIELD2,
-            out SqlString SS_FIELD3,
-            out SqlString SS_FIELD4,
-            out SqlString SS_FIELD5,
-            out SqlString CONTRACT_ORDER,
-            out SqlString ADVERT_DES,
-            out SqlString REP_STOCKIST,
-            out SqlString SKIST_CAT,
-            out SqlString UPS_RET_LAB,
-            out SqlString EXIT_CODE_EMAIL,
-            out SqlString CALLED,
-            out SqlString MEMO)
-        {
-            var result = (TradeAccount)obj;
+        //public static void AccountBatchSelect_FillRow(
+        //    object obj,
+        //    out SqlString CUSREF,
+        //    out SqlString CUSNAME,
+        //    out SqlString OPEN,
+        //    out SqlString SORTNAME_EXP,
+        //    out SqlDateTime ONFILE_DT,
+        //    out SqlDateTime AMENDED_DT,
+        //    out SqlString CODE_GROUP,
+        //    out SqlString SS_CONTACT_NAME,
+        //    out SqlString CUSADD1X,
+        //    out SqlString CUSADD2X,
+        //    out SqlString CUSADD3X,
+        //    out SqlString CUSADD4X,
+        //    out SqlString CUSPCODE,
+        //    out SqlString COUNTRY,
+        //    out SqlString TOWN,
+        //    out SqlString COUNTY,
+        //    out SqlString STATEMENT_AC,
+        //    out SqlString STNAME,
+        //    out SqlString STADD1,
+        //    out SqlString STADD2,
+        //    out SqlString STADD3,
+        //    out SqlString STADD4,
+        //    out SqlString STPCODE,
+        //    out SqlString STCONTACT,
+        //    out SqlString STPHONE,
+        //    out SqlString STD_TELEPHONE,
+        //    out SqlString EMAIL,
+        //    out SqlString SS_MARKET_EMAIL,
+        //    out SqlString WEB_SITE,
+        //    out SqlString SSLPOSTJSON,
+        //    out SqlString MARKTYPE_DES,
+        //    out SqlString CUSTYPE,
+        //    out SqlString CLASS_CODE,
+        //    out SqlString SEL1,
+        //    out SqlString SEL2,
+        //    out SqlString SEL3,
+        //    out SqlString DIVISION_CODE,
+        //    out SqlString COMPANY_REGNO,
+        //    out SqlString EORI_NUMBER,
+        //    out SqlString TAXID,
+        //    out SqlString VATREG_DES,
+        //    out SqlString VATCOUNTRY,
+        //    out SqlString VATNORM,
+        //    out SqlString VATDATLASTCHK,
+        //    out SqlString VALIDVATNO,
+        //    out SqlString INVALIDVATNO,
+        //    out SqlString CURRENCY,
+        //    out SqlString SELLPRICE,
+        //    out SqlString BANKNO,
+        //    out SqlString CREDCONT_DES,
+        //    out SqlString CRLIMIT,
+        //    out SqlDateTime CRLIMIT_EXPIRY_DT,
+        //    out SqlString HIGH_VALUE_EXEMPT_DES,
+        //    out SqlString INS_CRLIM_SL_DES,
+        //    out SqlString CRSTOP,
+        //    out SqlString CL_CHECK_AGAINST_DES,
+        //    out SqlDateTime INS_EXPDT_SL_DES_DT,
+        //    out SqlString BANKRUPT,
+        //    out SqlString STTERMS,
+        //    out SqlString POREQ,
+        //    out SqlString HAULIER,
+        //    out SqlString SERVICE,
+        //    out SqlString UPS_ACCOUNT_NO_DES,
+        //    out SqlString DUTY_ACC_NO,
+        //    out SqlString DHL_ACCOUNT_NO_DES,
+        //    out SqlString TNT_BILLING_DES,
+        //    out SqlString DELTERMS,
+        //    out SqlString EXCLUDE_INVOICE,
+        //    out SqlString INVVATDISPLAY,
+        //    out SqlString INV_ODUE_POG,
+        //    out SqlString EDI_INVOICE,
+        //    out SqlString EXTENDEDMEMO_NV,
+        //    out SqlString PARTNER_CO,
+        //    out SqlString CUSACC1,
+        //    out SqlString CUSALYS,
+        //    out SqlString CUSSUB,
+        //    out SqlString SUNDRY_ACCPT,
+        //    out SqlString OD_LETTER1,
+        //    out SqlString OD_LETTER2,
+        //    out SqlString OD_LETTER3,
+        //    out SqlString OD_LETTER4,
+        //    out SqlString OD_LETTER5,
+        //    out SqlString DEF_DELREF,
+        //    out SqlString COMM_INV_DES,
+        //    out SqlString ORDER_LOC,
+        //    out SqlString EXPORT_DES,
+        //    out SqlString EXP_NO_PN_DES,
+        //    out SqlString DEF_CONSOLIDATE,
+        //    out SqlString CARR_EXEM_SL,
+        //    out SqlString CONF_REQ_SL,
+        //    out SqlString PF_TRADING,
+        //    out SqlString FOC_CODE_DES,
+        //    out SqlString INV_DETAILS,
+        //    out SqlString SELLCO,
+        //    out SqlString GROUPAGE_TYPE,
+        //    out SqlString DIR_DEL,
+        //    out SqlString PACKLIST_SL,
+        //    out SqlString CRD_COPY,
+        //    out SqlString ABC_PRICING_DES,
+        //    out SqlString STD_ROLLEN,
+        //    out SqlString MIN_VALUE_SUR,
+        //    out SqlString DELCHANGE,
+        //    out SqlString PF_SURCHARGE,
+        //    out SqlString INV_COPIES,
+        //    out SqlString DISTREF,
+        //    out SqlString TRANS_ACCNT_DES,
+        //    out SqlString STOCK_ONLY_DES,
+        //    out SqlString RECEIVE_LOC_DES,
+        //    out SqlString CONT_PRICING,
+        //    out SqlString PROD_SCREEN,
+        //    out SqlString MINORDQTY_SL,
+        //    out SqlString OVERDUE_LETTERS,
+        //    out SqlString OVERDUE_TOTALS,
+        //    out SqlString CUT_VERIFY,
+        //    out SqlString CCARD_DETAILS,
+        //    out SqlString OOS_LETTER,
+        //    out SqlString STAT_PRINT,
+        //    out SqlString INT_EXT,
+        //    out SqlString EDI_DIRECT_CUST,
+        //    out SqlString FILE_PROTOCOL,
+        //    out SqlString TRAN_USER,
+        //    out SqlString TILL_CREDITS,
+        //    out SqlString TITLE_TRANS_DES,
+        //    out SqlString END_CUST_INV_DES,
+        //    out SqlString WEBTEX_EXCLUDE_LIST,
+        //    out SqlString MISC_ACCNT_DES,
+        //    out SqlString PRICECODE,
+        //    out SqlString DELDATE_SL,
+        //    out SqlString MINORDVAL_SL,
+        //    out SqlString CHKDUPLICATE,
+        //    out SqlString TILLID_CODE,
+        //    out SqlString USUAL_ORD_UNIT,
+        //    out SqlString CANX_LETTS_DES,
+        //    out SqlString STMNT_CREDACT,
+        //    out SqlString INFORM_DATE_DES,
+        //    out SqlString STORE_NAME,
+        //    out SqlString MEASURE_PIECE,
+        //    out SqlString TRAN_ADDR,
+        //    out SqlString TRAN_PWD,
+        //    out SqlString RETAIL_TILL_CUST,
+        //    out SqlString END_CUST_REQ_DES,
+        //    out SqlString DEF_ORDER_PRIORITY,
+        //    out SqlString SO_ALLOC_FULL,
+        //    out SqlString INV_TO_DELIVERY,
+        //    out SqlString DELNOTE_PRICES,
+        //    out SqlString ORDER_CATAGORY_DES,
+        //    out SqlString RET_CONT_DES,
+        //    out SqlString HAULIER_CONSOLIDATE_DES,
+        //    out SqlString NEWPL_FOR_GIPROB_DES,
+        //    out SqlString MTM_CARR_CHARGED_DES,
+        //    out SqlString CUT_OFF_VALUE_DES,
+        //    out SqlString UPS_ADD_ON_DES,
+        //    out SqlString ALLOC_PROFORMA_DES,
+        //    out SqlString PRINT_INV_AT_CONF_DES,
+        //    out SqlString RESERVE_DAYS_DES,
+        //    out SqlString JLP_LABELS_DES,
+        //    out SqlString RF_SCANNER_MEMO_DES,
+        //    out SqlString CONFIRMATION_MEMO_DES,
+        //    out SqlString SS_FIELD1,
+        //    out SqlString SS_FIELD2,
+        //    out SqlString SS_FIELD3,
+        //    out SqlString SS_FIELD4,
+        //    out SqlString SS_FIELD5,
+        //    out SqlString CONTRACT_ORDER,
+        //    out SqlString ADVERT_DES,
+        //    out SqlString REP_STOCKIST,
+        //    out SqlString SKIST_CAT,
+        //    out SqlString UPS_RET_LAB,
+        //    out SqlString EXIT_CODE_EMAIL,
+        //    out SqlString CALLED,
+        //    out SqlString MEMO)
+        //{
+        //    var result = (TradeAccount)obj;
 
-            CUSREF = result.CUSREF;
-            CUSNAME = result.CUSNAME;
-            OPEN = result.OPEN;
-            SORTNAME_EXP = result.SORTNAME_EXP;
-            ONFILE_DT = result.ONFILE_DT ?? SqlDateTime.Null;
-            AMENDED_DT = result.AMENDED_DT ?? SqlDateTime.Null;
-            CODE_GROUP = result.CODE_GROUP;
-            SS_CONTACT_NAME = result.SS_CONTACT_NAME;
-            CUSADD1X = result.CUSADD1X;
-            CUSADD2X = result.CUSADD2X;
-            CUSADD3X = result.CUSADD3X;
-            CUSADD4X = result.CUSADD4X;
-            CUSPCODE = result.CUSPCODE;
-            COUNTRY = result.COUNTRY;
-            TOWN = result.TOWN;
-            COUNTY = result.COUNTY;
-            STATEMENT_AC = result.STATEMENT_AC;
-            STNAME = result.STNAME;
-            STADD1 = result.STADD1;
-            STADD2 = result.STADD2;
-            STADD3 = result.STADD3;
-            STADD4 = result.STADD4;
-            STPCODE = result.STPCODE;
-            STCONTACT = result.STCONTACT;
-            STPHONE = result.STPHONE;
-            STD_TELEPHONE = result.STD_TELEPHONE;
-            EMAIL = result.EMAIL;
-            SS_MARKET_EMAIL = result.SS_MARKET_EMAIL;
-            WEB_SITE = result.WEB_SITE;
-            SSLPOSTJSON = JsonConvert.SerializeObject(result.SSLPOSTJSON);
-            MARKTYPE_DES = result.MARKTYPE_DES;
-            CUSTYPE = result.CUSTYPE;
-            CLASS_CODE = result.CLASS_CODE;
-            SEL1 = result.SEL1;
-            SEL2 = result.SEL2;
-            SEL3 = result.SEL3;
-            DIVISION_CODE = result.DIVISION_CODE;
-            COMPANY_REGNO = result.COMPANY_REGNO;
-            EORI_NUMBER = result.EORI_NUMBER;
-            TAXID = result.TAXID;
-            VATREG_DES = result.VATREG_DES;
-            VATCOUNTRY = result.VATCOUNTRY;
-            VATNORM = result.VATNORM;
-            VATDATLASTCHK = result.VATDATLASTCHK;
-            VALIDVATNO = result.VALIDVATNO;
-            INVALIDVATNO = result.INVALIDVATNO;
-            CURRENCY = result.CURRENCY;
-            SELLPRICE = result.SELLPRICE;
-            BANKNO = result.BANKNO;
-            CREDCONT_DES = result.CREDCONT_DES;
-            CRLIMIT = result.CRLIMIT;
-            CRLIMIT_EXPIRY_DT = result.CRLIMIT_EXPIRY_DT ?? SqlDateTime.Null;
-            HIGH_VALUE_EXEMPT_DES = result.HIGH_VALUE_EXEMPT_DES;
-            INS_CRLIM_SL_DES = result.INS_CRLIM_SL_DES;
-            CRSTOP = result.CRSTOP;
-            CL_CHECK_AGAINST_DES = result.CL_CHECK_AGAINST_DES;
-            INS_EXPDT_SL_DES_DT = result.INS_EXPDT_SL_DES_DT ?? SqlDateTime.Null;
-            BANKRUPT = result.BANKRUPT;
-            STTERMS = result.STTERMS;
-            POREQ = result.POREQ;
-            HAULIER = result.HAULIER;
-            SERVICE = result.SERVICE;
-            UPS_ACCOUNT_NO_DES = result.UPS_ACCOUNT_NO_DES;
-            DUTY_ACC_NO = result.DUTY_ACC_NO;
-            DHL_ACCOUNT_NO_DES = result.DHL_ACCOUNT_NO_DES;
-            TNT_BILLING_DES = result.TNT_BILLING_DES;
-            DELTERMS = result.DELTERMS;
-            EXCLUDE_INVOICE = result.EXCLUDE_INVOICE;
-            INVVATDISPLAY = result.INVVATDISPLAY;
-            INV_ODUE_POG = result.INV_ODUE_POG;
-            EDI_INVOICE = result.EDI_INVOICE;
-            EXTENDEDMEMO_NV = result.EXTENDEDMEMO_NV;
-            PARTNER_CO = result.PARTNER_CO;
-            CUSACC1 = result.CUSACC1;
-            CUSALYS = result.CUSALYS;
-            CUSSUB = result.CUSSUB;
-            SUNDRY_ACCPT = result.SUNDRY_ACCPT;
-            OD_LETTER1 = result.OD_LETTER1;
-            OD_LETTER2 = result.OD_LETTER2;
-            OD_LETTER3 = result.OD_LETTER3;
-            OD_LETTER4 = result.OD_LETTER4;
-            OD_LETTER5 = result.OD_LETTER5;
-            DEF_DELREF = result.DEF_DELREF;
-            COMM_INV_DES = result.COMM_INV_DES;
-            ORDER_LOC = result.ORDER_LOC;
-            EXPORT_DES = result.EXPORT_DES;
-            EXP_NO_PN_DES = result.EXP_NO_PN_DES;
-            DEF_CONSOLIDATE = result.DEF_CONSOLIDATE;
-            CARR_EXEM_SL = result.CARR_EXEM_SL;
-            CONF_REQ_SL = result.CONF_REQ_SL;
-            PF_TRADING = result.PF_TRADING;
-            FOC_CODE_DES = result.FOC_CODE_DES;
-            INV_DETAILS = result.INV_DETAILS;
-            SELLCO = result.SELLCO;
-            GROUPAGE_TYPE = result.GROUPAGE_TYPE;
-            DIR_DEL = result.DIR_DEL;
-            PACKLIST_SL = result.PACKLIST_SL;
-            CRD_COPY = result.CRD_COPY;
-            ABC_PRICING_DES = result.ABC_PRICING_DES;
-            STD_ROLLEN = result.STD_ROLLEN;
-            MIN_VALUE_SUR = result.MIN_VALUE_SUR;
-            DELCHANGE = result.DELCHANGE;
-            PF_SURCHARGE = result.PF_SURCHARGE;
-            INV_COPIES = result.INV_COPIES;
-            DISTREF = result.DISTREF;
-            TRANS_ACCNT_DES = result.TRANS_ACCNT_DES;
-            STOCK_ONLY_DES = result.STOCK_ONLY_DES;
-            RECEIVE_LOC_DES = result.RECEIVE_LOC_DES;
-            CONT_PRICING = result.CONT_PRICING;
-            PROD_SCREEN = result.PROD_SCREEN;
-            MINORDQTY_SL = result.MINORDQTY_SL;
-            OVERDUE_LETTERS = result.OVERDUE_LETTERS;
-            OVERDUE_TOTALS = result.OVERDUE_TOTALS;
-            CUT_VERIFY = result.CUT_VERIFY;
-            CCARD_DETAILS = result.CCARD_DETAILS;
-            OOS_LETTER = result.OOS_LETTER;
-            STAT_PRINT = result.STAT_PRINT;
-            INT_EXT = result.INT_EXT;
-            EDI_DIRECT_CUST = result.EDI_DIRECT_CUST;
-            FILE_PROTOCOL = result.FILE_PROTOCOL;
-            TRAN_USER = result.TRAN_USER;
-            TILL_CREDITS = result.TILL_CREDITS;
-            TITLE_TRANS_DES = result.TITLE_TRANS_DES;
-            END_CUST_INV_DES = result.END_CUST_INV_DES;
-            WEBTEX_EXCLUDE_LIST = result.WEBTEX_EXCLUDE_LIST;
-            MISC_ACCNT_DES = result.MISC_ACCNT_DES;
-            PRICECODE = result.PRICECODE;
-            DELDATE_SL = result.DELDATE_SL;
-            MINORDVAL_SL = result.MINORDVAL_SL;
-            CHKDUPLICATE = result.CHKDUPLICATE;
-            TILLID_CODE = result.TILLID_CODE;
-            USUAL_ORD_UNIT = result.USUAL_ORD_UNIT;
-            CANX_LETTS_DES = result.CANX_LETTS_DES;
-            STMNT_CREDACT = result.STMNT_CREDACT;
-            INFORM_DATE_DES = result.INFORM_DATE_DES;
-            STORE_NAME = result.STORE_NAME;
-            MEASURE_PIECE = result.MEASURE_PIECE;
-            TRAN_ADDR = result.TRAN_ADDR;
-            TRAN_PWD = result.TRAN_PWD;
-            RETAIL_TILL_CUST = result.RETAIL_TILL_CUST;
-            END_CUST_REQ_DES = result.END_CUST_REQ_DES;
-            DEF_ORDER_PRIORITY = result.DEF_ORDER_PRIORITY;
-            SO_ALLOC_FULL = result.SO_ALLOC_FULL;
-            INV_TO_DELIVERY = result.INV_TO_DELIVERY;
-            DELNOTE_PRICES = result.DELNOTE_PRICES;
-            ORDER_CATAGORY_DES = result.ORDER_CATAGORY_DES;
-            RET_CONT_DES = result.RET_CONT_DES;
-            HAULIER_CONSOLIDATE_DES = result.HAULIER_CONSOLIDATE_DES;
-            NEWPL_FOR_GIPROB_DES = result.NEWPL_FOR_GIPROB_DES;
-            MTM_CARR_CHARGED_DES = result.MTM_CARR_CHARGED_DES;
-            CUT_OFF_VALUE_DES = result.CUT_OFF_VALUE_DES;
-            UPS_ADD_ON_DES = result.UPS_ADD_ON_DES;
-            ALLOC_PROFORMA_DES = result.ALLOC_PROFORMA_DES;
-            PRINT_INV_AT_CONF_DES = result.PRINT_INV_AT_CONF_DES;
-            RESERVE_DAYS_DES = result.RESERVE_DAYS_DES;
-            JLP_LABELS_DES = result.JLP_LABELS_DES;
-            RF_SCANNER_MEMO_DES = result.RF_SCANNER_MEMO_DES;
-            CONFIRMATION_MEMO_DES = result.CONFIRMATION_MEMO_DES;
-            SS_FIELD1 = result.SS_FIELD1;
-            SS_FIELD2 = result.SS_FIELD2;
-            SS_FIELD3 = result.SS_FIELD3;
-            SS_FIELD4 = result.SS_FIELD4;
-            SS_FIELD5 = result.SS_FIELD5;
-            CONTRACT_ORDER = result.CONTRACT_ORDER;
-            ADVERT_DES = result.ADVERT_DES;
-            REP_STOCKIST = result.REP_STOCKIST;
-            SKIST_CAT = result.SKIST_CAT;
-            UPS_RET_LAB = result.UPS_RET_LAB;
-            EXIT_CODE_EMAIL = result.EXIT_CODE_EMAIL;
-            CALLED = result.CALLED;
-            MEMO = result.MEMO;
-        }
+        //    CUSREF = result.CUSREF;
+        //    CUSNAME = result.CUSNAME;
+        //    OPEN = result.OPEN;
+        //    SORTNAME_EXP = result.SORTNAME_EXP;
+        //    ONFILE_DT = result.ONFILE_DT ?? SqlDateTime.Null;
+        //    AMENDED_DT = result.AMENDED_DT ?? SqlDateTime.Null;
+        //    CODE_GROUP = result.CODE_GROUP;
+        //    SS_CONTACT_NAME = result.SS_CONTACT_NAME;
+        //    CUSADD1X = result.CUSADD1X;
+        //    CUSADD2X = result.CUSADD2X;
+        //    CUSADD3X = result.CUSADD3X;
+        //    CUSADD4X = result.CUSADD4X;
+        //    CUSPCODE = result.CUSPCODE;
+        //    COUNTRY = result.COUNTRY;
+        //    TOWN = result.TOWN;
+        //    COUNTY = result.COUNTY;
+        //    STATEMENT_AC = result.STATEMENT_AC;
+        //    STNAME = result.STNAME;
+        //    STADD1 = result.STADD1;
+        //    STADD2 = result.STADD2;
+        //    STADD3 = result.STADD3;
+        //    STADD4 = result.STADD4;
+        //    STPCODE = result.STPCODE;
+        //    STCONTACT = result.STCONTACT;
+        //    STPHONE = result.STPHONE;
+        //    STD_TELEPHONE = result.STD_TELEPHONE;
+        //    EMAIL = result.EMAIL;
+        //    SS_MARKET_EMAIL = result.SS_MARKET_EMAIL;
+        //    WEB_SITE = result.WEB_SITE;
+        //    SSLPOSTJSON = JsonConvert.SerializeObject(result.SSLPOSTJSON);
+        //    MARKTYPE_DES = result.MARKTYPE_DES;
+        //    CUSTYPE = result.CUSTYPE;
+        //    CLASS_CODE = result.CLASS_CODE;
+        //    SEL1 = result.SEL1;
+        //    SEL2 = result.SEL2;
+        //    SEL3 = result.SEL3;
+        //    DIVISION_CODE = result.DIVISION_CODE;
+        //    COMPANY_REGNO = result.COMPANY_REGNO;
+        //    EORI_NUMBER = result.EORI_NUMBER;
+        //    TAXID = result.TAXID;
+        //    VATREG_DES = result.VATREG_DES;
+        //    VATCOUNTRY = result.VATCOUNTRY;
+        //    VATNORM = result.VATNORM;
+        //    VATDATLASTCHK = result.VATDATLASTCHK;
+        //    VALIDVATNO = result.VALIDVATNO;
+        //    INVALIDVATNO = result.INVALIDVATNO;
+        //    CURRENCY = result.CURRENCY;
+        //    SELLPRICE = result.SELLPRICE;
+        //    BANKNO = result.BANKNO;
+        //    CREDCONT_DES = result.CREDCONT_DES;
+        //    CRLIMIT = result.CRLIMIT;
+        //    CRLIMIT_EXPIRY_DT = result.CRLIMIT_EXPIRY_DT ?? SqlDateTime.Null;
+        //    HIGH_VALUE_EXEMPT_DES = result.HIGH_VALUE_EXEMPT_DES;
+        //    INS_CRLIM_SL_DES = result.INS_CRLIM_SL_DES;
+        //    CRSTOP = result.CRSTOP;
+        //    CL_CHECK_AGAINST_DES = result.CL_CHECK_AGAINST_DES;
+        //    INS_EXPDT_SL_DES_DT = result.INS_EXPDT_SL_DES_DT ?? SqlDateTime.Null;
+        //    BANKRUPT = result.BANKRUPT;
+        //    STTERMS = result.STTERMS;
+        //    POREQ = result.POREQ;
+        //    HAULIER = result.HAULIER;
+        //    SERVICE = result.SERVICE;
+        //    UPS_ACCOUNT_NO_DES = result.UPS_ACCOUNT_NO_DES;
+        //    DUTY_ACC_NO = result.DUTY_ACC_NO;
+        //    DHL_ACCOUNT_NO_DES = result.DHL_ACCOUNT_NO_DES;
+        //    TNT_BILLING_DES = result.TNT_BILLING_DES;
+        //    DELTERMS = result.DELTERMS;
+        //    EXCLUDE_INVOICE = result.EXCLUDE_INVOICE;
+        //    INVVATDISPLAY = result.INVVATDISPLAY;
+        //    INV_ODUE_POG = result.INV_ODUE_POG;
+        //    EDI_INVOICE = result.EDI_INVOICE;
+        //    EXTENDEDMEMO_NV = result.EXTENDEDMEMO_NV;
+        //    PARTNER_CO = result.PARTNER_CO;
+        //    CUSACC1 = result.CUSACC1;
+        //    CUSALYS = result.CUSALYS;
+        //    CUSSUB = result.CUSSUB;
+        //    SUNDRY_ACCPT = result.SUNDRY_ACCPT;
+        //    OD_LETTER1 = result.OD_LETTER1;
+        //    OD_LETTER2 = result.OD_LETTER2;
+        //    OD_LETTER3 = result.OD_LETTER3;
+        //    OD_LETTER4 = result.OD_LETTER4;
+        //    OD_LETTER5 = result.OD_LETTER5;
+        //    DEF_DELREF = result.DEF_DELREF;
+        //    COMM_INV_DES = result.COMM_INV_DES;
+        //    ORDER_LOC = result.ORDER_LOC;
+        //    EXPORT_DES = result.EXPORT_DES;
+        //    EXP_NO_PN_DES = result.EXP_NO_PN_DES;
+        //    DEF_CONSOLIDATE = result.DEF_CONSOLIDATE;
+        //    CARR_EXEM_SL = result.CARR_EXEM_SL;
+        //    CONF_REQ_SL = result.CONF_REQ_SL;
+        //    PF_TRADING = result.PF_TRADING;
+        //    FOC_CODE_DES = result.FOC_CODE_DES;
+        //    INV_DETAILS = result.INV_DETAILS;
+        //    SELLCO = result.SELLCO;
+        //    GROUPAGE_TYPE = result.GROUPAGE_TYPE;
+        //    DIR_DEL = result.DIR_DEL;
+        //    PACKLIST_SL = result.PACKLIST_SL;
+        //    CRD_COPY = result.CRD_COPY;
+        //    ABC_PRICING_DES = result.ABC_PRICING_DES;
+        //    STD_ROLLEN = result.STD_ROLLEN;
+        //    MIN_VALUE_SUR = result.MIN_VALUE_SUR;
+        //    DELCHANGE = result.DELCHANGE;
+        //    PF_SURCHARGE = result.PF_SURCHARGE;
+        //    INV_COPIES = result.INV_COPIES;
+        //    DISTREF = result.DISTREF;
+        //    TRANS_ACCNT_DES = result.TRANS_ACCNT_DES;
+        //    STOCK_ONLY_DES = result.STOCK_ONLY_DES;
+        //    RECEIVE_LOC_DES = result.RECEIVE_LOC_DES;
+        //    CONT_PRICING = result.CONT_PRICING;
+        //    PROD_SCREEN = result.PROD_SCREEN;
+        //    MINORDQTY_SL = result.MINORDQTY_SL;
+        //    OVERDUE_LETTERS = result.OVERDUE_LETTERS;
+        //    OVERDUE_TOTALS = result.OVERDUE_TOTALS;
+        //    CUT_VERIFY = result.CUT_VERIFY;
+        //    CCARD_DETAILS = result.CCARD_DETAILS;
+        //    OOS_LETTER = result.OOS_LETTER;
+        //    STAT_PRINT = result.STAT_PRINT;
+        //    INT_EXT = result.INT_EXT;
+        //    EDI_DIRECT_CUST = result.EDI_DIRECT_CUST;
+        //    FILE_PROTOCOL = result.FILE_PROTOCOL;
+        //    TRAN_USER = result.TRAN_USER;
+        //    TILL_CREDITS = result.TILL_CREDITS;
+        //    TITLE_TRANS_DES = result.TITLE_TRANS_DES;
+        //    END_CUST_INV_DES = result.END_CUST_INV_DES;
+        //    WEBTEX_EXCLUDE_LIST = result.WEBTEX_EXCLUDE_LIST;
+        //    MISC_ACCNT_DES = result.MISC_ACCNT_DES;
+        //    PRICECODE = result.PRICECODE;
+        //    DELDATE_SL = result.DELDATE_SL;
+        //    MINORDVAL_SL = result.MINORDVAL_SL;
+        //    CHKDUPLICATE = result.CHKDUPLICATE;
+        //    TILLID_CODE = result.TILLID_CODE;
+        //    USUAL_ORD_UNIT = result.USUAL_ORD_UNIT;
+        //    CANX_LETTS_DES = result.CANX_LETTS_DES;
+        //    STMNT_CREDACT = result.STMNT_CREDACT;
+        //    INFORM_DATE_DES = result.INFORM_DATE_DES;
+        //    STORE_NAME = result.STORE_NAME;
+        //    MEASURE_PIECE = result.MEASURE_PIECE;
+        //    TRAN_ADDR = result.TRAN_ADDR;
+        //    TRAN_PWD = result.TRAN_PWD;
+        //    RETAIL_TILL_CUST = result.RETAIL_TILL_CUST;
+        //    END_CUST_REQ_DES = result.END_CUST_REQ_DES;
+        //    DEF_ORDER_PRIORITY = result.DEF_ORDER_PRIORITY;
+        //    SO_ALLOC_FULL = result.SO_ALLOC_FULL;
+        //    INV_TO_DELIVERY = result.INV_TO_DELIVERY;
+        //    DELNOTE_PRICES = result.DELNOTE_PRICES;
+        //    ORDER_CATAGORY_DES = result.ORDER_CATAGORY_DES;
+        //    RET_CONT_DES = result.RET_CONT_DES;
+        //    HAULIER_CONSOLIDATE_DES = result.HAULIER_CONSOLIDATE_DES;
+        //    NEWPL_FOR_GIPROB_DES = result.NEWPL_FOR_GIPROB_DES;
+        //    MTM_CARR_CHARGED_DES = result.MTM_CARR_CHARGED_DES;
+        //    CUT_OFF_VALUE_DES = result.CUT_OFF_VALUE_DES;
+        //    UPS_ADD_ON_DES = result.UPS_ADD_ON_DES;
+        //    ALLOC_PROFORMA_DES = result.ALLOC_PROFORMA_DES;
+        //    PRINT_INV_AT_CONF_DES = result.PRINT_INV_AT_CONF_DES;
+        //    RESERVE_DAYS_DES = result.RESERVE_DAYS_DES;
+        //    JLP_LABELS_DES = result.JLP_LABELS_DES;
+        //    RF_SCANNER_MEMO_DES = result.RF_SCANNER_MEMO_DES;
+        //    CONFIRMATION_MEMO_DES = result.CONFIRMATION_MEMO_DES;
+        //    SS_FIELD1 = result.SS_FIELD1;
+        //    SS_FIELD2 = result.SS_FIELD2;
+        //    SS_FIELD3 = result.SS_FIELD3;
+        //    SS_FIELD4 = result.SS_FIELD4;
+        //    SS_FIELD5 = result.SS_FIELD5;
+        //    CONTRACT_ORDER = result.CONTRACT_ORDER;
+        //    ADVERT_DES = result.ADVERT_DES;
+        //    REP_STOCKIST = result.REP_STOCKIST;
+        //    SKIST_CAT = result.SKIST_CAT;
+        //    UPS_RET_LAB = result.UPS_RET_LAB;
+        //    EXIT_CODE_EMAIL = result.EXIT_CODE_EMAIL;
+        //    CALLED = result.CALLED;
+        //    MEMO = result.MEMO;
+        //}
     }
 }

@@ -62,9 +62,10 @@ namespace MertexerV2.InvoiceFunctions
 
                         foreach(var batch in split)
                         {
-                            var filters = new List<Tuple<string, string, string>>();
-
-                            filters.Add(new Tuple<string, string, string>("DOCNO", "=", String.Join(" ", batch)));
+                            var filters = new List<Tuple<string, string, string>>
+                            {
+                                new Tuple<string, string, string>("DOCNO", "=", String.Join(" ", batch))
+                            };
 
                             var results = Selector<InvoiceLine>.Filter(
                                 filters,

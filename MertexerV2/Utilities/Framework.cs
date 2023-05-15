@@ -35,6 +35,8 @@ namespace MertexerV2.Utilities
         public static readonly char ValueMark = (char)253;
         public static readonly char SubValueMark = (char)252;
 
+        public static readonly string[] EnvironmentNewLineDelimiter = new string[] { System.Environment.NewLine };
+        public static readonly char[] UnixNewLineDelimiter = new char[] { '\n' };
         public static readonly char[] SpaceDelimiter = new char[] { ' ' };
         public static readonly char[] AsteriskDelimiter = new char[] { '*' };
         public static readonly char[] ValueMarkDelimiter = new char[] { (char)253 };

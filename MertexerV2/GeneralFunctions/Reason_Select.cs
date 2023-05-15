@@ -95,8 +95,6 @@ namespace MertexerV2.GeneralFunctions
 
             Code = p.Key?.TrimReduceTruncate(5);
             Name = p.Name?.TrimReduceTruncate(200);
-
-            int f = 3;
         }
     }
 }

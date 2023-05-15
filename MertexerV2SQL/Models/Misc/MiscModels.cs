@@ -152,25 +152,12 @@ namespace MertexerV2SQL.Models.Misc
         public decimal quantity { get; set; }
     }
 
-    public class DuplicateLineCheckResult
-    {
-        public bool isDuplicate { get; set; }
-        public bool isCurrentBasketDuplicate { get; set; }
-        public List<string> orderNumbers { get; set; }
-
-        public DuplicateLineCheckResult()
-        {
-            isDuplicate = false;
-            isCurrentBasketDuplicate = false;
-            orderNumbers = new List<string>();
-        }
-    }
-
     public class PassOrderReference
     {
         public string tradeAccountCode { get; set; }
         public string OrderReference { get; set; }
     }
+
     public class TradeAccountVATNumber
     {
         public string CountryCode { get; set; }
@@ -251,66 +238,5 @@ namespace MertexerV2SQL.Models.Misc
     public class PassTradeAccountNumber
     {
         public string accountNumber { get; set; }
-    }
-    public class FetchLinkedDocumentsResult
-    {
-        public List<LinkedDocument> LinkedDocuments { get; set; }
-
-        public FetchLinkedDocumentsResult()
-        {
-            LinkedDocuments = new List<LinkedDocument>();
-        }
-    }
-
-    public class LinkedDocument
-    {
-        public string Path { get; set; }
-        public string Description { get; set; }
-
-        [NotMapped]
-        public string FileName
-        {
-            get
-            {
-                return Path.Substring(Path.LastIndexOf("\\") + 1);
-            }
-            set { }
-        }
-    }
-
-    public class MertexRetailTill
-    {
-        public string TillNumber { get; set; }
-        public string Name { get; set; }
-
-        public override bool Equals(object obj)
-        {
-            return ((MertexRetailTill)obj).TillNumber == TillNumber;
-        }
-
-        public override int GetHashCode()
-        {
-            return TillNumber.GetHashCode();
-        }
-    }
-
-    public class MertexRetailTillSession
-    {
-        public string SessionNumber { get; set; }
-        public DateTime OpenedOn { get; set; }
-        public TimeSpan OpenedAt { get; set; }
-        public string OpenedBy { get; set; }
-        public string Label
-        {
-            get
-            {
-                return $"Session {SessionNumber} Opened: {OpenedOn.ToString("dd/MM/yyyy HH:mm")} by: {OpenedBy}";
-            }
-        }
-    }
-
-    public class PassRetailTillNumber
-    {
-        public string retailTillNumber { get; set; }
     }
 }

@@ -131,7 +131,10 @@ namespace MertexerV2.Utilities
 
             cmd.Command = command;
             cmd.Execute();
+
             var response_str = cmd.Response;
+
+            response_str = cmd.Response;
 
             stopWatch.Stop();
 

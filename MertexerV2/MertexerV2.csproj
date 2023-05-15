@@ -125,11 +125,16 @@
     <Compile Include="AccountFunctions\DeliveryAddress_Exists.cs" />
     <Compile Include="AccountFunctions\ExchangeRate_Select.cs" />
     <Compile Include="AccountFunctions\ExchangeRate_Upsert.cs" />
+    <Compile Include="AccountFunctions\OrderReferenceCheck.cs" />
     <Compile Include="GeneralFunctions\Reason_Upsert.cs" />
     <Compile Include="GeneralFunctions\Reason_Select.cs" />
     <Compile Include="Models\General\Reason.cs" />
+    <Compile Include="Models\Order\DuplicateLineCheckResult.cs" />
     <Compile Include="Models\Product\Transport.cs" />
     <Compile Include="Models\Product\ShippingTerms.cs" />
+    <Compile Include="Models\Retail\RetailModels.cs" />
+    <Compile Include="Models\Retail\RetailTill.cs" />
+    <Compile Include="Models\Retail\RetailTillSession.cs" />
     <Compile Include="Models\TradeAccount\SSLPostDocument.cs" />
     <Compile Include="Models\TradeAccount\SSLPostDocumentCode.cs" />
     <Compile Include="Models\TradeAccount\TradeAccountCode.cs" />
@@ -137,6 +142,7 @@
     <Compile Include="ProductFunctions\ShippingTerms_Select.cs" />
     <Compile Include="ProductFunctions\Transport_Upsert.cs" />
     <Compile Include="ProductFunctions\ShippingTerms_Upsert.cs" />
+    <Compile Include="RetailFunctions\TillFunctions.cs" />
     <Compile Include="TradeAccountFunctions\SSLPostDocument_Select.cs" />
     <Compile Include="TradeAccountFunctions\TradeAccount_Select.cs" />
     <Compile Include="TradeAccountFunctions\SSLPostDocument_Upsert.cs" />

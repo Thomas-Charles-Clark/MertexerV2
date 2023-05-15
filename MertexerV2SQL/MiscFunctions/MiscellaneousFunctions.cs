@@ -1,4 +1,5 @@
-﻿using MertexerV2.Models.DataSource;
+﻿using MertexerV2.Models;
+using MertexerV2.Models.DataSource;
 using MertexerV2.Utilities;
 using MertexerV2SQL.Models.Misc;
 using MertexerV2SQL.Models.Stock;
@@ -200,9 +201,6 @@ namespace MertexerV2SQL.MiscFunctions
                     }
                 }
             });
-
-            if (result.orderNumbers.Any())
-                result.isDuplicate = true;
 
             return result;
         }
@@ -1107,170 +1105,6 @@ namespace MertexerV2SQL.MiscFunctions
 
                 reader.Close();
             }
-        }
-
-        public static FetchLinkedDocumentsResult FetchLinkedDocuments(
-            PassProductCode objProductCode)
-        {
-            var result = new FetchLinkedDocumentsResult();
-
-            U2ConnectionStringBuilder conn_str = new U2ConnectionStringBuilder();
-            conn_str.UserID = MertexConnectionDetails.UserID;
-            conn_str.Password = MertexConnectionDetails.Password;
-            conn_str.Server = MertexConnectionDetails.Server;
-            conn_str.Database = MertexConnectionDetails.Database;
-            conn_str.ServerType = MertexConnectionDetails.ServerType;
-
-            using (U2Connection conn = new U2Connection(conn_str.ConnectionString))
-            {
-                U2Command comm = conn.CreateCommand();
-
-                comm.CommandText = @"
-                    SELECT
-                        LINK.DOCS,
-                        LINK.DOCS.DESC
-                    FROM 
-                        STPRODMASTER
-                    WHERE
-                        PRODCODE = @ProductCode";
-
-                comm.Parameters.Add("@ProductCode", objProductCode.code);
-
-                conn.Open();
-
-                var reader = comm.ExecuteReader();
-
-                var pathResults = "";
-                var descriptionResults = "";
-
-                while (reader.Read())
-                {
-                    if (!reader.IsDBNull(0))
-                    {
-                        pathResults = reader.GetString(0);
-                        descriptionResults = reader.GetString(1);
-                    }
-                }
-
-                var pathSplits = pathResults.Split(Framework.ValueMarkDelimiter, StringSplitOptions.RemoveEmptyEntries).ToArray();
-                var descriptionSplits = descriptionResults.Split(Framework.ValueMarkDelimiter, StringSplitOptions.RemoveEmptyEntries);
-
-                for (var i = 0; i < pathSplits.Length; i++)
-                {
-                    result.LinkedDocuments.Add(new LinkedDocument()
-                    {
-                        Path = pathSplits[i],
-                        Description = descriptionSplits[i]
-                    });
-                }
-
-                reader.Close();
-
-                conn.Close();
-            }
-
-            return result;
-        }
-
-        public static List<MertexRetailTill> FetchRetailTills()
-        {
-            var results = new List<MertexRetailTill>();
-
-            using (var sql = new MertexerV2SQL.DAL.MertexSQLConnection())
-            {
-                var conn = sql.Connection;
-
-                var selectComm = conn.CreateCommand();
-
-                selectComm.CommandText = $@"SELECT  A.[TILL.NO],
-                                                    A.[DESCRIPTION]
-                                            FROM OETILLNO AS A
-                                            INNER JOIN OESESSION AS B ON B.TILLNO = A.[TILL.NO]
-                                            WHERE B.[OPEN.FLAG] = 'Y' AND B.[OPENED.ON] > @StartDT
-                                            ORDER BY A.[TILL.NO]";
-
-                var selectParams = new List<U2Parameter>()
-                {
-                    new U2Parameter("@StartDT", DateTime.Now.AddMonths(-1))
-                };
-
-                selectComm.Parameters.AddRange(selectParams.ToArray());
-
-                conn.Open();
-
-                var reader = selectComm.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    var sr = new MertexRetailTill()
-                    {
-                        TillNumber = reader.GetString(0),
-                        Name = reader.GetString(1)
-                    };
-
-                    results.Add(sr);
-                }
-
-                reader.Close();
-
-                conn.Close();
-            }
-
-            return results;
-        }
-
-        public static List<MertexRetailTillSession> FetchRetailTillSessions(PassRetailTillNumber objTill)
-        {
-            var results = new List<MertexRetailTillSession>();
-
-            using (var sql = new MertexerV2SQL.DAL.MertexSQLConnection())
-            {
-                var conn = sql.Connection;
-
-                var selectComm = conn.CreateCommand();
-
-                selectComm.CommandText = $@"SELECT  SESSIONNO,
-                                                    [OPENED.ON],
-                                                    [OPENED.AT],
-                                                    [OPENED.BY]
-                                            FROM OESESSION 
-                                            WHERE [OPEN.FLAG] = 'Y' AND [TILLNO] = @TillNumber
-                                            ORDER BY [OPENED.ON] DESC, [OPENED.AT] DESC";
-
-                var selectParams = new List<U2Parameter>()
-                {
-                    new U2Parameter("@TillNumber", objTill.retailTillNumber)
-                };
-
-                selectComm.Parameters.AddRange(selectParams.ToArray());
-
-                conn.Open();
-
-                var reader = selectComm.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    var sr = new MertexRetailTillSession()
-                    {
-                        SessionNumber = reader.GetString(0),
-                        OpenedOn = reader.GetDateTime(1),
-                        OpenedAt = reader.GetTimeSpan(2),
-                        OpenedBy = reader.GetString(3)
-                    };
-
-                    sr.OpenedOn += sr.OpenedAt;
-
-                    results.Add(sr);
-                }
-
-                reader.Close();
-
-                conn.Close();
-            }
-
-            results = results.Where(p => p.OpenedOn > DateTime.Now.AddMonths(-1)).ToList();
-
-            return results;
         }
 
         public static MertexerV2.Models.Accounts.OutstandingOrdersReturn OutstandingOrders(

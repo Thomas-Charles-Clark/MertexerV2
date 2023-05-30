@@ -460,6 +460,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AddAssembly.sql" />
+    <Content Include="AddFunctions.sql" />
     <Content Include="ExternalDependencies\CsvHelper.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

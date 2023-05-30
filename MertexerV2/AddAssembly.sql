@@ -1,0 +1,9 @@
+USE [Flock]
+ALTER ASSEMBLY [MertexerV2]
+FROM 'C:\MertexerV2DLLs\MertexerV2.dll'
+WITH PERMISSION_SET = UNSAFE
+
+USE [FlockDev]
+ALTER ASSEMBLY [MertexerV2]
+FROM 'C:\MertexerV2DLLs\MertexerV2.dll'
+WITH PERMISSION_SET = UNSAFE

@@ -25,8 +25,6 @@ namespace MertexerV2.Models.EDAReplacement
             {
                 RRPPriceListCode = rrpPriceListCode;
             }
-
-            int f = 0;
         }
     }
 }

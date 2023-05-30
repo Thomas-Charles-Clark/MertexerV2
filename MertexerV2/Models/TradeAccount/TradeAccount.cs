@@ -1,4 +1,7 @@
-﻿using MertexerV2.Models.Product;
+﻿using MertexerV2.Models.General;
+using MertexerV2.Models.Invoices;
+using MertexerV2.Models.Pricing;
+using MertexerV2.Models.Product;
 using MertexerV2.TradeAccountFunctions;
 using MertexerV2.Utilities;
 using Newtonsoft.Json;
@@ -45,28 +48,28 @@ namespace MertexerV2.Models
         /// Invoice Address Line 1
         /// </summary>
         [UniVerseIndex(1, 2)]
-        [UniVerseFieldName("CUSADD1X")]
+        [UniVerseFieldName("CUSADD1")]
         public string InvoiceAddressLine1 { get; set; }
 
         /// <summary>
         /// Invoice Address Line 2
         /// </summary>
         [UniVerseIndex(1, 3)]
-        [UniVerseFieldName("CUSADD2X")]
+        [UniVerseFieldName("CUSADD2")]
         public string InvoiceAddressLine2 { get; set; }
 
         /// <summary>
         /// Invoice Address Town
         /// </summary>
         [UniVerseIndex(1, 4)]
-        [UniVerseFieldName("CUSADD3X")]
+        [UniVerseFieldName("CUSADD3")]
         public string InvoiceAddressTown { get; set; }
 
         /// <summary>
         /// Invoice Address County
         /// </summary>
         [UniVerseIndex(1, 5)]
-        [UniVerseFieldName("CUSADD4X")]
+        [UniVerseFieldName("CUSADD4")]
         public string InvoiceAddressCounty { get; set; }
 
         /// <summary>
@@ -273,9 +276,7 @@ namespace MertexerV2.Models
         /// <summary>
         /// Analysis Code (S) - whatever that is (?)
         /// Optional; does not validate
-        /// Defaults to B("DGLCODE,S") which is actually a call to a Default definition... which does some godawful thing:
-        /// IF(<42,-1> < 2000,<42,-1>*1000+<38>[S],<42,-1>*1000+<38>)
-        /// This seems to result in 01 or 02, lord help me I can't see why it should
+        /// Refers to GLSUB 
         /// </summary>
         [UniVerseIndex(32)]
         [UniVerseFieldName("CUSSUB")]
@@ -654,6 +655,7 @@ namespace MertexerV2.Models
         /// <summary>
         /// Delivery Terms
         /// Optional; not validated
+        /// Sarah tells me this links to STPRODCLASS8
         /// </summary>
         [UniVerseIndex(207)]
         [UniVerseFieldName("DELTERMS")]
@@ -767,6 +769,30 @@ namespace MertexerV2.Models
         [UniVerseIndex(287)]
         [UniVerseFieldName("CONTRACT.ORDER")]
         public string ContractOrDisplay { get; set; }
+
+        /// <summary>
+        /// Sample Stock Location
+        /// Optional; must exist on STLOCATION if given
+        /// </summary>
+        [UniVerseIndex(302)]
+        [UniVerseFieldName("SAMP.LOC")]
+        public string SampleStockLocation { get; set; }
+
+        /// <summary>
+        /// Sample Haulier Code
+        /// Optional (?): must exist on OEHAULIER
+        /// </summary>
+        [UniVerseIndex(303)]
+        [UniVerseFieldName("SAMP.HAULIER")]
+        public string SampleHaulierCode { get; set; }
+
+        /// <summary>
+        /// Sample Carriage Code
+        /// Optional (?): must exist on OECARRIAGE
+        /// </summary>
+        [UniVerseIndex(304)]
+        [UniVerseFieldName("SAMP.SERVICE")]
+        public string SampleCarriageCode { get; set; }
 
         /// <summary>
         /// Normal Order Location (?)
@@ -1128,7 +1154,7 @@ namespace MertexerV2.Models
         /// </summary>
         [UniVerseIndex(689)]
         [UniVerseFieldName("CANX.LETTS.DES")]
-        public bool CancellationLetters { get; set; }
+        public bool SendCancellationLetters { get; set; }
 
         /// <summary>
         /// Sample Letter Text / Titles In
@@ -1554,6 +1580,22 @@ namespace MertexerV2.Models
 
         [UniVerseForeignKey("InvoiceAccounts", "MertexerV2.Models.TradeAccount")]
         public virtual ICollection<TradeAccount> EndCustomers { get; set; }
+
+        [UniVerseForeignKey("CustomerType", "MertexerV2.Models.CustomerType")]
+        public virtual TradeAccountType Type { get; set; }
+
+        [UniVerseForeignKey("CustomerClass", "MertexerV2.Models.CustomerClass")]
+        public virtual TradeAccountClass Class { get; set; }
+
+        [UniVerseForeignKey("AnalysisCodeS", "MertexerV2.Models.Pricing.GeneralLedgerSubCode")]
+        public virtual GeneralLedgerSubCode SubAnalysisCode { get; set; }
+
+        [UniVerseForeignKey("PaymentTerms", "MertexerV2.Models.Invoices.InvoiceTerms")]
+        public virtual InvoiceTerms InvoiceTerms { get; set; }
+
+
+        [UniVerseForeignKey("DeliveryTerms", "MertexerV2.Models.General.DeliveryTerms")]
+        public virtual DeliveryTerms DeliveryTerm { get; set; }
 
         #endregion
 

@@ -80,7 +80,7 @@ namespace MertexerV2.RetailFunctions
         {
             var p = (RetailTillSession)obj;
 
-            SessionNumber = p.Key?.TrimReduceTruncate(5);
+            SessionNumber = p.Key?.TrimReduceTruncate(10);
             Open = p.Open;
             OpenedBy = p.OpenedBy?.TrimReduceTruncate(50);
             OpenedDT = p.OpenedDT ?? SqlDateTime.Null;

@@ -61,13 +61,13 @@ namespace MertexerV2.ProductFunctions
 
         public static void GeneralLedgerAnalysisCodeSelect_FillRow(
             object obj,
-            out SqlInt32 Code,
+            out SqlString Code,
             out SqlString Name
             )
         {
             var p = (GeneralLedgerAnalysisCode)obj;
 
-            Code = Convert.ToInt32(p.Key);
+            Code = p.Key?.TrimReduceTruncate(5);
             Name = p.Name?.TrimReduceTruncate(50);
         }
     }

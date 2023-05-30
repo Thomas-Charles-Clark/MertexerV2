@@ -33,6 +33,7 @@ using MertexerV2.Models.Accounts;
 using MertexerV2.AccountFunctions;
 using MertexerV2.TradeAccountFunctions;
 using System.CodeDom;
+using MertexerV2.RetailFunctions;
 
 namespace Tester
 {
@@ -44,17 +45,33 @@ namespace Tester
 
             Console.ForegroundColor = ConsoleColor.Yellow;
 
-            var tradeAccountNumber = "M2830";
+            var tradeAccountNumber = "K0098";
 
             var tradeDataSourceJson = TesterFramework.FetchAccountDataSourceJson(tradeAccountNumber);
 
-            tradeDataSourceJson = @"{""enquiryTypes"":[{""enquiryType"":""Account"",""dataSources"":[{""uniVerseAccount"":""MERTEX"",""customerReference"":""M2830""}]},{""enquiryType"":""Address"",""dataSources"":[{""uniVerseAccount"":""MERTEX"",""customerReference"":""M2830""}]},{""enquiryType"":""CheckOrders"",""dataSources"":[{""uniVerseAccount"":""MERTEX"",""customerReference"":""M2830""}]},{""enquiryType"":""Contact"",""dataSources"":[{""uniVerseAccount"":""MERTEX"",""customerReference"":""M2830""}]},{""enquiryType"":""CreditControls"",""dataSources"":[{""uniVerseAccount"":""MERTEX"",""customerReference"":""M2830""}]},{""enquiryType"":""CreditStatus"",""dataSources"":[{""uniVerseAccount"":""MERTEX"",""customerReference"":""M2830""}]},{""enquiryType"":""EndCustomers"",""dataSources"":[{""uniVerseAccount"":""MERTEX"",""customerReference"":""M2830""}]},{""enquiryType"":""General"",""dataSources"":[{""uniVerseAccount"":""MERTEX"",""customerReference"":""M2830""}]},{""enquiryType"":""Invoice"",""dataSources"":[{""uniVerseAccount"":""MERTEX"",""customerReference"":""M2830""}]},{""enquiryType"":""PlaceOrder"",""dataSources"":[{""uniVerseAccount"":""MERTEX"",""customerReference"":""M2830""}]}]}";
+            //tradeDataSourceJson = @"{""enquiryTypes"":[{""enquiryType"":""Account"",""dataSources"":[{""uniVerseAccount"":""MERTEX"",""customerReference"":""M2830""}]},{""enquiryType"":""Address"",""dataSources"":[{""uniVerseAccount"":""MERTEX"",""customerReference"":""M2830""}]},{""enquiryType"":""CheckOrders"",""dataSources"":[{""uniVerseAccount"":""MERTEX"",""customerReference"":""M2830""}]},{""enquiryType"":""Contact"",""dataSources"":[{""uniVerseAccount"":""MERTEX"",""customerReference"":""M2830""}]},{""enquiryType"":""CreditControls"",""dataSources"":[{""uniVerseAccount"":""MERTEX"",""customerReference"":""M2830""}]},{""enquiryType"":""CreditStatus"",""dataSources"":[{""uniVerseAccount"":""MERTEX"",""customerReference"":""M2830""}]},{""enquiryType"":""EndCustomers"",""dataSources"":[{""uniVerseAccount"":""MERTEX"",""customerReference"":""M2830""}]},{""enquiryType"":""General"",""dataSources"":[{""uniVerseAccount"":""MERTEX"",""customerReference"":""M2830""}]},{""enquiryType"":""Invoice"",""dataSources"":[{""uniVerseAccount"":""MERTEX"",""customerReference"":""M2830""}]},{""enquiryType"":""PlaceOrder"",""dataSources"":[{""uniVerseAccount"":""MERTEX"",""customerReference"":""M2830""}]}]}";
 
             var stopwatch = new System.Diagnostics.Stopwatch();
 
             var uniVerseAccount = "MERTEX";
 
             stopwatch.Start();
+
+            //var results = MertexerV2.SQLFunctions.Dedupe.CheckLine(tradeDataSourceJson, "F1190/01/C", 1.0m, "SAMPLE ORDER", 3).OfType<string>().ToList();
+
+            //var da = new DeliveryAddress(
+
+            //    tradeAccountCode: "K0098",
+            //    addressLine1: "line1",
+            //    addressLine2: "line2",
+            //    town: "town",
+            //    county: "county",
+            //    postcode: "postcode",
+            //    countryCode: "GB",
+            //    contactName: "Tom",
+            //    companyName: "Tom");
+
+            //da.Upsert(uniVerseAccount);
 
             //EDAReplacementTestSuite.OECarriages("MERTEX");
 
@@ -72,13 +89,13 @@ namespace Tester
 
             //var results = DeliveryAddressFunctions.Exists(uniVerseAccount, "K0098", "COMPANY NAME", "COMPANY NAME", "ADDRESS LINE 1", "ADDRESS LINE 2", "TOWN", "COUNTY", "POSTCODE", "GB").OfType<string>().ToList();
 
-            
-            var results = MertexerV2.RetailFunctions.TillFunctions.FetchRetailTillSessions(uniVerseAccount).OfType<RetailTillSession>().ToList();
 
-            foreach (var r in results)
-            {
-                Console.WriteLine(r);
-            }
+            //var results = MertexerV2.RetailFunctions.TillFunctions.FetchRetailTillSessions(uniVerseAccount).OfType<RetailTillSession>().ToList();
+
+            //foreach (var r in results)
+            //{
+            //    Console.WriteLine(r);
+            //}
 
             //Console.WriteLine("OEINVHEAD");
             //var headResults = InvoiceHeadFunctions.InitialiseSelect(uniVerseAccount, DateTime.ParseExact("01/11/2021", "dd/MM/yyyy", new CultureInfo("en-GB")), DateTime.ParseExact("03/03/2023", "dd/MM/yyyy", new CultureInfo("en-GB"))).OfType<InvoiceHead>().ToList();
@@ -93,6 +110,16 @@ namespace Tester
             //var lineResults = InvoiceLineFunctions.Select(uniVerseAccount, null, JsonConvert.SerializeObject(documentNumbers)).OfType<InvoiceLine>().ToList();
             //Console.WriteLine();
             //Console.WriteLine();
+
+            //var results = TillFunctions.FetchOpenTills(uniVerseAccount).OfType<RetailTill>().ToList();
+
+
+            //var sessions = TillFunctions.FetchRetailTillSessions(uniVerseAccount).OfType<RetailTillSession>().ToList();
+
+            //foreach (var r in sessions)
+            //{
+            //    Console.WriteLine(r);
+            //}
 
             //lineResults.ForEach(r =>
             //{
@@ -150,9 +177,9 @@ namespace Tester
 
             //EDAReplacementTestSuite.FetchPurchaseOrderPrices(uniVerseAccount, @"[{ ""Key"": ""A0091*P462/01""  }]");
 
-            //var result = Selector<TradeAccount>.Select("M2830");
+            var result = Selector<TradeAccount>.Select("K0098", true, true, 1000, uniVerseAccount);
 
-            //Console.WriteLine(result);
+            Console.WriteLine(result);
 
             //var results = MertexerV2.AccountFunctions.DeliveryAddressFunctions.Search(uniVerseAccount, "K0098", "123").OfType<DeliveryAddress>().ToList();
 

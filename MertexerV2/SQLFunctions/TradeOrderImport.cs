@@ -1792,10 +1792,6 @@ For further assistance, please contact <a href=""mailto:itsupport@designersguild
                             true
                         ));
                     }
-                    else
-                    {
-                        int f = 0;
-                    }
 
                     Console.WriteLine($"Found a HEADER on line {lineNumber + 1}: {thisOrderHeadGuid}");
                 }
@@ -1966,10 +1962,6 @@ For further assistance, please contact <a href=""mailto:itsupport@designersguild
                                                                                 memo: fields[6],
                                                                                 promoCode: null,
                                                                                 discountPercentage: null));
-                        }
-                        else
-                        {
-                            int f = 0;
                         }
                     }
 

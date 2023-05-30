@@ -456,6 +456,14 @@ namespace MertexerV2.GeneralFunctions
             {
                 var fkAttr = fkProp.GetCustomAttributes(typeof(UniVerseForeignKeyAttribute), false).Cast<UniVerseForeignKeyAttribute>().Single();
 
+#if DEBUG
+                Console.ForegroundColor = ConsoleColor.Yellow;
+
+                Console.WriteLine($"Select<{typeof(T).Name}>.Execute ProcessForeignKeys: {fkAttr.PropertyName}");
+
+                Console.ForegroundColor = ConsoleColor.Green;
+#endif
+
                 if (typeof(IEnumerable).IsAssignableFrom(fkProp.PropertyType))
                 {
                     var genericType = fkProp.PropertyType.GetGenericArguments().First();

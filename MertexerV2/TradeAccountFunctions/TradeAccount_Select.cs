@@ -184,13 +184,16 @@ namespace MertexerV2.TradeAccountFunctions
             out SqlByte DefaultOrderPriority,
             out SqlString PartnerCompany,
             out SqlBoolean AcceptSundries,
+            out SqlString SampleStockLocation,
+            out SqlString SampleHaulierCode,
+            out SqlString SampleCarriageCode,
             out SqlString DefaultStockLocation,
             out SqlBoolean Export,
             out SqlBoolean ExportWithNoPackingNote,
             out SqlBoolean Consolidate,
             out SqlString CarriageSurchargeExempt,
             out SqlString OrderConfirmationPrint,
-            out SqlBoolean CancellationLetters,
+            out SqlBoolean SendCancellationLetters,
             out SqlBoolean InterimStatementActions,
             out SqlString InformOnPromiseDateChanged,
             out SqlBoolean ProductScreen,
@@ -313,6 +316,9 @@ namespace MertexerV2.TradeAccountFunctions
             OverdueLetter5Delay = result.OverdueLetter5Delay ?? SqlByte.Null;
             DefaultDeliveryReference = result.DefaultDeliveryReference?.TrimReduceTruncate(20);
             CommericalInvoice = result.CommercialInvoice;
+            SampleStockLocation = result.SampleStockLocation?.TrimReduceTruncate(10);
+            SampleHaulierCode = result.SampleHaulierCode?.TrimReduceTruncate(10);
+            SampleCarriageCode = result.SampleCarriageCode?.TrimReduceTruncate(10);
             DefaultStockLocation = result.DefaultStockLocation?.TrimReduceTruncate(10);
             Export = result.Export;
             ExportWithNoPackingNote = result.ExportWithNoPackingNote;
@@ -361,7 +367,7 @@ namespace MertexerV2.TradeAccountFunctions
             CheckForDuplicates = result.CheckForDuplicates;
             TillIDCode = result.TillIDCode?.TrimReduceTruncate(10);
             UsualOrderUnit = result.UsualOrderUnit?.TrimReduceTruncate(5);
-            CancellationLetters = result.CancellationLetters;
+            SendCancellationLetters = result.SendCancellationLetters;
             InterimStatementActions = result.InterimStatementActions;
             InformOnPromiseDateChanged = result.InformOnPromiseDateChanged?.TrimReduceTruncate(1);
             StoreName = result.StoreName?.TrimReduceTruncate(20);
@@ -405,7 +411,60 @@ namespace MertexerV2.TradeAccountFunctions
             DataAccess = DataAccessKind.Read,
             FillRowMethodName = "EndCustomerSelect_FillRow")]
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
-        public static IEnumerable EndCustomerSelect(string TradeDataSourceJson, string SearchTerm)
+        public static IEnumerable EndCustomerSelect(string UniVerseAccount)
+        {
+            var results = new List<Tuple<string, string>>();
+
+            var accounts = new List<string>();
+
+            using (var qe = new CommandExecutor(UniVerseAccount))
+            {
+                accounts = qe.Arbitrary($"LIST SLCUST @ID FMT\"60L\" WITH INV.ACCOUNTS # \"\" COUNT.SUP ID.SUPP COL.HDR.SUPP")
+                    .Split(Framework.EnvironmentNewLineDelimiter, StringSplitOptions.RemoveEmptyEntries)
+                    .ToList();
+            }
+
+            using (var qe = new QueryExecutor(UniVerseAccount))
+            {
+                foreach (var acc in accounts)
+                {
+                    var xmlResult = qe.Run("LIST_END_CUSTOMERS", $"CUSREF=\"{acc}\"", "CUSREF", "");
+
+                    var xDoc = XDocument.Parse(xmlResult);
+
+                    var pr = new List<Tuple<string, string>>();
+
+                    xDoc.Descendants("record").ToList().ForEach(c =>
+                    {
+                        var cusRef = c.XPathSelectElement("descendant::fd[@id='C1']").Attribute("value").Value;
+
+                        results.Add(new Tuple<string,string>(acc, cusRef));
+                    });
+                }
+            }
+
+            foreach (var r in results.OrderBy(r => r.Item1).ThenBy(r => r.Item2))
+            {
+                yield return r;
+            }
+        }
+
+        public static void EndCustomerSelect_FillRow(
+            object obj,
+            out SqlString ParentTradeAccountCode,
+            out SqlString TradeAccountCode)
+        {
+            var result = (Tuple<string,string>)obj;
+
+            ParentTradeAccountCode = result.Item1.TrimReduceTruncate(50);
+            TradeAccountCode = result.Item2.TrimReduceTruncate(50);
+        }
+
+        [Microsoft.SqlServer.Server.SqlFunction(
+            DataAccess = DataAccessKind.Read,
+            FillRowMethodName = "EndCustomerSearch_FillRow")]
+        [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
+        public static IEnumerable EndCustomerSearch(string TradeDataSourceJson, string SearchTerm)
         {
             var preResult = new List<Tuple<string, string>>();
             
@@ -460,7 +519,7 @@ namespace MertexerV2.TradeAccountFunctions
             }
         }
 
-        public static void EndCustomerSelect_FillRow(
+        public static void EndCustomerSearch_FillRow(
             object obj,
             out SqlString TradeAccountCode)
         {

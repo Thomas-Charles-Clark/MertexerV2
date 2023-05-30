@@ -80,7 +80,7 @@ namespace MertexerV2.ProductFunctions
 
             // ADD ADDRESS DETAILS AND REMOVE EXTANT EDAREPLACEMENT VERSION
 
-            Code = p.Key?.TrimReduceTruncate(10);
+            Code = p.Key?.TrimReduceTruncate(50);
             Name = p.Name?.TrimReduceTruncate(100);
             AddressLine1 = p.AddressLine1?.TrimReduceTruncate(60);
             AddressLine2 = p.AddressLine2?.TrimReduceTruncate(60);

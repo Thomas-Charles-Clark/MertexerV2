@@ -38,11 +38,47 @@ namespace MertexerV2.AccountFunctions
                     // then lock the specific record
                     // then write all the fields
                     // then unlock the record
+
+
+                    if (String.IsNullOrEmpty(DeliveryAddress.Key))
+                    {
+                        var keys = ce.Arbitrary($"LIST DELADD @ID FMT\"40L\" WITH CUSREF = \"{DeliveryAddress.TradeAccountCode}\" ID.SUP COUNT.SUP COL.HDR.SUPP")
+                            .Split(Framework.EnvironmentNewLineDelimiter, StringSplitOptions.RemoveEmptyEntries)
+                            .ToList();
+
+                        if (keys.Count == 0)
+                        {
+                            keys.Add($"{DeliveryAddress.TradeAccountCode}-0");
+                        }
+
+                        var references = keys.Select(p => p.Split(new char[] { '-' })[1]).ToList();
+
+                        var NumericReferences = new List<int>();
+
+                        references.ForEach(c =>
+                        {
+                            if (Int32.TryParse(c, out int referenceNumber))
+                            {
+                                NumericReferences.Add(referenceNumber);
+                            }
+                        });
+
+                        var nextReference = NumericReferences.Max() + 1;
+
+                        var newDeliveryReference = $"{DeliveryAddress.TradeAccountCode}-{nextReference}";
+
+                        DeliveryAddress = new DeliveryAddress(newDeliveryReference, DeliveryAddress);
+                    }
+
                     var dataSet = new IBMU2.UODOTNET.UniDataSet(ce.Session);
+
                     dataSet.Insert(DeliveryAddress.Key);
 
                     //slcustFile.LockFile();
                     uniVerseFile.WriteRecords(dataSet);
+
+
+
                     //slcustFile.UnlockFile();
                 }
 

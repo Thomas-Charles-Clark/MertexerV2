@@ -93,7 +93,7 @@ namespace MertexerV2.GeneralFunctions
         {
             var p = (Reason)obj;
 
-            Code = p.Key?.TrimReduceTruncate(5);
+            Code = p.Key?.TrimReduceTruncate(20);
             Name = p.Name?.TrimReduceTruncate(200);
         }
     }

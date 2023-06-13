@@ -14,9 +14,9 @@ namespace MertexerV2.TradeAccountFunctions
     public static partial class TradeAccountTypeFunctions
     {
         [SqlFunction]
-        public static string Upsert(string UniVerseAccount, string CustomerTypeJSON)
+        public static string Upsert(string UniVerseAccount, string TradeAccountTypeJSON)
         {
-            var sslPostDocument = JsonConvert.DeserializeObject<TradeAccountType>(CustomerTypeJSON);
+            var tradeAccountType = JsonConvert.DeserializeObject<TradeAccountType>(TradeAccountTypeJSON);
 
             var fileName = typeof(TradeAccountType).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
                     .Cast<UniVerseFileNameAttribute>()
@@ -29,7 +29,7 @@ namespace MertexerV2.TradeAccountFunctions
 
                 try
                 {
-                    var extantRecord = uniVerseFile.ReadField(sslPostDocument.Key, 0).StringValue;
+                    var extantRecord = uniVerseFile.ReadField(tradeAccountType.Key, 0).StringValue;
                 }
                 catch (IBMU2.UODOTNET.UniFileException)
                 {
@@ -39,22 +39,22 @@ namespace MertexerV2.TradeAccountFunctions
                     // then write all the fields
                     // then unlock the record
                     var dataSet = new IBMU2.UODOTNET.UniDataSet(ce.Session);
-                    dataSet.Insert(sslPostDocument.Key);
+                    dataSet.Insert(tradeAccountType.Key);
 
                     //slcustFile.LockFile();
                     uniVerseFile.WriteRecords(dataSet);
                     //slcustFile.UnlockFile();
                 }
 
-                uniVerseFile.LockRecord(sslPostDocument.Key, 1);
+                uniVerseFile.LockRecord(tradeAccountType.Key, 1);
 
-                UniUpsert<TradeAccountType>.Upsert(sslPostDocument, uniVerseFile, UniVerseAccount);
+                UniUpsert<TradeAccountType>.Upsert(TradeAccountTypeJSON, uniVerseFile, UniVerseAccount);
 
-                uniVerseFile.UnlockRecord(sslPostDocument.Key);
+                uniVerseFile.UnlockRecord(tradeAccountType.Key);
 
             }
 
-            return sslPostDocument.Key;
+            return tradeAccountType.Key;
         }
     }
 }

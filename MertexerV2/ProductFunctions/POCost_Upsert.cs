@@ -48,7 +48,7 @@ namespace MertexerV2.ProductFunctions
 
                 uniVerseFile.LockRecord(poCost.Key, 1);
 
-                UniUpsert<POCost>.Upsert(poCost, uniVerseFile, UniVerseAccount);
+                UniUpsert<POCost>.Upsert(POCostJSON, uniVerseFile, UniVerseAccount);
 
                 uniVerseFile.UnlockRecord(poCost.Key);
 

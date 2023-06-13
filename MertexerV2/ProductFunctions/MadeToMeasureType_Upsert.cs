@@ -48,7 +48,7 @@ namespace MertexerV2.ProductFunctions
 
                 uniVerseFile.LockRecord(MadeToMeasureType.Key, 1);
 
-                UniUpsert<MadeToMeasureType>.Upsert(MadeToMeasureType, uniVerseFile, UniVerseAccount);
+                UniUpsert<MadeToMeasureType>.Upsert(MadeToMeasureTypeJSON, uniVerseFile, UniVerseAccount);
 
                 uniVerseFile.UnlockRecord(MadeToMeasureType.Key);
 

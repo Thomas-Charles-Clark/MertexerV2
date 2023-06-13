@@ -49,7 +49,7 @@ namespace MertexerV2.AccountFunctions
 
                 uniVerseFile.LockRecord(ExchangeRate.Code, 1);
 
-                UniUpsert<ExchangeRate>.Upsert(ExchangeRate, uniVerseFile, UniVerseAccount);
+                UniUpsert<ExchangeRate>.Upsert(ExchangeRateJSON, uniVerseFile, UniVerseAccount);
 
                 uniVerseFile.UnlockRecord(ExchangeRate.Code);
 

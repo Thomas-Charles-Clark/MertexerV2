@@ -16,7 +16,7 @@ namespace MertexerV2.TradeAccountFunctions
         [SqlFunction]
         public static string Upsert(string UniVerseAccount, string TradeAccountClassJSON)
         {
-            var record = JsonConvert.DeserializeObject<TradeAccountClass>(TradeAccountClassJSON);
+            var tradeAccountClass = JsonConvert.DeserializeObject<TradeAccountClass>(TradeAccountClassJSON);
 
             var fileName = typeof(TradeAccountClass).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
                     .Cast<UniVerseFileNameAttribute>()
@@ -29,7 +29,7 @@ namespace MertexerV2.TradeAccountFunctions
 
                 try
                 {
-                    var extantRecord = uniVerseFile.ReadField(record.Key, 0).StringValue;
+                    var extantRecord = uniVerseFile.ReadField(tradeAccountClass.Key, 0).StringValue;
                 }
                 catch (IBMU2.UODOTNET.UniFileException)
                 {
@@ -39,22 +39,22 @@ namespace MertexerV2.TradeAccountFunctions
                     // then write all the fields
                     // then unlock the record
                     var dataSet = new IBMU2.UODOTNET.UniDataSet(ce.Session);
-                    dataSet.Insert(record.Key);
+                    dataSet.Insert(tradeAccountClass.Key);
 
                     //slcustFile.LockFile();
                     uniVerseFile.WriteRecords(dataSet);
                     //slcustFile.UnlockFile();
                 }
 
-                uniVerseFile.LockRecord(record.Key, 1);
+                uniVerseFile.LockRecord(tradeAccountClass.Key, 1);
 
-                UniUpsert<TradeAccountClass>.Upsert(record, uniVerseFile, UniVerseAccount);
+                UniUpsert<TradeAccountClass>.Upsert(TradeAccountClassJSON, uniVerseFile, UniVerseAccount);
 
-                uniVerseFile.UnlockRecord(record.Key);
+                uniVerseFile.UnlockRecord(tradeAccountClass.Key);
 
             }
 
-            return record.Key;
+            return tradeAccountClass.Key;
         }
     }
 }

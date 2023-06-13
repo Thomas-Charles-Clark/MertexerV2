@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace MertexerV2.Models
 {
-    [UniVerseFileName("SLCUSCLASS")]
+    [UniVerseFileName("OECODEGROUPS")]
     public class TradeAccountGroup : UniVerseSerializationBase<string>
     {
         [JsonConstructor]

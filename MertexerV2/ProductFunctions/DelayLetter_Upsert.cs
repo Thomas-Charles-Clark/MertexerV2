@@ -48,7 +48,7 @@ namespace MertexerV2.ProductFunctions
 
                 uniVerseFile.LockRecord(DelayLetter.Key, 1);
 
-                UniUpsert<DelayLetter>.Upsert(DelayLetter, uniVerseFile, UniVerseAccount);
+                UniUpsert<DelayLetter>.Upsert(DelayLetterJSON, uniVerseFile, UniVerseAccount);
 
                 uniVerseFile.UnlockRecord(DelayLetter.Key);
 

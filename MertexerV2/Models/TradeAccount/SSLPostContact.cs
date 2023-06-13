@@ -11,27 +11,28 @@ using System.Threading.Tasks;
 
 namespace MertexerV2.Models
 {
-    public class SSLPostDocument : UniVerseSerializationBase<string>
+    [UniVerseFileName("SSLPOST.CONTACTS")]
+    public class SSLPostContact : UniVerseSerializationBase<string>
     {
         [JsonConstructor]
-        public SSLPostDocument(string key) : base(key)
+        public SSLPostContact(string key) : base(key)
         {
             Initialise();
         }
 
-        public SSLPostDocument() : base()
+        public SSLPostContact() : base()
         {
             Initialise();
         }
 
         public override void Initialise()
         {
-            typeof(SSLPostDocument).GetProperties().ToList().ForEach(p => Framework.InitialiseUniProperty(this, p));
+            typeof(SSLPostContact).GetProperties().ToList().ForEach(p => Framework.InitialiseUniProperty(this, p));
         }
 
         public void Upsert(string uniVerseAccount = "MERTEX")
         {
-            SSLPostDocumentFunctions.Upsert(uniVerseAccount, JsonConvert.SerializeObject(this));
+            SSLPostContactFunctions.Upsert(uniVerseAccount, JsonConvert.SerializeObject(this));
         }
 
         public string DocumentType
@@ -40,13 +41,21 @@ namespace MertexerV2.Models
             {
                 return Key.Split(Framework.AsteriskDelimiter, StringSplitOptions.RemoveEmptyEntries)[0];
             }
+            set
+            {
+                Key = $"{value}*{TradeAccountCode}";
+            }
         }
 
-        public string Reference
+        public string TradeAccountCode
         {
             get
             {
                 return Key.Split(Framework.AsteriskDelimiter, StringSplitOptions.RemoveEmptyEntries)[1];
+            }
+            set
+            {
+                Key = $"{DocumentType}*{value}";
             }
         }
 

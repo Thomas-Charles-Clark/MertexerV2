@@ -48,7 +48,7 @@ namespace MertexerV2.ProductFunctions
 
                 uniVerseFile.LockRecord(VATCode.Key, 1);
 
-                UniUpsert<VATCode>.Upsert(VATCode, uniVerseFile, UniVerseAccount);
+                UniUpsert<VATCode>.Upsert(VATCodeJSON, uniVerseFile, UniVerseAccount);
 
                 uniVerseFile.UnlockRecord(VATCode.Key);
 

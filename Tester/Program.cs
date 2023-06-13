@@ -34,6 +34,7 @@ using MertexerV2.AccountFunctions;
 using MertexerV2.TradeAccountFunctions;
 using System.CodeDom;
 using MertexerV2.RetailFunctions;
+using System.Diagnostics.Tracing;
 
 namespace Tester
 {
@@ -45,9 +46,9 @@ namespace Tester
 
             Console.ForegroundColor = ConsoleColor.Yellow;
 
-            var tradeAccountNumber = "K0098";
+            var tradeAccountCode = "K0098";
 
-            var tradeDataSourceJson = TesterFramework.FetchAccountDataSourceJson(tradeAccountNumber);
+            var tradeDataSourceJson = TesterFramework.FetchAccountDataSourceJson(tradeAccountCode);
 
             //tradeDataSourceJson = @"{""enquiryTypes"":[{""enquiryType"":""Account"",""dataSources"":[{""uniVerseAccount"":""MERTEX"",""customerReference"":""M2830""}]},{""enquiryType"":""Address"",""dataSources"":[{""uniVerseAccount"":""MERTEX"",""customerReference"":""M2830""}]},{""enquiryType"":""CheckOrders"",""dataSources"":[{""uniVerseAccount"":""MERTEX"",""customerReference"":""M2830""}]},{""enquiryType"":""Contact"",""dataSources"":[{""uniVerseAccount"":""MERTEX"",""customerReference"":""M2830""}]},{""enquiryType"":""CreditControls"",""dataSources"":[{""uniVerseAccount"":""MERTEX"",""customerReference"":""M2830""}]},{""enquiryType"":""CreditStatus"",""dataSources"":[{""uniVerseAccount"":""MERTEX"",""customerReference"":""M2830""}]},{""enquiryType"":""EndCustomers"",""dataSources"":[{""uniVerseAccount"":""MERTEX"",""customerReference"":""M2830""}]},{""enquiryType"":""General"",""dataSources"":[{""uniVerseAccount"":""MERTEX"",""customerReference"":""M2830""}]},{""enquiryType"":""Invoice"",""dataSources"":[{""uniVerseAccount"":""MERTEX"",""customerReference"":""M2830""}]},{""enquiryType"":""PlaceOrder"",""dataSources"":[{""uniVerseAccount"":""MERTEX"",""customerReference"":""M2830""}]}]}";
 
@@ -56,6 +57,10 @@ namespace Tester
             var uniVerseAccount = "MERTEX";
 
             stopwatch.Start();
+
+            var deliveryAddressJson = @"{""Key"":null,""TradeAccountCode"":""S2390"",""CompanyName"":""SRA. UTE FLORY-URAK"",""ContactName"":""SRA. UTE FLORY-URAK"",""AddressLine1"":""ROMERWEG, 27"",""AddressLine2"":null,""Town"":""ST. JOHANN"",""County"":""ST. JOHANN"",""Postcode"":""A-6380"",""CountryCode"":""AT""}";
+
+            var result = DeliveryAddressFunctions.Upsert("MERTEX", deliveryAddressJson);
 
             //var results = MertexerV2.SQLFunctions.Dedupe.CheckLine(tradeDataSourceJson, "F1190/01/C", 1.0m, "SAMPLE ORDER", 3).OfType<string>().ToList();
 
@@ -177,15 +182,62 @@ namespace Tester
 
             //EDAReplacementTestSuite.FetchPurchaseOrderPrices(uniVerseAccount, @"[{ ""Key"": ""A0091*P462/01""  }]");
 
-            var result = Selector<TradeAccount>.Select("K0098", true, true, 1000, uniVerseAccount);
+            //var result = Selector<TradeAccount>.Select("PH03000", true, true, 1000, uniVerseAccount);
 
-            Console.WriteLine(result);
+            //Console.WriteLine(JsonConvert.SerializeObject(result, Framework.IndentedFormatting));
+
+
 
             //var results = MertexerV2.AccountFunctions.DeliveryAddressFunctions.Search(uniVerseAccount, "K0098", "123").OfType<DeliveryAddress>().ToList();
 
             //results.ForEach(r => Console.WriteLine(r));
 
 
+            //var tradeAccountJson = TesterFramework.FetchTradeAccountUpsertJSON("K0098");
+
+            //TradeAccountFunctions.Upsert("MERTEX", tradeAccountJson);
+
+            //var tags = TradeAccountGroupFunctions.Select(uniVerseAccount, @"[{""Code"": ""ABDFAS""}]").OfType<TradeAccountGroup>().ToList();
+
+            //foreach (var t in tags)
+            //{
+            //    Console.WriteLine(t);
+            //}
+
+            //var ta = TradeAccountFunctions.Select(uniVerseAccount, @"[{""Code"":""J0650""}]").OfType<TradeAccount>().ToList();
+
+            //foreach(var t in ta)
+            //{
+            //    Console.WriteLine(t);
+            //}
+
+            //            var ta = JsonConvert.DeserializeObject<TradeAccount>(tradeAccountJson);
+
+            //            Console.WriteLine(JsonConvert.SerializeObject(ta, Framework.JsonSettingsIndentedIncludeNullsAlphabetical));
+
+            //            ta.CompanyRegistrationNumber = "Company Registration Number";
+
+            //            var tradeAccountUpsertJson = JsonConvert.SerializeObject(ta);
+
+            //            Console.WriteLine(TradeAccountFunctions.Upsert(uniVerseAccount, @"{
+            //    ""TradeAccountCode"": ""K0098"",
+            //    ""CompanyRegistrationNumber"": ""Company Reg. No.""
+            //}"));
+
+            // That's all well and good, but...
+
+            // ... what if we want to only affect those fields we've provided?
+
+            // I'd go so far as to suggest that that would be the default intention: if you want to leave a field unaffected
+            // don't provide it in the JSON
+
+
+
+
+
+
+
+            //var testUpsertResult = Tests.Account.AccountTestSuite.UpsertAccount(tradeDataSourceJson, TesterFramework.FetchTradeAccountUpsertJSON());
 
             //var stockResults = Stock.BatchPiece("PDG1131/02", "WH", "S").OfType<BatchPieceResult>().ToList();
 

@@ -88,13 +88,15 @@ namespace MertexerV2.GeneralFunctions
         public static void DeliveryTermsSelect_FillRow(
             object obj,
             out SqlString Code,
-            out SqlString Name
+            out SqlByte SortOrder,
+            out SqlString Description
             )
         {
             var p = (DeliveryTerms)obj;
 
-            Code = p.Key?.TrimReduceTruncate(20);
-            Name = p.Name?.TrimReduceTruncate(200);
+            Code = p.Code?.TrimReduceTruncate(3);
+            SortOrder = p.SortOrder;
+            Description = p.Description?.TrimReduceTruncate(30);
         }
     }
 }

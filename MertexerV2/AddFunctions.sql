@@ -4566,22 +4566,20 @@ GO
 -- Author:		Thomas Clark
 -- Create date: 21/04/2023
 -- Description: Selects Trade Accounts
--- IF YOU CHANGE THE RETURN TABLE TYPE HERE, ALSO CHANGE FOR clr.fnc_Mertex_EndCustomer_Select
 -- =============================================
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
-CREATE FUNCTION clr.fnc_Mertex_TradeAccountDetail_Select
+ALTER FUNCTION clr.fnc_Mertex_TradeAccountDetail_Select
 (
 	@UniVerseAccount NVARCHAR(50), -- Generally "MERTEX"
 	@TradeAccountCodes NVARCHAR(MAX)
 )
 RETURNS TABLE
 (
-	[TradeAccountCode] NVARCHAR(50),
+	[Code] NVARCHAR(50),
 	[Status] NVARCHAR(1),
 	[CreatedDT] DATETIME,
 	[ModifiedDT] DATETIME,
@@ -4597,8 +4595,8 @@ RETURNS TABLE
 	[TaxID] NVARCHAR(50),
 	[Currency] NVARCHAR(3),
 	[TradeAccountGroup] NVARCHAR(3),
-	[CustomerType] NVARCHAR(2),
-	[CustomerClass] NVARCHAR(2),
+	[TradeAccountType] NVARCHAR(2),
+	[TradeAccountClass] NVARCHAR(2),
 	[OrderCategory] NVARCHAR(2),
 	[Market] NVARCHAR(1),
 	[PriceList] NVARCHAR(10),
@@ -4660,10 +4658,10 @@ RETURNS TABLE
 	[PermitTillCreditNotes] BIT,
 	[StatementAccount] NVARCHAR(50),
 	[StatementAccountName] NVARCHAR(100),
-	[StatementAddressCounty] NVARCHAR(40),
 	[StatementAddressLine1] NVARCHAR(60),
 	[StatementAddressLine2] NVARCHAR(60),
 	[StatementAddressTown] NVARCHAR(50),
+	[StatementAddressCounty] NVARCHAR(40),
 	[StatementAddressPostcode] NVARCHAR(20),
 	[StatementContactName] NVARCHAR(100),
 	[StatementPhoneNumber] NVARCHAR(50),
@@ -4672,8 +4670,8 @@ RETURNS TABLE
 	[AnalysisCodeD] NVARCHAR(2),
 	[AnalysisCodeS] NVARCHAR(2),
 	[Memo] NVARCHAR(500),
-	[RFScannerMemo] NVARCHAR(200),
-	[ConfirmationMemo] NVARCHAR(200),
+	[RFScannerMemos] NVARCHAR(MAX),
+	[ConfirmationMemos] NVARCHAR(MAX),
 	[ExtendedMemos] NVARCHAR(MAX),
 	[FreeOfChargePromotionCode] NVARCHAR(5),
 	[SellingCompany] NVARCHAR(10),
@@ -4713,6 +4711,7 @@ RETURNS TABLE
 	[SampleStockLocation] NVARCHAR(10),
 	[SampleHaulierCode] NVARCHAR(10),
 	[SampleCarriageCode] NVARCHAR(10),
+	[SampleCarriageExempt] NVARCHAR(1),
 	[DefaultStockLocation] NVARCHAR(10),
 	[Export] BIT,
 	[ExportWithNoPackingNote] BIT,
@@ -5380,7 +5379,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE FUNCTION clr.fnc_Mertex_TradeAccountGroup_Select
+ALTER FUNCTION clr.fnc_Mertex_TradeAccountGroup_Select
 (
 	@UniVerseAccount NVARCHAR(50), -- Generally "MERTEX"
 	@DeliveryTermCodes NVARCHAR(MAX)
@@ -5615,3 +5614,104 @@ RETURNS NVARCHAR(10)
 AS
 EXTERNAL NAME [MertexerV2].[MertexerV2.PricingFunctions.SalesDivisionFunctions].[Upsert]
 GO
+
+
+
+-- =============================================
+-- Author:		Thomas Clark
+-- Create date: 27/01/2023
+-- Description: Fetches Transports
+-- =============================================
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE FUNCTION clr.fnc_Mertex_Bank_Select
+(
+	@UniVerseAccount NVARCHAR(50), -- Generally "MERTEX"
+	@Mertex_BankCodes NVARCHAR(MAX)
+)
+RETURNS TABLE
+(
+	[Code] NVARCHAR(10),
+	[Name] NVARCHAR(50)
+)
+AS
+EXTERNAL NAME [MertexerV2].[MertexerV2.InvoiceFunctions.BankFunctions].[Select]
+GO
+
+
+-- =============================================
+-- Author:		Thomas Clark
+-- Create date: 03/02/2023
+-- Description: Upserts Transports
+-- =============================================
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE FUNCTION clr.fnc_Mertex_Bank_Upsert
+(
+	@UniVerseAccount NVARCHAR(50), -- Generally "MERTEX"
+	@Mertex_BankJSON NVARCHAR(MAX)
+)
+RETURNS NVARCHAR(10)
+AS
+EXTERNAL NAME [MertexerV2].[MertexerV2.InvoiceFunctions.BankFunctions].[Upsert]
+GO
+
+
+
+
+-- =============================================
+-- Author:		Thomas Clark
+-- Create date: 27/01/2023
+-- Description: Fetches Transports
+-- =============================================
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE FUNCTION clr.fnc_Mertex_GeneralLedgerSubCode_Select
+(
+	@UniVerseAccount NVARCHAR(50), -- Generally "MERTEX"
+	@GeneralLedgerSubCodes NVARCHAR(MAX)
+)
+RETURNS TABLE
+(
+	[Code] NVARCHAR(2),
+	[Name] NVARCHAR(50)
+)
+AS
+EXTERNAL NAME [MertexerV2].[MertexerV2.ProductFunctions.GeneralLedgerSubFunctions].[Select]
+GO
+
+
+-- =============================================
+-- Author:		Thomas Clark
+-- Create date: 03/02/2023
+-- Description: Upserts Transports
+-- =============================================
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+create FUNCTION clr.fnc_Mertex_GeneralLedgerSubCode_Upsert
+(
+	@UniVerseAccount NVARCHAR(50), -- Generally "MERTEX"
+	@GeneralLedgerSubCodesJSON NVARCHAR(MAX)
+)
+RETURNS NVARCHAR(10)
+AS
+EXTERNAL NAME [MertexerV2].[MertexerV2.ProductFunctions.GeneralLedgerSubFunctions].[Upsert]
+GO
+
+

@@ -48,7 +48,7 @@ namespace MertexerV2.ProductFunctions
 
                 uniVerseFile.LockRecord(patternBook.Key, 1);
 
-                UniUpsert<PatternBook>.Upsert(patternBook, uniVerseFile, UniVerseAccount);
+                UniUpsert<PatternBook>.Upsert(PatternBookJSON, uniVerseFile, UniVerseAccount);
 
                 uniVerseFile.UnlockRecord(patternBook.Key);
 

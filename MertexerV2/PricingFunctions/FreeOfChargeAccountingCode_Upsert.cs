@@ -16,7 +16,7 @@ namespace MertexerV2.PricingFunctions
         [SqlFunction]
         public static string Upsert(string UniVerseAccount, string FreeOfChargeAccountingCodeJSON)
         {
-            var record = JsonConvert.DeserializeObject<FreeOfChargeAccountingCode>(FreeOfChargeAccountingCodeJSON);
+            var freeOfChargeAccountingCode = JsonConvert.DeserializeObject<FreeOfChargeAccountingCode>(FreeOfChargeAccountingCodeJSON);
 
             var fileName = typeof(FreeOfChargeAccountingCode).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
                     .Cast<UniVerseFileNameAttribute>()
@@ -29,7 +29,7 @@ namespace MertexerV2.PricingFunctions
 
                 try
                 {
-                    var extantRecord = uniVerseFile.ReadField(record.Key, 0).StringValue;
+                    var extantRecord = uniVerseFile.ReadField(freeOfChargeAccountingCode.Key, 0).StringValue;
                 }
                 catch (IBMU2.UODOTNET.UniFileException)
                 {
@@ -39,22 +39,22 @@ namespace MertexerV2.PricingFunctions
                     // then write all the fields
                     // then unlock the record
                     var dataSet = new IBMU2.UODOTNET.UniDataSet(ce.Session);
-                    dataSet.Insert(record.Key);
+                    dataSet.Insert(freeOfChargeAccountingCode.Key);
 
                     //slcustFile.LockFile();
                     uniVerseFile.WriteRecords(dataSet);
                     //slcustFile.UnlockFile();
                 }
 
-                uniVerseFile.LockRecord(record.Key, 1);
+                uniVerseFile.LockRecord(freeOfChargeAccountingCode.Key, 1);
 
-                UniUpsert<FreeOfChargeAccountingCode>.Upsert(record, uniVerseFile, UniVerseAccount);
+                UniUpsert<FreeOfChargeAccountingCode>.Upsert(FreeOfChargeAccountingCodeJSON, uniVerseFile, UniVerseAccount);
 
-                uniVerseFile.UnlockRecord(record.Key);
+                uniVerseFile.UnlockRecord(freeOfChargeAccountingCode.Key);
 
             }
 
-            return record.Key;
+            return freeOfChargeAccountingCode.Key;
         }
     }
 }

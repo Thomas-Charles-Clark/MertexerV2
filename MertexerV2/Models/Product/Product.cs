@@ -1061,7 +1061,7 @@ namespace MertexerV2.Models.Product
         /// </summary>
         [UniVerseIndex(1057)]
         [UniVerseFieldName("SS.SHIPTERM")]
-        public string ShippingTerms { get; set; }
+        public string DeliveryTerms { get; set; }
 
         /// <summary>
         /// Knots per square metre

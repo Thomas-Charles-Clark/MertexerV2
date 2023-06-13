@@ -48,7 +48,7 @@ namespace MertexerV2.GeneralFunctions
 
                 uniVerseFile.LockRecord(OrderCategory.Code, 1);
 
-                UniUpsert<OrderCategory>.Upsert(OrderCategory, uniVerseFile, UniVerseAccount);
+                UniUpsert<OrderCategory>.Upsert(OrderCategoryJSON, uniVerseFile, UniVerseAccount);
 
                 uniVerseFile.UnlockRecord(OrderCategory.Code);
 

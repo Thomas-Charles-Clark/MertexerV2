@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace MertexerV2.Models
 {
-    public class SSLPostDocumentCode
+    public class SSLPostContactKey
     {
-        public string Code { get; set; }
+        public string Key { get; set; }
     }
 }

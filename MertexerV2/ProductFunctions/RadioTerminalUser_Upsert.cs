@@ -48,7 +48,7 @@ namespace MertexerV2.ProductFunctions
 
                 uniVerseFile.LockRecord(RadioTerminalUser.Key, 1);
 
-                UniUpsert<RadioTerminalUser>.Upsert(RadioTerminalUser, uniVerseFile, UniVerseAccount);
+                UniUpsert<RadioTerminalUser>.Upsert(RadioTerminalUserJSON, uniVerseFile, UniVerseAccount);
 
                 uniVerseFile.UnlockRecord(RadioTerminalUser.Key);
 

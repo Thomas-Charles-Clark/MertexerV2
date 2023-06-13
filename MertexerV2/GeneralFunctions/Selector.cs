@@ -95,11 +95,13 @@ namespace MertexerV2.GeneralFunctions
                 {
                     if (keys.Any())
                     {
-                        var extantRecords = uniFile.ReadRecords(keys.ToArray());
+                        //var extantRecords = uniFile.ReadRecords(keys.ToArray());
 
                         foreach (var key in keys)
                         {
-                            var extantRecord = extantRecords.GetRecord(key).Record;
+                            var extantRecord = uniFile.Read(key);
+
+                            //var extantRecord = extantRecords.GetRecord(key).Record;
 
                             var result = UniVerseSerializer.Deserialize(typeof(T).AssemblyQualifiedName, key, extantRecord, applyConversions);
 
@@ -184,10 +186,12 @@ namespace MertexerV2.GeneralFunctions
 
                     return results;
                 }
-                catch (UniFileException)
+                catch (UniFileException _)
                 {
-                    throw new Exception($"One or more of \"{keys.Count()}\" keys were not found on file \"{fileName}\"");
+                    // not bothered: if a key isn't found, don't return a record for it.
                 }
+
+                return results;
             }
         }
 

@@ -12,7 +12,7 @@ namespace MertexerV2.StockFunctions
         [SqlFunction]
         public static string Upsert(string UniVerseAccount, string StockLocationJSON)
         {
-            var record = JsonConvert.DeserializeObject<StockLocation>(StockLocationJSON);
+            var stockLocation = JsonConvert.DeserializeObject<StockLocation>(StockLocationJSON);
 
             var fileName = typeof(StockLocation).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
                     .Cast<UniVerseFileNameAttribute>()
@@ -25,7 +25,7 @@ namespace MertexerV2.StockFunctions
 
                 try
                 {
-                    var extantRecord = uniVerseFile.ReadField(record.Key, 0).StringValue;
+                    var extantRecord = uniVerseFile.ReadField(stockLocation.Key, 0).StringValue;
                 }
                 catch (IBMU2.UODOTNET.UniFileException)
                 {
@@ -35,22 +35,22 @@ namespace MertexerV2.StockFunctions
                     // then write all the fields
                     // then unlock the record
                     var dataSet = new IBMU2.UODOTNET.UniDataSet(ce.Session);
-                    dataSet.Insert(record.Key);
+                    dataSet.Insert(stockLocation.Key);
 
                     //slcustFile.LockFile();
                     uniVerseFile.WriteRecords(dataSet);
                     //slcustFile.UnlockFile();
                 }
 
-                uniVerseFile.LockRecord(record.Key, 1);
+                uniVerseFile.LockRecord(stockLocation.Key, 1);
 
-                UniUpsert<StockLocation>.Upsert(record, uniVerseFile, UniVerseAccount);
+                UniUpsert<StockLocation>.Upsert(StockLocationJSON, uniVerseFile, UniVerseAccount);
 
-                uniVerseFile.UnlockRecord(record.Key);
+                uniVerseFile.UnlockRecord(stockLocation.Key);
 
             }
 
-            return record.Key;
+            return stockLocation.Key;
         }
     }
 }

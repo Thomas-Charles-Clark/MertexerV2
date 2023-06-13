@@ -15,20 +15,18 @@ namespace MertexerV2.Utilities
         /// <summary>
         /// Key
         /// </summary>
-        private T _key { get; set; }
+        protected T _key { get; set; }
 
-        //[UniVerseIndex(0)]
-        //[UniVerseFieldName("@ID")]
         [JsonProperty("Code")]
-        public string Key
+        public virtual T Key
         {
             get
             {
-//#if DEBUG
-//                return $"{_key}".EndsWith("*TESTING") ? $"{_key}" : $"{_key}*TESTING";
-//#else
-                return $"{_key}";
-//#endif
+                return _key;
+            }
+            set
+            {
+                _key = value;
             }
         }
 

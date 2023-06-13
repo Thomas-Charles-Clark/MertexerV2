@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,7 @@ using MertexerV2.Models.Accounts;
 using MertexerV2.Models.EDAReplacement;
 using MertexerV2.Utilities;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Tester.Utilities
 {
@@ -105,13 +107,36 @@ namespace Tester.Utilities
                 }
                 finally
                 {
-                    conn.Close();
+                    conn.Close(); 
                 }
             }
         }
 
-        public static string FetchTradeAccountUpsertJSON(string tradeAccountNumber)
+        public static string FetchTradeAccountUpsertJSON(string tradeAccountCode)
         {
+            return @"{
+                ""Code"": ""K0098"", 
+                ""TradeAccountContacts"": [{
+                    ""Name"":""Jess"",
+                    ""Email"":""bobdole@northpole.org"",
+                    ""Phone"":""0207 893 7740"",
+                    ""Mobile"":""07880 241 650"",
+                    ""Type"":""07""
+                },{
+                    ""Name"":""Name"",
+                    ""Email"":""Email"",
+                    ""Phone"":""Phone"",
+                    ""Mobile"":""Mobile"",
+                    ""Type"":""20""
+                },{
+                    ""Name"":""Ms Sarah Waller"",
+                    ""Email"":""pfearn@designersguild.com"",
+                    ""Phone"":""0207 893 7740"",
+                    ""Mobile"":""2078937739"",
+                    ""Type"":""06""
+                }]
+            }";
+
 #if DEBUG
             using (var conn = new SqlConnection("Data Source=vm-sql1;Initial Catalog=Flock;Integrated Security=True"))
 #else
@@ -120,17 +145,13 @@ namespace Tester.Utilities
             {
                 try
                 {
-                    var id = conn.Query<int>("SELECT TradeAccountID FROM dbo.TradeAccount WHERE Code = @TradeAccountNumber", new { tradeAccountNumber }).Single();
-
                     var cmd = conn.CreateCommand();
 
-                    cmd.CommandType = System.Data.CommandType.Text;
+                    cmd.CommandText = "Mertex.TradeAccount_JSON_Select";
 
-                    cmd.CommandText = @"DECLARE @Result NVARCHAR(MAX) 
-SELECT @Result = portal.fnc_TradeAccount_UpsertJSON(@TradeAccountID)
-SELECT @Result";
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
-                    cmd.Parameters.AddWithValue("@TradeAccountID", id);
+                    cmd.Parameters.AddWithValue("@TradeAccountCode", tradeAccountCode);
 
                     if (conn.State != System.Data.ConnectionState.Open)
                         conn.Open();
@@ -144,6 +165,12 @@ SELECT @Result";
                         sb.Append(reader.GetString(0));
                     }
 
+#if DEBUG
+                    var obj = JToken.Parse(sb.ToString());
+
+                    Console.WriteLine(JsonConvert.SerializeObject(obj, Framework.JsonSettingsIndentedIncludeNullsAlphabetical));
+#endif
+
                     return sb.ToString();
                 }
                 finally
@@ -151,6 +178,7 @@ SELECT @Result";
                     conn.Close();
                 }
             }
+
         }
 
         public static string ModifyReserveLine(string tradeDataSourceJson, PassReserveLine objLine)

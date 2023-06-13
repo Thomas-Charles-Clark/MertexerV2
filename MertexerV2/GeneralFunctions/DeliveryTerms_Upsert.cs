@@ -1,4 +1,5 @@
-﻿using MertexerV2.Models.General;
+﻿using MertexerV2.Models;
+using MertexerV2.Models.General;
 using MertexerV2.Utilities;
 
 using Microsoft.SqlServer.Server;
@@ -48,7 +49,7 @@ namespace MertexerV2.GeneralFunctions
 
                 uniVerseFile.LockRecord(DeliveryTerms.Code, 1);
 
-                UniUpsert<DeliveryTerms>.Upsert(DeliveryTerms, uniVerseFile, UniVerseAccount);
+                UniUpsert<DeliveryTerms>.Upsert(DeliveryTermsJSON, uniVerseFile, UniVerseAccount);
 
                 uniVerseFile.UnlockRecord(DeliveryTerms.Code);
 

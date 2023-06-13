@@ -1,24 +1,24 @@
-﻿using MertexerV2.Models.Product;
+﻿using MertexerV2.Models;
 using MertexerV2.Utilities;
-
 using Microsoft.SqlServer.Server;
-
 using Newtonsoft.Json;
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace MertexerV2.ProductFunctions
+namespace MertexerV2.TradeAccountFunctions
 {
-    public static partial class ShippingTermsFunctions
+    public static partial class TradeAccountContactTypeFunctions
     {
         [SqlFunction]
-        public static string Upsert(string UniVerseAccount, string ShippingTermsJSON)
+        public static string Upsert(string UniVerseAccount, string TradeAccountContactTypeJSON)
         {
-            var ShippingTerms = JsonConvert.DeserializeObject<ShippingTerms>(ShippingTermsJSON);
+            var tradeAccountContactType = JsonConvert.DeserializeObject<TradeAccountContactType>(TradeAccountContactTypeJSON);
 
-            var fileName = typeof(ShippingTerms).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
+            var fileName = typeof(TradeAccountContactType).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
                     .Cast<UniVerseFileNameAttribute>()
                     .Single()
                     .FileName;
@@ -29,7 +29,7 @@ namespace MertexerV2.ProductFunctions
 
                 try
                 {
-                    var extantRecord = uniVerseFile.ReadField(ShippingTerms.Key, 0).StringValue;
+                    var extantRecord = uniVerseFile.ReadField(tradeAccountContactType.Key, 0).StringValue;
                 }
                 catch (IBMU2.UODOTNET.UniFileException)
                 {
@@ -39,22 +39,22 @@ namespace MertexerV2.ProductFunctions
                     // then write all the fields
                     // then unlock the record
                     var dataSet = new IBMU2.UODOTNET.UniDataSet(ce.Session);
-                    dataSet.Insert(ShippingTerms.Key);
+                    dataSet.Insert(tradeAccountContactType.Key);
 
                     //slcustFile.LockFile();
                     uniVerseFile.WriteRecords(dataSet);
                     //slcustFile.UnlockFile();
                 }
 
-                uniVerseFile.LockRecord(ShippingTerms.Key, 1);
+                uniVerseFile.LockRecord(tradeAccountContactType.Key, 1);
 
-                UniUpsert<ShippingTerms>.Upsert(ShippingTerms, uniVerseFile, UniVerseAccount);
+                UniUpsert<TradeAccountContactType>.Upsert(TradeAccountContactTypeJSON, uniVerseFile, UniVerseAccount);
 
-                uniVerseFile.UnlockRecord(ShippingTerms.Key);
+                uniVerseFile.UnlockRecord(tradeAccountContactType.Key);
 
             }
 
-            return ShippingTerms.Key;
+            return tradeAccountContactType.Key;
         }
     }
 }

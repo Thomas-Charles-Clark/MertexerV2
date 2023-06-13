@@ -16,6 +16,31 @@ namespace MertexerV2.Models
     [UniVerseFileName("SLCUST")]
     public class TradeAccount : UniVerseSerializationBase<string>
     {
+        [JsonRequired]
+        public override string Key
+        {
+            get
+            {
+                return _key;
+            }
+            set
+            {
+                _key = value;
+            }
+        }
+
+        public string TradeAccountCode
+        {
+            get
+            {
+                return Key;
+            }
+            set
+            {
+                Key = value;
+            }
+        }
+
         [JsonConstructor]
         public TradeAccount(string key) : base(key)
         {
@@ -86,6 +111,7 @@ namespace MertexerV2.Models
         [UniVerseFieldName("SORTNAME.EXP")]
         public string SortName { get; set; }
 
+        [JsonAlsoUpdates("CreatedDate")]
         public DateTime? CreatedDT { get; set; }
 
         /// <summary>
@@ -93,6 +119,7 @@ namespace MertexerV2.Models
         /// </summary>
         [UniVerseIndex(4, 1)]
         [UniVerseFieldName("ONFILE")]
+        [JsonIgnore]
         public string CreatedDate
         {
             get
@@ -122,6 +149,7 @@ namespace MertexerV2.Models
             }
         }
 
+        [JsonAlsoUpdates("ModifiedDate")]
         public DateTime? ModifiedDT { get; set; }
 
         /// <summary>
@@ -129,6 +157,7 @@ namespace MertexerV2.Models
         /// </summary>
         [UniVerseIndex(4, 2)]
         [UniVerseFieldName("AMENDED")]
+        [JsonIgnore]
         public string ModifiedDate
         {
             get
@@ -161,6 +190,32 @@ namespace MertexerV2.Models
         /// <summary>
         /// Memorandum
         /// </summary>
+        [UniVerseIndex(5)]
+        [UniVerseMultiValue]
+        [UniVerseFieldName("CONTACT")]
+        public IEnumerable<string> Contacts { get; set; }
+
+        /// <summary>
+        /// Contact Type
+        /// </summary>
+        [UniVerseIndex(6)]
+        [UniVerseMultiValue] // SLPOS
+        [UniVerseFieldName("POSITION")]
+        [JsonIgnore]
+        public IEnumerable<string> ContactTypes { get; set; }
+
+        /// <summary>
+        /// Memorandum
+        /// </summary>
+        [UniVerseIndex(7)]
+        [UniVerseMultiValue]
+        [UniVerseFieldName("PHONEX")]
+        [JsonIgnore]
+        public IEnumerable<string> ContactPhones { get; set; }
+
+        /// <summary>
+        /// Memorandum
+        /// </summary>
         [UniVerseIndex(8)]
         [UniVerseFieldName("MEMO")]
         public string Memo { get; set; }
@@ -170,7 +225,7 @@ namespace MertexerV2.Models
         /// </summary>
         [UniVerseIndex(9)]
         [UniVerseFieldName("CUSTYPE")]
-        public string CustomerType { get; set; }
+        public string TradeAccountType { get; set; }
 
         /// <summary>
         /// Analysis Code (D) - whatever that is (?)
@@ -319,6 +374,7 @@ namespace MertexerV2.Models
         [UniVerseFieldName("VATNORM")]
         public string VATNormalRateCode { get; set; }
 
+        [JsonAlsoUpdates("CreditLimitExpiryDate")]
         public DateTime? CreditLimitExpiryDT { get; set; }
 
         /// <summary>
@@ -326,6 +382,7 @@ namespace MertexerV2.Models
         /// </summary>
         [UniVerseIndex(56)]
         [UniVerseFieldName("CRLIMIT.EXP")]
+        [JsonIgnore]
         public string CreditLimitExpiryDate
         {
             get
@@ -357,6 +414,7 @@ namespace MertexerV2.Models
         /// Defaults: 500
         /// </summary>
         [UniVerseIndex(59)]
+        [UniVerseConversion("MR22")]
         [UniVerseFieldName("MINORDVAL.SL")]
         public decimal? MinimumOrderValue { get; set; }
 
@@ -382,6 +440,7 @@ namespace MertexerV2.Models
         /// Must exist on BANK
         /// Like currency, this shouldn't be modified after creation (unless there happen to be no transactions or balances)
         /// Seems as though the currency can be automatically modified upon changing Bank Code to match the currency on the entered Bank record.
+        /// SEE PG.VAL.BANK
         /// </summary>
         [UniVerseIndex(75)]
         [UniVerseFieldName("BANKNO")]
@@ -468,7 +527,7 @@ namespace MertexerV2.Models
         /// </summary>
         [UniVerseIndex(98)]
         [UniVerseFieldName("STATEMENT.AC")]
-        public string StatementAccount { get; set; }
+        public string StatementTradeAccountCode { get; set; }
 
         /// <summary>
         /// Contract Pricing
@@ -500,7 +559,7 @@ namespace MertexerV2.Models
         [UniVerseMultiValue]
         [UniVerseFieldName("INV.ACCOUNTS")]
         public IEnumerable<string> InvoiceAccounts { get; set; }
-        
+
         /// <summary>
         /// Minimum Order Quantity (?)
         /// Optional; validates: if given, must be a positive number
@@ -594,6 +653,7 @@ namespace MertexerV2.Models
         [UniVerseFieldName("INS.CRLIM.SL.DES")]
         public int? InsuredCreditLimit { get; set; }
 
+        [JsonAlsoUpdates("InsuredCreditLimitExpiryDate")]
         public DateTime? InsuredCreditLimitExpiryDT { get; set; }
 
         /// <summary>
@@ -601,6 +661,7 @@ namespace MertexerV2.Models
         /// </summary>
         [UniVerseIndex(166)]
         [UniVerseFieldName("INS.EXPDT.SL.DES")]
+        [JsonIgnore]
         public string InsuredCreditLimitExpiryDate
         {
             get
@@ -660,6 +721,20 @@ namespace MertexerV2.Models
         [UniVerseIndex(207)]
         [UniVerseFieldName("DELTERMS")]
         public string DeliveryTerms { get; set; }
+
+        /// <summary>
+        /// Redundant Town Field (Used for searching in Mertex)
+        /// </summary>
+        [UniVerseIndex(223)]
+        [UniVerseFieldName("TOWN")]
+        public string Town { get; set; }
+
+        /// <summary>
+        /// Redundant County field (Used for searching in Mertex)
+        /// </summary>
+        [UniVerseIndex(224)]
+        [UniVerseFieldName("COUNTY")]
+        public string County { get; set; }
 
         /// <summary>
         /// Email
@@ -795,6 +870,13 @@ namespace MertexerV2.Models
         public string SampleCarriageCode { get; set; }
 
         /// <summary>
+        /// Sample Carriage Exempt
+        /// </summary>
+        [UniVerseIndex(305)]
+        [UniVerseFieldName("SAMP.CARR.EX")]
+        public string SampleCarriageExempt { get; set; }
+
+        /// <summary>
         /// Normal Order Location (?)
         /// Optional; must exist on STLOCATION if given
         /// </summary>
@@ -877,6 +959,15 @@ namespace MertexerV2.Models
         public string InternalOrExternal { get; set; }
 
         /// <summary>
+        /// Memorandum
+        /// </summary>
+        [UniVerseIndex(392)]
+        [UniVerseMultiValue]
+        [UniVerseFieldName("CONTACT.EMAIL")]
+        [JsonIgnore]
+        public IEnumerable<string> ContactEmails { get; set; }
+
+        /// <summary>
         /// Main Telephone Number
         /// </summary>
         [UniVerseIndex(393)]
@@ -916,7 +1007,7 @@ namespace MertexerV2.Models
         /// </summary>
         [UniVerseIndex(410)]
         [UniVerseFieldName("CLASS.CODE")]
-        public string CustomerClass { get; set; }
+        public string TradeAccountClass { get; set; }
 
         /// <summary>
         /// File Tranfer Protocol (?)
@@ -1026,7 +1117,7 @@ namespace MertexerV2.Models
         /// </summary>
         [UniVerseIndex(544)]
         [UniVerseFieldName("INV.TO.DELIVERY")]
-        public string SendInvoiceToDeliveryAddress { get; set; }
+        public bool SendInvoiceToDeliveryAddress { get; set; }
 
         /// <summary>
         /// Full Order Only (?)
@@ -1044,7 +1135,7 @@ namespace MertexerV2.Models
         [UniVerseIndex(568)]
         [UniVerseFieldName("DISTREF")]
         public string DistributorReference { get; set; }
-        
+
         /// <summary>
         /// Measure Pieces on Despatch
         /// Optional; 'Y', 'N' if given
@@ -1157,6 +1248,15 @@ namespace MertexerV2.Models
         public bool SendCancellationLetters { get; set; }
 
         /// <summary>
+        /// Memorandum
+        /// </summary>
+        [UniVerseIndex(690)]
+        [UniVerseMultiValue]
+        [UniVerseFieldName("CONT.MOBNO.DES")]
+        [JsonIgnore]
+        public IEnumerable<string> ContactPhonesMobile { get; set; }
+
+        /// <summary>
         /// Sample Letter Text / Titles In
         /// Think this one is the Language code 
         /// Optional; validates against REP.TITLES.DES
@@ -1212,16 +1312,18 @@ namespace MertexerV2.Models
         /// No idea what this does
         /// </summary>
         [UniVerseIndex(729)]
+        [UniVerseMultiValue]
         [UniVerseFieldName("RF.SCANNER.MEMO.DES")]
-        public string RFScannerMemo { get; set; }
+        public IEnumerable<string> RFScannerMemos { get; set; }
 
         /// <summary>
         /// Confirmation Memo (?)
         /// No idea what this does
         /// </summary>
         [UniVerseIndex(730)]
+        [UniVerseMultiValue]
         [UniVerseFieldName("CONFIRMATION.MEMO.DES")]
-        public string ConfirmationMemo { get; set; }
+        public IEnumerable<string> ConfirmationMemos { get; set; }
 
         /// <summary>
         /// Export with no Packing Note
@@ -1463,6 +1565,7 @@ namespace MertexerV2.Models
         [UniVerseFieldName("VALIDVATNO")]
         public string VATNumberValid { get; set; }
 
+        [JsonAlsoUpdates("VATLastCheckedDate")]
         public DateTime? VATLastCheckedDT { get; set; }
 
         /// <summary>
@@ -1470,6 +1573,7 @@ namespace MertexerV2.Models
         /// </summary>
         [UniVerseIndex(1011)]
         [UniVerseFieldName("VATDATLASTCHK")]
+        [JsonIgnore]
         public string VATLastCheckedDate
         {
             get
@@ -1533,7 +1637,7 @@ namespace MertexerV2.Models
         /// </summary>
         [UniVerseIndex(1016)]
         [UniVerseFieldName("SS.FIELD1")]
-        public string SSField1 { get; set; }
+        public bool eCommerceCustomer { get; set; }
 
         /// <summary>
         /// Site-Specific Field 2 (?)
@@ -1568,34 +1672,73 @@ namespace MertexerV2.Models
         [UniVerseFieldName("SS.FIELD5")]
         public string SSField5 { get; set; }
 
-        public string TradeAccountCode
-        {
-            get
-            {
-                return Key;
-            }
-        }
-
         #region Linked Entities
 
+        [JsonIgnore]
         [UniVerseForeignKey("InvoiceAccounts", "MertexerV2.Models.TradeAccount")]
         public virtual ICollection<TradeAccount> EndCustomers { get; set; }
 
-        [UniVerseForeignKey("CustomerType", "MertexerV2.Models.CustomerType")]
+        [JsonIgnore]
+        [UniVerseForeignKey("TradeAccountType", "MertexerV2.Models.TradeAccountType")]
         public virtual TradeAccountType Type { get; set; }
 
-        [UniVerseForeignKey("CustomerClass", "MertexerV2.Models.CustomerClass")]
+        [JsonIgnore]
+        [UniVerseForeignKey("TradeAccountClass", "MertexerV2.Models.TradeAccountClass")]
         public virtual TradeAccountClass Class { get; set; }
 
+        [JsonIgnore]
         [UniVerseForeignKey("AnalysisCodeS", "MertexerV2.Models.Pricing.GeneralLedgerSubCode")]
         public virtual GeneralLedgerSubCode SubAnalysisCode { get; set; }
 
+        [JsonIgnore]
         [UniVerseForeignKey("PaymentTerms", "MertexerV2.Models.Invoices.InvoiceTerms")]
         public virtual InvoiceTerms InvoiceTerms { get; set; }
 
-
+        [JsonIgnore]
         [UniVerseForeignKey("DeliveryTerms", "MertexerV2.Models.General.DeliveryTerms")]
         public virtual DeliveryTerms DeliveryTerm { get; set; }
+
+        [JsonProperty("TradeAccountContacts")]
+        [JsonAlsoUpdates("Contacts", "ContactEmails", "ContactPhones", "ContactPhonesMobile", "ContactTypes")]
+        public virtual IEnumerable<TradeAccountContact> TradeAccountContacts
+        {
+            get
+            {
+                var dummyList = new List<string>();
+
+                for (var i = 0; i < Contacts?.Count(); i++)
+                {
+                    dummyList.Add(null);
+                }
+
+                return Contacts?.Select((c, i) =>
+                {
+                    var emails = (ContactEmails?.Count() >= dummyList.Count ? ContactEmails : dummyList).ToArray();
+                    var phones = (ContactPhones?.Count() >= dummyList.Count ? ContactPhones : dummyList).ToArray();
+                    var mobiles = (ContactPhonesMobile?.Count() >= dummyList.Count ? ContactPhonesMobile : dummyList).ToArray();
+                    var types = (ContactTypes?.Count() >= dummyList.Count ? ContactTypes : dummyList).ToArray();
+                    return new TradeAccountContact()
+                    {
+                        TradeAccountCode = TradeAccountCode,
+                        Name = c,
+                        Email = emails[i],
+                        Phone = phones[i],
+                        Mobile = mobiles[i],
+                        Type = types[i]
+                    };
+                }).ToList();
+            }
+            set
+            {
+                var list = value.ToList();
+
+                Contacts = list.Select(p => p.Name).ToList();
+                ContactEmails = list.Select(p => p.Email).ToList();
+                ContactPhones = list.Select(p => p.Phone).ToList();
+                ContactPhonesMobile = list.Select(p => p.Mobile).ToList();
+                ContactTypes = list.Select(p => p.Type).ToList();
+            }
+        }
 
         #endregion
 
@@ -1605,52 +1748,3 @@ namespace MertexerV2.Models
         }
     }
 }
-
-///// <summary>
-///// Redundant Town Field (?)
-///// </summary>
-//[UniVerseIndex(223)]
-//[UniVerseFieldName("TOWN")]
-//public string DefunctTown { get; set; }
-
-///// <summary>
-///// Redundant County field (?)
-///// </summary>
-//[UniVerseIndex(224)]
-//[UniVerseFieldName("COUNTY")]
-//public string DefunctCounty { get; set; }
-
-
-/// <summary>
-/// I'm not sure how this should go down...
-/// </summary>
-//public string SSLPOSTJSON { get; set; }
-
-//[UniVerseIndex(5)]
-//[UniVerseFieldName(null)]
-//public List<SSLPostDocument> SSLPOSTJSON { get; set; }
-//{ 
-//    get 
-//    { 
-//        return JsonConvert.DeserializeObject<List<SSLPostDocument>>(SSLPOSTJSON ?? "[]"); 
-//    }
-//    set 
-//    { 
-
-//    } 
-//}
-
-//[UniVerseIndex(0)]
-//[UniVerseFieldName("STOP.REASON")]
-//public string STOP_REASON { get; set; }
-
-
-///// <summary>
-///// Free of Charge Orders Only?
-///// Optional; 'Y' or 'N' if given
-///// Defaults: 'N'
-///// </summary>
-///// DEFUNCT 10/09/2021
-//[UniVerseIndex(748)]
-//[UniVerseFieldName("FOC.ORDERS.DES")]
-//public string FOC_ORDERS_DES { get; set; }

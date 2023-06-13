@@ -48,7 +48,7 @@ namespace MertexerV2.ProductFunctions
 
                 uniVerseFile.LockRecord(Brand.Key, 1);
 
-                UniUpsert<Brand>.Upsert(Brand, uniVerseFile, UniVerseAccount);
+                UniUpsert<Brand>.Upsert(BrandJSON, uniVerseFile, UniVerseAccount);
 
                 uniVerseFile.UnlockRecord(Brand.Key);
 

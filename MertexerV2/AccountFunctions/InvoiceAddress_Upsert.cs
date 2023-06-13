@@ -1,4 +1,5 @@
 ﻿using MertexerV2.Models;
+using MertexerV2.Models.ExchangeRate;
 using MertexerV2.Utilities;
 
 using Microsoft.SqlServer.Server;
@@ -29,6 +30,8 @@ namespace MertexerV2.AccountFunctions
 
                 try
                 {
+                    // If you've done something silly such as called this without a TradeAccountCode in the JSON, there'll be an uncaught exception thrown here because
+                    // ReadField doesn't allow you to provide a NULL key. It doesn't throw a UniFileException though which is... just... crazy. But useful in this instance.
                     var extantRecord = uniVerseFile.ReadField(InvoiceAddress.Key, 0).StringValue;
                 }
                 catch (IBMU2.UODOTNET.UniFileException)
@@ -48,10 +51,9 @@ namespace MertexerV2.AccountFunctions
 
                 uniVerseFile.LockRecord(InvoiceAddress.Key, 1);
 
-                UniUpsert<InvoiceAddress>.Upsert(InvoiceAddress, uniVerseFile, UniVerseAccount);
+                UniUpsert<InvoiceAddress>.Upsert(InvoiceAddressJSON, uniVerseFile, UniVerseAccount);
 
                 uniVerseFile.UnlockRecord(InvoiceAddress.Key);
-
             }
 
             return InvoiceAddress.Key;

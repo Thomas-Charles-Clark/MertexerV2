@@ -14,9 +14,9 @@ namespace MertexerV2.ProductFunctions
     public static partial class ProductFunctions
     {
         [SqlFunction]
-        public static string Upsert(string UniVerseAccount, string ProductCodeJSON)
+        public static string Upsert(string UniVerseAccount, string ProductJSON)
         {
-            var product = JsonConvert.DeserializeObject<Product>(ProductCodeJSON);
+            var product = JsonConvert.DeserializeObject<Product>(ProductJSON);
 
             var fileName = typeof(Product).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
                     .Cast<UniVerseFileNameAttribute>()
@@ -48,7 +48,7 @@ namespace MertexerV2.ProductFunctions
 
                 uniVerseFile.LockRecord(product.Key, 1);
 
-                UniUpsert<Product>.Upsert(product, uniVerseFile, UniVerseAccount);
+                UniUpsert<Product>.Upsert(ProductJSON, uniVerseFile, UniVerseAccount);
 
                 uniVerseFile.UnlockRecord(product.Key);
 

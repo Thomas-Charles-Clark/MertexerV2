@@ -23,7 +23,7 @@ namespace MertexerV2.TradeAccountFunctions
         {
             if (String.IsNullOrEmpty(TradeAccountGroupCodes))
             {
-                foreach (var r in Selector<TradeAccountClass>.SelectAllNonParallel(
+                foreach (var r in Selector<TradeAccountGroup>.SelectAllNonParallel(
                     true,
                     false,
                     50,
@@ -34,8 +34,8 @@ namespace MertexerV2.TradeAccountFunctions
             }
             else
             {
-                var results = Selector<TradeAccountClass>.Select(
-                    JsonConvert.DeserializeObject<IEnumerable<TradeAccountClassCode>>(TradeAccountGroupCodes).Select(p => p.Code),
+                var results = Selector<TradeAccountGroup>.Select(
+                    JsonConvert.DeserializeObject<IEnumerable<TradeAccountGroupCode>>(TradeAccountGroupCodes).Select(p => p.Code),
                     true,
                     false,
                     50,
@@ -54,7 +54,7 @@ namespace MertexerV2.TradeAccountFunctions
             out SqlString Code,
             out SqlString Name)
         {
-            var result = (TradeAccountClass)obj;
+            var result = (TradeAccountGroup)obj;
 
             Code = result.Key.TrimReduceTruncate(10);
             Name = result.Name.TrimReduceTruncate(50);

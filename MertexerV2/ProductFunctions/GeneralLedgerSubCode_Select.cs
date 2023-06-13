@@ -44,7 +44,7 @@ namespace MertexerV2.ProductFunctions
             }
             else
             {
-                var results = Selector<GeneralLedgerAnalysisCode>.Select(
+                var results = Selector<GeneralLedgerSubCode>.Select(
                     JsonConvert.DeserializeObject<IEnumerable<GLSubCodeCode>>(GeneralLedgerSubCodes).Select(p => p.Code),
                     true,
                     false,
@@ -61,13 +61,13 @@ namespace MertexerV2.ProductFunctions
 
         public static void GeneralLedgerSubSelect_FillRow(
             object obj,
-            out SqlInt32 Code,
+            out SqlString Code,
             out SqlString Name
             )
         {
             var p = (GeneralLedgerSubCode)obj;
 
-            Code = Convert.ToInt16(p.Key);
+            Code = p.Key?.TrimReduceTruncate(2);
             Name = p.Name?.TrimReduceTruncate(50);
         }
     }

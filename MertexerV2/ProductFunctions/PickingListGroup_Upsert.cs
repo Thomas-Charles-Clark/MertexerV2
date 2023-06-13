@@ -48,7 +48,7 @@ namespace MertexerV2.ProductFunctions
 
                 uniVerseFile.LockRecord(PickingListGroup.Key, 1);
 
-                UniUpsert<PickingListGroup>.Upsert(PickingListGroup, uniVerseFile, UniVerseAccount);
+                UniUpsert<PickingListGroup>.Upsert(PickingListGroupJSON, uniVerseFile, UniVerseAccount);
 
                 uniVerseFile.UnlockRecord(PickingListGroup.Key);
 

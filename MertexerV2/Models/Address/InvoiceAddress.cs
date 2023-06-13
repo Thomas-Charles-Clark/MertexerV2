@@ -14,6 +14,31 @@ namespace MertexerV2.Models
     [UniVerseFileName("SLCUST")]
     public class InvoiceAddress : UniVerseSerializationBase<string>
     {
+        [JsonRequired]
+        public override string Key
+        {
+            get
+            {
+                return _key;
+            }
+            set
+            {
+                _key = value;
+            }
+        }
+
+        public string TradeAccountCode
+        {
+            get
+            {
+                return Key;
+            }
+            set
+            {
+                Key = value;
+            }
+        }
+
         [JsonConstructor]
         public InvoiceAddress(string key) : base(key)
         {

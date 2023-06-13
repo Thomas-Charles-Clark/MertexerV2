@@ -44,11 +44,13 @@ namespace MertexerV2.GeneralFunctions
                     //slcustFile.LockFile();
                     uniVerseFile.WriteRecords(dataSet);
                     //slcustFile.UnlockFile();
+
+                    ReasonJSON = JsonConvert.SerializeObject(Reason);
                 }
 
                 uniVerseFile.LockRecord(Reason.Code, 1);
 
-                UniUpsert<Reason>.Upsert(Reason, uniVerseFile, UniVerseAccount);
+                UniUpsert<Reason>.Upsert(ReasonJSON, uniVerseFile, UniVerseAccount);
 
                 uniVerseFile.UnlockRecord(Reason.Code);
 

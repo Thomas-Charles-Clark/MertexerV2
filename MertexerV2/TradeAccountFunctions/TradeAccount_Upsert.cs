@@ -39,6 +39,7 @@ namespace MertexerV2.TradeAccountFunctions
                     // then write all the fields
                     // then unlock the record
                     var dataSet = new IBMU2.UODOTNET.UniDataSet(ce.Session);
+
                     dataSet.Insert(tradeAccount.Key);
 
                     //slcustFile.LockFile();
@@ -48,7 +49,7 @@ namespace MertexerV2.TradeAccountFunctions
 
                 uniVerseFile.LockRecord(tradeAccount.Key, 1);
 
-                UniUpsert<TradeAccount>.Upsert(tradeAccount, uniVerseFile, UniVerseAccount);
+                UniUpsert<TradeAccount>.Upsert(TradeAccountJSON, uniVerseFile, UniVerseAccount);
 
                 uniVerseFile.UnlockRecord(tradeAccount.Key);
 

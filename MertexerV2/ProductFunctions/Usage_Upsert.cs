@@ -12,9 +12,9 @@ namespace MertexerV2.ProductFunctions
     public static partial class UsageFunctions
     {
         [SqlFunction]
-        public static string Upsert(string UniVerseAccount, string AfterCareJSON)
+        public static string Upsert(string UniVerseAccount, string UsageJSON)
         {
-            var usage = JsonConvert.DeserializeObject<Usage>(AfterCareJSON);
+            var usage = JsonConvert.DeserializeObject<Usage>(UsageJSON);
 
             var fileName = typeof(Usage).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
                     .Cast<UniVerseFileNameAttribute>()
@@ -46,7 +46,7 @@ namespace MertexerV2.ProductFunctions
 
                 uniVerseFile.LockRecord(usage.Key, 1);
 
-                UniUpsert<Usage>.Upsert(usage, uniVerseFile, UniVerseAccount);
+                UniUpsert<Usage>.Upsert(UsageJSON, uniVerseFile, UniVerseAccount);
 
                 uniVerseFile.UnlockRecord(usage.Key);
 

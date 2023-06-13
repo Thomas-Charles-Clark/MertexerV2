@@ -17,7 +17,7 @@ namespace MertexerV2.InvoiceFunctions
         [SqlFunction]
         public static string Upsert(string UniVerseAccount, string InvoiceHeadJSON)
         {
-            var test = JsonConvert.DeserializeObject<InvoiceHead>(InvoiceHeadJSON);
+            var invoiceHead = JsonConvert.DeserializeObject<InvoiceHead>(InvoiceHeadJSON);
 
             var fileName = typeof(InvoiceHead).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
                     .Cast<UniVerseFileNameAttribute>()
@@ -30,7 +30,7 @@ namespace MertexerV2.InvoiceFunctions
 
                 try
                 {
-                    var extantRecord = uniVerseFile.ReadField(test.Key, 0).StringValue;
+                    var extantRecord = uniVerseFile.ReadField(invoiceHead.Key, 0).StringValue;
                 }
                 catch (IBMU2.UODOTNET.UniFileException)
                 {
@@ -40,22 +40,22 @@ namespace MertexerV2.InvoiceFunctions
                     // then write all the fields
                     // then unlock the record
                     var dataSet = new IBMU2.UODOTNET.UniDataSet(ce.Session);
-                    dataSet.Insert(test.Key);
+                    dataSet.Insert(invoiceHead.Key);
 
                     //slcustFile.LockFile();
                     uniVerseFile.WriteRecords(dataSet);
                     //slcustFile.UnlockFile();
                 }
 
-                uniVerseFile.LockRecord(test.Key, 1);
+                uniVerseFile.LockRecord(invoiceHead.Key, 1);
 
-                UniUpsert<InvoiceHead>.Upsert(test, uniVerseFile, UniVerseAccount);
+                UniUpsert<InvoiceHead>.Upsert(InvoiceHeadJSON, uniVerseFile, UniVerseAccount);
 
-                uniVerseFile.UnlockRecord(test.Key);
+                uniVerseFile.UnlockRecord(invoiceHead.Key);
 
             }
 
-            return test.Key;
+            return invoiceHead.Key;
         }
     }
 }

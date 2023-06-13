@@ -48,7 +48,7 @@ namespace MertexerV2.ProductFunctions
 
                 uniVerseFile.LockRecord(test.Key, 1);
 
-                UniUpsert<Test>.Upsert(test, uniVerseFile, UniVerseAccount);
+                UniUpsert<Test>.Upsert(TestJSON, uniVerseFile, UniVerseAccount);
 
                 uniVerseFile.UnlockRecord(test.Key);
 

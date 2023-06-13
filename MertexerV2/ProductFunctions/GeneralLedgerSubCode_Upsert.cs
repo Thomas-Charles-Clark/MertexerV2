@@ -48,7 +48,7 @@ namespace MertexerV2.ProductFunctions
 
                 uniVerseFile.LockRecord(GeneralLedgerSub.Key, 1);
 
-                UniUpsert<GeneralLedgerSubCode>.Upsert(GeneralLedgerSub, uniVerseFile, UniVerseAnalysis);
+                UniUpsert<GeneralLedgerSubCode>.Upsert(GeneralLedgerSubJSON, uniVerseFile, UniVerseAnalysis);
 
                 uniVerseFile.UnlockRecord(GeneralLedgerSub.Key);
             }

@@ -71,8 +71,8 @@ namespace MertexerV2.TradeAccountFunctions
             out SqlString TaxID,
             out SqlString Currency,
             out SqlString TradeAccountGroup,
-            out SqlString CustomerType,
-            out SqlString CustomerClass,
+            out SqlString TradeAccountType,
+            out SqlString TradeAccountClass,
             out SqlString OrderCategory,
             out SqlString Market,
             out SqlString PriceList,
@@ -96,7 +96,7 @@ namespace MertexerV2.TradeAccountFunctions
             out SqlString InvoiceAddressCountryCode,
             out SqlString InvoiceAccounts,
             out SqlString DefaultDeliveryReference,
-            out SqlString SendInvoiceToDeliveryAddress,
+            out SqlBoolean SendInvoiceToDeliveryAddress,
             out SqlString PaymentTerms,
             out SqlInt32 CreditLimit,
             out SqlBoolean CreditStopped,
@@ -132,22 +132,23 @@ namespace MertexerV2.TradeAccountFunctions
             out SqlBoolean StatementPrint,
             out SqlBoolean RetailTillCustomer,
             out SqlBoolean PermitTillCreditNotes,
-            out SqlString StatementAccount,
+            out SqlString StatementTradeAccountCode,
             out SqlString StatementAccountName,
-            out SqlString StatementContactName,
             out SqlString StatementAddressLine1,
             out SqlString StatementAddressLine2,
             out SqlString StatementAddressTown,
             out SqlString StatementAddressCounty,
             out SqlString StatementAddressPostcode,
+            out SqlString StatementContactName,
             out SqlString StatementPhoneNumber,
             out SqlBoolean PurchaseOrderRequired,
             out SqlString AnalysisCodeA,
             out SqlString AnalysisCodeD,
             out SqlString AnalysisCodeS,
             out SqlString Memo,
-            out SqlString RFScannerMemo,
-            out SqlString ConfirmationMemo,
+            out SqlString Contacts,
+            out SqlString RFScannerMemos,
+            out SqlString ConfirmationMemos,
             out SqlString ExtendedMemos,
             out SqlString FreeOfChargePromotionCode,
             out SqlString SellingCompany,
@@ -187,6 +188,7 @@ namespace MertexerV2.TradeAccountFunctions
             out SqlString SampleStockLocation,
             out SqlString SampleHaulierCode,
             out SqlString SampleCarriageCode,
+            out SqlString SampleCarriageExempt,
             out SqlString DefaultStockLocation,
             out SqlBoolean Export,
             out SqlBoolean ExportWithNoPackingNote,
@@ -220,7 +222,7 @@ namespace MertexerV2.TradeAccountFunctions
             out SqlString HaulierForConsolidatedInvoice,
             out SqlInt32 CutOffValue,
             out SqlByte DaysForwardForReservations,
-            out SqlString SSField1,
+            out SqlBoolean eCommerceCustomer,
             out SqlString SSField2,
             out SqlString SSField4,
             out SqlString SSField5,
@@ -233,7 +235,7 @@ namespace MertexerV2.TradeAccountFunctions
             {
                 result = new TradeAccount(null);
             }
-            
+
             TradeAccountCode = result.Key?.TrimReduceTruncate(50);
             Name = result.Name?.TrimReduceTruncate(100);
             Status = result.Status?.TrimReduceTruncate(1);
@@ -248,8 +250,8 @@ namespace MertexerV2.TradeAccountFunctions
             InvoiceAddressCounty = result.InvoiceAddressCounty?.TrimReduceTruncate(100);
             InvoiceAddressPostcode = result.InvoiceAddressPostcode?.TrimReduceTruncate(40);
             InvoiceAddressCountryCode = result.InvoiceAddressCountryCode?.TrimReduceTruncate(3);
-            InvoiceAccounts = JsonConvert.SerializeObject(result.InvoiceAccounts);
-            StatementAccount = result.StatementAccount?.TrimReduceTruncate(50);
+            InvoiceAccounts = result.InvoiceAccounts.Any() ? JsonConvert.SerializeObject(result.InvoiceAccounts) : SqlString.Null;
+            StatementTradeAccountCode = result.StatementTradeAccountCode?.TrimReduceTruncate(50);
             StatementAccountName = result.StatementAccountName?.TrimReduceTruncate(100);
             StatementAddressLine1 = result.StatementAddressLine1?.TrimReduceTruncate(60);
             StatementAddressLine2 = result.StatementAddressLine2?.TrimReduceTruncate(60);
@@ -263,8 +265,8 @@ namespace MertexerV2.TradeAccountFunctions
             MarketingEmail = result.MarketingEmail?.TrimReduceTruncate(254);
             Website = result.Website?.TrimReduceTruncate(200);
             Market = result.Market?.TrimReduceTruncate(1);
-            CustomerType = result.CustomerType?.TrimReduceTruncate(2);
-            CustomerClass = result.CustomerClass?.TrimReduceTruncate(2);
+            TradeAccountType = result.TradeAccountType?.TrimReduceTruncate(2);
+            TradeAccountClass = result.TradeAccountClass?.TrimReduceTruncate(2);
             SalesRepresentativeCode = result.SalesRepresentativeCode?.TrimReduceTruncate(3);
             SalesAgentCode = result.SalesAgentCode?.TrimReduceTruncate(3);
             SalesArea = result.SalesArea?.TrimReduceTruncate(10);
@@ -303,11 +305,36 @@ namespace MertexerV2.TradeAccountFunctions
             VATInvoiceDisplay = result.VATInvoiceDisplay?.TrimReduceTruncate(50);
             OverdueInvoiceGracePeriod = result.OverdueInvoiceGracePeriod ?? SqlByte.Null;
             EDIInvoice = result.EDIInvoice;
-            ExtendedMemos = JsonConvert.SerializeObject(result.ExtendedMemos);
+            ExtendedMemos = result.ExtendedMemos.Any() ? JsonConvert.SerializeObject(result.ExtendedMemos) : SqlString.Null;
             PartnerCompany = result.PartnerCompany?.TrimReduceTruncate(20);
             AnalysisCodeA = result.AnalysisCodeA?.TrimReduceTruncate(12);
             AnalysisCodeD = result.AnalysisCodeD?.TrimReduceTruncate(2);
             AnalysisCodeS = result.AnalysisCodeS?.TrimReduceTruncate(2);
+            Memo = result.Memo?.TrimReduceTruncate(500);
+
+            var dummyList = new List<string>();
+
+            for (var i = 0; i < result.Contacts?.Count(); i++)
+            {
+                dummyList.Add(null);
+            }
+
+            var emails = (result.ContactEmails?.Count() >= dummyList.Count ? result.ContactEmails : dummyList).ToArray();
+            var phones = (result.ContactPhones?.Count() >= dummyList.Count ? result.ContactPhones : dummyList).ToArray();
+            var mobiles = (result.ContactPhonesMobile?.Count() >= dummyList.Count ? result.ContactPhonesMobile : dummyList).ToArray();
+            var types = (result.ContactTypes?.Count() >= dummyList.Count ? result.ContactTypes : dummyList).ToArray();
+
+            Contacts = result.Contacts.Any() ? JsonConvert.SerializeObject(result.Contacts.Select((c, i) => {
+                return new
+                {
+                    Name = c,
+                    Email = emails[i],
+                    Phone = phones[i],
+                    Mobile = mobiles[i],
+                    Type = types[i]
+                };
+            })) : SqlString.Null;
+
             AcceptSundries = result.AcceptSundries;
             OverdueLetter1Delay = result.OverdueLetter1Delay ?? SqlByte.Null;
             OverdueLetter2Delay = result.OverdueLetter2Delay ?? SqlByte.Null;
@@ -319,6 +346,7 @@ namespace MertexerV2.TradeAccountFunctions
             SampleStockLocation = result.SampleStockLocation?.TrimReduceTruncate(10);
             SampleHaulierCode = result.SampleHaulierCode?.TrimReduceTruncate(10);
             SampleCarriageCode = result.SampleCarriageCode?.TrimReduceTruncate(10);
+            SampleCarriageExempt = result.SampleCarriageExempt?.TrimReduceTruncate(1);
             DefaultStockLocation = result.DefaultStockLocation?.TrimReduceTruncate(10);
             Export = result.Export;
             ExportWithNoPackingNote = result.ExportWithNoPackingNote;
@@ -391,9 +419,9 @@ namespace MertexerV2.TradeAccountFunctions
             PrintInvoiceAtConfirmation = result.PrintInvoiceAtConfirmation;
             DaysForwardForReservations = result.DaysForwardForReservations ?? SqlByte.Null;
             PrintJLPEanLabels = result.PrintJLPEanLabels;
-            RFScannerMemo = result.RFScannerMemo?.TrimReduceTruncate(200);
-            ConfirmationMemo = result.ConfirmationMemo?.TrimReduceTruncate(200);
-            SSField1 = result.SSField1?.TrimReduceTruncate(50);
+            RFScannerMemos = result.RFScannerMemos.Any() ? JsonConvert.SerializeObject(result.RFScannerMemos) : SqlString.Null;
+            ConfirmationMemos = result.ConfirmationMemos.Any() ? JsonConvert.SerializeObject(result.ConfirmationMemos) : SqlString.Null;
+            eCommerceCustomer = result.eCommerceCustomer;
             SSField2 = result.SSField2?.TrimReduceTruncate(50);
             SSField4 = result.SSField4?.TrimReduceTruncate(50);
             SSField5 = result.SSField5?.TrimReduceTruncate(50);
@@ -404,7 +432,6 @@ namespace MertexerV2.TradeAccountFunctions
             UPSReturnsLabel = result.UPSReturnsLabel;
             ExitCodeEmail = result.ExitCodeEmail?.TrimReduceTruncate(254);
             NoEmail = result.NoEmail;
-            Memo = result.Memo?.TrimReduceTruncate(500);
         }
 
         [Microsoft.SqlServer.Server.SqlFunction(
@@ -526,6 +553,65 @@ namespace MertexerV2.TradeAccountFunctions
             var result = (string)obj;
 
             TradeAccountCode = result.TrimReduceTruncate(50);
+        }
+
+        [Microsoft.SqlServer.Server.SqlFunction(
+            DataAccess = DataAccessKind.Read,
+            FillRowMethodName = "TradeAccountContactSelect_FillRow")]
+        [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
+        public static IEnumerable ContactSelect(string UniVerseAccount, string TradeAccountCodes)
+        {
+            if (String.IsNullOrEmpty(TradeAccountCodes))
+            {
+                foreach (var r in Selector<TradeAccount>.SelectAllNonParallel(
+                    true,
+                    false,
+                    50,
+                    UniVerseAccount))
+                {
+                    foreach (var c in r.TradeAccountContacts)
+                    {
+                        yield return c;
+                    }
+                }
+            }
+            else
+            {
+                var results = Selector<TradeAccount>.Select(
+                    JsonConvert.DeserializeObject<IEnumerable<TradeAccountCode>>(TradeAccountCodes).Select(p => p.Code),
+                    true,
+                    false,
+                    50,
+                    UniVerseAccount)
+                    .ToList();
+
+                foreach (var r in results)
+                {
+                    foreach (var c in r.TradeAccountContacts)
+                    {
+                        yield return c;
+                    }
+                }
+            }
+        }
+
+        public static void TradeAccountContactSelect_FillRow(
+            object obj,
+            out SqlString TradeAccountContactTypeCode,
+            out SqlString TradeAccountCode,
+            out SqlString Name,
+            out SqlString Email,
+            out SqlString Phone,
+            out SqlString Mobile)
+        {
+            var result = (TradeAccountContact)obj;
+
+            TradeAccountContactTypeCode = result.Type;
+            TradeAccountCode = result.TradeAccountCode;
+            Name = result.Name?.TrimReduceTruncate(100);
+            Email = result.Email?.TrimReduceTruncate(254);
+            Phone = result.Phone?.TrimReduceTruncate(20);
+            Mobile = result.Mobile?.TrimReduceTruncate(20);
         }
     }
 }

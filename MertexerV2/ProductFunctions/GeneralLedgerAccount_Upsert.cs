@@ -48,8 +48,8 @@ namespace MertexerV2.ProductFunctions
 
                 uniVerseFile.LockRecord(GeneralLedgerAccount.Key, 1);
 
-                UniUpsert<GeneralLedgerAccountCode>.Upsert(GeneralLedgerAccount, uniVerseFile, UniVerseAccount);
-
+                UniUpsert<GeneralLedgerAccountCode>.Upsert(GeneralLedgerAccountJSON, uniVerseFile, UniVerseAccount);
+                
                 uniVerseFile.UnlockRecord(GeneralLedgerAccount.Key);
             }
 

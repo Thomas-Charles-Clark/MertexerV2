@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Markup;
 
 namespace MertexerV2.Utilities
 {
@@ -110,7 +111,11 @@ namespace MertexerV2.Utilities
                 #endif
 
                 // Squish our MV field values back into UniVerse format
-                result = String.Join($"{Framework.ValueMark}", values);
+                if (values?.Any() == true)
+                {
+                    // If you nested to the SubValue level, God help you... because I won't.
+                    result = String.Join($"{Framework.ValueMark}", values);
+                }
             }
             else
             {

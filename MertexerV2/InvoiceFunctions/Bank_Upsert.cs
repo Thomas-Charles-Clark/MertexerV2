@@ -1,4 +1,4 @@
-﻿using MertexerV2.Models;
+﻿using MertexerV2.Models.Bank;
 using MertexerV2.Utilities;
 using Microsoft.SqlServer.Server;
 using Newtonsoft.Json;
@@ -9,16 +9,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MertexerV2.TradeAccountFunctions
+namespace MertexerV2.InvoiceFunctions
 {
-    public static partial class SSLPostDocumentFunctions
+    public static partial class BankFunctions
     {
         [SqlFunction]
-        public static string Upsert(string UniVerseAccount, string SSLPostDocumentJSON)
+        public static string Upsert(string UniVerseAccount, string BankJSON)
         {
-            var sslPostDocument = JsonConvert.DeserializeObject<SSLPostDocument>(SSLPostDocumentJSON);
+            var Bank = JsonConvert.DeserializeObject<Bank>(BankJSON);
 
-            var fileName = typeof(SSLPostDocument).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
+            var fileName = typeof(Bank).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
                     .Cast<UniVerseFileNameAttribute>()
                     .Single()
                     .FileName;
@@ -29,7 +29,7 @@ namespace MertexerV2.TradeAccountFunctions
 
                 try
                 {
-                    var extantRecord = uniVerseFile.ReadField(sslPostDocument.Key, 0).StringValue;
+                    var extantRecord = uniVerseFile.ReadField(Bank.Key, 0).StringValue;
                 }
                 catch (IBMU2.UODOTNET.UniFileException)
                 {
@@ -39,22 +39,22 @@ namespace MertexerV2.TradeAccountFunctions
                     // then write all the fields
                     // then unlock the record
                     var dataSet = new IBMU2.UODOTNET.UniDataSet(ce.Session);
-                    dataSet.Insert(sslPostDocument.Key);
+                    dataSet.Insert(Bank.Key);
 
                     //slcustFile.LockFile();
                     uniVerseFile.WriteRecords(dataSet);
                     //slcustFile.UnlockFile();
                 }
 
-                uniVerseFile.LockRecord(sslPostDocument.Key, 1);
+                uniVerseFile.LockRecord(Bank.Key, 1);
 
-                UniUpsert<SSLPostDocument>.Upsert(sslPostDocument, uniVerseFile, UniVerseAccount);
+                UniUpsert<Bank>.Upsert(BankJSON, uniVerseFile, UniVerseAccount);
 
-                uniVerseFile.UnlockRecord(sslPostDocument.Key);
+                uniVerseFile.UnlockRecord(Bank.Key);
 
             }
 
-            return sslPostDocument.Key;
+            return Bank.Key;
         }
     }
 }

@@ -48,7 +48,7 @@ namespace MertexerV2.ProductFunctions
 
                 uniVerseFile.LockRecord(GeneralLedgerDiscountCodeGroup.Key, 1);
 
-                UniUpsert<GeneralLedgerDiscountGroup>.Upsert(GeneralLedgerDiscountCodeGroup, uniVerseFile, UniVerseAccount);
+                UniUpsert<GeneralLedgerDiscountGroup>.Upsert(GeneralLedgerDiscountCodeGroupJSON, uniVerseFile, UniVerseAccount);
 
                 uniVerseFile.UnlockRecord(GeneralLedgerDiscountCodeGroup.Key);
 

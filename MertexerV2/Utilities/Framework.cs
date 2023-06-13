@@ -26,6 +26,12 @@ namespace MertexerV2.Utilities
             Formatting = Framework.IndentedFormatting,
             NullValueHandling = NullValueHandling.Ignore
         };
+        public static JsonSerializerSettings JsonSettingsIndentedIncludeNullsAlphabetical = new JsonSerializerSettings()
+        {
+            Formatting = Framework.IndentedFormatting,
+            NullValueHandling = NullValueHandling.Include,
+            ContractResolver = new OrderedContractResolver()
+        };
         public static JsonSerializerSettings JsonSettingsIndentedIgnoreNullsAlphabetical = new JsonSerializerSettings()
         {
             Formatting = Framework.IndentedFormatting,

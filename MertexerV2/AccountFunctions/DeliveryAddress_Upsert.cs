@@ -29,7 +29,7 @@ namespace MertexerV2.AccountFunctions
 
                 try
                 {
-                    var extantRecord = uniVerseFile.ReadField(DeliveryAddress.Key, 0).StringValue;
+                    var extantRecord = uniVerseFile.ReadField(DeliveryAddress.Key ?? "", 0).StringValue;
                 }
                 catch (IBMU2.UODOTNET.UniFileException)
                 {
@@ -38,7 +38,6 @@ namespace MertexerV2.AccountFunctions
                     // then lock the specific record
                     // then write all the fields
                     // then unlock the record
-
 
                     if (String.IsNullOrEmpty(DeliveryAddress.Key))
                     {
@@ -51,7 +50,16 @@ namespace MertexerV2.AccountFunctions
                             keys.Add($"{DeliveryAddress.TradeAccountCode}-0");
                         }
 
-                        var references = keys.Select(p => p.Split(new char[] { '-' })[1]).ToList();
+                        var references = keys.Select(p =>
+                            {
+                                var split = p.Split(new char[] { '-' });
+                                if (split.Count() > 1)
+                                    return split[1];
+                                else
+                                    return "0";
+                            })
+                            .Distinct()
+                            .ToList();
 
                         var NumericReferences = new List<int>();
 
@@ -68,6 +76,8 @@ namespace MertexerV2.AccountFunctions
                         var newDeliveryReference = $"{DeliveryAddress.TradeAccountCode}-{nextReference}";
 
                         DeliveryAddress = new DeliveryAddress(newDeliveryReference, DeliveryAddress);
+
+                        DeliveryAddressJSON = JsonConvert.SerializeObject(DeliveryAddress);
                     }
 
                     var dataSet = new IBMU2.UODOTNET.UniDataSet(ce.Session);
@@ -84,7 +94,7 @@ namespace MertexerV2.AccountFunctions
 
                 uniVerseFile.LockRecord(DeliveryAddress.Key, 1);
 
-                UniUpsert<DeliveryAddress>.Upsert(DeliveryAddress, uniVerseFile, UniVerseAccount);
+                UniUpsert<DeliveryAddress>.Upsert(DeliveryAddressJSON, uniVerseFile, UniVerseAccount);
 
                 uniVerseFile.UnlockRecord(DeliveryAddress.Key);
 

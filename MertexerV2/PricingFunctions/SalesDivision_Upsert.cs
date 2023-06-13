@@ -16,7 +16,7 @@ namespace MertexerV2.PricingFunctions
         [SqlFunction]
         public static string Upsert(string UniVerseAccount, string SalesDivisionJSON)
         {
-            var record = JsonConvert.DeserializeObject<SalesDivision>(SalesDivisionJSON);
+            var salesDivision = JsonConvert.DeserializeObject<SalesDivision>(SalesDivisionJSON);
 
             var fileName = typeof(SalesDivision).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
                     .Cast<UniVerseFileNameAttribute>()
@@ -29,7 +29,7 @@ namespace MertexerV2.PricingFunctions
 
                 try
                 {
-                    var extantRecord = uniVerseFile.ReadField(record.Key, 0).StringValue;
+                    var extantRecord = uniVerseFile.ReadField(salesDivision.Key, 0).StringValue;
                 }
                 catch (IBMU2.UODOTNET.UniFileException)
                 {
@@ -39,22 +39,22 @@ namespace MertexerV2.PricingFunctions
                     // then write all the fields
                     // then unlock the record
                     var dataSet = new IBMU2.UODOTNET.UniDataSet(ce.Session);
-                    dataSet.Insert(record.Key);
+                    dataSet.Insert(salesDivision.Key);
 
                     //slcustFile.LockFile();
                     uniVerseFile.WriteRecords(dataSet);
                     //slcustFile.UnlockFile();
                 }
 
-                uniVerseFile.LockRecord(record.Key, 1);
+                uniVerseFile.LockRecord(salesDivision.Key, 1);
 
-                UniUpsert<SalesDivision>.Upsert(record, uniVerseFile, UniVerseAccount);
+                UniUpsert<SalesDivision>.Upsert(SalesDivisionJSON, uniVerseFile, UniVerseAccount);
 
-                uniVerseFile.UnlockRecord(record.Key);
+                uniVerseFile.UnlockRecord(salesDivision.Key);
 
             }
 
-            return record.Key;
+            return salesDivision.Key;
         }
     }
 }

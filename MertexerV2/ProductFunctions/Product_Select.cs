@@ -181,7 +181,7 @@ namespace MertexerV2.ProductFunctions
             out SqlInt32 MerchandiserCode,
             out SqlInt16 OrderFormGroup,
             out SqlString PackagingDescription,
-            out SqlString ShippingTerms,
+            out SqlString DeliveryTerms,
             out SqlInt16 KnotsPerSquareMetre,
             out SqlDecimal WeightPerSquareMetre,
             out SqlString Transport,
@@ -407,7 +407,7 @@ namespace MertexerV2.ProductFunctions
             MerchandiserCode = p.MerchandiserCode ?? SqlInt32.Null;
             OrderFormGroup = p.OrderFormGroup ?? SqlInt16.Null;
             PackagingDescription = p.PackagingDescription?.TrimReduceTruncate(200);
-            ShippingTerms = p.ShippingTerms?.TrimReduceTruncate(20);
+            DeliveryTerms = p.DeliveryTerms?.TrimReduceTruncate(3);
             KnotsPerSquareMetre = p.KnotsPerSquareMetre ?? SqlInt16.Null;
             WeightPerSquareMetre = p.WeightPerSquareMetre ?? SqlDecimal.Null;
             Transport = p.Transport?.TrimReduceTruncate(20);

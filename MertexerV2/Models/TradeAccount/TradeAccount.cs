@@ -1216,6 +1216,7 @@ namespace MertexerV2.Models
         /// <summary>
         /// Consolidate Indicator (?)
         /// Optional; must be 'Y' or 'N' if given.
+        /// // Default to 'N'
         /// </summary>
         [UniVerseIndex(619)]
         [UniVerseFieldName("DEF.CONSOLIDATE")]
@@ -1445,6 +1446,14 @@ namespace MertexerV2.Models
         [UniVerseIndex(791)]
         [UniVerseFieldName("WEBTEX.EXCLUDE.LIST")]
         public string ProductExclusionListCode { get; set; }
+        
+        /// <summary>
+        /// US Sales Tax Exemption Certificate (used to just store Sales Tax ID, instead now 
+        /// stores UNC path to file on \\files
+        /// </summary>
+        [UniVerseIndex(793)]
+        [UniVerseFieldName("TAX.EXEMPT.CERT.DES")]
+        public string USSalesTaxExemptionCertificate { get; set; }
 
         /// <summary>
         /// UPS Returns Label (?)
@@ -1611,7 +1620,8 @@ namespace MertexerV2.Models
         public string Bankrupt { get; set; }
 
         /// <summary>
-        /// Purchase Order Req (?) No idea. Not validated.
+        /// Purchase Order Req
+        /// Causes the Portal's Order Entry to relabel 'Order Reference' to 'Purchase Order Reference'.
         /// </summary>
         [UniVerseIndex(1013)]
         [UniVerseFieldName("POREQ")]
@@ -1645,7 +1655,7 @@ namespace MertexerV2.Models
         /// </summary>
         [UniVerseIndex(1017)]
         [UniVerseFieldName("SS.FIELD2")]
-        public string SSField2 { get; set; }
+        public string DeliveryAlertEmail { get; set; }
 
         /// <summary>
         /// Wrapping (?)
@@ -1657,12 +1667,11 @@ namespace MertexerV2.Models
         public string GroupageType { get; set; }
 
         /// <summary>
-        /// Site-Specific Field 4 (?)
-        /// No idea what this does
+        /// Credit Control Region - SL.CONTROLLER <3> CONT.REGION
         /// </summary>
         [UniVerseIndex(1019)]
         [UniVerseFieldName("SS.FIELD4")]
-        public string SSField4 { get; set; }
+        public string CreditControlRegion { get; set; }
 
         /// <summary>
         /// Site-Specific Field 5 (?)

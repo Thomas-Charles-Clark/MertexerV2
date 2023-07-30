@@ -87,13 +87,15 @@ namespace MertexerV2.GeneralFunctions
 
         public static void DeliveryTermsSelect_FillRow(
             object obj,
+            out SqlByte DeliveryTermID,
             out SqlString Code,
             out SqlByte SortOrder,
             out SqlString Description
             )
         {
             var p = (DeliveryTerms)obj;
-
+            
+            DeliveryTermID = Convert.ToByte(p.Key);
             Code = p.Code?.TrimReduceTruncate(3);
             SortOrder = p.SortOrder;
             Description = p.Description?.TrimReduceTruncate(30);

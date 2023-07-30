@@ -35,6 +35,7 @@ using MertexerV2.TradeAccountFunctions;
 using System.CodeDom;
 using MertexerV2.RetailFunctions;
 using System.Diagnostics.Tracing;
+using MertexerV2.EDAReplacement;
 
 namespace Tester
 {
@@ -58,9 +59,18 @@ namespace Tester
 
             stopwatch.Start();
 
-            var deliveryAddressJson = @"{""Key"":null,""TradeAccountCode"":""S2390"",""CompanyName"":""SRA. UTE FLORY-URAK"",""ContactName"":""SRA. UTE FLORY-URAK"",""AddressLine1"":""ROMERWEG, 27"",""AddressLine2"":null,""Town"":""ST. JOHANN"",""County"":""ST. JOHANN"",""Postcode"":""A-6380"",""CountryCode"":""AT""}";
+            //var deliveryAddressJson = @"{""Key"":null,""TradeAccountCode"":""S2390"",""CompanyName"":""SRA. UTE FLORY-URAK"",""ContactName"":""SRA. UTE FLORY-URAK"",""AddressLine1"":""ROMERWEG, 27"",""AddressLine2"":null,""Town"":""ST. JOHANN"",""County"":""ST. JOHANN"",""Postcode"":""A-6380"",""CountryCode"":""AT""}";
 
-            var result = DeliveryAddressFunctions.Upsert("MERTEX", deliveryAddressJson);
+            //var result = DeliveryAddressFunctions.Upsert("MERTEX", deliveryAddressJson);
+
+            //var json = $@"[{"OrderHeadID": 1108937001}]";
+
+            //var results = EDAReplacement.FetchOrderLinesForOrderHeads("MERTEX", json).OfType<TOELine>().ToArray();
+
+            //foreach(var r in results)
+            //{
+            //    Console.WriteLine(r);
+            //}
 
             //var results = MertexerV2.SQLFunctions.Dedupe.CheckLine(tradeDataSourceJson, "F1190/01/C", 1.0m, "SAMPLE ORDER", 3).OfType<string>().ToList();
 
@@ -95,6 +105,8 @@ namespace Tester
             //var results = DeliveryAddressFunctions.Exists(uniVerseAccount, "K0098", "COMPANY NAME", "COMPANY NAME", "ADDRESS LINE 1", "ADDRESS LINE 2", "TOWN", "COUNTY", "POSTCODE", "GB").OfType<string>().ToList();
 
 
+
+
             //var results = MertexerV2.RetailFunctions.TillFunctions.FetchRetailTillSessions(uniVerseAccount).OfType<RetailTillSession>().ToList();
 
             //foreach (var r in results)
@@ -118,6 +130,24 @@ namespace Tester
 
             //var results = TillFunctions.FetchOpenTills(uniVerseAccount).OfType<RetailTill>().ToList();
 
+            //var results = SSLPostContactFunctions.Select("MERTEX", null, null).OfType<SSLPostContact>().ToList();
+
+            //Console.WriteLine($"Saw {results.Count} results");
+
+
+            //var Code = new SqlString();
+            //var DocumentType = new SqlString();
+            //var TradeAccountCode = new SqlString();
+            //var Email = new SqlString();
+
+            //foreach (var r in results)
+            //{
+            //    SSLPostContactFunctions.SSLPostContactSelect_FillRow(r, out Code, out DocumentType, out TradeAccountCode, out Email);
+            //    //Console.WriteLine(r);
+            //}
+
+
+            var result = TradeAccountFunctions.InsertTransactionHistory("MERTEX", @"{""Code"":""PH03005"",""DocumentHistory"":[],""MertexCurrencyCode"":""STG""}");
 
             //var sessions = TillFunctions.FetchRetailTillSessions(uniVerseAccount).OfType<RetailTillSession>().ToList();
 

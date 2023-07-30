@@ -141,7 +141,25 @@ namespace MertexerV2.Models.EDAReplacement
 
         public string ReserveIndicator { get; set; }
 
-        public TOELine(
+        public int? CurrentlySuggestedDeliveryDate { get; set; }
+
+        public DateTime? CurrentlySuggestedDeliveryDT
+        {
+          get
+          {
+            if (CurrentlySuggestedDeliveryDate != null)
+            {
+              var date = Framework.DateTimeFromUniVerseOffset(CurrentlySuggestedDeliveryDate.Value);
+
+              return date;
+            }
+
+            return null;
+          }
+          set { }
+        }
+
+    public TOELine(
             string key,
             string orderId,
             string lineNumber,
@@ -172,7 +190,8 @@ namespace MertexerV2.Models.EDAReplacement
             string stockLocation,
             string purchaseOrderLineId,
             string partnerProductCode,
-            string reserveIndicator)
+            string reserveIndicator, 
+            string currentSuggestedDeliveryDate)
         {
             Key = key;
 
@@ -283,6 +302,11 @@ namespace MertexerV2.Models.EDAReplacement
             PartnerProductCode = String.IsNullOrEmpty(partnerProductCode) ? null : partnerProductCode;
 
             ReserveIndicator = String.IsNullOrEmpty(reserveIndicator) ? null : reserveIndicator;
+
+            if (Int32.TryParse(currentSuggestedDeliveryDate, out int csdd))
+            {
+              CurrentlySuggestedDeliveryDate = csdd;
+            }
         }
 
         public override string ToString()

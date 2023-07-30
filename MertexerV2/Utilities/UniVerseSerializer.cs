@@ -46,23 +46,43 @@ namespace MertexerV2.Utilities
                 {
                     values = (List<string>)pi.GetValue(source);
                 }
-                else if (pi.PropertyType == typeof(IEnumerable<decimal>) || pi.PropertyType == typeof(IEnumerable<decimal?>))
+                else if (pi.PropertyType == typeof(IEnumerable<decimal>))
+                {
+                    values = ((List<decimal>)pi.GetValue(source)).Select(p => $"{p}").ToList();
+                }
+                else if (pi.PropertyType == typeof(IEnumerable<decimal?>))
                 {
                     values = ((List<decimal?>)pi.GetValue(source)).Select(p => $"{p}").ToList();
                 }
-                else if (pi.PropertyType == typeof(IEnumerable<long>) || pi.PropertyType == typeof(IEnumerable<long?>))
+                else if (pi.PropertyType == typeof(IEnumerable<long>))
+                {
+                    values = ((List<long>)pi.GetValue(source)).Select(p => $"{p}").ToList();
+                }
+                else if (pi.PropertyType == typeof(IEnumerable<long?>))
                 {
                     values = ((List<long?>)pi.GetValue(source)).Select(p => $"{p}").ToList();
                 }
-                else if (pi.PropertyType == typeof(IEnumerable<int>) || pi.PropertyType == typeof(IEnumerable<int?>))
+                else if (pi.PropertyType == typeof(IEnumerable<int>))
+                {
+                    values = ((List<int>)pi.GetValue(source)).Select(p => $"{p}").ToList();
+                }
+                else if (pi.PropertyType == typeof(IEnumerable<int?>))
                 {
                     values = ((List<int?>)pi.GetValue(source)).Select(p => $"{p}").ToList();
                 }
-                else if (pi.PropertyType == typeof(IEnumerable<short>) || pi.PropertyType == typeof(IEnumerable<short?>))
+                else if (pi.PropertyType == typeof(IEnumerable<short>))
+                {
+                    values = ((List<short>)pi.GetValue(source)).Select(p => $"{p}").ToList();
+                }
+                else if (pi.PropertyType == typeof(IEnumerable<short?>))
                 {
                     values = ((List<short?>)pi.GetValue(source)).Select(p => $"{p}").ToList();
                 }
-                else if (pi.PropertyType == typeof(IEnumerable<byte>) || pi.PropertyType == typeof(IEnumerable<byte?>))
+                else if (pi.PropertyType == typeof(IEnumerable<byte>))
+                {
+                    values = ((List<byte>)pi.GetValue(source)).Select(p => $"{p}").ToList();
+                }
+                else if (pi.PropertyType == typeof(IEnumerable<byte?>))
                 {
                     values = ((List<byte?>)pi.GetValue(source)).Select(p => $"{p}").ToList();
                 }

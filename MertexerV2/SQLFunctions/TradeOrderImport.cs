@@ -203,10 +203,11 @@ namespace MertexerV2.SQLFunctions
                     }
                     else
                     {
+                        recipientEmail = orderImportFileEmail;
 #if DEBUG
                         using (var conn = new SqlConnection("Data Source=vm-sql1;Initial Catalog=Flock;Integrated Security=True"))
 #else
-            using (var conn = new SqlConnection("context connection=true"))
+                        using (var conn = new SqlConnection("context connection=true"))
 #endif
                         {
                             if (conn.State != ConnectionState.Open)

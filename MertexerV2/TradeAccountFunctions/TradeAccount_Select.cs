@@ -212,6 +212,7 @@ namespace MertexerV2.TradeAccountFunctions
             out SqlString UserID,
             out SqlString SampleLetterTitleText,
             out SqlString ProductExclusionListCode,
+            out SqlString USSalesTaxExemptionCertificate,
             out SqlString DeliveryDateCalculation,
             out SqlDecimal MinimumOrderValue,
             out SqlString TillIDCode,
@@ -224,7 +225,7 @@ namespace MertexerV2.TradeAccountFunctions
             out SqlByte DaysForwardForReservations,
             out SqlBoolean eCommerceCustomer,
             out SqlString SSField2,
-            out SqlString SSField4,
+            out SqlString CreditControlRegion,
             out SqlString SSField5,
             out SqlString StockistCategory,
             out SqlString ExitCodeEmail)
@@ -388,6 +389,7 @@ namespace MertexerV2.TradeAccountFunctions
             SampleLetterTitleText = result.SampleLetterTitleText?.TrimReduceTruncate(2);
             EndCustomerInvoicing = result.EndCustomerInvoicing;
             ProductExclusionListCode = result.ProductExclusionListCode?.TrimReduceTruncate(3);
+            USSalesTaxExemptionCertificate = result.USSalesTaxExemptionCertificate?.TrimReduceTruncate(255);
             MiscellaneousAccount = result.MiscellaneousAccount;
             PriceCode = result.PriceCode?.TrimReduceTruncate(3);
             DeliveryDateCalculation = result.DeliveryDateCalculation?.TrimReduceTruncate(2);
@@ -422,8 +424,8 @@ namespace MertexerV2.TradeAccountFunctions
             RFScannerMemos = result.RFScannerMemos.Any() ? JsonConvert.SerializeObject(result.RFScannerMemos) : SqlString.Null;
             ConfirmationMemos = result.ConfirmationMemos.Any() ? JsonConvert.SerializeObject(result.ConfirmationMemos) : SqlString.Null;
             eCommerceCustomer = result.eCommerceCustomer;
-            SSField2 = result.SSField2?.TrimReduceTruncate(50);
-            SSField4 = result.SSField4?.TrimReduceTruncate(50);
+            SSField2 = result.DeliveryAlertEmail?.TrimReduceTruncate(50);
+            CreditControlRegion = result.CreditControlRegion?.TrimReduceTruncate(50);
             SSField5 = result.SSField5?.TrimReduceTruncate(50);
             ContractOrDisplay = result.ContractOrDisplay?.TrimReduceTruncate(1);
             Advertiser = result.Advertiser;
@@ -440,6 +442,8 @@ namespace MertexerV2.TradeAccountFunctions
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
         public static IEnumerable EndCustomerSelect(string UniVerseAccount)
         {
+            int f = 0;
+
             var results = new List<Tuple<string, string>>();
 
             var accounts = new List<string>();

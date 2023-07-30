@@ -132,11 +132,14 @@
     <Compile Include="GeneralFunctions\OrderCategory_Upsert.cs" />
     <Compile Include="GeneralFunctions\Reason_Upsert.cs" />
     <Compile Include="GeneralFunctions\Reason_Select.cs" />
+    <Compile Include="InvoiceFunctions\CreditController_Select.cs" />
     <Compile Include="InvoiceFunctions\Bank_Select.cs" />
+    <Compile Include="InvoiceFunctions\CreditController_Upsert.cs" />
     <Compile Include="InvoiceFunctions\InvoiceTerms_Select.cs" />
     <Compile Include="InvoiceFunctions\Bank_Upsert.cs" />
     <Compile Include="InvoiceFunctions\InvoiceTerms_Upsert.cs" />
     <Compile Include="Models\Bank\Bank.cs" />
+    <Compile Include="Models\Credit\CreditController.cs" />
     <Compile Include="Models\General\DeliveryTerms.cs" />
     <Compile Include="Models\General\Reason.cs" />
     <Compile Include="Models\Invoices\InvoiceTerms.cs" />
@@ -150,8 +153,10 @@
     <Compile Include="Models\Stock\StockLocation.cs" />
     <Compile Include="Models\TradeAccount\TradeAccountContact.cs" />
     <Compile Include="Models\TradeAccount\TradeAccountContactType.cs" />
+    <Compile Include="Models\TradeAccount\TradeAccountCurrentBalance.cs" />
     <Compile Include="Models\TradeAccount\TradeAccountGroup.cs" />
     <Compile Include="Models\TradeAccount\TradeAccountGroupCode.cs" />
+    <Compile Include="Models\TradeAccount\TradeAccountTransactionHistory.cs" />
     <Compile Include="Models\TradeAccount\TradeAccountType.cs" />
     <Compile Include="Models\TradeAccount\TradeAccountClass.cs" />
     <Compile Include="Models\TradeAccount\TradeAccountTypeCode.cs" />
@@ -171,6 +176,8 @@
     <Compile Include="StockFunctions\StockLocation_Upsert.cs" />
     <Compile Include="TradeAccountFunctions\TradeAccountContactType_Select.cs" />
     <Compile Include="TradeAccountFunctions\TradeAccountContactType_Upsert.cs" />
+    <Compile Include="TradeAccountFunctions\TradeAccountTransactionHistory_Select.cs" />
+    <Compile Include="TradeAccountFunctions\TradeAccountTransactionHistory_Upsert.cs" />
     <Compile Include="TradeAccountFunctions\TradeAccountGroup_Select.cs" />
     <Compile Include="TradeAccountFunctions\TradeAccountGroup_Upsert.cs" />
     <Compile Include="TradeAccountFunctions\TradeAccountType_Select.cs" />
@@ -178,8 +185,10 @@
     <Compile Include="TradeAccountFunctions\TradeAccountType_Upsert.cs" />
     <Compile Include="TradeAccountFunctions\SSLPostContact_Select.cs" />
     <Compile Include="TradeAccountFunctions\TradeAccountClass_Upsert.cs" />
+    <Compile Include="TradeAccountFunctions\TradeAccountCurrentBalance_Select.cs" />
     <Compile Include="TradeAccountFunctions\TradeAccount_Select.cs" />
     <Compile Include="TradeAccountFunctions\SSLPostContact_Upsert.cs" />
+    <Compile Include="TradeAccountFunctions\TradeAccountCurrentBalance_Upsert.cs" />
     <Compile Include="TradeAccountFunctions\TradeAccount_Upsert.cs" />
     <Compile Include="AccountFunctions\InvoiceAddress_Select.cs" />
     <Compile Include="AccountFunctions\InvoiceAddress_Upsert.cs" />

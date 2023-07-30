@@ -201,7 +201,12 @@ namespace MertexerV2.EDAReplacement
                     "CUSADDR3.FF",
                     "CUSADDR4.FF",
                     "CUSPCODE.FF",
-                    "ORDERTYPE"
+                    "ORDERTYPE",
+                    "EMAIL.FAX.DES",
+                    "EMAIL.TILL",
+                    "ECOMM.EMAIL.DES",
+                    "MISC.EMAIL.DES",
+                    "ENDCUST"
                 };
 
                 using (var ce = new CommandExecutor(UniVerseAccount))
@@ -282,7 +287,12 @@ namespace MertexerV2.EDAReplacement
                                 record.Record.Extract(38).StringValue,
                                 record.Record.Extract(39).StringValue,
                                 record.Record.Extract(40).StringValue,
-                                record.Record.Extract(41).StringValue
+                                record.Record.Extract(41).StringValue,
+                                record.Record.Extract(42).StringValue,
+                                record.Record.Extract(43).StringValue,
+                                record.Record.Extract(44).StringValue,
+                                record.Record.Extract(45).StringValue,
+                                record.Record.Extract(46).StringValue
                             ));
                         });
 
@@ -367,7 +377,12 @@ namespace MertexerV2.EDAReplacement
                     "CUSADDR3.FF",
                     "CUSADDR4.FF",
                     "CUSPCODE.FF",
-                    "ORDERTYPE"
+                    "ORDERTYPE",
+                    "EMAIL.FAX.DES",
+                    "EMAIL.TILL",
+                    "ECOMM.EMAIL.DES",
+                    "MISC.EMAIL.DES",
+                    "ENDCUST"
                 };
 
                 using (var ce = new CommandExecutor(UniVerseAccount))
@@ -441,7 +456,12 @@ namespace MertexerV2.EDAReplacement
                                     record.Record.Extract(38).StringValue,
                                     record.Record.Extract(39).StringValue,
                                     record.Record.Extract(40).StringValue,
-                                    record.Record.Extract(41).StringValue
+                                    record.Record.Extract(41).StringValue,
+                                    record.Record.Extract(42).StringValue,
+                                    record.Record.Extract(43).StringValue,
+                                    record.Record.Extract(44).StringValue,
+                                    record.Record.Extract(45).StringValue,
+                                    record.Record.Extract(46).StringValue
                                 ));
                             });
 
@@ -504,7 +524,12 @@ namespace MertexerV2.EDAReplacement
             out SqlString InvoiceAddressTown,
             out SqlString InvoiceAddressCounty,
             out SqlString InvoiceAddressPostcode,
-            out SqlString OrderType)
+            out SqlString OrderType,
+            out SqlString ContactEmailFax,
+            out SqlString EmailTill,
+            out SqlString EcommEmail,
+            out SqlString MiscEmail,
+            out SqlString EndCustomer)
         {
             var result = (TOEHead)obj;
 
@@ -549,6 +574,12 @@ namespace MertexerV2.EDAReplacement
             InvoiceAddressCounty = String.IsNullOrEmpty(result.InvoiceAddressCounty) ? SqlString.Null : result.InvoiceAddressCounty.TrimReduceTruncate(40);
             InvoiceAddressPostcode = String.IsNullOrEmpty(result.InvoiceAddressPostcode) ? SqlString.Null : result.InvoiceAddressPostcode.TrimReduceTruncate(20);
             OrderType = String.IsNullOrEmpty(result.OrderType) ? SqlString.Null : result.OrderType.TrimReduceTruncate(5);
+
+            ContactEmailFax = String.IsNullOrEmpty(result.ContactEmailFax) ? SqlString.Null : result.ContactEmailFax.TrimReduceTruncate(256);
+            EmailTill = String.IsNullOrEmpty(result.EmailTill) ? SqlString.Null : result.EmailTill.TrimReduceTruncate(256);
+            EcommEmail = String.IsNullOrEmpty(result.EcommEmail) ? SqlString.Null : result.EcommEmail.TrimReduceTruncate(256);
+            MiscEmail = String.IsNullOrEmpty(result.MiscEmail) ? SqlString.Null : result.MiscEmail.TrimReduceTruncate(256);
+            EndCustomer = String.IsNullOrEmpty(result.EndCustomer) ? SqlString.Null : result.EndCustomer.TrimReduceTruncate(50);
         }
 
 
@@ -641,7 +672,8 @@ namespace MertexerV2.EDAReplacement
                     "L.LOCCODE",             // 19
                     "PORDNO",                // 219
                     "PARTPRODCODE",          // 269
-                    "RESERVE.FLAG"           // 311
+                    "RESERVE.FLAG",           // 311
+                    "SS.CURSUG.DELDATE.ABS"  // 75.1
                 };
 
                 using (var ce = new CommandExecutor(UniVerseAccount))
@@ -697,7 +729,8 @@ namespace MertexerV2.EDAReplacement
                                 stockLocation: record.Record.Extract(27).StringValue,
                                 purchaseOrderLineId: record.Record.Extract(28).StringValue,
                                 partnerProductCode: record.Record.Extract(29).StringValue,
-                                reserveIndicator: record.Record.Extract(30).StringValue
+                                reserveIndicator: record.Record.Extract(30).StringValue,
+                                currentSuggestedDeliveryDate: record.Record.Extract(31).StringValue
                             ));
                         });
 
@@ -754,7 +787,7 @@ namespace MertexerV2.EDAReplacement
                     "ORDVAL",                // 7
                     "DISCOUNT",              // 28
                     "VATVAL",                // 9
-                    "SS.ORDPRICE.CUR",          // 81
+                    "SS.ORDPRICE.CUR",       // 81
                     "ORDVAL.CUR",            // 83
                     "DISCOUNT.CUR",          // 17
                     "VATVAL.CUR",            // 84
@@ -764,7 +797,8 @@ namespace MertexerV2.EDAReplacement
                     "L.LOCCODE",             // 19
                     "PORDNO",                // 219
                     "PARTPRODCODE",          // 269
-                    "RESERVE.FLAG"           // 311
+                    "RESERVE.FLAG",          // 311
+                    "SS.CURSUG.DELDATE.ABS"  // 75.1
                 };
 
                 using (var ce = new CommandExecutor(UniVerseAccount))
@@ -845,7 +879,8 @@ namespace MertexerV2.EDAReplacement
                                 stockLocation: record.Record.Extract(27).StringValue,
                                 purchaseOrderLineId: record.Record.Extract(28).StringValue,
                                 partnerProductCode: record.Record.Extract(29).StringValue,
-                                reserveIndicator: record.Record.Extract(30).StringValue
+                                reserveIndicator: record.Record.Extract(30).StringValue,
+                                currentSuggestedDeliveryDate: record.Record.Extract(31).StringValue
                             ));
                         });
 
@@ -891,7 +926,8 @@ namespace MertexerV2.EDAReplacement
             out SqlString StockLocationCode,
             out SqlString PurchaseOrderLineID,
             out SqlString PartnerProductCode,
-            out SqlString ReserveIndicator
+            out SqlString ReserveIndicator,
+            out SqlDateTime CurrentSuggestedDeliveryDT
             )
         {
             var result = (TOELine)obj;
@@ -955,10 +991,12 @@ namespace MertexerV2.EDAReplacement
             PartnerProductCode = String.IsNullOrEmpty(result.PartnerProductCode) ? SqlString.Null : result.PartnerProductCode.TrimReduceTruncate(50);
 
             ReserveIndicator = String.IsNullOrEmpty(result.ReserveIndicator) ? SqlString.Null : result.ReserveIndicator.TrimReduceTruncate(1);
+
+            CurrentSuggestedDeliveryDT = result.CurrentlySuggestedDeliveryDT ?? SqlDateTime.Null;
         }
 
 
-        [SqlFunction(DataAccess = DataAccessKind.Read,
+    [SqlFunction(DataAccess = DataAccessKind.Read,
             SystemDataAccess = SystemDataAccessKind.Read,
             FillRowMethodName = "FetchProductLocations_FillRow",
             TableDefinition = "")]

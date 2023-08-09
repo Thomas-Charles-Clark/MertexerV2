@@ -122,6 +122,12 @@
     <Compile Include="AccountFunctions\AccountSummaryRecentPayments.cs" />
     <Compile Include="AccountFunctions\AccountSummary.cs" />
     <Compile Include="AccountFunctions\AccountUpsert.cs" />
+    <Compile Include="AccountFunctions\CustomerCareRecordAction_Upsert.cs" />
+    <Compile Include="AccountFunctions\CustomerCareRecordAction_Select.cs" />
+    <Compile Include="AccountFunctions\CustomerCareRecordHead_Select.cs" />
+    <Compile Include="AccountFunctions\CustomerCareRecordHead_Upsert.cs" />
+    <Compile Include="AccountFunctions\CustomerCareRecordLine_Upsert.cs" />
+    <Compile Include="AccountFunctions\CustomerCareRecordLine_Select.cs" />
     <Compile Include="AccountFunctions\DeliveryAddress_Exists.cs" />
     <Compile Include="AccountFunctions\ExchangeRate_Select.cs" />
     <Compile Include="AccountFunctions\ExchangeRate_Upsert.cs" />
@@ -140,6 +146,9 @@
     <Compile Include="InvoiceFunctions\InvoiceTerms_Upsert.cs" />
     <Compile Include="Models\Bank\Bank.cs" />
     <Compile Include="Models\Credit\CreditController.cs" />
+    <Compile Include="Models\CustomerCare\CustomerCareRecordAction.cs" />
+    <Compile Include="Models\CustomerCare\CustomerCareRecordHead.cs" />
+    <Compile Include="Models\CustomerCare\CustomerCareRecordLine.cs" />
     <Compile Include="Models\General\DeliveryTerms.cs" />
     <Compile Include="Models\General\Reason.cs" />
     <Compile Include="Models\Invoices\InvoiceTerms.cs" />

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace MertexerV2.Models.CustomerCare
 {
-    [UniVerseFileName("TCCHEAD")]
+    [UniVerseFileName("TCCLINE")]
     public class CustomerCareRecordLine : UniVerseSerializationBase<string>
     {
         [JsonConstructor]

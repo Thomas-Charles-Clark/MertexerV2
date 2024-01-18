@@ -122,6 +122,7 @@ namespace MertexerV2.ProductFunctions
             out SqlString Supplier,
             out SqlString MylandsProductCode,
             out SqlString ProductClass2,
+            out SqlString ProductClass3,
             out SqlDecimal CuttingLength,
             out SqlDecimal MinimumReplenishment,
             out SqlString BulkRack,
@@ -348,6 +349,7 @@ namespace MertexerV2.ProductFunctions
             Supplier = p.Supplier?.TrimReduceTruncate(20);
             MylandsProductCode = p.MylandsProductCode?.TrimReduceTruncate(50);
             ProductClass2 = p.ProductClass2?.TrimReduceTruncate(20);
+            ProductClass3 = p.ProductClass2?.TrimReduceTruncate(50);
             CuttingLength = p.CuttingLength ?? SqlDecimal.Null;
             MinimumReplenishment = p.MinimumReplenishment ?? SqlDecimal.Null;
             BulkRack = p.BulkRack?.TrimReduceTruncate(20);

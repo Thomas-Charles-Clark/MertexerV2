@@ -45,7 +45,7 @@ namespace MertexerV2.SQLFunctions
                     uvFileName: "B2C_STOCK_ITEM_BREAKDOWN",
                     uvSelectStatement: uvSelectStatement,
                     fieldsToReturn: "",
-                    webData: String.IsNullOrEmpty(StockLocations) ? "MSL=0.1" : $"LOC={StockLocations};MSL=0.1",
+                    webData: String.IsNullOrEmpty(StockLocations) ? "MSL=-9999" : $"LOC={StockLocations};MSL=-9999",
                     returnType: "XML"));
             }
 
@@ -275,7 +275,8 @@ namespace MertexerV2.SQLFunctions
             out SqlDecimal OnReserve,
             out SqlDateTime PODate,
             out SqlString POMessage,
-            out SqlBoolean POStatus
+            out SqlBoolean POStatus,
+            out SqlBoolean CallOff
             )
         {
             var batchPiece = (BatchPieceResult)obj;
@@ -293,6 +294,7 @@ namespace MertexerV2.SQLFunctions
             PODate = batchPiece.PurchaseOrderDate ?? SqlDateTime.Null;
             POMessage = batchPiece.PurchaseOrderMessage;
             POStatus = batchPiece.PurchaseOrderStatus ?? SqlBoolean.Null;
+            CallOff = batchPiece.CallOff ?? SqlBoolean.Null;
         }
 
         public static void SendProblemEmail(List<BatchPieceResult> discards, string subject = "MertexerV2 Stock Record(s) Discarded", string body = "Muppets wielding scanners? Possibly...")

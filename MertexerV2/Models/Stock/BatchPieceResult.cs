@@ -25,6 +25,7 @@ namespace MertexerV2.Models.Stock
         public DateTime? PurchaseOrderDate { get; set; }
         public bool? PurchaseOrderStatus { get; set; }
         public string PurchaseOrderMessage { get; set; }
+        public bool? CallOff { get; set; }
 
         public BatchPieceResult(
             string type,
@@ -54,16 +55,33 @@ namespace MertexerV2.Models.Stock
             OnReserve = onReserve;
             PurchaseOrderNumber = poNumber;
             PurchaseOrderStatus = poStatus;
+            PurchaseOrderMessage = null;
 
-            DateTime poRealDate = DateTime.MinValue;
+            CallOff = null;
 
-            if (DateTime.TryParse(poDueDate, out poRealDate))
+            if (poDueDate != null)
             {
-                PurchaseOrderDate = poRealDate;
-            }
-            else
-            {
-                PurchaseOrderMessage = poDueDate;
+                if (poDueDate?.StartsWith("CO") == true)
+                {
+                    CallOff = true;
+
+                    poDueDate = poDueDate.Replace("CO", "").Trim();
+                }
+                else 
+                {
+                    CallOff = false;
+                }
+
+                DateTime poRealDate = DateTime.MinValue;
+
+                if (DateTime.TryParse(poDueDate, out poRealDate))
+                {
+                    PurchaseOrderDate = poRealDate;
+                }
+                else
+                {
+                    PurchaseOrderMessage = poDueDate;
+                }
             }
 
             LocationCode = locationCode;
@@ -71,7 +89,7 @@ namespace MertexerV2.Models.Stock
 
         public override string ToString()
         {
-            return JsonConvert.SerializeObject(this, Framework.JsonSettingsIndentedIgnoreNullsAlphabetical);
+            return JsonConvert.SerializeObject(this, Framework.JsonSettingsIndentedIncludeNullsAlphabetical);
         }
     }
 }

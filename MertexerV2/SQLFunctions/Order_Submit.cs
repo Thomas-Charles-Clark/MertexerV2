@@ -55,7 +55,7 @@ namespace MertexerV2.SQLFunctions
             dataSet.Tables.Add(giftBoxTable);
 
 #if DEBUG
-            using (var conn = new SqlConnection("Data Source=vm-sql1;Initial Catalog=FlockDev;Integrated Security=True"))
+            using (var conn = new SqlConnection("Data Source=vm-sql1;Initial Catalog=Flock;Integrated Security=True"))
 #else
             using (var conn = new SqlConnection("context connection=true"))
 #endif
@@ -161,6 +161,12 @@ namespace MertexerV2.SQLFunctions
                     
                     try
                     {
+
+#if DEBUG
+                        order.BasketID = "PH03047~1140305001~b1f0906d-c8df-4009-9fd6-926d70897e6e";
+#endif
+
+
                         var result = oc.PlaceOrder(order);
 
                         if (result.Contains(order.OrderNumber.ToString()))
@@ -223,7 +229,7 @@ namespace MertexerV2.SQLFunctions
                     message.Subject = $"TESTING - EXCEPTION while submitting {order.OrderNumber} to Mertex!";
 #else
                     message.Subject = $"EXCEPTION while submitting {order} to Mertex!";
-#endif           
+#endif
                     message.CC.Add("itsupport@designersguild.com");
                     message.CC.Add("tclark@designersguild.com");
                     message.CC.Add("mchristie@designersguild.com");
@@ -299,7 +305,7 @@ namespace MertexerV2.SQLFunctions
                         var fileName = $"TESTING-{order.OrderNumber}-WebData.txt";
 #else
                         var fileName = $"{order.OrderNumber}-WebData.txt";
-#endif           
+#endif
 
                         var attachment = new System.Net.Mail.Attachment(ms, fileName, System.Net.Mime.MediaTypeNames.Text.Plain);
 

@@ -141,8 +141,6 @@ namespace MertexerV2.Utilities
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine($"Query returned in {watch.ElapsedMilliseconds}ms\r\n");
 
-            Console.Write(".");
-
             if (++counter % 10 == 0)
                 Console.WriteLine();
 #endif

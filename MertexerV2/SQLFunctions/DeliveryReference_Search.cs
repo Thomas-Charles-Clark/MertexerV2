@@ -61,9 +61,13 @@ namespace MertexerV2.SQLFunctions
             TableDefinition = "DeliveryReference NVARCHAR(20)")]
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
         public static IEnumerable Search(
-            string TradeDataSourceJSON, 
-            string AddressLine1, 
-            string PostalCode, 
+            string TradeDataSourceJSON,
+            string Name,
+            string AddressLine1,
+            string AddressLine2,
+            string Town,
+            string County,
+            string PostalCode,
             string CountryCode)
         {
             var dataSources = JsonConvert.DeserializeObject<TradeAccountDataSourceInfo>(TradeDataSourceJSON);
@@ -76,26 +80,28 @@ namespace MertexerV2.SQLFunctions
 
             var results = new ArrayList();
 
-            var delrefs = "";
+            var delrefs = new List<string>();
 
             using (var qe = new CommandExecutor(dataSource.UniVerseAccount))
             {
-                qe.Arbitrary("CASE OFF");
+                var command = $"LIST DELADD DELREF WITH CUSREF = \"{dataSource.CustomerReference}\"" +
+                    (!String.IsNullOrEmpty(Name) ? $" AND SS.DELNAME.MCL = \"{Name.ToLowerInvariant()}\" " : "") + 
+                    (!String.IsNullOrEmpty(AddressLine1) ? $" AND SS.DELADDR1.MCL = \"{AddressLine1.ToLowerInvariant()}\" " : "") + 
+                    (!String.IsNullOrEmpty(AddressLine2) ? $" AND SS.DELADDR2.MCL = \"{AddressLine2.ToLowerInvariant()}\" " : "") +
+                    (!String.IsNullOrEmpty(Town) ? $" AND SS.DELADDR3.MCL = \"{Town.ToLowerInvariant()}\" " : "") +
+                    (!String.IsNullOrEmpty(County) ? $" AND SS.DELADDR4.MCL = \"{County.ToLowerInvariant()}\" " : "") +
+                    (!String.IsNullOrEmpty(PostalCode) ? $" AND SS.DELPCODE.MCL = \"{PostalCode.ToLowerInvariant()}\" " : "") + 
+                    $" AND COUNTRY = \"{CountryCode}\" BY-DSND DELREF COUNT.SUP ID.SUP COL.HDR.SUPP";
 
-                var command = $"SELECT DELREF FROM DELADD WHERE CUSREF = '{dataSource.CustomerReference}'" +
-                    (!String.IsNullOrEmpty(AddressLine1) ? $" AND DELADDR1 LIKE '{AddressLine1}' " : "") + 
-                    (!String.IsNullOrEmpty(PostalCode) ? $" AND DELPCODE LIKE '{PostalCode}' " : "") + 
-                    $" AND COUNTRY = '{CountryCode}' ORDER BY DELREF NOPAGE SUPPRESS COLUMN HEADING COUNT.SUP;";
-
-                delrefs = qe.Arbitrary(command);
-                delrefs = delrefs.Trim();
+                var stringResult = qe.Arbitrary(command);
+                delrefs = stringResult
+                    .Split(Framework.EnvironmentNewLineDelimiter, StringSplitOptions.RemoveEmptyEntries)
+                    .ToList();
             }
-
-            var preResults = delrefs.Split(new string[] { System.Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
 
             var delim = new char[] { '-' };
 
-            preResults = preResults.OrderBy<string, int>(p => {
+            delrefs = delrefs.OrderBy<string, int>(p => {
                 var n = p.Split(delim);
                 if (n.Length == 2)
                 {
@@ -112,11 +118,11 @@ namespace MertexerV2.SQLFunctions
                 {
                     return 0;
                 }
-            }).ToArray();
+            }).ToList();
 
             var addresses = new List<DeliveryAddress>();
             
-            foreach(var delref in preResults)
+            foreach(var delref in delrefs)
             {
                 using (var qe = new QueryExecutor(dataSource.UniVerseAccount))
                 {

@@ -103,6 +103,8 @@ namespace MertexerV2.Models.EDAReplacement
 
         public string EndCustomer { get; set; }
 
+        public string DeliveryReference { get; set; }
+
         public TOEHead(
             string orderId,
             string tradeAccountCode,
@@ -150,7 +152,8 @@ namespace MertexerV2.Models.EDAReplacement
             string emailTill,
             string ecommEmail,
             string miscEmail,
-            string endCustomer)
+            string endCustomer,
+            string deliveryReference)
         {
             TradeAccountCode = String.IsNullOrEmpty(tradeAccountCode) ? null : tradeAccountCode;
 
@@ -287,10 +290,16 @@ namespace MertexerV2.Models.EDAReplacement
             OrderType = orderType;
 
             ContactEmailFax = contactEmailFax;
+
             EmailTill = emailTill;
+
             EcommEmail = ecommEmail;
+
             MiscEmail = miscEmail;
+
             EndCustomer = endCustomer;
+
+            DeliveryReference = String.IsNullOrEmpty(deliveryReference) ? null : deliveryReference;
         }
 
         public override string ToString()

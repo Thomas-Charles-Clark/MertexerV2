@@ -575,6 +575,13 @@ namespace MertexerV2.Models.Product
         [UniVerseFieldName("PRODCLASS2")]
         public string ProductClass2 { get; set; }
 
+        /// <summary>
+        /// Product Class 3
+        /// </summary>
+        [UniVerseIndex(565)]
+        [UniVerseFieldName("PRODCLASS3")]
+        public string ProductClass3 { get; set; }
+
         /// <summary> *new*
         /// Cutting Length
         /// </summary>

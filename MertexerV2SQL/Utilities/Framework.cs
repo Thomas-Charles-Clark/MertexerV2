@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using U2.Data.Client;
+
 namespace MertexerV2SQL.Utilities
 {
     public static class Framework
@@ -18,5 +20,4 @@ namespace MertexerV2SQL.Utilities
 
         public static readonly string WavyLineBreak = $"\r\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\r\n";
     }
-
 }

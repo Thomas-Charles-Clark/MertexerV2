@@ -43,13 +43,71 @@ namespace MertexerV2.ProductFunctions
             }
             else
             {
-                var results = Selector<POPriceList>.Select(
+                var preResults = Selector<POPriceList>.Select(
                     JsonConvert.DeserializeObject<IEnumerable<POPriceListCode>>(POPriceListCodes).Select(p => p.Code),
                     true,
                     false,
                     50,
                     UniVerseAccount)
                     .ToList();
+
+                var results = new List<POPriceListExplosion>();
+
+                preResults.ForEach(pr =>
+                {
+                    pr.Quantities.ToList().Select((q, i) => new { quantity = q, index = i })
+                    .ToList()
+                    .ForEach((obj) =>
+                    {
+                        decimal? quantity = null;
+                        decimal? price = null;
+                        DateTime? lastAmendedDt = null;
+
+                        if (Decimal.TryParse(obj.quantity, out decimal q))
+                        {
+                            quantity = q;
+                        }
+
+                        try
+                        {
+                            var priceString = pr.Prices.ElementAt(obj.index);
+
+                            if (Decimal.TryParse(priceString, out decimal p))
+                            {
+                                price = p;
+                            }
+                        }
+                        catch (Exception)
+                        {
+
+                        }
+
+                        try
+                        {
+                            var lastAmendedString = pr.LastAmendedDates.ElementAt(obj.index);
+
+                            if (Int32.TryParse(lastAmendedString, out int dt))
+                            {
+                                lastAmendedDt = Framework.DateTimeFromUniVerseOffset(dt);
+                            }
+                        }
+                        catch (Exception)
+                        {
+
+                        }
+
+                        results.Add(new POPriceListExplosion()
+                        {
+                            Code = pr.Key,
+                            PurchaseUnit = pr.PurchaseUnit,
+                            Quantity = quantity,
+                            Price = price,
+                            LastAmendedDT = lastAmendedDt,
+                            OpenOrderPrice = pr.OpenOrderPrice,
+                            FutureOrderPrice = pr.FutureOrderPrice,
+                        });
+                    });
+                });
 
                 foreach (var r in results)
                 {
@@ -62,20 +120,20 @@ namespace MertexerV2.ProductFunctions
             object obj,
             out SqlString Code,
             out SqlString PurchaseUnit,
-            out SqlString Quantities,
-            out SqlString Prices,
-            out SqlString LastAmendedDates,
+            out SqlDecimal Quantity,
+            out SqlDecimal Prices,
+            out SqlDateTime LastAmendedDT,
             out SqlDecimal OpenOrderPrice,
             out SqlDecimal FutureOrderPrice
             )
         {
-            var p = (POPriceList)obj;
+            var p = (POPriceListExplosion)obj;
 
-            Code = p.Key?.TrimReduceTruncate(10);
+            Code = p.Code?.TrimReduceTruncate(10);
             PurchaseUnit = p.PurchaseUnit?.TrimReduceTruncate(10);
-            Quantities = p.Quantities == null ? SqlString.Null : JsonConvert.SerializeObject(p.Quantities);
-            Prices = p.Prices == null ? SqlString.Null : JsonConvert.SerializeObject(p.Prices);
-            LastAmendedDates = p.LastAmendedDates == null ? SqlString.Null : JsonConvert.SerializeObject(p.LastAmendedDates);
+            Quantity = p.Quantity ?? SqlDecimal.Null;
+            Prices = p.Price ?? SqlDecimal.Null;
+            LastAmendedDT = p.LastAmendedDT ?? SqlDateTime.Null;
             OpenOrderPrice = p.OpenOrderPrice ?? SqlDecimal.Null;
             FutureOrderPrice = p.FutureOrderPrice ?? SqlDecimal.Null;
         }

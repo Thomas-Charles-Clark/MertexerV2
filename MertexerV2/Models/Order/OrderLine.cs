@@ -277,6 +277,21 @@ namespace MertexerV2.Models
         /// </summary>
         public string ProcessSpecialDetails { get; set; }
 
+        /// <summary>
+        /// 39.
+        /// Product to Refund
+        /// For refund lines this is the product code to be refunded
+        /// Ignored if Forward Order is not Y
+        /// </summary>
+        public string ProductToRefund { get; set; }
+
+        /// <summary>
+        /// 40.
+        /// Process Special Details
+        /// Pipe delimited string applicable to process details set in fields 30 and 33
+        /// </summary>
+        public string ReturnToStock { get; set; }
+
         public OrderLine(DataRow row)
         {
             CustomerReference = row["CustomerReference"]?.ToString();
@@ -317,6 +332,8 @@ namespace MertexerV2.Models
             ForwardOrder = row["ForwardOrder"]?.ToString();
             ForwardOrderDate = row["ForwardOrderDate"]?.ToString();
             ProcessSpecialDetails = row["ProcessSpecialDetails"]?.ToString();
+            ProductToRefund = row["ProductToRefund"]?.ToString();
+            ReturnToStock = row["ReturnToStock"]?.ToString();
         }
 
         public string WebData() => $@"{CustomerReference}
@@ -356,7 +373,9 @@ namespace MertexerV2.Models
 {NotUsed35}
 {ForwardOrder}
 {ForwardOrderDate}
-{ProcessSpecialDetails}";
+{ProcessSpecialDetails}
+{ProductToRefund}
+{ReturnToStock}";
 
         public override string ToString() => JsonConvert.SerializeObject(this, Formatting.Indented);
     }

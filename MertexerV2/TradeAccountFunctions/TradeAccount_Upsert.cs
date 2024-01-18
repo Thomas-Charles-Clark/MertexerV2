@@ -53,6 +53,9 @@ namespace MertexerV2.TradeAccountFunctions
 
                 uniVerseFile.UnlockRecord(tradeAccount.Key);
 
+//#if DEBUG
+//                Console.WriteLine(indexRebuildResult);
+//#endif
             }
 
             return tradeAccount.Key;

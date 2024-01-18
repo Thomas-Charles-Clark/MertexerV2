@@ -131,7 +131,7 @@ namespace MertexerV2.GeneralFunctions.Pricing
 
                 var filters = new List<Tuple<string, string, string>>()
                 {
-                    new Tuple<string, string, string>("CUR.STAT", "#", "D")
+                    new Tuple<string, string, string>("CUR.STAT", "#", "\"D\"")
                 };
 
                 if (productCodes == null || productCodes.Any() == false)
@@ -140,10 +140,10 @@ namespace MertexerV2.GeneralFunctions.Pricing
                         !String.IsNullOrEmpty(brandFilter))
                     {
                         if (!String.IsNullOrEmpty(productGroupFilter))
-                            filters.Add(new Tuple<string, string, string>("GROUPCODE", "EQUALS", productGroupFilter));
+                            filters.Add(new Tuple<string, string, string>("GROUPCODE", "EQUALS", $"\"{productGroupFilter}\""));
 
                         if (!String.IsNullOrEmpty(brandFilter))
-                            filters.Add(new Tuple<string, string, string>("SALES.DIV.DES", "EQUALS", brandFilter));
+                            filters.Add(new Tuple<string, string, string>("SALES.DIV.DES", "EQUALS", $"\"{brandFilter}\""));
 
                         products = Selector<ProductStub>.Filter(filters).ToList();
                     }
@@ -211,9 +211,9 @@ namespace MertexerV2.GeneralFunctions.Pricing
                 var batchCounter = 0;
 
 #if DEBUG
-                Console.WriteLine($"QuantityBreakCostPrice.Execute Stage One saw {products.Count()} keys, splitting into {batches.Count} batches of size 1000");
+                Console.WriteLine($"QuantityBreakCostPrice.Execute Stage Three saw {products.Count()} keys, splitting into {batches.Count} batches of size 1000");
                 Console.WriteLine();
-                Console.WriteLine($"QuantityBreakCostPrice.Execute Stage Two: Batch Processing");
+                Console.WriteLine($"QuantityBreakCostPrice.Execute Stage Three: Batch Processing");
                 Console.WriteLine();
 #endif
 

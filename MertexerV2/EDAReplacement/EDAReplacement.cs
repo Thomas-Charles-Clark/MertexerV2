@@ -206,7 +206,8 @@ namespace MertexerV2.EDAReplacement
                     "EMAIL.TILL",
                     "ECOMM.EMAIL.DES",
                     "MISC.EMAIL.DES",
-                    "ENDCUST"
+                    "ENDCUST",
+                    "DELREF"
                 };
 
                 using (var ce = new CommandExecutor(UniVerseAccount))
@@ -292,7 +293,8 @@ namespace MertexerV2.EDAReplacement
                                 record.Record.Extract(43).StringValue,
                                 record.Record.Extract(44).StringValue,
                                 record.Record.Extract(45).StringValue,
-                                record.Record.Extract(46).StringValue
+                                record.Record.Extract(46).StringValue,
+                                record.Record.Extract(47).StringValue
                             ));
                         });
 
@@ -382,7 +384,8 @@ namespace MertexerV2.EDAReplacement
                     "EMAIL.TILL",
                     "ECOMM.EMAIL.DES",
                     "MISC.EMAIL.DES",
-                    "ENDCUST"
+                    "ENDCUST",
+                    "DELREF"
                 };
 
                 using (var ce = new CommandExecutor(UniVerseAccount))
@@ -461,7 +464,8 @@ namespace MertexerV2.EDAReplacement
                                     record.Record.Extract(43).StringValue,
                                     record.Record.Extract(44).StringValue,
                                     record.Record.Extract(45).StringValue,
-                                    record.Record.Extract(46).StringValue
+                                    record.Record.Extract(46).StringValue,
+                                record.Record.Extract(47).StringValue
                                 ));
                             });
 
@@ -529,7 +533,8 @@ namespace MertexerV2.EDAReplacement
             out SqlString EmailTill,
             out SqlString EcommEmail,
             out SqlString MiscEmail,
-            out SqlString EndCustomer)
+            out SqlString EndCustomer,
+            out SqlString DeliveryReference)
         {
             var result = (TOEHead)obj;
 
@@ -580,6 +585,8 @@ namespace MertexerV2.EDAReplacement
             EcommEmail = String.IsNullOrEmpty(result.EcommEmail) ? SqlString.Null : result.EcommEmail.TrimReduceTruncate(256);
             MiscEmail = String.IsNullOrEmpty(result.MiscEmail) ? SqlString.Null : result.MiscEmail.TrimReduceTruncate(256);
             EndCustomer = String.IsNullOrEmpty(result.EndCustomer) ? SqlString.Null : result.EndCustomer.TrimReduceTruncate(50);
+
+            DeliveryReference = String.IsNullOrEmpty(result.DeliveryReference) ? SqlString.Null : result.DeliveryReference.TrimReduceTruncate(20);
         }
 
 
@@ -2674,7 +2681,6 @@ namespace MertexerV2.EDAReplacement
 
                         var parcels = new List<Parcel>();
 
-
                         var parcelNumbers = record.Record.Extract(9).StringValue?.Split(Framework.ValueMarkDelimiter, StringSplitOptions.RemoveEmptyEntries);
 
                         var pclDotNos = record.Record.Extract(17).StringValue?.Split(Framework.ValueMarkDelimiter, StringSplitOptions.RemoveEmptyEntries).ToList();
@@ -2684,9 +2690,11 @@ namespace MertexerV2.EDAReplacement
                             parcelNumbers = record.Record.Extract(17).StringValue?.Split(Framework.ValueMarkDelimiter, StringSplitOptions.RemoveEmptyEntries);
                         }
 
+                        var ctr = pclDotNos.Count();
+
                         if (pclDotNos.Count() < parcelNumbers.Length)
                         {
-                            for (var i = 0; i < (parcelNumbers.Length - pclDotNos.Count()); i++)
+                            for (var i = 0; i < (parcelNumbers.Length - ctr); i++)
                             {
                                 pclDotNos.Add("");
                             }

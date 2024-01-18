@@ -162,7 +162,7 @@ namespace MertexerV2.SQLFunctions
                                         uvFileName: "B2C_STOCK_ENQUIRY",
                                         uvSelectStatement: codes,
                                         fieldsToReturn: "PRODCODE WI.TOTFREE WI.DUEIN.SEL WI.DUEIN.OSQTY WI.DUEIN.OSQTY.TOTAL WI.DUEIN.POCONF",
-                                        webData: $"LOC={(String.IsNullOrEmpty(stockLocation) ? "*" : stockLocation)};MSL=0.1",
+                                        webData: $"LOC={(String.IsNullOrEmpty(stockLocation) ? "*" : stockLocation)};MSL=-9999",
                                         returnType: "XML",
                                         "STOCK_ENQUIRY");
 
@@ -251,7 +251,7 @@ namespace MertexerV2.SQLFunctions
                     uvFileName: "B2C_STOCK_ENQUIRY",
                     uvSelectStatement: $"\"{ProductCode}\"",
                     fieldsToReturn: "PRODCODE WI.TOTFREE WI.DUEIN.SEL WI.DUEIN.OSQTY WI.DUEIN.OSQTY.TOTAL WI.DUEIN.POCONF",
-                    webData: $"LOC={StockLocation};MSL=0.1",
+                    webData: $"LOC={StockLocation};MSL=-9999",
                     returnType: "XML",
                     "STOCK_ENQUIRY");
 

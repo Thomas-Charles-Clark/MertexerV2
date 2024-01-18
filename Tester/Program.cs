@@ -36,6 +36,11 @@ using System.CodeDom;
 using MertexerV2.RetailFunctions;
 using System.Diagnostics.Tracing;
 using MertexerV2.EDAReplacement;
+using static System.Collections.Specialized.BitVector32;
+using MertexerV2.Models.CustomerCare;
+using System.Security.Cryptography.X509Certificates;
+using MertexerV2SQL;
+using System.Management.Instrumentation;
 
 namespace Tester
 {
@@ -47,7 +52,7 @@ namespace Tester
 
             Console.ForegroundColor = ConsoleColor.Yellow;
 
-            var tradeAccountCode = "K0098";
+            var tradeAccountCode = "R2299";
 
             var tradeDataSourceJson = TesterFramework.FetchAccountDataSourceJson(tradeAccountCode);
 
@@ -58,6 +63,65 @@ namespace Tester
             var uniVerseAccount = "MERTEX";
 
             stopwatch.Start();
+
+
+            //var headResult = MaxFieldLengths<CustomerCareRecordHead>.Execute();
+
+            //Console.WriteLine(headResult);
+
+
+            //var lineResult = MaxFieldLengths<CustomerCareRecordLine>.Execute();
+
+            //Console.WriteLine(lineResult);
+
+
+            //var actionResult = MaxFieldLengths<CustomerCareRecordAction>.Execute();
+
+            //Console.WriteLine(actionResult);
+
+            //using (var qe = new QueryExecutor(uniVerseAccount))
+            //{
+            //    var logCommand = qe.Session.CreateUniCommand();
+
+            //    logCommand.Command = "PORT.STATUS";
+
+            //    logCommand.Execute();
+
+            //    var logCommandResult = logCommand.Response;
+
+            //    //////var cmd = $"OE.PG.INIT.ORD1";
+            //    ///
+            //    /// 
+            //    /////
+
+            //    var argCount = 3;
+            //    var sub = qe.Session.CreateUniSubroutine("HELLO.WORLD", argCount);
+
+            //    var atOne = qe.Session.GetAtVariable(1);
+            //    var atTwo = qe.Session.GetAtVariable(2);
+            //    var atThree = qe.Session.GetAtVariable(3);
+            //    var atFour = qe.Session.GetAtVariable(4);
+            //    var atFive = qe.Session.GetAtVariable(5);
+
+            //    var atSix = qe.Session.GetAtVariable(6);
+            //    var atSeven = qe.Session.GetAtVariable(7);
+            //    var atEight = qe.Session.GetAtVariable(8);
+            //    var atNine = qe.Session.GetAtVariable(9);
+            //    var atTen = qe.Session.GetAtVariable(10);
+
+            //    sub.SetArg(0, "0");
+            //    sub.SetArg(1, "TOM");
+            //    sub.SetArg(2, $"{qe.Session.HostPort}");
+
+            //    sub.Call();
+
+            //    for (var i = 0; i < argCount; i++)
+            //    {
+            //        Console.WriteLine($"sub.GetArg({i}): {sub.GetArg(i)}");
+            //    }
+            //}
+
+
 
             //var deliveryAddressJson = @"{""Key"":null,""TradeAccountCode"":""S2390"",""CompanyName"":""SRA. UTE FLORY-URAK"",""ContactName"":""SRA. UTE FLORY-URAK"",""AddressLine1"":""ROMERWEG, 27"",""AddressLine2"":null,""Town"":""ST. JOHANN"",""County"":""ST. JOHANN"",""Postcode"":""A-6380"",""CountryCode"":""AT""}";
 
@@ -107,12 +171,18 @@ namespace Tester
 
 
 
-            //var results = MertexerV2.RetailFunctions.TillFunctions.FetchRetailTillSessions(uniVerseAccount).OfType<RetailTillSession>().ToList();
+            var results = TillFunctions.FetchRetailTillSessions(uniVerseAccount).OfType<RetailTillSession>().ToList();
+            var tills = TillFunctions.FetchOpenTills(uniVerseAccount).OfType<RetailTill>().ToList();
 
-            //foreach (var r in results)
-            //{
-            //    Console.WriteLine(r);
-            //}
+            foreach (var r in results)
+            {
+                Console.WriteLine(r);
+            }
+
+            foreach (var r in tills)
+            {
+                Console.WriteLine(r);
+            }
 
             //Console.WriteLine("OEINVHEAD");
             //var headResults = InvoiceHeadFunctions.InitialiseSelect(uniVerseAccount, DateTime.ParseExact("01/11/2021", "dd/MM/yyyy", new CultureInfo("en-GB")), DateTime.ParseExact("03/03/2023", "dd/MM/yyyy", new CultureInfo("en-GB"))).OfType<InvoiceHead>().ToList();
@@ -147,7 +217,7 @@ namespace Tester
             //}
 
 
-            var result = TradeAccountFunctions.InsertTransactionHistory("MERTEX", @"{""Code"":""PH03005"",""DocumentHistory"":[],""MertexCurrencyCode"":""STG""}");
+            //var result = TradeAccountFunctions.InsertTransactionHistory("MERTEX", @"{""Code"":""PH03005"",""DocumentHistory"":[],""MertexCurrencyCode"":""STG""}");
 
             //var sessions = TillFunctions.FetchRetailTillSessions(uniVerseAccount).OfType<RetailTillSession>().ToList();
 
@@ -223,7 +293,19 @@ namespace Tester
             //results.ForEach(r => Console.WriteLine(r));
 
 
-            //var tradeAccountJson = TesterFramework.FetchTradeAccountUpsertJSON("K0098");
+            //Tests.ValidateCSV.ValidateCSV.Run(tradeOrderImportFileId: 22941);
+
+
+            //var tradeAccountJson = TesterFramework.FetchTradeAccountUpsertJSON("PH03179");
+
+            //using (var ce = new CommandExecutor(uniVerseAccount))
+            //{
+            //    var indexRebuildResult = ce.Arbitrary("LOGIN");
+            //}
+
+            // need to get from "real" TCL to SB/XA
+            // might need to do a whole separate SSH connection to achieve this, ugh...
+
 
             //TradeAccountFunctions.Upsert("MERTEX", tradeAccountJson);
 
@@ -269,15 +351,24 @@ namespace Tester
 
             //var testUpsertResult = Tests.Account.AccountTestSuite.UpsertAccount(tradeDataSourceJson, TesterFramework.FetchTradeAccountUpsertJSON());
 
-            //var stockResults = Stock.BatchPiece("PDG1131/02", "WH", "S").OfType<BatchPieceResult>().ToList();
+            //var stockResults = Stock.BatchPiece("F1723/62", "WH", null).OfType<BatchPieceResult>().ToList();
 
             //Console.ForegroundColor = ConsoleColor.Yellow;
 
             //stockResults.ForEach(r => Console.WriteLine(r));
 
+            //int result = 0;
+
+            //MertexerV2.SQLFunctions.Order.Submit(1140305001, "portal.Mertex_Order_Select", out result);
+
+            //var headresults = EDAReplacementTestSuite.FetchDespatchNoteHeads(uniVerseAccount, "[{ DespatchHeadID: \"4701346-1\" }]");
+
+            //var lineresults = EDAReplacementTestSuite.FetchDespatchNoteLines(uniVerseAccount, "[{ DespatchLineID: \"4320536-1*1\" }]");
+
             //Console.WriteLine($"Saw {stockResults.Count} results in {stopwatch.Elapsed}");
 
             //var results = MertexerV2.SQLFunctions.QuantityBreakCostPrice.Select("MERTEX", "[{ \"Code\": \"FDG2749/31\" }]", "FA", "DG").OfType<QuantityBreakCostPriceResult>().ToList();
+            //var results = MertexerV2.SQLFunctions.QuantityBreakCostPrice.Select("MERTEX", null, "FA", "EH").OfType<QuantityBreakCostPriceResult>().ToList();
 
             //results.ForEach(r => Console.WriteLine(r));
 
@@ -315,6 +406,29 @@ namespace Tester
             //UniTestRecordBuilder.InitialiseTestRecord(typeof(Product), record);
 
             //record.Upsert(uniVerseAccount);
+
+            //var results = PreAllocation.Create("TOM-TESTING", "FDG2839/01", "WH", 1, "M", null, null, DateTime.Now.AddDays(1), null, null).OfType<PreAllocationCreation>().ToList();
+
+            //results.ForEach(r => Console.WriteLine(r));
+
+
+            //var results = POPriceListFunctions.Select("MERTEX", "[{ Code: \"S0049*F1134\" }]")
+            //    .OfType<POPriceListExplosion>().ToList();
+
+            //results.ForEach(r => Console.WriteLine(r));
+
+
+            //Stock.BatchPiece("F1723/57", "WH", "S");
+
+            //Console.ForegroundColor = ConsoleColor.Magenta;
+
+            ////Item("SLCUST", "PH03154");
+
+            //Console.ForegroundColor = ConsoleColor.Cyan;
+
+            //Item("SLCUST", "PH03155");
+
+            Console.ForegroundColor = ConsoleColor.Green;
 
             stopwatch.Stop();
 

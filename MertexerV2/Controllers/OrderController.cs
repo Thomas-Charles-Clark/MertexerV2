@@ -49,6 +49,18 @@ namespace MertexerV2
 
         public string PlaceOrder(Order order)
         {
+
+#if DEBUG
+
+            AddGiftBoxes(order);
+
+            AddHeader(order);
+
+            var result = ConfirmOrder(order);
+
+            throw new Exception("PURPOSEFULLY FAILING EARLY 17/11/2023");
+
+#else
             CreateBasket(order);
 
             AddLines(order);
@@ -58,6 +70,7 @@ namespace MertexerV2
             AddHeader(order);
 
             return ConfirmOrder(order);
+#endif
         }
 
         public bool CreateBasket(Order order)

@@ -35,7 +35,7 @@ namespace MertexerV2.RetailFunctions
                 }
             }
         }
-
+         
         public static void FetchOpenTills_FillRow(
             object obj,
             out SqlString TillNumber,
@@ -61,9 +61,12 @@ namespace MertexerV2.RetailFunctions
                     .Split(Framework.EnvironmentNewLineDelimiter, StringSplitOptions.RemoveEmptyEntries)
                     .ToList();
 
-                foreach (var till in Selector<RetailTillSession>.Select(tillNumbers, true, false, 1000, UniVerseAccount))
+                if (tillNumbers.Any())
                 {
-                    yield return till;
+                    foreach (var till in Selector<RetailTillSession>.Select(tillNumbers, true, false, 1000, UniVerseAccount))
+                    {
+                        yield return till;
+                    }
                 }
             }
         }

@@ -73,6 +73,16 @@ namespace MertexerV2.SQLFunctions
             "WATERFALL ONLY"
         };
 
+        // ISO_3166-2:US correct as of 15/11/2023
+        internal static readonly IEnumerable<string> ValidUSStateCodes = new List<string> {
+            "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA",
+            "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD",
+            "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ",
+            "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC",
+            "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY",
+            "DC", "AS", "GU", "MP", "PR", "UM", "VI"
+        };
+
         internal static readonly List<string> ForbiddenItemTypeCodes = new List<string>() { 
             "CPS" // Old Cushion Pad code
         };
@@ -420,8 +430,12 @@ namespace MertexerV2.SQLFunctions
                                             new SqlParameter("@Now", now),
                                             new SqlParameter("@LineCount", oh.OrderLines.Count),
                                             new SqlParameter("@TradeAccountNumber", oh.TradeAccountNumber),
-                                            new SqlParameter("@OrderReference", oh.OrderReference),
-                                            new SqlParameter("@DeliveryName", String.IsNullOrEmpty(oh.DeliveryName) ? (object)DBNull.Value : oh.DeliveryName),
+#if DEBUG
+                                                new SqlParameter("@OrderReference", oh.OrderReference ?? "14/12/2023"),
+#else
+                                                new SqlParameter("@OrderReference", oh.OrderReference),
+#endif
+                                                new SqlParameter("@DeliveryName", String.IsNullOrEmpty(oh.DeliveryName) ? (object)DBNull.Value : oh.DeliveryName),
                                             new SqlParameter("@DeliveryAddressLine1", oh.DeliveryAddressLine1),
                                             new SqlParameter("@DeliveryAddressLine2", String.IsNullOrEmpty(oh.DeliveryAddressLine2) ? (object)DBNull.Value : oh.DeliveryAddressLine2),
                                             new SqlParameter("@DeliveryTown", String.IsNullOrEmpty(oh.DeliveryTown) ? (object)DBNull.Value : oh.DeliveryTown),
@@ -975,6 +989,39 @@ For further assistance, please contact <a href=""mailto:itsupport@designersguild
                         {
                             result.LineValidationFailures.Add(new LineValidationResult(lineNumber, "10. Delivery Phone Number", $"\"{line.DeliveryPhoneNumber}\" is over-length. Maximum length: 20"));
                         }
+
+                        // *** 15/11/2023 ***
+                        // Torpedo time
+
+                        if (line.DeliveryCountryCode == "US")
+                        {
+                            if (line.DeliveryCounty == null)
+                            {
+                                // The United States Minor Outlying Islands do *not* have State codes, however they DO have a distinct 3166 alpha-2: "UM".
+                                // Therefore they won't encounter this check, if the user has provided the appropriate country code.
+                                result.LineValidationFailures.Add(new LineValidationResult(lineNumber, "7. Delivery County", $"Delivery County cannot be NULL for US Orders. Please provide the two-letter postal abbreviation for the destination state, district or outlying area."));
+                            }
+                            else
+                            {
+                                if (!ValidUSStateCodes.Contains(line.DeliveryCounty))
+                                {
+                                    result.LineValidationFailures.Add(new LineValidationResult(lineNumber, "7. Delivery County", $"\"{line.DeliveryCounty}\" is not a valid two-letter postal abbreviation for a state, district or outlying area of the US."));
+                                }
+                            }
+                        }
+
+                        // end of Torpedo time
+
+
+                        // *** 15/11/2023 Time to help out our Canadian kinsmen, eh? ***
+
+                        if (line.DeliveryCountryCode == "CA" && line.DeliveryPostcode != null)
+                        {
+                            line.DeliveryPostcode = line.DeliveryPostcode.Replace(" ", "");
+                        }
+                        
+                        // O dear, end of Canada, eh!
+
                         if (line.Email?.Length > 256)
                         {
                             result.LineValidationFailures.Add(new LineValidationResult(lineNumber, "11. Email", $"\"{line.Email}\" is over-length. Maximum length: 256"));

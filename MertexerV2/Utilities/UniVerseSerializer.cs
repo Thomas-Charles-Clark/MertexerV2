@@ -314,23 +314,43 @@ namespace MertexerV2.Utilities
                                 {
                                     pi.SetValue(result, values);
                                 }
-                                else if (pi.PropertyType == typeof(IEnumerable<decimal>) || pi.PropertyType == typeof(IEnumerable<decimal?>))
+                                else if (pi.PropertyType == typeof(IEnumerable<decimal>))
+                                {
+                                    pi.SetValue(result, values.Select(v => String.IsNullOrEmpty(v) ? 0M : Convert.ToDecimal(v)));
+                                }
+                                else if (pi.PropertyType == typeof(IEnumerable<decimal?>))
                                 {
                                     pi.SetValue(result, values.Select(v => String.IsNullOrEmpty(v) ? (decimal?)null : Convert.ToDecimal(v)));
                                 }
-                                else if (pi.PropertyType == typeof(IEnumerable<long>) || pi.PropertyType == typeof(IEnumerable<long?>))
+                                else if (pi.PropertyType == typeof(IEnumerable<long>))
+                                {
+                                    pi.SetValue(result, values.Select(v => String.IsNullOrEmpty(v) ? 0L : Convert.ToInt64(v)));
+                                }
+                                else if (pi.PropertyType == typeof(IEnumerable<long?>))
                                 {
                                     pi.SetValue(result, values.Select(v => String.IsNullOrEmpty(v) ? (long?)null : Convert.ToInt64(v)));
                                 }
-                                else if (pi.PropertyType == typeof(IEnumerable<int>) || pi.PropertyType == typeof(IEnumerable<int?>))
+                                else if (pi.PropertyType == typeof(IEnumerable<int>) )
+                                {
+                                    pi.SetValue(result, values.Select(v => String.IsNullOrEmpty(v) ? 0 : Convert.ToInt32(v)));
+                                }
+                                else if (pi.PropertyType == typeof(IEnumerable<int?>))
                                 {
                                     pi.SetValue(result, values.Select(v => String.IsNullOrEmpty(v) ? (int?)null : Convert.ToInt32(v)));
                                 }
-                                else if (pi.PropertyType == typeof(IEnumerable<short>) || pi.PropertyType == typeof(IEnumerable<short?>))
+                                else if (pi.PropertyType == typeof(IEnumerable<short>))
+                                {
+                                    pi.SetValue(result, values.Select(v => String.IsNullOrEmpty(v) ? (short)0 : Convert.ToInt16(v)));
+                                }
+                                else if (pi.PropertyType == typeof(IEnumerable<short?>))
                                 {
                                     pi.SetValue(result, values.Select(v => String.IsNullOrEmpty(v) ? (short?)null : Convert.ToInt16(v)));
                                 }
-                                else if (pi.PropertyType == typeof(IEnumerable<byte>) || pi.PropertyType == typeof(IEnumerable<byte?>))
+                                else if (pi.PropertyType == typeof(IEnumerable<byte>))
+                                {
+                                    pi.SetValue(result, values.Select(v => String.IsNullOrEmpty(v) ? (byte)0 : Convert.ToByte(v)));
+                                }
+                                else if (pi.PropertyType == typeof(IEnumerable<byte?>))
                                 {
                                     pi.SetValue(result, values.Select(v => String.IsNullOrEmpty(v) ? (byte?)null : Convert.ToByte(v)));
                                 }

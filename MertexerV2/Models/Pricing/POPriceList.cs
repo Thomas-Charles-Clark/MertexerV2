@@ -85,4 +85,20 @@ namespace MertexerV2.Models.Pricing
         [UniVerseFieldName("SS.FUT.ORD.PRICE")]
         public decimal? FutureOrderPrice { get; set; }
     }
+
+    public class POPriceListExplosion
+    {
+        public string Code { get; set; }
+        public string PurchaseUnit { get; set; }
+        public decimal? Quantity { get; set; }
+        public decimal? Price { get; set; }
+        public DateTime? LastAmendedDT { get; set; }
+        public decimal? OpenOrderPrice { get; set; }
+        public decimal? FutureOrderPrice { get; set; }
+
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this, Framework.JsonSettingsIndentedIgnoreNullsAlphabetical);
+        }
+    }
 }

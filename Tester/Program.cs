@@ -41,6 +41,7 @@ using MertexerV2.Models.CustomerCare;
 using System.Security.Cryptography.X509Certificates;
 using MertexerV2SQL;
 using System.Management.Instrumentation;
+using MertexerV2.PricingFunctions;
 
 namespace Tester
 {
@@ -52,7 +53,7 @@ namespace Tester
 
             Console.ForegroundColor = ConsoleColor.Yellow;
 
-            var tradeAccountCode = "R2299";
+            var tradeAccountCode = "K0098";
 
             var tradeDataSourceJson = TesterFramework.FetchAccountDataSourceJson(tradeAccountCode);
 
@@ -171,18 +172,32 @@ namespace Tester
 
 
 
-            var results = TillFunctions.FetchRetailTillSessions(uniVerseAccount).OfType<RetailTillSession>().ToList();
-            var tills = TillFunctions.FetchOpenTills(uniVerseAccount).OfType<RetailTill>().ToList();
+            //var results = TillFunctions.FetchRetailTillSessions(uniVerseAccount).OfType<RetailTillSession>().ToList();
+            //var tills = TillFunctions.FetchOpenTills(uniVerseAccount).OfType<RetailTill>().ToList();
 
-            foreach (var r in results)
-            {
-                Console.WriteLine(r);
-            }
+            //foreach (var r in results)
+            //{
+            //    Console.WriteLine(r);
+            //}
 
-            foreach (var r in tills)
-            {
-                Console.WriteLine(r);
-            }
+            //foreach (var r in tills)
+            //{
+            //    Console.WriteLine(r);
+            //}
+
+            //var results = DeliveryReference.Search(tradeDataSourceJson,
+            //    "Mackenzie...Company",
+            //    "71...Suite...1",
+            //    "Sand...",
+            //    "MA",
+            //    "MA",
+            //    "02563",
+            //    "US").OfType<DeliveryAddress>().ToList();
+
+            //foreach(var r in results)
+            //{
+            //    Console.WriteLine(r);
+            //}
 
             //Console.WriteLine("OEINVHEAD");
             //var headResults = InvoiceHeadFunctions.InitialiseSelect(uniVerseAccount, DateTime.ParseExact("01/11/2021", "dd/MM/yyyy", new CultureInfo("en-GB")), DateTime.ParseExact("03/03/2023", "dd/MM/yyyy", new CultureInfo("en-GB"))).OfType<InvoiceHead>().ToList();
@@ -351,11 +366,63 @@ namespace Tester
 
             //var testUpsertResult = Tests.Account.AccountTestSuite.UpsertAccount(tradeDataSourceJson, TesterFramework.FetchTradeAccountUpsertJSON());
 
-            //var stockResults = Stock.BatchPiece("F1723/62", "WH", null).OfType<BatchPieceResult>().ToList();
+            //var stockResults = Stock.BatchPiece("FDG2821/01", "WH", "S").OfType<BatchPieceResult>().ToList();
+
+            ////var singularStockResult = Stock.B2CEnquiry_Singular("FRL5272/01", "WH").OfType<B2CEnquiryResult>().ToList();
 
             //Console.ForegroundColor = ConsoleColor.Yellow;
 
             //stockResults.ForEach(r => Console.WriteLine(r));
+
+            //using (var ce = new CommandExecutor(uniVerseAccount)) 
+            //{
+            //    //var result = ce.Arbitrary("/REGEN.INDEX SLCUST SLCUST SORTNAME");
+            //    //var result = ce.Arbitrary("/REGEN.INDEX SLCUST SLCUST SORTNAME");
+            //    var result = ce.Arbitrary("SB.LOGIN tom,gui");
+
+            //    Console.WriteLine(result);
+            //}
+
+
+
+
+            //var contractPriceResults = ContractPriceFunctions.Select(uniVerseAccount, null, "[{ \"Code\": \"H9018*FA*DGA\" }]").OfType<ContractPriceExplosion>().ToList();
+            ////var contractPriceResults = ContractPriceFunctions.Select(uniVerseAccount, "D5150", null).OfType<ContractPriceExplosion>().ToList();
+            ////var contractPriceResults = ContractPriceFunctions.Select(uniVerseAccount, null, null).OfType<ContractPriceExplosion>().ToList();
+
+            //Console.WriteLine($"Saw {contractPriceResults.Count} ContractPriceExplosion results");
+
+            //contractPriceResults.ForEach(r => Console.WriteLine(r));
+
+
+            //var contractDiscoResults = ContractDiscountFunctions.Select(uniVerseAccount, "E9100", null).OfType<ContractDiscountExplosion>().ToList();
+            ////var contractPriceResults = ContractPriceFunctions.Select(uniVerseAccount, "D5150", null).OfType<ContractPriceExplosion>().ToList();
+            ////var contractPriceResults = ContractPriceFunctions.Select(uniVerseAccount, null, null).OfType<ContractPriceExplosion>().ToList();
+
+            //Console.WriteLine($"Saw {contractDiscoResults.Count} ContractDiscountExplosion results");
+
+            //contractDiscoResults.ForEach(r => Console.WriteLine(r));
+
+
+
+            var results = ContractDiscountFunctions.Upsert(uniVerseAccount, @"{
+	            ""Code"": ""K0098*FDG2345/01"",
+	            ""TradeAccountCode"": ""K0098"",
+	            ""ProductCode"": ""FDG2345/01"",
+	            ""SortType"": ""Q"",
+	            ""Quality"": null,
+	            ""PromotionCode"": ""DG13"",
+	            ""BrandCode"": null,
+	            ""ProductGroupCode"": null,
+	            ""ItemTypeCode"": null,
+	            ""StartDTs"": [""2024/01/26""],
+	            ""ExpiryDTs"": [""2024/04/26""],
+	            ""ContractDiscounts"": [10.00],
+	            ""LastAmendedDTs"": [""2024/01/26 17:07:00""],
+	            ""QuantitiesRequired"": [0]
+            }");
+
+
 
             //int result = 0;
 

@@ -161,7 +161,7 @@ namespace MertexerV2.SQLFunctions
                                     var result = queryExecutor.Run(
                                         uvFileName: "B2C_STOCK_ENQUIRY",
                                         uvSelectStatement: codes,
-                                        fieldsToReturn: "PRODCODE WI.TOTFREE WI.DUEIN.SEL WI.DUEIN.OSQTY WI.DUEIN.OSQTY.TOTAL WI.DUEIN.POCONF",
+                                        fieldsToReturn: "PRODCODE WI.TOTFREE WI.DUEIN.SEL WI.DUEIN.OSQTY WI.DUEIN.OSQTY.TOTAL WI.DUEIN.POCONF PSE.PO.DATEMSG.WI",
                                         webData: $"LOC={(String.IsNullOrEmpty(stockLocation) ? "*" : stockLocation)};MSL=-9999",
                                         returnType: "XML",
                                         "STOCK_ENQUIRY");
@@ -181,6 +181,7 @@ namespace MertexerV2.SQLFunctions
                                         var nextDueQuantity = c.XPathSelectElement("descendant::fd[@id='C4']").Attribute("value").Value;
                                         var totalDueQuantity = c.XPathSelectElement("descendant::fd[@id='C5']").Attribute("value").Value;
                                         var poStatus = c.XPathSelectElement("descendant::fd[@id='C6']").Attribute("value").Value;
+                                        var poMessage = c.XPathSelectElement("descendant::fd[@id='C7']").Attribute("value").Value;
 
                                         bool? poStatusBool = null;
 
@@ -206,7 +207,8 @@ namespace MertexerV2.SQLFunctions
                                             nextPODueDate: nextDueDate,
                                             nextPOQuantity: Convert.ToDecimal(nextDueQuantity),
                                             totalPOQuantity: Convert.ToDecimal(totalDueQuantity),
-                                            poStatus: poStatusBool
+                                            poStatus: poStatusBool,
+                                            poMessage: poMessage
                                         ));
                                     });
                                 }
@@ -250,7 +252,7 @@ namespace MertexerV2.SQLFunctions
                 var result = queryExecutor.Run(
                     uvFileName: "B2C_STOCK_ENQUIRY",
                     uvSelectStatement: $"\"{ProductCode}\"",
-                    fieldsToReturn: "PRODCODE WI.TOTFREE WI.DUEIN.SEL WI.DUEIN.OSQTY WI.DUEIN.OSQTY.TOTAL WI.DUEIN.POCONF",
+                    fieldsToReturn: "PRODCODE WI.TOTFREE WI.DUEIN.SEL WI.DUEIN.OSQTY WI.DUEIN.OSQTY.TOTAL WI.DUEIN.POCONF PSE.PO.DATEMSG.WI",
                     webData: $"LOC={StockLocation};MSL=-9999",
                     returnType: "XML",
                     "STOCK_ENQUIRY");
@@ -265,6 +267,7 @@ namespace MertexerV2.SQLFunctions
                     var nextDueQuantity = c.XPathSelectElement("descendant::fd[@id='C4']").Attribute("value").Value;
                     var totalDueQuantity = c.XPathSelectElement("descendant::fd[@id='C5']").Attribute("value").Value;
                     var poStatus = c.XPathSelectElement("descendant::fd[@id='C6']").Attribute("value").Value;
+                    var poMessage = c.XPathSelectElement("descendant::fd[@id='C7']").Attribute("value").Value;
 
                     bool? poStatusBool = null;
 
@@ -290,7 +293,8 @@ namespace MertexerV2.SQLFunctions
                         nextPODueDate: nextDueDate,
                         nextPOQuantity: Convert.ToDecimal(nextDueQuantity),
                         totalPOQuantity: Convert.ToDecimal(totalDueQuantity),
-                        poStatus: poStatusBool
+                        poStatus: poStatusBool,
+                        poMessage: poMessage
                     ));
                 });
             }

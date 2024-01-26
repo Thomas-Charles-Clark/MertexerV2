@@ -30,89 +30,89 @@ namespace MertexerV2.ProductFunctions
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
         public static IEnumerable Select(string UniVerseAccount, string POPriceListCodes)
         {
+            IEnumerable<POPriceList> preResults = null;
+
             if (String.IsNullOrEmpty(POPriceListCodes))
             {
-                foreach (var q in Selector<POPriceList>.SelectAllNonParallel(
+                preResults = Selector<POPriceList>.SelectAllNonParallel(
                    true,
                    false,
                    50,
-                   UniVerseAccount))
-                {
-                    yield return q;
-                }
+                   UniVerseAccount);
             }
             else
             {
-                var preResults = Selector<POPriceList>.Select(
+                preResults = Selector<POPriceList>.Select(
                     JsonConvert.DeserializeObject<IEnumerable<POPriceListCode>>(POPriceListCodes).Select(p => p.Code),
                     true,
                     false,
                     50,
-                    UniVerseAccount)
-                    .ToList();
+                    UniVerseAccount);
+            }
 
-                var results = new List<POPriceListExplosion>();
+            var results = new List<POPriceListExplosion>();
 
-                preResults.ForEach(pr =>
+            preResults
+                .ToList()
+                .ForEach(pr =>
+            {
+                pr.Quantities.ToList().Select((q, i) => new { quantity = q, index = i })
+                .ToList()
+                .ForEach((obj) =>
                 {
-                    pr.Quantities.ToList().Select((q, i) => new { quantity = q, index = i })
-                    .ToList()
-                    .ForEach((obj) =>
+                    decimal? quantity = null;
+                    decimal? price = null;
+                    DateTime? lastAmendedDt = null;
+
+                    if (Decimal.TryParse(obj.quantity, out decimal q))
                     {
-                        decimal? quantity = null;
-                        decimal? price = null;
-                        DateTime? lastAmendedDt = null;
+                        quantity = q;
+                    }
 
-                        if (Decimal.TryParse(obj.quantity, out decimal q))
+                    try
+                    {
+                        var priceString = pr.Prices.ElementAt(obj.index);
+
+                        if (Decimal.TryParse(priceString, out decimal p))
                         {
-                            quantity = q;
+                            price = p;
                         }
+                    }
+                    catch (Exception)
+                    {
 
-                        try
+                    }
+
+                    try
+                    {
+                        var lastAmendedString = pr.LastAmendedDates.ElementAt(obj.index);
+
+                        if (Int32.TryParse(lastAmendedString, out int dt))
                         {
-                            var priceString = pr.Prices.ElementAt(obj.index);
-
-                            if (Decimal.TryParse(priceString, out decimal p))
-                            {
-                                price = p;
-                            }
+                            lastAmendedDt = Framework.DateTimeFromUniVerseOffset(dt);
                         }
-                        catch (Exception)
-                        {
+                    }
+                    catch (Exception)
+                    {
 
-                        }
+                    }
 
-                        try
-                        {
-                            var lastAmendedString = pr.LastAmendedDates.ElementAt(obj.index);
-
-                            if (Int32.TryParse(lastAmendedString, out int dt))
-                            {
-                                lastAmendedDt = Framework.DateTimeFromUniVerseOffset(dt);
-                            }
-                        }
-                        catch (Exception)
-                        {
-
-                        }
-
-                        results.Add(new POPriceListExplosion()
-                        {
-                            Code = pr.Key,
-                            PurchaseUnit = pr.PurchaseUnit,
-                            Quantity = quantity,
-                            Price = price,
-                            LastAmendedDT = lastAmendedDt,
-                            OpenOrderPrice = pr.OpenOrderPrice,
-                            FutureOrderPrice = pr.FutureOrderPrice,
-                        });
+                    results.Add(new POPriceListExplosion()
+                    {
+                        Code = pr.Key,
+                        PurchaseUnit = pr.PurchaseUnit,
+                        Quantity = quantity,
+                        Price = price,
+                        LastAmendedDT = lastAmendedDt,
+                        OpenOrderPrice = pr.OpenOrderPrice,
+                        FutureOrderPrice = pr.FutureOrderPrice,
                     });
                 });
+            });
 
-                foreach (var r in results)
-                {
-                    yield return r;
-                }
+            foreach (var r in results)
+            {
+                yield return r;
             }
         }
 

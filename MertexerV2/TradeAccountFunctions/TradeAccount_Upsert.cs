@@ -53,9 +53,13 @@ namespace MertexerV2.TradeAccountFunctions
 
                 uniVerseFile.UnlockRecord(tradeAccount.Key);
 
-//#if DEBUG
-//                Console.WriteLine(indexRebuildResult);
-//#endif
+                // need to find some way to call 
+                // REGEN.INDEX SLCUST SORTNAME
+                // so that the SB+ index gets rebuilt.
+
+                //#if DEBUG
+                //                Console.WriteLine(indexRebuildResult);
+                //#endif
             }
 
             return tradeAccount.Key;

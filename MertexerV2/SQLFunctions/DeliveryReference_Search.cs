@@ -85,13 +85,14 @@ namespace MertexerV2.SQLFunctions
             using (var qe = new CommandExecutor(dataSource.UniVerseAccount))
             {
                 var command = $"LIST DELADD DELREF WITH CUSREF = \"{dataSource.CustomerReference}\"" +
-                    (!String.IsNullOrEmpty(Name) ? $" AND SS.DELNAME.MCL = \"{Name.ToLowerInvariant()}\" " : "") + 
-                    (!String.IsNullOrEmpty(AddressLine1) ? $" AND SS.DELADDR1.MCL = \"{AddressLine1.ToLowerInvariant()}\" " : "") + 
-                    (!String.IsNullOrEmpty(AddressLine2) ? $" AND SS.DELADDR2.MCL = \"{AddressLine2.ToLowerInvariant()}\" " : "") +
-                    (!String.IsNullOrEmpty(Town) ? $" AND SS.DELADDR3.MCL = \"{Town.ToLowerInvariant()}\" " : "") +
-                    (!String.IsNullOrEmpty(County) ? $" AND SS.DELADDR4.MCL = \"{County.ToLowerInvariant()}\" " : "") +
-                    (!String.IsNullOrEmpty(PostalCode) ? $" AND SS.DELPCODE.MCL = \"{PostalCode.ToLowerInvariant()}\" " : "") + 
-                    $" AND COUNTRY = \"{CountryCode}\" BY-DSND DELREF COUNT.SUP ID.SUP COL.HDR.SUPP";
+                    (!String.IsNullOrEmpty(Name) ? $" AND SS.DELNAME.MCL LIKE \"...{Name.ToLowerInvariant()}...\" " : "") + 
+                    (!String.IsNullOrEmpty(AddressLine1) ? $" AND SS.DELADDR1.MCL LIKE \"...{AddressLine1.ToLowerInvariant()}...\" " : "") + 
+                    (!String.IsNullOrEmpty(AddressLine2) ? $" AND SS.DELADDR2.MCL LIKE \"...{AddressLine2.ToLowerInvariant()}...\" " : "") +
+                    (!String.IsNullOrEmpty(Town) ? $" AND SS.DELADDR3.MCL LIKE \"...{Town.ToLowerInvariant()}...\" " : "") +
+                    (!String.IsNullOrEmpty(County) ? $" AND SS.DELADDR4.MCL LIKE \"...{County.ToLowerInvariant()}...\" " : "") +
+                    (!String.IsNullOrEmpty(PostalCode) ? $" AND SS.DELPCODE.MCL LIKE \"...{PostalCode.ToLowerInvariant()}...\" " : "") + 
+                    (!String.IsNullOrEmpty(CountryCode) ? $" AND COUNTRY = \"{CountryCode}\" " : "") 
+                    + " BY-DSND DELREF COUNT.SUP ID.SUP COL.HDR.SUPP";
 
                 var stringResult = qe.Arbitrary(command);
                 delrefs = stringResult

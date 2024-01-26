@@ -89,6 +89,7 @@ namespace MertexerV2.SQLFunctions
                 var purchaseOrderQuantities = c.XPathSelectElement("descendant::fd[@id='C9']").Attribute("value").Value;
                 var purchaseOrderStockLocations = c.XPathSelectElement("descendant::fd[@id='C10']").Attribute("value").Value;
                 var purchaseOrderStatuses = c.XPathSelectElement("descendant::fd[@id='C11']").Attribute("value").Value;
+                var purchaseOrderMessages = c.XPathSelectElement("descendant::fd[@id='C12']").Attribute("value").Value;
 
 
                 var pickableFlagArray = pickableFlags.Split(pipeDelimiter, StringSplitOptions.None).ToArray();
@@ -127,6 +128,7 @@ namespace MertexerV2.SQLFunctions
                 var purchaseOrderQuantityArray = purchaseOrderQuantities.Split(pipeDelimiter, StringSplitOptions.None).ToArray();
                 var purchaseOrderStockLocationArray = purchaseOrderStockLocations.Split(pipeDelimiter, StringSplitOptions.None).ToArray();
                 var purchaseOrderStatusArray = purchaseOrderStatuses.Split(pipeDelimiter, StringSplitOptions.None).ToArray();
+                var purchaseOrderMessageArray = purchaseOrderMessages.Split(pipeDelimiter, StringSplitOptions.None).ToArray();
 
                 if (String.IsNullOrEmpty(EnquiryType) || EnquiryType == "S")
                 {
@@ -166,7 +168,8 @@ namespace MertexerV2.SQLFunctions
                                 poNumber: null,
                                 poDueDate: null, 
                                 poStatus: null,
-                                locationCode: String.IsNullOrWhiteSpace(stockLocations[i]) ? null : stockLocations[i]
+                                locationCode: String.IsNullOrWhiteSpace(stockLocations[i]) ? null : stockLocations[i],
+                                poMessage: null
                             ));
                         }
                     }
@@ -230,7 +233,8 @@ namespace MertexerV2.SQLFunctions
                                 poNumber: purchaseOrderNumberArray[i],
                                 poDueDate: purchaseOrderDueDateArray[i],
                                 poStatus: poStatusBool,
-                                locationCode: purchaseOrderStockLocationArray[i]
+                                locationCode: purchaseOrderStockLocationArray[i],
+                                poMessage: purchaseOrderMessageArray[i]
                             ));
                         }
                     }

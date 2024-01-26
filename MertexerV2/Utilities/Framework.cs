@@ -111,7 +111,14 @@ namespace MertexerV2.Utilities
 
         public static DateTime DateTimeFromUniVerseOffset(int val)
         {
-            return DateTime.ParseExact("31/12/1967", "dd/MM/yyyy", new System.Globalization.CultureInfo("en-GB")).AddDays(val);
+            try
+            {
+                return DateTime.ParseExact("31/12/1967", "dd/MM/yyyy", new System.Globalization.CultureInfo("en-GB")).AddDays(val);
+            }
+            catch(System.ArgumentOutOfRangeException)
+            {
+                return DateTime.MaxValue;
+            }
         }
 
         public static IEnumerable<CodeDescription> GetOrderEntryCodeGroups(string universeAccount = "MERTEX")

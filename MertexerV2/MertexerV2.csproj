@@ -154,6 +154,8 @@
     <Compile Include="Models\Invoices\InvoiceTerms.cs" />
     <Compile Include="Models\Order\OrderCategory.cs" />
     <Compile Include="Models\Order\DuplicateLineCheckResult.cs" />
+    <Compile Include="Models\Pricing\ContractDiscount.cs" />
+    <Compile Include="Models\Pricing\ContractPrice.cs" />
     <Compile Include="Models\Pricing\SalesDivision.cs" />
     <Compile Include="Models\Product\Transport.cs" />
     <Compile Include="Models\Retail\RetailModels.cs" />
@@ -174,8 +176,12 @@
     <Compile Include="Models\TradeAccount\SSLPostContactKey.cs" />
     <Compile Include="Models\TradeAccount\TradeAccountCode.cs" />
     <Compile Include="Models\Pricing\FreeOfChargeAccountingCode.cs" />
+    <Compile Include="PricingFunctions\ContractDiscount_Select.cs" />
+    <Compile Include="PricingFunctions\ContractPrice_Select.cs" />
+    <Compile Include="PricingFunctions\ContractDiscount_Upsert.cs" />
     <Compile Include="PricingFunctions\SalesDivision_Select.cs" />
     <Compile Include="PricingFunctions\FreeOfChargeAccountingCode_Select.cs" />
+    <Compile Include="PricingFunctions\ContractPrice_Upsert.cs" />
     <Compile Include="PricingFunctions\SalesDivision_Upsert.cs" />
     <Compile Include="PricingFunctions\FreeOfChargeAccountingCode_Upsert.cs" />
     <Compile Include="ProductFunctions\Transport_Select.cs" />

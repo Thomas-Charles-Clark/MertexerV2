@@ -40,7 +40,8 @@ namespace MertexerV2.Models.Stock
             string poNumber,
             string poDueDate,
             bool? poStatus,
-            string locationCode)
+            string locationCode,
+            string poMessage)
         {
             Type = type;
 
@@ -55,7 +56,7 @@ namespace MertexerV2.Models.Stock
             OnReserve = onReserve;
             PurchaseOrderNumber = poNumber;
             PurchaseOrderStatus = poStatus;
-            PurchaseOrderMessage = null;
+            PurchaseOrderMessage = poMessage;
 
             CallOff = null;
 
@@ -77,10 +78,6 @@ namespace MertexerV2.Models.Stock
                 if (DateTime.TryParse(poDueDate, out poRealDate))
                 {
                     PurchaseOrderDate = poRealDate;
-                }
-                else
-                {
-                    PurchaseOrderMessage = poDueDate;
                 }
             }
 

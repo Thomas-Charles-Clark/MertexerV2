@@ -24,18 +24,16 @@ namespace MertexerV2.Models.Stock
             string nextPODueDate,
             decimal nextPOQuantity,
             decimal totalPOQuantity,
-            bool? poStatus)
+            bool? poStatus,
+            string poMessage)
         {
             StockLocationCode = stockLocationCode;
             ProductCode = productCode;
+            PurchaseOrderMessage = poMessage;
 
             if (DateTime.TryParse(nextPODueDate, out DateTime poRealDate))
             {
                 PurchaseOrderDate = poRealDate;
-            }
-            else
-            {
-                PurchaseOrderMessage = nextPODueDate;
             }
 
             TotalFreeStock = totalFreeStock;

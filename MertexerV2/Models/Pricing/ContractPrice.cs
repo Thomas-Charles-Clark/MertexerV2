@@ -62,7 +62,7 @@ namespace MertexerV2.Models.Pricing
         /// </summary>
         [UniVerseIndex(10)]
         [UniVerseFieldName("QUALITY")]
-        public string Quality { get; set; }
+        public string QualityCode { get; set; }
 
         /// <summary>
         /// VAT Inclusive
@@ -260,7 +260,7 @@ namespace MertexerV2.Models.Pricing
         public string TradeAccountCode { get; set; }
         public string ProductCode { get; set; }
         public string SortType { get; set; }
-        public string Quality { get; set; }
+        public string QualityCode { get; set; }
         public bool VATInclusive { get; set; }
         public string BrandCode { get; set; }
         public string ProductGroupCode { get; set; }
@@ -283,7 +283,7 @@ namespace MertexerV2.Models.Pricing
             TradeAccountCode = cp.TradeAccountCode;
             ProductCode = cp.ProductCode;
             SortType = cp.SortType;
-            Quality = cp.Quality;
+            QualityCode = cp.QualityCode;
             VATInclusive = cp.VATInclusive;
             BrandCode = cp.BrandCode;
             ProductGroupCode = cp.ProductGroupCode;

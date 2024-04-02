@@ -129,7 +129,7 @@ namespace MertexerV2.PricingFunctions
             out SqlString TradeAccountCode,
             out SqlString ProductCode,
             out SqlString SortType,
-            out SqlString Quality,
+            out SqlString QualityCode,
             out SqlString PromotionCode,
             out SqlString BrandCode,
             out SqlString ProductGroupCode,
@@ -151,7 +151,7 @@ namespace MertexerV2.PricingFunctions
 
             SortType = result.SortType?.TrimReduceTruncate(1) ?? SqlString.Null;
 
-            Quality = result.Quality?.TrimReduceTruncate(50);
+            QualityCode = result.QualityCode?.TrimReduceTruncate(50);
 
             PromotionCode = result.PromotionCode?.TrimReduceTruncate(50);
 

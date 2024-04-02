@@ -55,7 +55,7 @@ namespace MertexerV2.Models.Pricing
         /// </summary>
         [UniVerseIndex(9)]
         [UniVerseFieldName("QUALITY")]
-        public string Quality { get; set; }
+        public string QualityCode { get; set; }
 
         /// <summary>
         /// Sort
@@ -257,7 +257,7 @@ namespace MertexerV2.Models.Pricing
         public string TradeAccountCode { get; set; }
         public string ProductCode { get; set; }
         public string SortType { get; set; }
-        public string Quality { get; set; }
+        public string QualityCode { get; set; }
         public string PromotionCode { get; set; }
         public string BrandCode { get; set; }
         public string ProductGroupCode { get; set; }
@@ -282,7 +282,7 @@ namespace MertexerV2.Models.Pricing
             TradeAccountCode = cp.TradeAccountCode;
             ProductCode = cp.ProductCode;
             SortType = cp.SortType;
-            Quality = cp.Quality;
+            QualityCode = cp.QualityCode;
             PromotionCode = cp.PromotionCode;
             BrandCode = cp.BrandCode;
             ProductGroupCode = cp.ProductGroupCode;

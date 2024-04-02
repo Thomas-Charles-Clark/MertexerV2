@@ -22,7 +22,7 @@ namespace MertexerV2.SQLFunctions
             FillRowMethodName = "BatchPiece_FillRow",
             TableDefinition = "")]
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
-        public static IEnumerable BatchPiece(string ProductCodes, string StockLocations, string EnquiryType)
+        public static IEnumerable BatchPiece(string ProductCodes, string StockLocations, string EnquiryType, decimal StockCheckMinimum = -9999)
         {
             var results = new List<BatchPieceResult>();
 
@@ -45,7 +45,7 @@ namespace MertexerV2.SQLFunctions
                     uvFileName: "B2C_STOCK_ITEM_BREAKDOWN",
                     uvSelectStatement: uvSelectStatement,
                     fieldsToReturn: "",
-                    webData: String.IsNullOrEmpty(StockLocations) ? "MSL=-9999" : $"LOC={StockLocations};MSL=-9999",
+                    webData: String.IsNullOrEmpty(StockLocations) ? $"MSL={StockCheckMinimum}" : $"LOC={StockLocations};MSL={StockCheckMinimum}",
                     returnType: "XML"));
             }
 
@@ -158,6 +158,7 @@ namespace MertexerV2.SQLFunctions
                             results.Add(new BatchPieceResult(
                                 type: "S",
                                 productCode: productCode,
+                                stockCheckMinimum: StockCheckMinimum,
                                 batch: batches[i],
                                 piece: pieces[i],
                                 pickable: Convert.ToBoolean(Convert.ToInt32(String.IsNullOrEmpty(pickableFlagArray[i]) ? "1" : pickableFlagArray[i])),
@@ -223,6 +224,7 @@ namespace MertexerV2.SQLFunctions
                             results.Add(new BatchPieceResult(
                                 type: "P",
                                 productCode: productCode,
+                                stockCheckMinimum: StockCheckMinimum,
                                 batch: null,
                                 piece: null,
                                 pickable: null,
@@ -269,6 +271,7 @@ namespace MertexerV2.SQLFunctions
             object obj,
             out SqlString Type,
             out SqlString ProductCode,
+            out SqlDecimal StockCheckMinimum,
             out SqlString LocationCode,
             out SqlString Batch,
             out SqlString Piece,
@@ -287,6 +290,7 @@ namespace MertexerV2.SQLFunctions
 
             Type = batchPiece.Type;
             ProductCode = batchPiece.ProductCode;
+            StockCheckMinimum = batchPiece.StockCheckMinimum;
             LocationCode = batchPiece.LocationCode;
             Batch = batchPiece.Batch;
             Piece = batchPiece.Piece;

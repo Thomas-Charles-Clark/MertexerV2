@@ -742,13 +742,32 @@ namespace MertexerV2.Accounts
 
                     xDoc.Descendants("record").ToList().ForEach(c =>
                     {
-                        trackingDetails.Add(new ParcelTrackingDetail()
+                        var parcels = c.XPathSelectElement("descendant::fd[@id='C1']").Attribute("value").Value
+                            .Split(Framework.ValueMark)
+                            .ToList();
+
+                        var products = c.XPathSelectElement("descendant::fd[@id='C2']").Attribute("value").Value
+                            .Split(Framework.ValueMark)
+                            .ToList();
+
+                        var descriptions = c.XPathSelectElement("descendant::fd[@id='C3']").Attribute("value").Value
+                            .Split(Framework.ValueMark)
+                            .ToList();
+
+                        var trackingUrls = c.XPathSelectElement("descendant::fd[@id='C4']").Attribute("value").Value
+                            .Split(Framework.ValueMark)
+                            .ToList();
+
+                        for (var i = 0; i < parcels.Count; i++)
                         {
-                            Parcel = c.XPathSelectElement("descendant::fd[@id='C1']").Attribute("value").Value,
-                            ProductCodes = c.XPathSelectElement("descendant::fd[@id='C2']").Attribute("value").Value,
-                            Descriptions = c.XPathSelectElement("descendant::fd[@id='C3']").Attribute("value").Value,
-                            TrackingURL = c.XPathSelectElement("descendant::fd[@id='C4']").Attribute("value").Value
-                        });
+                            trackingDetails.Add(new ParcelTrackingDetail()
+                            {
+                                Parcel = parcels[i],
+                                ProductCodes = products[i],
+                                Descriptions = descriptions[i],
+                                TrackingURL = trackingUrls[i]
+                            });
+                        }
                     });
 
                     lock(locker)

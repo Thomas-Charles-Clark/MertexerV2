@@ -13,6 +13,7 @@ namespace MertexerV2.Models.Stock
     {
         public string Type { get; set; }
         public string ProductCode { get; set; }
+        public decimal StockCheckMinimum { get; set; }
         public string LocationCode { get; set; }
         public string Batch { get; set; }
         public string Piece { get; set; }
@@ -30,6 +31,7 @@ namespace MertexerV2.Models.Stock
         public BatchPieceResult(
             string type,
             string productCode,
+            decimal stockCheckMinimum,
             string batch,
             string piece,
             bool? pickable,
@@ -46,6 +48,8 @@ namespace MertexerV2.Models.Stock
             Type = type;
 
             ProductCode = productCode;
+
+            StockCheckMinimum = stockCheckMinimum;
 
             Batch = batch;
             Piece = piece;

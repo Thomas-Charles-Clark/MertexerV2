@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MertexerV2</RootNamespace>
-    <AssemblyName>MertexerV2</AssemblyName>
+    <AssemblyName>MertexerV3</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -176,6 +176,9 @@
     <Compile Include="Models\TradeAccount\SSLPostContactKey.cs" />
     <Compile Include="Models\TradeAccount\TradeAccountCode.cs" />
     <Compile Include="Models\Pricing\FreeOfChargeAccountingCode.cs" />
+    <Compile Include="PricingFunctions\TradeAccountDiscounts_DeleteAll.cs" />
+    <Compile Include="PricingFunctions\ContractPrice_Delete.cs" />
+    <Compile Include="PricingFunctions\ContractDiscount_Delete.cs" />
     <Compile Include="PricingFunctions\ContractDiscount_Select.cs" />
     <Compile Include="PricingFunctions\ContractPrice_Select.cs" />
     <Compile Include="PricingFunctions\ContractDiscount_Upsert.cs" />
@@ -504,13 +507,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>echo F | xcopy /y $(TargetPath) "C:\Users\tclark\source\repos\www\Development\wwwDesignersGuild\wwwDesignersGuild\ExternalDependencies\$(TargetFileName)"
-echo F | xcopy /y "$(ProjectDir)$(OutDir)\MertexerV2.pdb" "C:\Users\tclark\source\repos\www\Development\wwwDesignersGuild\wwwDesignersGuild\ExternalDependencies\MertexerV2.pdb"
-echo F | xcopy /y $(TargetPath) "C:\Users\tclark\source\repos\www\Preview\wwwDesignersGuild\wwwDesignersGuild\ExternalDependencies\$(TargetFileName)"
-echo F | xcopy /y "$(ProjectDir)$(OutDir)\MertexerV2.pdb" "C:\Users\tclark\source\repos\www\Preview\wwwDesignersGuild\wwwDesignersGuild\ExternalDependencies\MertexerV2.pdb"
-echo F | xcopy /y $(TargetPath) "C:\Users\tclark\source\repos\www\Production\wwwDesignersGuild\wwwDesignersGuild\ExternalDependencies\$(TargetFileName)"
-echo F | xcopy /y "$(ProjectDir)$(OutDir)\MertexerV2.pdb" "C:\Users\tclark\source\repos\www\Production\wwwDesignersGuild\wwwDesignersGuild\ExternalDependencies\MertexerV2.pdb"
-echo F | xcopy /y $(TargetPath) "C:\Users\tclark\Documents\Visual Studio 2015\Projects\Portal\Portal\Libraries\$(TargetFileName)"
-echo F | xcopy /y "$(ProjectDir)\$(OutDir)\MertexerV2.pdb" "C:\Users\tclark\Documents\Visual Studio 2015\Projects\Portal\Portal\Libraries\MertexerV2.pdb"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>

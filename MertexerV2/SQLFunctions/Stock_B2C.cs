@@ -49,7 +49,7 @@ namespace MertexerV2.SQLFunctions
 
                         while (reader.Read())
                         {
-                            dataFetch.ProductCodes.Add(reader.GetString(0));
+                            dataFetch.ProductCodes.Add(new ProductCodeMinimumStockLevel(reader.GetString(0), reader.GetDecimal(1)));
                         }
 
                         reader.NextResult();
@@ -63,7 +63,7 @@ namespace MertexerV2.SQLFunctions
 
                         while (reader.Read())
                         {
-                            dataFetch.SampleProductCodes.Add(reader.GetString(0));
+                            dataFetch.SampleProductCodes.Add(new ProductCodeMinimumStockLevel(reader.GetString(0), reader.GetDecimal(1)));
                         }
 
                         reader.NextResult();
@@ -77,7 +77,7 @@ namespace MertexerV2.SQLFunctions
 
                         while (reader.Read())
                         {
-                            dataFetch.PaintProductCodes.Add(reader.GetString(0));
+                            dataFetch.PaintProductCodes.Add(new ProductCodeMinimumStockLevel(reader.GetString(0), reader.GetDecimal(1)));
                         }
 
                         reader.NextResult();
@@ -94,132 +94,180 @@ namespace MertexerV2.SQLFunctions
                 }
             }
 
-            // right the... lists are no longer batched. So batch them. The product codes are no longer wrapped either, so wrap them.
+            var minimumStockLevels = dataFetch.ProductCodes.GroupBy(msl => msl.MinimumStockLevel);
 
-            var productCodeBatches = ListExtension.Split(dataFetch.ProductCodes, 1000);
-            var sampleCodeBatches = ListExtension.Split(dataFetch.SampleProductCodes, 1000);
-            var paintCodeBatches = ListExtension.Split(dataFetch.PaintProductCodes, 1000);
+            // You've now got PartNumber,MinimumStockLevel for each of the three result sets.
 
-            var productCodes = new List<string>();
-            var sampleProductCodes = new List<string>();
-            var paintProductCodes = new List<string>();
+            // You're already... going... Products | Samples | Paint in parallel. Fine.
 
-            foreach (var chunk in productCodeBatches)
-            {
-                productCodes.Add(String.Join(" ", chunk));
-            }
+            var productCodeBatches = ListExtension.Split(dataFetch.ProductCodes, 2000);
+            var sampleCodeBatches = ListExtension.Split(dataFetch.SampleProductCodes, 2000);
+            var paintCodeBatches = ListExtension.Split(dataFetch.PaintProductCodes, 2000);
 
-            foreach (var chunk in sampleCodeBatches)
-            {
-                sampleProductCodes.Add(String.Join(" ", chunk));
-            }
+            //var productCodes = new List<string>();
+            //var sampleProductCodes = new List<string>();
+            //var paintProductCodes = new List<string>();
 
-            foreach (var chunk in paintCodeBatches)
-            {
-                paintProductCodes.Add(String.Join(" ", chunk));
-            }
+            //foreach (var chunk in productCodeBatches)
+            //{
+            //    productCodes.Add(String.Join(" ", chunk));
+            //}
 
-            Console.WriteLine($"Checking {productCodes.Count} Product part numbers");
-            Console.WriteLine($"Checking {paintProductCodes.Count} Paint part numbers");
-            Console.WriteLine($"Checking {sampleProductCodes.Count} Sample part numbers");
+            //foreach (var chunk in sampleCodeBatches)
+            //{
+            //    sampleProductCodes.Add(String.Join(" ", chunk));
+            //}
 
-            var totalToCheck = productCodes.Count + paintProductCodes.Count + sampleProductCodes.Count;
+            //foreach (var chunk in paintCodeBatches)
+            //{
+            //    paintProductCodes.Add(String.Join(" ", chunk));
+            //}
 
-            Console.WriteLine($"Checking {totalToCheck} in total.");
+            //Console.WriteLine($"Checking {productCodes.Count} Product part numbers");
+            //Console.WriteLine($"Checking {paintProductCodes.Count} Paint part numbers");
+            //Console.WriteLine($"Checking {sampleProductCodes.Count} Sample part numbers");
 
-            var objLock = new object();
+            //var totalToCheck = productCodes.Count + paintProductCodes.Count + sampleProductCodes.Count;
+
+            //Console.WriteLine($"Checking {totalToCheck} in total.");
 
             // nested parallel loops?
 
-            var chunkyList = new List<Tuple<List<string>, List<string>>>()
+            var chunkyList = new List<Tuple<List<List<ProductCodeMinimumStockLevel>>, List<string>>>()
             {
-                new Tuple<List<string>, List<string>>(productCodes, dataFetch.StockLocations),
-                new Tuple<List<string>, List<string>>(sampleProductCodes, dataFetch.SampleStockLocations),
-                new Tuple<List<string>, List<string>>(paintProductCodes, dataFetch.PaintStockLocations)
+                new Tuple<List<List<ProductCodeMinimumStockLevel>>, List<string>>(productCodeBatches, dataFetch.StockLocations),
+                new Tuple<List<List<ProductCodeMinimumStockLevel>>, List<string>>(sampleCodeBatches, dataFetch.SampleStockLocations),
+                new Tuple<List<List<ProductCodeMinimumStockLevel>>, List<string>>(paintCodeBatches, dataFetch.PaintStockLocations)
             };
 
             var finalResults = new List<B2CEnquiryResult>();
 
+            var objLock = new object();
+
             var finalResultsLock = new object();
 
-            Parallel.ForEach(
+            var typeLock = new object();
+
+            var stockLocationLock = new object();
+
+                // Loop through each of our Types
+                Parallel.ForEach(
                 chunkyList,
                 (tuple) =>
                 {
+                    var tupleLock = new Object();
+
                     var tupleResults = new List<B2CEnquiryResult>();
 
+                    // Do each of the stock locations in parallel
                     Parallel.ForEach(
                         tuple.Item2,
                         (stockLocation) =>
                         {
-                            var stockLocationResults = new List<B2CEnquiryResult>();
+                            var chunkLock = new Object();
 
+                            var chunkResults = new List<B2CEnquiryResult>();
+
+                            // Do each of the chunks in parallel
+                            //Parallel.ForEach(tuple.Item1,
+                            //    new ParallelOptions() { MaxDegreeOfParallelism = 4 },
                             using (var queryExecutor = new QueryExecutor())
                             {
-                                foreach (var codes in tuple.Item1)
+                                //tuple.Item1.ForEach(
+                                Parallel.ForEach(tuple.Item1,
+                                (chunk) =>
                                 {
-                                    var result = queryExecutor.Run(
-                                        uvFileName: "B2C_STOCK_ENQUIRY",
-                                        uvSelectStatement: codes,
-                                        fieldsToReturn: "PRODCODE WI.TOTFREE WI.DUEIN.SEL WI.DUEIN.OSQTY WI.DUEIN.OSQTY.TOTAL WI.DUEIN.POCONF PSE.PO.DATEMSG.WI",
-                                        webData: $"LOC={(String.IsNullOrEmpty(stockLocation) ? "*" : stockLocation)};MSL=-9999",
-                                        returnType: "XML",
-                                        "STOCK_ENQUIRY");
+                                    var mslLock = new object();
+                                    
+                                    var mslResults = new List<B2CEnquiryResult>();
 
-                                    var xDoc = XDocument.Parse(result);
+                                    var msls = chunk.GroupBy(c => c.MinimumStockLevel).ToList();
 
-                                    if (!xDoc.Descendants("record").Any())
+                                    Parallel.ForEach(msls, 
+                                        (msl) =>
                                     {
-                                        SendBatchProblemEmail(stockLocation, codes, "Stock Check Problem Batch");
-                                    }
+                                        var thisChunkResults = new List<B2CEnquiryResult>();
 
-                                    xDoc.Descendants("record").ToList().ForEach(c =>
-                                    {
-                                        var productCode = c.XPathSelectElement("descendant::fd[@id='C1']").Attribute("value").Value;
-                                        var totalFree = c.XPathSelectElement("descendant::fd[@id='C2']").Attribute("value").Value;
-                                        var nextDueDate = c.XPathSelectElement("descendant::fd[@id='C3']").Attribute("value").Value;
-                                        var nextDueQuantity = c.XPathSelectElement("descendant::fd[@id='C4']").Attribute("value").Value;
-                                        var totalDueQuantity = c.XPathSelectElement("descendant::fd[@id='C5']").Attribute("value").Value;
-                                        var poStatus = c.XPathSelectElement("descendant::fd[@id='C6']").Attribute("value").Value;
-                                        var poMessage = c.XPathSelectElement("descendant::fd[@id='C7']").Attribute("value").Value;
+                                        var codes = String.Join(" ", msl.Select(c => c.ProductCode));
 
-                                        bool? poStatusBool = null;
+                                        var result = "";
 
-                                        if (!String.IsNullOrEmpty(poStatus))
+                                        result = queryExecutor.Run(
+                                            uvFileName: "B2C_STOCK_ENQUIRY",
+                                            uvSelectStatement: codes,
+                                            fieldsToReturn: "PRODCODE WI.TOTFREE WI.DUEIN.SEL WI.DUEIN.OSQTY WI.DUEIN.OSQTY.TOTAL WI.DUEIN.POCONF PSE.PO.DATEMSG.WI",
+                                            webData: $"LOC={(String.IsNullOrEmpty(stockLocation) ? "*" : stockLocation)};MSL={msl.Key}",
+                                            returnType: "XML",
+                                            "STOCK_ENQUIRY",
+                                            false,
+                                            60);
+                                        
+                                        var xDoc = XDocument.Parse(result);
+
+                                        if (!xDoc.Descendants("record").Any())
                                         {
-                                            switch (poStatus)
-                                            {
-                                                case "PO Conf":
-                                                    poStatusBool = true;
-                                                    break;
-                                                case "PO Unconf":
-                                                    poStatusBool = false;
-                                                    break;
-                                                default:
-                                                    break;
-                                            }
+                                            SendBatchProblemEmail(stockLocation, codes, "Stock Check Problem Batch");
                                         }
 
-                                        stockLocationResults.Add(new B2CEnquiryResult(
-                                            stockLocationCode: stockLocation,
-                                            productCode: productCode,
-                                            totalFreeStock: Convert.ToDecimal(totalFree),
-                                            nextPODueDate: nextDueDate,
-                                            nextPOQuantity: Convert.ToDecimal(nextDueQuantity),
-                                            totalPOQuantity: Convert.ToDecimal(totalDueQuantity),
-                                            poStatus: poStatusBool,
-                                            poMessage: poMessage
-                                        ));
+                                        xDoc.Descendants("record").ToList().ForEach(c =>
+                                        {
+                                            var productCode = c.XPathSelectElement("descendant::fd[@id='C1']").Attribute("value").Value;
+                                            var totalFree = c.XPathSelectElement("descendant::fd[@id='C2']").Attribute("value").Value;
+                                            var nextDueDate = c.XPathSelectElement("descendant::fd[@id='C3']").Attribute("value").Value;
+                                            var nextDueQuantity = c.XPathSelectElement("descendant::fd[@id='C4']").Attribute("value").Value;
+                                            var totalDueQuantity = c.XPathSelectElement("descendant::fd[@id='C5']").Attribute("value").Value;
+                                            var poStatus = c.XPathSelectElement("descendant::fd[@id='C6']").Attribute("value").Value;
+                                            var poMessage = c.XPathSelectElement("descendant::fd[@id='C7']").Attribute("value").Value;
+
+                                            bool? poStatusBool = null;
+
+                                            if (!String.IsNullOrEmpty(poStatus))
+                                            {
+                                                switch (poStatus)
+                                                {
+                                                    case "PO Conf":
+                                                        poStatusBool = true;
+                                                        break;
+                                                    case "PO Unconf":
+                                                        poStatusBool = false;
+                                                        break;
+                                                    default:
+                                                        break;
+                                                }
+                                            }
+
+                                            thisChunkResults.Add(new B2CEnquiryResult(
+                                                stockLocationCode: stockLocation,
+                                                productCode: productCode,
+                                                stockCheckMinimum: msl.Key,
+                                                totalFreeStock: Convert.ToDecimal(totalFree),
+                                                nextPODueDate: nextDueDate,
+                                                nextPOQuantity: Convert.ToDecimal(nextDueQuantity),
+                                                totalPOQuantity: Convert.ToDecimal(totalDueQuantity),
+                                                poStatus: poStatusBool,
+                                                poMessage: poMessage
+                                            ));
+                                        });
+
+                                        //lock (mslLock)
+                                        //{
+                                            mslResults.AddRange(thisChunkResults);
+                                        //}
                                     });
-                                }
+
+                                    lock (chunkLock)
+                                    {
+                                        chunkResults.AddRange(mslResults);
+                                    }
+                                });
+
                             }
 
-                            lock (objLock)
+                            lock (tupleLock)
                             {
-                                tupleResults.AddRange(stockLocationResults);
+                                tupleResults.AddRange(chunkResults);
                             }
-                        }
-                    );
+                        });
 
                     lock (finalResultsLock)
                     {
@@ -243,7 +291,7 @@ namespace MertexerV2.SQLFunctions
             FillRowMethodName = "B2CEnquiry_FillRow",
             TableDefinition = "")]
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
-        public static IEnumerable B2CEnquiry_Singular(string ProductCode, string StockLocation)
+        public static IEnumerable B2CEnquiry_Singular(string ProductCode, string StockLocation, decimal StockCheckMinimum = -9999)
         {
             var results = new List<B2CEnquiryResult>();
 
@@ -253,7 +301,7 @@ namespace MertexerV2.SQLFunctions
                     uvFileName: "B2C_STOCK_ENQUIRY",
                     uvSelectStatement: $"\"{ProductCode}\"",
                     fieldsToReturn: "PRODCODE WI.TOTFREE WI.DUEIN.SEL WI.DUEIN.OSQTY WI.DUEIN.OSQTY.TOTAL WI.DUEIN.POCONF PSE.PO.DATEMSG.WI",
-                    webData: $"LOC={StockLocation};MSL=-9999",
+                    webData: $"LOC={StockLocation};MSL={StockCheckMinimum}",
                     returnType: "XML",
                     "STOCK_ENQUIRY");
 
@@ -289,6 +337,7 @@ namespace MertexerV2.SQLFunctions
                     results.Add(new B2CEnquiryResult(
                         stockLocationCode: StockLocation,
                         productCode: productCode,
+                        stockCheckMinimum: StockCheckMinimum,
                         totalFreeStock: Convert.ToDecimal(totalFree),
                         nextPODueDate: nextDueDate,
                         nextPOQuantity: Convert.ToDecimal(nextDueQuantity),
@@ -315,6 +364,7 @@ namespace MertexerV2.SQLFunctions
             object obj,
             out SqlString StockLocationCode,
             out SqlString ProductCode,
+            out SqlDecimal StockCheckMinimum,
             out SqlDecimal TotalFreeStock,
             out SqlDateTime PODate,
             out SqlString POMessage,
@@ -327,6 +377,7 @@ namespace MertexerV2.SQLFunctions
 
             StockLocationCode = enquiryResult.StockLocationCode;
             ProductCode = enquiryResult.ProductCode;
+            StockCheckMinimum = enquiryResult.StockCheckMinimum;
             PODate = enquiryResult.PurchaseOrderDate ?? SqlDateTime.Null;
             POMessage = enquiryResult.PurchaseOrderMessage ?? SqlString.Null;
             TotalFreeStock = enquiryResult.TotalFreeStock;

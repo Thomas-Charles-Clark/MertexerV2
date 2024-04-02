@@ -10,6 +10,7 @@ namespace MertexerV2.Models.Stock
     {
         public string StockLocationCode { get; set; }
         public string ProductCode { get; set; }
+        public Decimal StockCheckMinimum { get; set; }
         public DateTime? PurchaseOrderDate { get; set; }
         public string PurchaseOrderMessage { get; set; }
         public decimal TotalFreeStock { get; set; }
@@ -20,6 +21,7 @@ namespace MertexerV2.Models.Stock
         public B2CEnquiryResult(
             string stockLocationCode,
             string productCode,
+            decimal stockCheckMinimum,
             decimal totalFreeStock,
             string nextPODueDate,
             decimal nextPOQuantity,
@@ -29,6 +31,7 @@ namespace MertexerV2.Models.Stock
         {
             StockLocationCode = stockLocationCode;
             ProductCode = productCode;
+            StockCheckMinimum = stockCheckMinimum;
             PurchaseOrderMessage = poMessage;
 
             if (DateTime.TryParse(nextPODueDate, out DateTime poRealDate))

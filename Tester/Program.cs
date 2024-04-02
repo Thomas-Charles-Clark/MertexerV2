@@ -405,23 +405,49 @@ namespace Tester
 
 
 
-            var results = ContractDiscountFunctions.Upsert(uniVerseAccount, @"{
-	            ""Code"": ""K0098*FDG2345/01"",
-	            ""TradeAccountCode"": ""K0098"",
-	            ""ProductCode"": ""FDG2345/01"",
-	            ""SortType"": ""Q"",
-	            ""Quality"": null,
-	            ""PromotionCode"": ""DG13"",
-	            ""BrandCode"": null,
-	            ""ProductGroupCode"": null,
-	            ""ItemTypeCode"": null,
-	            ""StartDTs"": [""2024/01/26""],
-	            ""ExpiryDTs"": [""2024/04/26""],
-	            ""ContractDiscounts"": [10.00],
-	            ""LastAmendedDTs"": [""2024/01/26 17:07:00""],
-	            ""QuantitiesRequired"": [0]
-            }");
+            //var results = ContractDiscountFunctions.Upsert(uniVerseAccount, @"{
+            // ""Code"": ""K0098*FDG2345/01"",
+            // ""TradeAccountCode"": ""K0098"",
+            // ""ProductCode"": ""FDG2345/01"",
+            // ""SortType"": ""Q"",
+            // ""Quality"": null,
+            // ""PromotionCode"": ""DG13"",
+            // ""BrandCode"": null,
+            // ""ProductGroupCode"": null,
+            // ""ItemTypeCode"": null,
+            // ""StartDTs"": [""2024/01/26""],
+            // ""ExpiryDTs"": [""2024/04/26""],
+            // ""ContractDiscounts"": [10.00],
+            // ""LastAmendedDTs"": [""2024/01/26 17:07:00""],
+            // ""QuantitiesRequired"": [0]
+            //}");
 
+
+            //var result = ContractDiscountFunctions.Delete(uniVerseAccount, "K0098", null);
+
+
+            //var results = ContractPriceFunctions.Upsert(uniVerseAccount, @"{
+            // ""Code"": ""K0098*FDG2345/01"",
+            // ""TradeAccountCode"": ""K0098"",
+            // ""ProductCode"": ""FDG2345/01"",
+            // ""SortType"": ""Q"",
+            // ""Quality"": null,
+            // ""PromotionCode"": ""DG13"",
+            // ""BrandCode"": null,
+            // ""ProductGroupCode"": null,
+            // ""ItemTypeCode"": null,
+            // ""StartDTs"": [""2024/01/26""],
+            // ""ExpiryDTs"": [""2024/04/26""],
+            // ""ContractDiscounts"": [10.00],
+            // ""LastAmendedDTs"": [""2024/01/26 17:07:00""],
+            // ""QuantitiesRequired"": [0]
+            //}");
+
+            //var result = ContractDiscountFunctions.Upsert(uniVerseAccount, @"[{""Code"":""PH03039*BAGDG0115"",""TradeAccountCode"":""PH03039"",""SortType"":""P"",""ProductCode"":""BAGDG0115"",""StartDTs"":[""2024/03/14""],""ExpiryDTs"":[""2024/04/08""],""ContractDiscounts"":[20.00],""LastAmendedDTs"":[""2024/03/11 12:00:00""],""QuantitiesRequired"":[0]},{""Code"":""PH03039*BLDG0137"",""TradeAccountCode"":""PH03039"",""SortType"":""P"",""ProductCode"":""BLDG0137"",""StartDTs"":[""2024/03/14""],""ExpiryDTs"":[""2024/04/08""],""ContractDiscounts"":[20.00],""LastAmendedDTs"":[""2024/03/11 12:00:00""],""QuantitiesRequired"":[0]},{""Code"":""PH03039*BLDG0156"",""TradeAccountCode"":""PH03039"",""SortType"":""P"",""ProductCode"":""BLDG0156"",""StartDTs"":[""2024/03/14""],""ExpiryDTs"":[""2024/04/08""],""ContractDiscounts"":[20.00],""LastAmendedDTs"":[""2024/03/11 12:00:00""],""QuantitiesRequired"":[0]},{""Code"":""PH03039*BLDG0157"",""TradeAccountCode"":""PH03039"",""SortType"":""P"",""ProductCode"":""BLDG0157"",""StartDTs"":[""2024/03/14""],""ExpiryDTs"":[""2024/04/08""],""ContractDiscounts"":[20.00],""LastAmendedDTs"":[""2024/03/11 12:00:00""],""QuantitiesRequired"":[0]},{""Code"":""PH03039*BLDG0159"",""TradeAccountCode"":""PH03039"",""SortType"":""P"",""ProductCode"":""BLDG0159"",""StartDTs"":[""2024/03/14""],""ExpiryDTs"":[""2024/04/08""],""ContractDiscounts"":[20.00],""LastAmendedDTs"":[""2024/03/11 12:00:00""],""QuantitiesRequired"":[0]},{""Code"":""PH03039*BLDG0249"",""TradeAccountCode"":""PH03039"",""SortType"":""P"",""ProductCode"":""BLDG0249"",""StartDTs"":[""2024/03/14""],""ExpiryDTs"":[""2024/04/08""],""ContractDiscounts"":[20.00],""LastAmendedDTs"":[""2024/03/11 12:00:00""],""QuantitiesRequired"":[0]},{""Code"":""PH03039*BLDG0253"",""TradeAccountCode"":""PH03039"",""SortType"":""P"",""ProductCode"":""BLDG0253"",""StartDTs"":[""2024/03/14""],""ExpiryDTs"":[""2024/04/08""],""ContractDiscounts"":[20.00],""LastAmendedDTs"":[""2024/03/11 12:00:00""],""QuantitiesRequired"":[0]},{""Code"":""PH03039*BLDG0254"",""TradeAccountCode"":""PH03039"",""SortType"":""P"",""ProductCode"":""BLDG0254"",""StartDTs"":[""2024/03/14""],""ExpiryDTs"":[""2024/04/08""],""ContractDiscounts"":[20.00],""LastAmendedDTs"":[""2024/03/11 12:00:00""],""QuantitiesRequired"":[0]},{""Code"":""PH03039*BLDG0256"",""TradeAccountCode"":""PH03039"",""SortType"":""P"",""ProductCode"":""BLDG0256"",""StartDTs"":[""2024/03/14""],""ExpiryDTs"":[""2024/04/08""],""ContractDiscounts"":[20.00],""LastAmendedDTs"":[""2024/03/11 12:00:00""],""QuantitiesRequired"":[0]},{""Code"":""PH03039*BLDG0258"",""TradeAccountCode"":""PH03039"",""SortType"":""P"",""ProductCode"":""BLDG0258"",""StartDTs"":[""2024/03/14""],""ExpiryDTs"":[""2024/04/08""],""ContractDiscounts"":[20.00],""LastAmendedDTs"":[""2024/03/11 12:00:00""],""QuantitiesRequired"":[0]},{""Code"":""PH03039*BLDG0268"",""TradeAccountCode"":""PH03039"",""SortType"":""P"",""ProductCode"":""BLDG0268"",""StartDTs"":[""2024/03/14""],""ExpiryDTs"":[""2024/04/08""],""ContractDiscounts"":[20.00],""LastAmendedDTs"":[""2024/03/11 12:00:00""],""QuantitiesRequired"":[0]},{""Code"":""PH03039*BLDG0270"",""TradeAccountCode"":""PH03039"",""SortType"":""P"",""ProductCode"":""BLDG0270"",""StartDTs"":[""2024/03/14""],""ExpiryDTs"":[""2024/04/08""],""ContractDiscounts"":[20.00],""LastAmendedDTs"":[""2024/03/11 12:00:00""],""QuantitiesRequired"":[0]},{""Code"":""PH03039*BLDG0272"",""TradeAccountCode"":""PH03039"",""SortType"":""P"",""ProductCode"":""BLDG0272"",""StartDTs"":[""2024/03/14""],""ExpiryDTs"":[""2024/04/08""],""ContractDiscounts"":[20.00],""LastAmendedDTs"":[""2024/03/11 12:00:00""],""QuantitiesRequired"":[0]},{""Code"":""PH03039*BLDG0273"",""TradeAccountCode"":""PH03039"",""SortType"":""P"",""ProductCode"":""BLDG0273"",""StartDTs"":[""2024/03/14""],""ExpiryDTs"":[""2024/04/08""],""ContractDiscounts"":[20.00],""LastAmendedDTs"":[""2024/03/11 12:00:00""],""QuantitiesRequired"":[0]},{""Code"":""PH03039*BLDG0276"",""TradeAccountCode"":""PH03039"",""SortType"":""P"",""ProductCode"":""BLDG0276"",""StartDTs"":[""2024/03/14""],""ExpiryDTs"":[""2024/04/08""],""ContractDiscounts"":[20.00],""LastAmendedDTs"":[""2024/03/11 12:00:00""],""QuantitiesRequired"":[0]},{""Code"":""PH03039*BLDG0277"",""TradeAccountCode"":""PH03039"",""SortType"":""P"",""ProductCode"":""BLDG0277"",""StartDTs"":[""2024/03/14""],""ExpiryDTs"":[""2024/04/08""],""ContractDiscounts"":[20.00],""LastAmendedDTs"":[""2024/03/11 12:00:00""],""QuantitiesRequired"":[0]}]");
+
+            Tests.Stock.StockTestSuite.Run(uniVerseAccount);
+
+            //var result = ContractPriceFunctions.Delete(uniVerseAccount, "K0098", null);
 
 
             //int result = 0;

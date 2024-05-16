@@ -6,34 +6,22 @@ using System.Threading.Tasks;
 
 namespace MertexerV2.Models.Stock
 {
-    public class ProductCodeMinimumStockLevel
-    {
-        public string ProductCode { get; set; }
-        public decimal MinimumStockLevel { get; set; }
-
-        public ProductCodeMinimumStockLevel(string productCode, decimal minimumStockLevel)
-        {
-            ProductCode = productCode;
-            MinimumStockLevel = minimumStockLevel;
-        }
-    }
-
     public class B2CEnquiryDataFetch
     {
-        public List<ProductCodeMinimumStockLevel> ProductCodes { get; set; }
+        public List<ProductCodeStockCheckMinimum> ProductCodes { get; set; }
         public List<string> StockLocations { get; set; }
-        public List<ProductCodeMinimumStockLevel> SampleProductCodes { get; set; }
+        public List<ProductCodeStockCheckMinimum> SampleProductCodes { get; set; }
         public List<string> SampleStockLocations { get; set; }
-        public List<ProductCodeMinimumStockLevel> PaintProductCodes { get; set; }
+        public List<ProductCodeStockCheckMinimum> PaintProductCodes { get; set; }
         public List<string> PaintStockLocations { get; set; }
 
         public B2CEnquiryDataFetch()
         {
-            ProductCodes = new List<ProductCodeMinimumStockLevel>();
+            ProductCodes = new List<ProductCodeStockCheckMinimum>();
             StockLocations = new List<string>();
-            SampleProductCodes = new List<ProductCodeMinimumStockLevel>();
+            SampleProductCodes = new List<ProductCodeStockCheckMinimum>();
             SampleStockLocations = new List<string>();
-            PaintProductCodes = new List<ProductCodeMinimumStockLevel>();
+            PaintProductCodes = new List<ProductCodeStockCheckMinimum>();
             PaintStockLocations = new List<string>();
         }
     }

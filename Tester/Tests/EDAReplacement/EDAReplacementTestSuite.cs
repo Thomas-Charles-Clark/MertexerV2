@@ -34,7 +34,7 @@ namespace Tester.Tests.EDAReplacement
 
             Console.ForegroundColor = ConsoleColor.Yellow;
 
-            //Console.WriteLine(JsonConvert.SerializeObject(results, Formatting.Indented));
+            Console.WriteLine(JsonConvert.SerializeObject(results, Formatting.Indented));
 
             var nocode = results.Where(p => p.TradeAccountCode == null).ToList();
 

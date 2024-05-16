@@ -159,6 +159,34 @@ namespace MertexerV2.Models.EDAReplacement
           set { }
         }
 
+        public bool AllocateAtPicking { get; set; }
+
+        public string PickedBy { get; set; }
+
+        public IEnumerable<string> Batches { get; set; }
+
+        public IEnumerable<string> Pieces { get; set; }
+        
+        public int? ReleasedDate { get; set; }
+
+        public DateTime? ReleasedDT
+        {
+            get
+            {
+                if (ReleasedDate != null)
+                {
+                    var date = Framework.DateTimeFromUniVerseOffset(ReleasedDate.Value);
+
+                    return date;
+                }
+
+                return null;
+            }
+            set { }
+        }
+
+        public string ReleasedBy { get; set; }
+
     public TOELine(
             string key,
             string orderId,
@@ -191,7 +219,13 @@ namespace MertexerV2.Models.EDAReplacement
             string purchaseOrderLineId,
             string partnerProductCode,
             string reserveIndicator, 
-            string currentSuggestedDeliveryDate)
+            string currentSuggestedDeliveryDate,
+            string allocateAtPicking,
+            string pickedBy,
+            string batches,
+            string pieces,
+            string releasedDate,
+            string releasedBy)
         {
             Key = key;
 
@@ -307,6 +341,21 @@ namespace MertexerV2.Models.EDAReplacement
             {
               CurrentlySuggestedDeliveryDate = csdd;
             }
+
+            AllocateAtPicking = allocateAtPicking == "Y" ? true : false;
+
+            PickedBy = String.IsNullOrEmpty(pickedBy) ? null : pickedBy;
+
+            Batches = String.IsNullOrEmpty(batches) ? new string[] { } : batches.Split(Framework.ValueMarkDelimiter);
+
+            Pieces = String.IsNullOrEmpty(pieces) ? new string[] { } : pieces.Split(Framework.ValueMarkDelimiter);
+
+            if (Int32.TryParse(releasedDate, out int rdd))
+            {
+                ReleasedDate = rdd;
+            }
+
+            ReleasedBy = String.IsNullOrEmpty(ReleasedBy) ? null : releasedBy;
         }
 
         public override string ToString()

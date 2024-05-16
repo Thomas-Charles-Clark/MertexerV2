@@ -445,7 +445,29 @@ namespace Tester
 
             //var result = ContractDiscountFunctions.Upsert(uniVerseAccount, @"[{""Code"":""PH03039*BAGDG0115"",""TradeAccountCode"":""PH03039"",""SortType"":""P"",""ProductCode"":""BAGDG0115"",""StartDTs"":[""2024/03/14""],""ExpiryDTs"":[""2024/04/08""],""ContractDiscounts"":[20.00],""LastAmendedDTs"":[""2024/03/11 12:00:00""],""QuantitiesRequired"":[0]},{""Code"":""PH03039*BLDG0137"",""TradeAccountCode"":""PH03039"",""SortType"":""P"",""ProductCode"":""BLDG0137"",""StartDTs"":[""2024/03/14""],""ExpiryDTs"":[""2024/04/08""],""ContractDiscounts"":[20.00],""LastAmendedDTs"":[""2024/03/11 12:00:00""],""QuantitiesRequired"":[0]},{""Code"":""PH03039*BLDG0156"",""TradeAccountCode"":""PH03039"",""SortType"":""P"",""ProductCode"":""BLDG0156"",""StartDTs"":[""2024/03/14""],""ExpiryDTs"":[""2024/04/08""],""ContractDiscounts"":[20.00],""LastAmendedDTs"":[""2024/03/11 12:00:00""],""QuantitiesRequired"":[0]},{""Code"":""PH03039*BLDG0157"",""TradeAccountCode"":""PH03039"",""SortType"":""P"",""ProductCode"":""BLDG0157"",""StartDTs"":[""2024/03/14""],""ExpiryDTs"":[""2024/04/08""],""ContractDiscounts"":[20.00],""LastAmendedDTs"":[""2024/03/11 12:00:00""],""QuantitiesRequired"":[0]},{""Code"":""PH03039*BLDG0159"",""TradeAccountCode"":""PH03039"",""SortType"":""P"",""ProductCode"":""BLDG0159"",""StartDTs"":[""2024/03/14""],""ExpiryDTs"":[""2024/04/08""],""ContractDiscounts"":[20.00],""LastAmendedDTs"":[""2024/03/11 12:00:00""],""QuantitiesRequired"":[0]},{""Code"":""PH03039*BLDG0249"",""TradeAccountCode"":""PH03039"",""SortType"":""P"",""ProductCode"":""BLDG0249"",""StartDTs"":[""2024/03/14""],""ExpiryDTs"":[""2024/04/08""],""ContractDiscounts"":[20.00],""LastAmendedDTs"":[""2024/03/11 12:00:00""],""QuantitiesRequired"":[0]},{""Code"":""PH03039*BLDG0253"",""TradeAccountCode"":""PH03039"",""SortType"":""P"",""ProductCode"":""BLDG0253"",""StartDTs"":[""2024/03/14""],""ExpiryDTs"":[""2024/04/08""],""ContractDiscounts"":[20.00],""LastAmendedDTs"":[""2024/03/11 12:00:00""],""QuantitiesRequired"":[0]},{""Code"":""PH03039*BLDG0254"",""TradeAccountCode"":""PH03039"",""SortType"":""P"",""ProductCode"":""BLDG0254"",""StartDTs"":[""2024/03/14""],""ExpiryDTs"":[""2024/04/08""],""ContractDiscounts"":[20.00],""LastAmendedDTs"":[""2024/03/11 12:00:00""],""QuantitiesRequired"":[0]},{""Code"":""PH03039*BLDG0256"",""TradeAccountCode"":""PH03039"",""SortType"":""P"",""ProductCode"":""BLDG0256"",""StartDTs"":[""2024/03/14""],""ExpiryDTs"":[""2024/04/08""],""ContractDiscounts"":[20.00],""LastAmendedDTs"":[""2024/03/11 12:00:00""],""QuantitiesRequired"":[0]},{""Code"":""PH03039*BLDG0258"",""TradeAccountCode"":""PH03039"",""SortType"":""P"",""ProductCode"":""BLDG0258"",""StartDTs"":[""2024/03/14""],""ExpiryDTs"":[""2024/04/08""],""ContractDiscounts"":[20.00],""LastAmendedDTs"":[""2024/03/11 12:00:00""],""QuantitiesRequired"":[0]},{""Code"":""PH03039*BLDG0268"",""TradeAccountCode"":""PH03039"",""SortType"":""P"",""ProductCode"":""BLDG0268"",""StartDTs"":[""2024/03/14""],""ExpiryDTs"":[""2024/04/08""],""ContractDiscounts"":[20.00],""LastAmendedDTs"":[""2024/03/11 12:00:00""],""QuantitiesRequired"":[0]},{""Code"":""PH03039*BLDG0270"",""TradeAccountCode"":""PH03039"",""SortType"":""P"",""ProductCode"":""BLDG0270"",""StartDTs"":[""2024/03/14""],""ExpiryDTs"":[""2024/04/08""],""ContractDiscounts"":[20.00],""LastAmendedDTs"":[""2024/03/11 12:00:00""],""QuantitiesRequired"":[0]},{""Code"":""PH03039*BLDG0272"",""TradeAccountCode"":""PH03039"",""SortType"":""P"",""ProductCode"":""BLDG0272"",""StartDTs"":[""2024/03/14""],""ExpiryDTs"":[""2024/04/08""],""ContractDiscounts"":[20.00],""LastAmendedDTs"":[""2024/03/11 12:00:00""],""QuantitiesRequired"":[0]},{""Code"":""PH03039*BLDG0273"",""TradeAccountCode"":""PH03039"",""SortType"":""P"",""ProductCode"":""BLDG0273"",""StartDTs"":[""2024/03/14""],""ExpiryDTs"":[""2024/04/08""],""ContractDiscounts"":[20.00],""LastAmendedDTs"":[""2024/03/11 12:00:00""],""QuantitiesRequired"":[0]},{""Code"":""PH03039*BLDG0276"",""TradeAccountCode"":""PH03039"",""SortType"":""P"",""ProductCode"":""BLDG0276"",""StartDTs"":[""2024/03/14""],""ExpiryDTs"":[""2024/04/08""],""ContractDiscounts"":[20.00],""LastAmendedDTs"":[""2024/03/11 12:00:00""],""QuantitiesRequired"":[0]},{""Code"":""PH03039*BLDG0277"",""TradeAccountCode"":""PH03039"",""SortType"":""P"",""ProductCode"":""BLDG0277"",""StartDTs"":[""2024/03/14""],""ExpiryDTs"":[""2024/04/08""],""ContractDiscounts"":[20.00],""LastAmendedDTs"":[""2024/03/11 12:00:00""],""QuantitiesRequired"":[0]}]");
 
-            Tests.Stock.StockTestSuite.Run(uniVerseAccount);
+            //Tests.Stock.StockTestSuite.Run(uniVerseAccount);
+
+
+            //using (var qe = new QueryExecutor())
+            //{
+            //    var result = qe.Run("SQL_CONNECTION", "KEY = \"1\"", "SQL.CONNECTION");
+
+            //    Console.WriteLine(result);
+            //}
+
+            //using (var ce = new CommandExecutor("MERTEX_INC"))
+            //{
+            //    var result = ce.Arbitrary("LIST SLCUST WITH MARKTYPE = U BY CUSREF");
+
+            //    System.IO.File.WriteAllText("MERTEX_INC-U.csv", result);
+            //}
+
+
+
+            //EDAReplacementTestSuite.TOELINESearchByOrderNumbersTest("MERTEX", TesterFramework.FetchOrderHeadIDs(10));
+
+            var toelineResults = EDAReplacementTestSuite.TOELINESearchByOrderNumbersTest("MERTEX", @"[{ ""OrderID"": ""4708935"" }]");
+
 
             //var result = ContractPriceFunctions.Delete(uniVerseAccount, "K0098", null);
 
@@ -520,6 +542,7 @@ namespace Tester
             //Console.ForegroundColor = ConsoleColor.Cyan;
 
             //Item("SLCUST", "PH03155");
+
 
             Console.ForegroundColor = ConsoleColor.Green;
 

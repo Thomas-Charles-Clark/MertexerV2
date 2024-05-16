@@ -20,6 +20,16 @@ namespace MertexerV2.Utilities
 
         }
 
+        public QueryExecutor(bool diagnostics) : base(diagnostics: diagnostics)
+        {
+
+        }
+
+        public QueryExecutor(string database, bool diagnostics = false) : base(database, diagnostics: diagnostics)
+        {
+
+        }
+
         ~QueryExecutor()
         {
             base.Dispose(false);
@@ -103,46 +113,46 @@ namespace MertexerV2.Utilities
 
 
 #if DEBUG
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("uvFileName:");
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine($"\t{uvFileName}\r\n");
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("selectionCriteria:");
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine($"\t{uvSelectStatement}\r\n");
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("fieldsToReturn:");
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine($"\t{fieldsToReturn}\r\n");
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("webData:");
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine($"\t{String.Join($"\r\n\t", webData.Split(new string[] { Environment.NewLine }, StringSplitOptions.None))}\r\n");
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("result:");
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            if (returnType == "XML")
-            {
-                try
-                {
-                    var xDoc = XDocument.Parse(result?.Trim(new char[] { '\"' }));
-                    Console.WriteLine($"\t{String.Join($"\r\n\t", xDoc.ToString().Split(new string[] { Environment.NewLine }, StringSplitOptions.None))}\r\n");
-                }
-                catch
-                {
-                    Console.WriteLine($"{String.Join(System.Environment.NewLine, result.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).Select(p => $"\t{p}"))}\r\n");
-                }
-            }
-            else
-            {
-                Console.WriteLine($"{String.Join(System.Environment.NewLine, result.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).Select(p => $"\t{p}"))}\r\n");
-            }
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"Query returned in {watch.ElapsedMilliseconds}ms\r\n");
+            //Console.ForegroundColor = ConsoleColor.Green;
+            //Console.WriteLine("uvFileName:");
+            //Console.ForegroundColor = ConsoleColor.Yellow;
+            //Console.WriteLine($"\t{uvFileName}\r\n");
+            //Console.ForegroundColor = ConsoleColor.Green;
+            //Console.WriteLine("selectionCriteria:");
+            //Console.ForegroundColor = ConsoleColor.Yellow;
+            //Console.WriteLine($"\t{uvSelectStatement}\r\n");
+            //Console.ForegroundColor = ConsoleColor.Green;
+            //Console.WriteLine("fieldsToReturn:");
+            //Console.ForegroundColor = ConsoleColor.Yellow;
+            //Console.WriteLine($"\t{fieldsToReturn}\r\n");
+            //Console.ForegroundColor = ConsoleColor.Green;
+            //Console.WriteLine("webData:");
+            //Console.ForegroundColor = ConsoleColor.Yellow;
+            //Console.WriteLine($"\t{String.Join($"\r\n\t", webData.Split(new string[] { Environment.NewLine }, StringSplitOptions.None))}\r\n");
+            //Console.ForegroundColor = ConsoleColor.Green;
+            //Console.WriteLine("result:");
+            //Console.ForegroundColor = ConsoleColor.Yellow;
+            //if (returnType == "XML")
+            //{
+            //    try
+            //    {
+            //        var xDoc = XDocument.Parse(result?.Trim(new char[] { '\"' }));
+            //        Console.WriteLine($"\t{String.Join($"\r\n\t", xDoc.ToString().Split(new string[] { Environment.NewLine }, StringSplitOptions.None))}\r\n");
+            //    }
+            //    catch
+            //    {
+            //        Console.WriteLine($"{String.Join(System.Environment.NewLine, result.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).Select(p => $"\t{p}"))}\r\n");
+            //    }
+            //}
+            //else
+            //{
+            //    Console.WriteLine($"{String.Join(System.Environment.NewLine, result.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).Select(p => $"\t{p}"))}\r\n");
+            //}
+            //Console.ForegroundColor = ConsoleColor.Green;
+            //Console.WriteLine($"Query returned in {watch.ElapsedMilliseconds}ms\r\n");
 
-            if (++counter % 10 == 0)
-                Console.WriteLine();
+            //if (++counter % 10 == 0)
+            //    Console.WriteLine();
 #endif
 
 

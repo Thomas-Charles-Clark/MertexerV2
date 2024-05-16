@@ -15,10 +15,14 @@ namespace MertexerV2.DAL
 
         private string Database { get; set; }
 
-        public MertexConnection(string database = "MERTEX", bool nativeMode = true, int timeoutSeconds = 90)
+        private bool Diagnostics { get; set; }
+
+        public MertexConnection(string database = "MERTEX", bool nativeMode = true, int timeoutSeconds = 90, bool diagnostics = false)
         {
             Database = database;
-            
+
+            Diagnostics = diagnostics;
+
             try
             {
                 //public U2Connection Connection { get; set; }
@@ -53,16 +57,28 @@ namespace MertexerV2.DAL
                 UniObjects.UOPooling = false;
                 UniObjects.TimeOut = 15;
 
-                stopWatch.Start();
+                if (Diagnostics)
+                {
+                    stopWatch.Start();
 
-                Session = UniObjects.OpenSession(
-                    MertexConnectionDetails.Server,
-                    MertexConnectionDetails.UserID,
-                    MertexConnectionDetails.Password,
-                    Database
-                );
+                    Session = UniObjects.OpenSession(
+                        MertexConnectionDetails.Server,
+                        MertexConnectionDetails.UserID,
+                        MertexConnectionDetails.Password,
+                        Database
+                    );
 
-                stopWatch.Stop();
+                    stopWatch.Stop();
+                }
+                else
+                {
+                    Session = UniObjects.OpenSession(
+                        MertexConnectionDetails.Server,
+                        MertexConnectionDetails.UserID,
+                        MertexConnectionDetails.Password,
+                        Database
+                    );
+                }
 
                 //UniObjects.UOPooling = true;
                 //UniObjects.MinPoolSize = 1;
@@ -73,7 +89,10 @@ namespace MertexerV2.DAL
                 //Session = Connection.UniSession;
 
 #if DEBUG
-                //Console.WriteLine($"{this.GetType().Name} instantiated and connected to {Database ?? MertexConnectionDetails.Database} in {stopWatch.ElapsedMilliseconds}ms\r\n");
+                if (Diagnostics)
+                {
+                    Console.WriteLine($"{this.GetType().Name} instantiated and connected to {Database ?? MertexConnectionDetails.Database} in {stopWatch.ElapsedMilliseconds}ms\r\n");
+                }
 #endif
             }
             catch (Exception ex)
@@ -115,7 +134,10 @@ namespace MertexerV2.DAL
                 }
 
 #if DEBUG
-                //Console.WriteLine($"MertexConnection disposed successfully.\r\n");
+                if (Diagnostics)
+                {
+                    Console.WriteLine($"MertexConnection disposed successfully.\r\n");
+                }
 #endif
             }
         }

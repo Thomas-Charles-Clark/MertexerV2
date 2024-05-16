@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MertexerV2</RootNamespace>
-    <AssemblyName>MertexerV3</AssemblyName>
+    <AssemblyName>MertexerV2</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -161,6 +161,10 @@
     <Compile Include="Models\Retail\RetailModels.cs" />
     <Compile Include="Models\Retail\RetailTill.cs" />
     <Compile Include="Models\Retail\RetailTillSession.cs" />
+    <Compile Include="Models\Stock\B2CEnquiryDataFetch2.cs" />
+    <Compile Include="Models\Stock\B2CEnquiryProductGroup.cs" />
+    <Compile Include="Models\Stock\B2CEnquiryStockLocation.cs" />
+    <Compile Include="Models\Stock\ProductCodeStockCheckMinimum.cs" />
     <Compile Include="Models\Stock\StockLocation.cs" />
     <Compile Include="Models\TradeAccount\TradeAccountContact.cs" />
     <Compile Include="Models\TradeAccount\TradeAccountContactType.cs" />
@@ -420,6 +424,20 @@
     <Compile Include="SQLFunctions\QuantityBreakCostPrice.cs" />
     <Compile Include="Utilities\Cryptography.cs" />
     <Compile Include="Utilities\JsonAlsoUpdatesAttribute.cs" />
+    <Compile Include="Utilities\Konsole\Colors.cs" />
+    <Compile Include="Utilities\Konsole\ConsoleState.cs" />
+    <Compile Include="Utilities\Konsole\IConsole.cs" />
+    <Compile Include="Utilities\Konsole\IntegerExtensions.cs" />
+    <Compile Include="Utilities\Konsole\IProgressBar.cs" />
+    <Compile Include="Utilities\Konsole\IWrite.cs" />
+    <Compile Include="Utilities\Konsole\PbStyle.cs" />
+    <Compile Include="Utilities\Konsole\PlatformCheck.cs" />
+    <Compile Include="Utilities\Konsole\ProgressBar.cs" />
+    <Compile Include="Utilities\Konsole\ProgressBarSlim.cs" />
+    <Compile Include="Utilities\Konsole\ProgressBarTwoLine.cs" />
+    <Compile Include="Utilities\Konsole\StringExtensions.cs" />
+    <Compile Include="Utilities\Konsole\ThreadsafeWriter.cs" />
+    <Compile Include="Utilities\Konsole\XY.cs" />
     <Compile Include="Utilities\MertexConnectionDetails.cs" />
     <Compile Include="Models\PreAllocation\PreAllocationStatus.cs" />
     <Compile Include="Models\Status\TrackingResult.cs" />
@@ -502,6 +520,7 @@
     </Content>
     <Content Include="Notes\AddAssembly.sql" />
     <Content Include="Notes\AddFunctions.sql" />
+    <Content Include="SQLFunctions\MertexerV3.dll" />
     <None Include="Notes\DropFunctions.sql" />
     <Content Include="Notes\Notes.txt" />
   </ItemGroup>

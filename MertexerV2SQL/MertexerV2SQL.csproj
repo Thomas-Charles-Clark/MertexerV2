@@ -110,18 +110,18 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MertexerV2\MertexerV2.csproj">
-      <Project>{7386a9df-c273-4fca-acc7-b58fb51ca52c}</Project>
-      <Name>MertexerV2</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="ExternalDependencies\U2.Data.Client.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="ExternalDependencies\U2.Data.Client.Entity.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MertexerV2\MertexerV2.csproj">
+      <Project>{7386a9df-c273-4fca-acc7-b58fb51ca52c}</Project>
+      <Name>MertexerV2</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

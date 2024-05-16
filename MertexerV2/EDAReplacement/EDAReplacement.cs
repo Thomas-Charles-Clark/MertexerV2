@@ -1,6 +1,7 @@
 ﻿using MertexerV2.Models;
 using MertexerV2.Models.EDAReplacement;
 using MertexerV2.Models.General;
+using MertexerV2.SQLFunctions;
 using MertexerV2.Utilities;
 using Microsoft.SqlServer.Server;
 using Newtonsoft.Json;
@@ -20,6 +21,59 @@ namespace MertexerV2.EDAReplacement
 
     public static class EDAReplacement
     {
+        static readonly string[] toeheadFields = new string[] {
+            "CUSREF",
+            "CUSNAME",
+            "CUSORDNO.DES",
+            "DATEONFILE.INT",
+            "ORDTIME",
+            "ORDERTAKER",
+            "ORDER.PRIORITY",
+            "SO.ALLOC.PRIORITY",
+            "HOLDORDER",
+            "HOLD.DEL.DES",
+            "DELNAME",
+            "DELADDR1",
+            "DELADDR2",
+            "DELADDR3",
+            "DELADDR4",
+            "DELPCODE",
+            "TO.COUNTRY",
+            "HAULIERCODE",
+            "CARRCODE",
+            "TOTAL.PAINT.WEIGHT",
+            "PAINT.MESSAGE",
+            "HEADER.REF24",
+            "HEADER.REF25",
+            "HEADER.REF26",
+            "CHARGE.ON.DES",
+            "CARRIAGE",
+            "CARRIAGE.CUR",
+            "HAUL.ACC.NO.DES",
+            "BILL.DUTY.ACC.DES",
+            "CURRENCY",
+            "XRATE",
+            "HEADER.REF32",
+            "HEADER.REF22",
+            "DELPHONE",
+            "CUSNAME.FF",
+            "CUSADDR1.FF",
+            "CUSADDR2.FF",
+            "CUSADDR3.FF",
+            "CUSADDR4.FF",
+            "CUSPCODE.FF",
+            "ORDERTYPE",
+            "EMAIL.FAX.DES",
+            "EMAIL.TILL",
+            "ECOMM.EMAIL.DES",
+            "MISC.EMAIL.DES",
+            "ENDCUST",
+            "DELREF",
+            "DELIVERY.TYPE.TDW",
+            "TERMS",
+            "CARR.EXEMPT"
+        };
+
         [SqlFunction(DataAccess = DataAccessKind.Read,
             SystemDataAccess = SystemDataAccessKind.Read,
             FillRowMethodName = "ListTradeAccounts_FillRow",
@@ -160,56 +214,6 @@ namespace MertexerV2.EDAReplacement
                         selectStatement = $"DATEONFILE.INT <= {Framework.UniVerseDateString(ToDT.Value)}";
                 }
 
-                string[] fields = new string[] {
-                    "CUSREF",
-                    "CUSNAME",
-                    "CUSORDNO.DES",
-                    "DATEONFILE.INT",
-                    "ORDTIME",
-                    "ORDERTAKER",
-                    "ORDER.PRIORITY",
-                    "SO.ALLOC.PRIORITY",
-                    "HOLDORDER",
-                    "HOLD.DEL.DES",
-                    "DELNAME",
-                    "DELADDR1",
-                    "DELADDR2",
-                    "DELADDR3",
-                    "DELADDR4",
-                    "DELPCODE",
-                    "TO.COUNTRY",
-                    "HAULIERCODE",
-                    "CARRCODE",
-                    "TOTAL.PAINT.WEIGHT",
-                    "PAINT.MESSAGE",
-                    "HEADER.REF24",
-                    "HEADER.REF25",
-                    "HEADER.REF26",
-                    "CHARGE.ON.DES",
-                    "CARRIAGE",
-                    "CARRIAGE.CUR",
-                    "HAUL.ACC.NO.DES",
-                    "BILL.DUTY.ACC.DES",
-                    "CURRENCY",
-                    "XRATE",
-                    "HEADER.REF32",
-                    "HEADER.REF22",
-                    "DELPHONE",
-                    "CUSNAME.FF",
-                    "CUSADDR1.FF",
-                    "CUSADDR2.FF",
-                    "CUSADDR3.FF",
-                    "CUSADDR4.FF",
-                    "CUSPCODE.FF",
-                    "ORDERTYPE",
-                    "EMAIL.FAX.DES",
-                    "EMAIL.TILL",
-                    "ECOMM.EMAIL.DES",
-                    "MISC.EMAIL.DES",
-                    "ENDCUST",
-                    "DELREF"
-                };
-
                 using (var ce = new CommandExecutor(UniVerseAccount))
                 {
                     var keys = new List<string>();
@@ -240,61 +244,64 @@ namespace MertexerV2.EDAReplacement
 #endif
                         var theseResults = new List<TOEHead>();
 
-                        var records = toehead.ReadRecords(batch.ToArray(), fields);
+                        var records = toehead.ReadRecords(batch.ToArray(), toeheadFields);
 
-                        batch.ForEach(b =>
+                        batch.ForEach(orderId =>
                         {
-                            var record = records[b];
+                            var record = records[orderId];
 
                             theseResults.Add(new TOEHead(
-                                b,
-                                record.Record.Extract(1).StringValue,
-                                record.Record.Extract(2).StringValue,
-                                record.Record.Extract(3).StringValue,
-                                record.Record.Extract(4).StringValue,
-                                record.Record.Extract(5).StringValue,
-                                record.Record.Extract(6).StringValue,
-                                record.Record.Extract(7).StringValue,
-                                record.Record.Extract(8).StringValue,
-                                record.Record.Extract(9).StringValue,
-                                record.Record.Extract(10).StringValue,
-                                record.Record.Extract(11).StringValue,
-                                record.Record.Extract(12).StringValue,
-                                record.Record.Extract(13).StringValue,
-                                record.Record.Extract(14).StringValue,
-                                record.Record.Extract(15).StringValue,
-                                record.Record.Extract(16).StringValue,
-                                record.Record.Extract(17).StringValue,
-                                record.Record.Extract(18).StringValue,
-                                record.Record.Extract(19).StringValue,
-                                record.Record.Extract(20).StringValue,
-                                record.Record.Extract(21).StringValue,
-                                record.Record.Extract(22).StringValue,
-                                record.Record.Extract(23).StringValue,
-                                record.Record.Extract(24).StringValue,
-                                record.Record.Extract(25).StringValue,
-                                record.Record.Extract(26).StringValue,
-                                record.Record.Extract(27).StringValue,
-                                record.Record.Extract(28).StringValue,
-                                record.Record.Extract(29).StringValue,
-                                record.Record.Extract(30).StringValue,
-                                record.Record.Extract(31).StringValue,
-                                record.Record.Extract(32).StringValue,
-                                record.Record.Extract(33).StringValue,
-                                record.Record.Extract(34).StringValue,
-                                record.Record.Extract(35).StringValue,
-                                record.Record.Extract(36).StringValue,
-                                record.Record.Extract(37).StringValue,
-                                record.Record.Extract(38).StringValue,
-                                record.Record.Extract(39).StringValue,
-                                record.Record.Extract(40).StringValue,
-                                record.Record.Extract(41).StringValue,
-                                record.Record.Extract(42).StringValue,
-                                record.Record.Extract(43).StringValue,
-                                record.Record.Extract(44).StringValue,
-                                record.Record.Extract(45).StringValue,
-                                record.Record.Extract(46).StringValue,
-                                record.Record.Extract(47).StringValue
+                                orderId: orderId,
+                                tradeAccountCode: record.Record.Extract(1).StringValue,
+                                tradeAccountName: record.Record.Extract(2).StringValue,
+                                customerOrderReference: record.Record.Extract(3).StringValue,
+                                dateOnFile: record.Record.Extract(4).StringValue,
+                                timeOnFile: record.Record.Extract(5).StringValue,
+                                orderTaker: record.Record.Extract(6).StringValue,
+                                orderPriority: record.Record.Extract(7).StringValue,
+                                allocationPriority: record.Record.Extract(8).StringValue,
+                                holdOrder: record.Record.Extract(9).StringValue,
+                                holdDelivery: record.Record.Extract(10).StringValue,
+                                deliveryName: record.Record.Extract(11).StringValue,
+                                deliveryAddressLine1: record.Record.Extract(12).StringValue,
+                                deliveryAddressLine2: record.Record.Extract(13).StringValue,
+                                deliveryTown: record.Record.Extract(14).StringValue,
+                                deliveryCounty: record.Record.Extract(15).StringValue,
+                                deliveryPostcode: record.Record.Extract(16).StringValue,
+                                deliveryCountry: record.Record.Extract(17).StringValue,
+                                haulierCode: record.Record.Extract(18).StringValue,
+                                carriageCode: record.Record.Extract(19).StringValue,
+                                totalPaintWeight: record.Record.Extract(20).StringValue,
+                                paintMessage: record.Record.Extract(21).StringValue,
+                                deliveryAlertLandlinePhoneNumber: record.Record.Extract(22).StringValue,
+                                deliveryAlertMobilePhoneNumber: record.Record.Extract(23).StringValue,
+                                deliveryAlertEmail: record.Record.Extract(24).StringValue,
+                                chargeOn: record.Record.Extract(25).StringValue,
+                                deliveryCharge: record.Record.Extract(26).StringValue,
+                                deliveryChargeCurrency: record.Record.Extract(27).StringValue,
+                                haulierAccountNumberForShippingCharge: record.Record.Extract(28).StringValue,
+                                haulierAccountNumberForDuty: record.Record.Extract(29).StringValue,
+                                mertexCurrencyCode: record.Record.Extract(30).StringValue,
+                                sterlingExchangeRate: record.Record.Extract(31).StringValue,
+                                deliveryGroup: record.Record.Extract(32).StringValue,
+                                eoriNumber: record.Record.Extract(33).StringValue,
+                                deliveryPhone: record.Record.Extract(34).StringValue,
+                                invoiceAddressName: record.Record.Extract(35).StringValue,
+                                invoiceAddressLine1: record.Record.Extract(36).StringValue,
+                                invoiceAddressLine2: record.Record.Extract(37).StringValue,
+                                invoiceAddressTown: record.Record.Extract(38).StringValue,
+                                invoiceAddressCounty: record.Record.Extract(39).StringValue,
+                                invoiceAddressPostcode: record.Record.Extract(40).StringValue,
+                                orderType: record.Record.Extract(41).StringValue,
+                                contactEmailFax: record.Record.Extract(42).StringValue,
+                                emailTill: record.Record.Extract(43).StringValue,
+                                ecommEmail: record.Record.Extract(44).StringValue,
+                                miscEmail: record.Record.Extract(45).StringValue,
+                                endCustomer: record.Record.Extract(46).StringValue,
+                                deliveryReference: record.Record.Extract(47).StringValue,
+                                deliveryType: record.Record.Extract(48).StringValue,
+                                paymentTerms: record.Record.Extract(49).StringValue,
+                                carriageExempt: record.Record.Extract(50).StringValue
                             ));
                         });
 
@@ -338,56 +345,6 @@ namespace MertexerV2.EDAReplacement
                         selectStatement = $"DATEONFILE.INT >= {Framework.UniVerseDateString(FromDT.Value)}";
                 }
 
-                string[] fields = new string[] {
-                    "CUSREF",
-                    "CUSNAME",
-                    "CUSORDNO.DES",
-                    "DATEONFILE.INT",
-                    "ORDTIME",
-                    "ORDERTAKER",
-                    "ORDER.PRIORITY",
-                    "SO.ALLOC.PRIORITY",
-                    "HOLDORDER",
-                    "HOLD.DEL.DES",
-                    "DELNAME",
-                    "DELADDR1",
-                    "DELADDR2",
-                    "DELADDR3",
-                    "DELADDR4",
-                    "DELPCODE",
-                    "TO.COUNTRY",
-                    "HAULIERCODE",
-                    "CARRCODE",
-                    "TOTAL.PAINT.WEIGHT",
-                    "PAINT.MESSAGE",
-                    "HEADER.REF24",
-                    "HEADER.REF25",
-                    "HEADER.REF26",
-                    "CHARGE.ON.DES",
-                    "CARRIAGE",
-                    "CARRIAGE.CUR",
-                    "HAUL.ACC.NO.DES",
-                    "BILL.DUTY.ACC.DES",
-                    "CURRENCY",
-                    "XRATE",
-                    "HEADER.REF32",
-                    "HEADER.REF22",
-                    "DELPHONE",
-                    "CUSNAME.FF",
-                    "CUSADDR1.FF",
-                    "CUSADDR2.FF",
-                    "CUSADDR3.FF",
-                    "CUSADDR4.FF",
-                    "CUSPCODE.FF",
-                    "ORDERTYPE",
-                    "EMAIL.FAX.DES",
-                    "EMAIL.TILL",
-                    "ECOMM.EMAIL.DES",
-                    "MISC.EMAIL.DES",
-                    "ENDCUST",
-                    "DELREF"
-                };
-
                 using (var ce = new CommandExecutor(UniVerseAccount))
                 {
                     var keys = new List<string>();
@@ -411,61 +368,64 @@ namespace MertexerV2.EDAReplacement
                         {
                             var theseResults = new List<TOEHead>();
 
-                            var records = toehead.ReadRecords(batch.ToArray(), fields);
+                            var records = toehead.ReadRecords(batch.ToArray(), toeheadFields);
 
-                            batch.ForEach(b =>
+                            batch.ForEach(orderId =>
                             {
-                                var record = records[b];
+                                var record = records[orderId];
 
                                 theseResults.Add(new TOEHead(
-                                    b,
-                                    record.Record.Extract(1).StringValue,
-                                    record.Record.Extract(2).StringValue,
-                                    record.Record.Extract(3).StringValue,
-                                    record.Record.Extract(4).StringValue,
-                                    record.Record.Extract(5).StringValue,
-                                    record.Record.Extract(6).StringValue,
-                                    record.Record.Extract(7).StringValue,
-                                    record.Record.Extract(8).StringValue,
-                                    record.Record.Extract(9).StringValue,
-                                    record.Record.Extract(10).StringValue,
-                                    record.Record.Extract(11).StringValue,
-                                    record.Record.Extract(12).StringValue,
-                                    record.Record.Extract(13).StringValue,
-                                    record.Record.Extract(14).StringValue,
-                                    record.Record.Extract(15).StringValue,
-                                    record.Record.Extract(16).StringValue,
-                                    record.Record.Extract(17).StringValue,
-                                    record.Record.Extract(18).StringValue,
-                                    record.Record.Extract(19).StringValue,
-                                    record.Record.Extract(20).StringValue,
-                                    record.Record.Extract(21).StringValue,
-                                    record.Record.Extract(22).StringValue,
-                                    record.Record.Extract(23).StringValue,
-                                    record.Record.Extract(24).StringValue,
-                                    record.Record.Extract(25).StringValue,
-                                    record.Record.Extract(26).StringValue,
-                                    record.Record.Extract(27).StringValue,
-                                    record.Record.Extract(28).StringValue,
-                                    record.Record.Extract(29).StringValue,
-                                    record.Record.Extract(30).StringValue,
-                                    record.Record.Extract(31).StringValue,
-                                    record.Record.Extract(32).StringValue,
-                                    record.Record.Extract(33).StringValue,
-                                    record.Record.Extract(34).StringValue,
-                                    record.Record.Extract(35).StringValue,
-                                    record.Record.Extract(36).StringValue,
-                                    record.Record.Extract(37).StringValue,
-                                    record.Record.Extract(38).StringValue,
-                                    record.Record.Extract(39).StringValue,
-                                    record.Record.Extract(40).StringValue,
-                                    record.Record.Extract(41).StringValue,
-                                    record.Record.Extract(42).StringValue,
-                                    record.Record.Extract(43).StringValue,
-                                    record.Record.Extract(44).StringValue,
-                                    record.Record.Extract(45).StringValue,
-                                    record.Record.Extract(46).StringValue,
-                                record.Record.Extract(47).StringValue
+                                    orderId: orderId,
+                                    tradeAccountCode: record.Record.Extract(1).StringValue,
+                                    tradeAccountName: record.Record.Extract(2).StringValue,
+                                    customerOrderReference: record.Record.Extract(3).StringValue,
+                                    dateOnFile: record.Record.Extract(4).StringValue,
+                                    timeOnFile: record.Record.Extract(5).StringValue,
+                                    orderTaker: record.Record.Extract(6).StringValue,
+                                    orderPriority: record.Record.Extract(7).StringValue,
+                                    allocationPriority: record.Record.Extract(8).StringValue,
+                                    holdOrder: record.Record.Extract(9).StringValue,
+                                    holdDelivery: record.Record.Extract(10).StringValue,
+                                    deliveryName: record.Record.Extract(11).StringValue,
+                                    deliveryAddressLine1: record.Record.Extract(12).StringValue,
+                                    deliveryAddressLine2: record.Record.Extract(13).StringValue,
+                                    deliveryTown: record.Record.Extract(14).StringValue,
+                                    deliveryCounty: record.Record.Extract(15).StringValue,
+                                    deliveryPostcode: record.Record.Extract(16).StringValue,
+                                    deliveryCountry: record.Record.Extract(17).StringValue,
+                                    haulierCode: record.Record.Extract(18).StringValue,
+                                    carriageCode: record.Record.Extract(19).StringValue,
+                                    totalPaintWeight: record.Record.Extract(20).StringValue,
+                                    paintMessage: record.Record.Extract(21).StringValue,
+                                    deliveryAlertLandlinePhoneNumber: record.Record.Extract(22).StringValue,
+                                    deliveryAlertMobilePhoneNumber: record.Record.Extract(23).StringValue,
+                                    deliveryAlertEmail: record.Record.Extract(24).StringValue,
+                                    chargeOn: record.Record.Extract(25).StringValue,
+                                    deliveryCharge: record.Record.Extract(26).StringValue,
+                                    deliveryChargeCurrency: record.Record.Extract(27).StringValue,
+                                    haulierAccountNumberForShippingCharge: record.Record.Extract(28).StringValue,
+                                    haulierAccountNumberForDuty: record.Record.Extract(29).StringValue,
+                                    mertexCurrencyCode: record.Record.Extract(30).StringValue,
+                                    sterlingExchangeRate: record.Record.Extract(31).StringValue,
+                                    deliveryGroup: record.Record.Extract(32).StringValue,
+                                    eoriNumber: record.Record.Extract(33).StringValue,
+                                    deliveryPhone: record.Record.Extract(34).StringValue,
+                                    invoiceAddressName: record.Record.Extract(35).StringValue,
+                                    invoiceAddressLine1: record.Record.Extract(36).StringValue,
+                                    invoiceAddressLine2: record.Record.Extract(37).StringValue,
+                                    invoiceAddressTown: record.Record.Extract(38).StringValue,
+                                    invoiceAddressCounty: record.Record.Extract(39).StringValue,
+                                    invoiceAddressPostcode: record.Record.Extract(40).StringValue,
+                                    orderType: record.Record.Extract(41).StringValue,
+                                    contactEmailFax: record.Record.Extract(42).StringValue,
+                                    emailTill: record.Record.Extract(43).StringValue,
+                                    ecommEmail: record.Record.Extract(44).StringValue,
+                                    miscEmail: record.Record.Extract(45).StringValue,
+                                    endCustomer: record.Record.Extract(46).StringValue,
+                                    deliveryReference: record.Record.Extract(47).StringValue,
+                                    deliveryType: record.Record.Extract(48).StringValue,
+                                    paymentTerms: record.Record.Extract(49).StringValue,
+                                    carriageExempt: record.Record.Extract(50).StringValue
                                 ));
                             });
 
@@ -484,7 +444,6 @@ namespace MertexerV2.EDAReplacement
 
             return new ArrayList(results);
         }
-
 
         public static void FetchOrderHeads_FillRow(
             object obj,
@@ -534,7 +493,10 @@ namespace MertexerV2.EDAReplacement
             out SqlString EcommEmail,
             out SqlString MiscEmail,
             out SqlString EndCustomer,
-            out SqlString DeliveryReference)
+            out SqlString DeliveryReference,
+            out SqlString DeliveryType,
+            out SqlString PaymentTerms,
+            out SqlString CarriageExempt)
         {
             var result = (TOEHead)obj;
 
@@ -587,6 +549,10 @@ namespace MertexerV2.EDAReplacement
             EndCustomer = String.IsNullOrEmpty(result.EndCustomer) ? SqlString.Null : result.EndCustomer.TrimReduceTruncate(50);
 
             DeliveryReference = String.IsNullOrEmpty(result.DeliveryReference) ? SqlString.Null : result.DeliveryReference.TrimReduceTruncate(20);
+            
+            DeliveryType = String.IsNullOrEmpty(result.DeliveryType) ? SqlString.Null : result.DeliveryType.TrimReduceTruncate(1);
+            PaymentTerms = String.IsNullOrEmpty(result.PaymentTerms) ? SqlString.Null : result.PaymentTerms.TrimReduceTruncate(10);
+            CarriageExempt = String.IsNullOrEmpty(result.CarriageExempt) ? SqlString.Null : result.CarriageExempt.TrimReduceTruncate(1);
         }
 
 
@@ -680,7 +646,13 @@ namespace MertexerV2.EDAReplacement
                     "PORDNO",                // 219
                     "PARTPRODCODE",          // 269
                     "RESERVE.FLAG",           // 311
-                    "SS.CURSUG.DELDATE.ABS"  // 75.1
+                    "SS.CURSUG.DELDATE.ABS",  // 75.1
+                    "SO.ALLOC.FULL.DES",      // 0 - TOEHEAD 655
+                    "USER.TO.GUN.DES",       // 628
+                    "MBATCH.NO",             // 70.M
+                    "MPIECE.NO",            // 91.M
+                    "SS.RELEASED.INT",      // 74
+                    "RELEASED.BY"           // 0 - OEPLHEAD 355.6
                 };
 
                 using (var ce = new CommandExecutor(UniVerseAccount))
@@ -737,7 +709,13 @@ namespace MertexerV2.EDAReplacement
                                 purchaseOrderLineId: record.Record.Extract(28).StringValue,
                                 partnerProductCode: record.Record.Extract(29).StringValue,
                                 reserveIndicator: record.Record.Extract(30).StringValue,
-                                currentSuggestedDeliveryDate: record.Record.Extract(31).StringValue
+                                currentSuggestedDeliveryDate: record.Record.Extract(31).StringValue,
+                                allocateAtPicking: record.Record.Extract(32).StringValue,
+                                pickedBy: record.Record.Extract(33).StringValue,
+                                batches: record.Record.Extract(34).StringValue,
+                                pieces: record.Record.Extract(35).StringValue,
+                                releasedDate: record.Record.Extract(36).StringValue,
+                                releasedBy: record.Record.Extract(37).StringValue
                             ));
                         });
 
@@ -805,7 +783,13 @@ namespace MertexerV2.EDAReplacement
                     "PORDNO",                // 219
                     "PARTPRODCODE",          // 269
                     "RESERVE.FLAG",          // 311
-                    "SS.CURSUG.DELDATE.ABS"  // 75.1
+                    "SS.CURSUG.DELDATE.ABS",  // 75.1
+                    "SO.ALLOC.FULL.DES",      // 0 - TOEHEAD 655
+                    "USER.TO.GUN.DES",       // 628
+                    "MBATCH.NO",             // 70.M
+                    "MPIECE.NO",            // 91.M
+                    "SS.RELEASED.INT",      // 74
+                    "RELEASED.BY"           // 0 - OEPLHEAD 355.6
                 };
 
                 using (var ce = new CommandExecutor(UniVerseAccount))
@@ -887,7 +871,13 @@ namespace MertexerV2.EDAReplacement
                                 purchaseOrderLineId: record.Record.Extract(28).StringValue,
                                 partnerProductCode: record.Record.Extract(29).StringValue,
                                 reserveIndicator: record.Record.Extract(30).StringValue,
-                                currentSuggestedDeliveryDate: record.Record.Extract(31).StringValue
+                                currentSuggestedDeliveryDate: record.Record.Extract(31).StringValue,
+                                allocateAtPicking: record.Record.Extract(32).StringValue,
+                                pickedBy: record.Record.Extract(33).StringValue,
+                                batches: record.Record.Extract(34).StringValue,
+                                pieces: record.Record.Extract(35).StringValue,
+                                releasedDate: record.Record.Extract(36).StringValue,
+                                releasedBy: record.Record.Extract(37).StringValue
                             ));
                         });
 
@@ -934,7 +924,13 @@ namespace MertexerV2.EDAReplacement
             out SqlString PurchaseOrderLineID,
             out SqlString PartnerProductCode,
             out SqlString ReserveIndicator,
-            out SqlDateTime CurrentSuggestedDeliveryDT
+            out SqlDateTime CurrentSuggestedDeliveryDT,
+            out SqlBoolean AllocateAtPicking,
+            out SqlString PickedBy,
+            out SqlString Batches,
+            out SqlString Pieces,
+            out SqlDateTime ReleasedDT,
+            out SqlString ReleasedBy
             )
         {
             var result = (TOELine)obj;
@@ -1000,10 +996,22 @@ namespace MertexerV2.EDAReplacement
             ReserveIndicator = String.IsNullOrEmpty(result.ReserveIndicator) ? SqlString.Null : result.ReserveIndicator.TrimReduceTruncate(1);
 
             CurrentSuggestedDeliveryDT = result.CurrentlySuggestedDeliveryDT ?? SqlDateTime.Null;
+
+            AllocateAtPicking = result.AllocateAtPicking;
+
+            PickedBy = String.IsNullOrEmpty(result.PickedBy) ? SqlString.Null : result.PickedBy.TrimReduceTruncate(10);
+
+            Batches = result.Batches.Any() ? JsonConvert.SerializeObject(result.Batches) : SqlString.Null;
+
+            Pieces = result.Pieces.Any() ? JsonConvert.SerializeObject(result.Pieces) : SqlString.Null;
+
+            ReleasedDT = result.ReleasedDT ?? SqlDateTime.Null;
+
+            ReleasedBy = String.IsNullOrEmpty(result.ReleasedBy) ? SqlString.Null : result.ReleasedBy.TrimReduceTruncate(50);
         }
 
 
-    [SqlFunction(DataAccess = DataAccessKind.Read,
+        [SqlFunction(DataAccess = DataAccessKind.Read,
             SystemDataAccess = SystemDataAccessKind.Read,
             FillRowMethodName = "FetchProductLocations_FillRow",
             TableDefinition = "")]

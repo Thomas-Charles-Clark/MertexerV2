@@ -74,6 +74,50 @@ namespace Tester.Utilities
             }
         }
 
+        public static string FetchB2CRealtimeStockCheckJson()
+        {
+            using (var conn = new SqlConnection("Data Source=vm-sql1;Initial Catalog=FlockDev;Integrated Security=True"))
+            {
+                try
+                {
+                    var parameters = new DynamicParameters();
+
+                    parameters.Add("EnquiryType", 'R');
+                    parameters.Add("ResultantJSON", dbType: DbType.String, direction: ParameterDirection.Output, size: Int32.MaxValue);
+
+                    conn.Execute("[portal].[StockCheckProductList]", parameters, null, null, CommandType.StoredProcedure);
+
+                    return parameters.Get<string>("ResultantJSON");
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+        }
+
+        public static string FetchB2CDiscontinuedStockCheckJson()
+        {
+            using (var conn = new SqlConnection("Data Source=vm-sql1;Initial Catalog=FlockDev;Integrated Security=True"))
+            {
+                try
+                {
+                    var parameters = new DynamicParameters();
+
+                    parameters.Add("EnquiryType", 'D');
+                    parameters.Add("ResultantJSON", dbType: DbType.String, direction: ParameterDirection.Output, size: Int32.MaxValue);
+
+                    conn.Execute("[portal].[StockCheckProductList]", parameters, null, null, CommandType.StoredProcedure);
+
+                    return parameters.Get<string>("ResultantJSON");
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+        }
+
         public static string FetchAccountDataSourceJson(string tradeAccountNumber)
         {
 #if DEBUG

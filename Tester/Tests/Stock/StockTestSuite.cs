@@ -40,23 +40,39 @@ namespace Tester.Tests.Stock
 
             stopWatch.Start();
 
-            var results = MertexerV2.SQLFunctions.Stock.B2CEnquiry();
+            Console.WriteLine($"Beginning Realtime stock check");
+
+            var results = MertexerV2.SQLFunctions.Stock.B2CEnquiry(TesterFramework.FetchB2CRealtimeStockCheckJson());
+
+            Console.WriteLine($"Realtime stock check operation returned {(results as ArrayList).Count} in {stopWatch.Elapsed:g}");
+
+            Console.WriteLine();
+
+            Console.WriteLine();
+
+            stopWatch.Reset();
+
+            stopWatch.Start();
+
+            Console.WriteLine($"Beginning Discontinued stock check");
+
+            var discoResults = MertexerV2.SQLFunctions.Stock.B2CEnquiry(TesterFramework.FetchB2CDiscontinuedStockCheckJson());
+
+            Console.WriteLine($"Discontinued stock check operation returned {(discoResults as ArrayList).Count} in {stopWatch.Elapsed:g}");
 
             stopWatch.Stop();
-
-            Console.WriteLine($"B2C_STOCK_ENQUIRY parallel operation returned {(results as ArrayList).Count} in {stopWatch.Elapsed:g}");
 
             Console.WriteLine($"Stock Tests Complete.");
 
             Console.WriteLine(TesterFramework.WavyLineBreak);
 
-            Console.Beep(37, 300);
-            Console.Beep(2820, 300);
-            System.Threading.Thread.Sleep(20);
-            Console.Beep(2800, 190);
-            Console.Beep(2800, 190);
-            System.Threading.Thread.Sleep(20);
-            Console.Beep(3800, 300);
+            //Console.Beep(37, 300);
+            //Console.Beep(2820, 300);
+            //System.Threading.Thread.Sleep(20);
+            //Console.Beep(2800, 190);
+            //Console.Beep(2800, 190);
+            //System.Threading.Thread.Sleep(20);
+            //Console.Beep(3800, 300);
         }
     }
 }

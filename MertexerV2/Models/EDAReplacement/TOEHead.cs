@@ -105,6 +105,12 @@ namespace MertexerV2.Models.EDAReplacement
 
         public string DeliveryReference { get; set; }
 
+        public string DeliveryType { get; set; }
+
+        public string PaymentTerms { get; set; }
+
+        public string CarriageExempt { get; set; }
+
         public TOEHead(
             string orderId,
             string tradeAccountCode,
@@ -153,7 +159,10 @@ namespace MertexerV2.Models.EDAReplacement
             string ecommEmail,
             string miscEmail,
             string endCustomer,
-            string deliveryReference)
+            string deliveryReference,
+            string deliveryType,
+            string paymentTerms,
+            string carriageExempt)
         {
             TradeAccountCode = String.IsNullOrEmpty(tradeAccountCode) ? null : tradeAccountCode;
 
@@ -300,6 +309,12 @@ namespace MertexerV2.Models.EDAReplacement
             EndCustomer = endCustomer;
 
             DeliveryReference = String.IsNullOrEmpty(deliveryReference) ? null : deliveryReference;
+
+            DeliveryType = String.IsNullOrEmpty(deliveryType) ? null : deliveryType;
+
+            PaymentTerms = String.IsNullOrEmpty(paymentTerms) ? null : paymentTerms;
+
+            CarriageExempt = String.IsNullOrEmpty(carriageExempt) ? null : carriageExempt;
         }
 
         public override string ToString()

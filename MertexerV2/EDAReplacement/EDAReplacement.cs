@@ -71,7 +71,8 @@ namespace MertexerV2.EDAReplacement
             "DELREF",
             "DELIVERY.TYPE.TDW",
             "TERMS",
-            "CARR.EXEMPT"
+            "CARR.EXEMPT",
+            "SO.CUSTREQ.FULLDESP.DES"
         };
 
         [SqlFunction(DataAccess = DataAccessKind.Read,
@@ -301,7 +302,8 @@ namespace MertexerV2.EDAReplacement
                                 deliveryReference: record.Record.Extract(47).StringValue,
                                 deliveryType: record.Record.Extract(48).StringValue,
                                 paymentTerms: record.Record.Extract(49).StringValue,
-                                carriageExempt: record.Record.Extract(50).StringValue
+                                carriageExempt: record.Record.Extract(50).StringValue,
+                                customerHeldForFullDespatch: record.Record.Extract(51).StringValue
                             ));
                         });
 
@@ -425,7 +427,8 @@ namespace MertexerV2.EDAReplacement
                                     deliveryReference: record.Record.Extract(47).StringValue,
                                     deliveryType: record.Record.Extract(48).StringValue,
                                     paymentTerms: record.Record.Extract(49).StringValue,
-                                    carriageExempt: record.Record.Extract(50).StringValue
+                                    carriageExempt: record.Record.Extract(50).StringValue,
+                                    customerHeldForFullDespatch: record.Record.Extract(51).StringValue
                                 ));
                             });
 
@@ -496,7 +499,8 @@ namespace MertexerV2.EDAReplacement
             out SqlString DeliveryReference,
             out SqlString DeliveryType,
             out SqlString PaymentTerms,
-            out SqlString CarriageExempt)
+            out SqlString CarriageExempt,
+            out SqlBoolean CustomerHeldForFullDespatch)
         {
             var result = (TOEHead)obj;
 
@@ -553,6 +557,8 @@ namespace MertexerV2.EDAReplacement
             DeliveryType = String.IsNullOrEmpty(result.DeliveryType) ? SqlString.Null : result.DeliveryType.TrimReduceTruncate(1);
             PaymentTerms = String.IsNullOrEmpty(result.PaymentTerms) ? SqlString.Null : result.PaymentTerms.TrimReduceTruncate(10);
             CarriageExempt = String.IsNullOrEmpty(result.CarriageExempt) ? SqlString.Null : result.CarriageExempt.TrimReduceTruncate(1);
+
+            CustomerHeldForFullDespatch = result.CustomerHeldForFullDespatch;
         }
 
 

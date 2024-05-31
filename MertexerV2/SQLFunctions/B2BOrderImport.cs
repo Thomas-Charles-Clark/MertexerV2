@@ -2,6 +2,8 @@
 using MertexerV2.Utilities;
 using Microsoft.SqlServer.Server;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -22,7 +24,7 @@ namespace MertexerV2.SQLFunctions
         // Call Clear_Basket
 
 #if DEBUG
-        private static string sqlConnectionString = "Data Source=vm-sql1;Initial Catalog=FlockDev;Integrated Security=True";
+        private static string sqlConnectionString = "Data Source=vm-sql1;Initial Catalog=Flock;Integrated Security=True";
 #else
         private static string sqlConnectionString = "Data Source=vm-sql1;Initial Catalog=Flock;Integrated Security=True";
 #endif
@@ -41,6 +43,8 @@ namespace MertexerV2.SQLFunctions
 
             try
             {
+                //throw new Exception("The cheeeeese. THE CHEEEEEEEEEESE HAS MADE ME DEAF, YOU KNOW!!!");
+
                 using (var qe = new QueryExecutor(UniVerseAccount))
                 {
                     headersDoc = XDocument.Parse(Framework.RemoveInvalidXmlChars(qe.Run("B2B_GET_BASKET_HEADERS", "")));
@@ -399,6 +403,9 @@ namespace MertexerV2.SQLFunctions
                                 using (var ohComm = new SqlCommand(@"
                                                 DECLARE @OrderImportHeadID BIGINT;
 
+                                                SET QUOTED_IDENTIFIER ON;
+                                                SET ANSI_NULLS ON;
+
                                                 INSERT INTO [portal].[OrderImportHead]
                                                             ([OrderImportTypeID]
                                                             ,[CreatedDT]
@@ -496,6 +503,10 @@ namespace MertexerV2.SQLFunctions
                                         using (var oltransaction = conn.BeginTransaction())
                                         {
                                             using (var olComm = new SqlCommand(@"
+
+                                                                    SET QUOTED_IDENTIFIER ON;
+                                                                    SET ANSI_NULLS ON;
+
                                                                     INSERT INTO [portal].[OrderImportLine]
                                                                                         ([OrderImportHeadID]
                                                                                         ,[ProductCode]
@@ -547,10 +558,15 @@ namespace MertexerV2.SQLFunctions
 
                                         using (var processedTransaction = conn.BeginTransaction())
                                         {
-                                            using (var processedComm = new SqlCommand(@"UPDATE [portal].[B2BOrderImport]
-                                                                                                SET ProcessedDT = @Now,  
-                                                                                                OrderImportHeadID = @OrderImportHeadID
-                                                                                        WHERE BasketKey = @BasketKey", conn))
+                                            using (var processedComm = new SqlCommand(@"
+
+                                                SET QUOTED_IDENTIFIER ON;
+                                                SET ANSI_NULLS ON;
+
+                                                UPDATE [portal].[B2BOrderImport]
+                                                        SET ProcessedDT = @Now,  
+                                                        OrderImportHeadID = @OrderImportHeadID
+                                                WHERE BasketKey = @BasketKey", conn))
                                             {
                                                 processedComm.Transaction = processedTransaction;
 
@@ -609,62 +625,105 @@ namespace MertexerV2.SQLFunctions
 
         public static async Task<int> SendSiphonErrorEmail(string basketKey, string basketJson, string recipientEmail, Exception ex)
         {
-            try
+            //            try
+            //            {
+            //                using (var client = new System.Net.Mail.SmtpClient("smtp.office365.com", 587))
+            //                {
+            //                    System.Net.Mail.MailMessage message = null;
+
+            //                    message = new System.Net.Mail.MailMessage("portal.noreply@designersguild.com", recipientEmail);
+
+            //                    client.EnableSsl = true;
+            //                    client.UseDefaultCredentials = false;
+            //                    client.Credentials = new System.Net.NetworkCredential("portal.noreply@designersguild.com", "TheCakeIsALi3");
+
+            //                    message.IsBodyHtml = true;
+
+            //                    if (!String.IsNullOrEmpty(basketKey))
+            //                    {
+            //                        message.Subject = $"EXCEPTION while importing {basketKey} into portal.B2BOrderImport";
+            //                    }
+            //                    else
+            //                    {
+            //                        message.Subject = $"EXCEPTION while running B2B Order Siphon";
+            //                    }
+
+            //                    message.CC.Add("itsupport@designersguild.com");
+
+            //                    System.IO.MemoryStream ms = new System.IO.MemoryStream();
+
+            //                    using (var writer = new System.IO.StreamWriter(ms))
+            //                    {
+            //                        writer.Write(basketJson);
+
+            //                        writer.Flush();
+
+            //                        ms.Position = 0;
+
+            //                        //var attachment = new System.Net.Mail.Attachment(ms, $"{basketKey}.json", System.Net.Mime.MediaTypeNames.Text.Plain);
+
+            //                        //message.Attachments.Add(attachment);
+
+            //                        message.Body = $@"<head>
+            //<style type=""text/css"">
+            //    body {{ line-height: 11.75pt; font-size: 13pt; font-family: 'Courier New'}}
+            //</style></head><body>One or more exceptions were raised:<br/><br/><br/>
+            //                                {ex.ToString().Replace(Environment.NewLine, "<br/><br/>")}
+            //<br/>
+            //<br/>
+            //{basketJson}
+            //</body>";
+
+            //                        await client.SendMailAsync(message);
+            //                    }
+            //                }
+            //            }
+            //            catch (Exception e)
+            //            {
+            //                Console.WriteLine(e);
+            //            }
+
+            using (var conn = new SqlConnection(sqlConnectionString))
             {
-                using (var client = new System.Net.Mail.SmtpClient("smtp.office365.com", 587))
+                var cmd = conn.CreateCommand();
+
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.CommandText = "[portal].[Email_Insert]";
+
+                cmd.Parameters.AddRange(new SqlParameter[]
                 {
-                    System.Net.Mail.MailMessage message = null;
+                    new SqlParameter("@To", recipientEmail),
+                    new SqlParameter("@CC", "itsupport@designersguild.com"),
+                    new SqlParameter("@Subject",  $"EXCEPTION while running B2B Order Siphon"),
+                    new SqlParameter("@Body", $@"<head>
+                        <style type=""text/css"">
+                            body {{ line-height: 11.75pt; font-size: 13pt; font-family: 'Courier New'}}
+                        </style></head><body>One or more exceptions were raised:<br/><br/><br/>
+                                                        {ex.ToString().Replace(Environment.NewLine, "<br/><br/>")}
+                        <br/>
+                        <br/>
+                        {basketJson}
+                        </body>"),
+                    new SqlParameter("@EmailTemplateID", 4),
+                    new SqlParameter("@EmailSourceID", 167), // ""portal.B2BOrderImportProcess [CLR Procedure] EXCEPTION""
+                    new SqlParameter("@EmailTypeID", 1)
+                });
 
-                    message = new System.Net.Mail.MailMessage("portal.noreply@designersguild.com", recipientEmail);
+                var p = new SqlParameter("@EmailID", DBNull.Value);
 
-                    client.EnableSsl = true;
-                    client.UseDefaultCredentials = false;
-                    client.Credentials = new System.Net.NetworkCredential("portal.noreply@designersguild.com", "TheCakeIsALi3");
+                p.Direction = ParameterDirection.Output;
+                p.SqlDbType = SqlDbType.BigInt;
 
-                    message.IsBodyHtml = true;
+                cmd.Parameters.Add(p);
 
-                    if (!String.IsNullOrEmpty(basketKey))
-                    {
-                        message.Subject = $"EXCEPTION while importing {basketKey} into portal.B2BOrderImport";
-                    }
-                    else
-                    {
-                        message.Subject = $"EXCEPTION while running B2B Order Siphon";
-                    }
+                conn.Open();
 
-                    message.CC.Add("itsupport@designersguild.com");
+                cmd.ExecuteNonQuery();
 
-                    System.IO.MemoryStream ms = new System.IO.MemoryStream();
+                var result = Convert.ToInt64(p.Value);
 
-                    using (var writer = new System.IO.StreamWriter(ms))
-                    {
-                        writer.Write(basketJson);
-
-                        writer.Flush();
-
-                        ms.Position = 0;
-
-                        //var attachment = new System.Net.Mail.Attachment(ms, $"{basketKey}.json", System.Net.Mime.MediaTypeNames.Text.Plain);
-
-                        //message.Attachments.Add(attachment);
-
-                        message.Body = $@"<head>
-<style type=""text/css"">
-    body {{ line-height: 11.75pt; font-size: 13pt; font-family: 'Courier New'}}
-</style></head><body>One or more exceptions were raised:<br/><br/><br/>
-                                {ex.ToString().Replace(Environment.NewLine, "<br/><br/>")}
-<br/>
-<br/>
-{basketJson}
-</body>";
-
-                        await client.SendMailAsync(message);
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
+                conn.Close();
             }
 
             return 0;
@@ -672,74 +731,118 @@ namespace MertexerV2.SQLFunctions
 
         public static async Task<int> SendProcessingErrorEmail(string basketKey, string basketJson, string recipientEmail, Exception ex)
         {
-            try
+            //            try
+            //            {
+            //                using (var client = new System.Net.Mail.SmtpClient("smtp.office365.com", 587))
+            //                {
+            //                    System.Net.Mail.MailMessage message = null;
+
+            //                    message = new System.Net.Mail.MailMessage("portal.noreply@designersguild.com", recipientEmail);
+
+            //                    client.EnableSsl = true;
+            //                    client.UseDefaultCredentials = false;
+            //                    client.Credentials = new System.Net.NetworkCredential("portal.noreply@designersguild.com", "TheCakeIsALi3");
+
+            //                    message.IsBodyHtml = true;
+
+            //                    if (!String.IsNullOrEmpty(basketKey))
+            //                    {
+            //                        message.Subject = $"EXCEPTION while importing {basketKey}";
+            //                    }
+            //                    else
+            //                    {
+            //                        message.Subject = $"EXCEPTION while processing portal.B2BOrderImport";
+            //                    }
+
+            //                    message.CC.Add("itsupport@designersguild.com");
+
+            //                    System.IO.MemoryStream ms = new System.IO.MemoryStream();
+
+            //                    using (var writer = new System.IO.StreamWriter(ms))
+            //                    {
+            //                        writer.Write(basketJson);
+
+            //                        writer.Flush();
+
+            //                        ms.Position = 0;
+
+            //                        //var attachment = new System.Net.Mail.Attachment(ms, $"{basketKey}.json", System.Net.Mime.MediaTypeNames.Text.Plain);
+
+            //                        //message.Attachments.Add(attachment);
+
+            //                        if (basketKey == null && basketJson == null)
+            //                        {
+            //                            message.Body = $@"<head>
+            //<style type=""text/css"">
+            //    body {{ line-height: 11.75pt; font-size: 13pt; font-family: 'Courier New'}}
+            //</style></head><body>The following exception occurred attempting to process portal.B2BOrderImport records:<br/><br/><br/>
+            //                                {ex.ToString().Replace(Environment.NewLine, "<br/><br/>")}
+            //</body>";
+            //                        }
+            //                        else
+            //                        {
+            //                            message.Body = $@"<head>
+            //<style type=""text/css"">
+            //    body {{ line-height: 11.75pt; font-size: 13pt; font-family: 'Courier New'}}
+            //</style></head><body>No OrderImportHead record has been created as one or more exceptions were raised while processing the basket.<br/><br/><br/>
+            //                                {ex.ToString().Replace(Environment.NewLine, "<br/><br/>")}
+            //<br/>
+            //<br/>
+            //{basketJson}
+            //</body>";
+            //                        }
+
+            //                        await client.SendMailAsync(message);
+            //                    }
+            //                }
+            //            }
+            //            catch (Exception e)
+            //            {
+            //                Console.WriteLine(e);
+            //            }
+
+            using (var conn = new SqlConnection(sqlConnectionString))
             {
-                using (var client = new System.Net.Mail.SmtpClient("smtp.office365.com", 587))
+                var cmd = conn.CreateCommand();
+
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.CommandText = "[portal].[Email_Insert]";
+
+                cmd.Parameters.AddRange(new SqlParameter[]
                 {
-                    System.Net.Mail.MailMessage message = null;
+                    new SqlParameter("@To", recipientEmail),
+                    new SqlParameter("@CC", "itsupport@designersguild.com"),
+                    new SqlParameter("@Subject",  $"EXCEPTION while processing portal.B2BOrderImport"),
+                    new SqlParameter("@Body", $@"<head>
+                        <style type=""text/css"">
+                            body {{ line-height: 11.75pt; font-size: 13pt; font-family: 'Courier New'}}
+                        </style></head><body>No OrderImportHead record has been created as one or more exceptions were raised while processing the basket.<br/><br/><br/>
+                                                        {ex.ToString().Replace(Environment.NewLine, "<br/><br/>")}
+                        <br/>
+                        <br/>
+                        {basketJson}
+                        </body>"
+                        ),
+                    new SqlParameter("@EmailTemplateID", 4),
+                    new SqlParameter("@EmailSourceID", 167), // ""portal.B2BOrderImportProcess [CLR Procedure] EXCEPTION""
+                    new SqlParameter("@EmailTypeID", 1)
+                });
 
-                    message = new System.Net.Mail.MailMessage("portal.noreply@designersguild.com", recipientEmail);
+                var p = new SqlParameter("@EmailID", DBNull.Value);
 
-                    client.EnableSsl = true;
-                    client.UseDefaultCredentials = false;
-                    client.Credentials = new System.Net.NetworkCredential("portal.noreply@designersguild.com", "TheCakeIsALi3");
+                p.Direction = ParameterDirection.Output;
+                p.SqlDbType = SqlDbType.BigInt;
 
-                    message.IsBodyHtml = true;
+                cmd.Parameters.Add(p);
 
-                    if (!String.IsNullOrEmpty(basketKey))
-                    {
-                        message.Subject = $"EXCEPTION while importing {basketKey}";
-                    }
-                    else
-                    {
-                        message.Subject = $"EXCEPTION while processing portal.B2BOrderImport";
-                    }
+                conn.Open();
 
-                    message.CC.Add("itsupport@designersguild.com");
+                cmd.ExecuteNonQuery();
 
-                    System.IO.MemoryStream ms = new System.IO.MemoryStream();
+                var result = Convert.ToInt64(p.Value);
 
-                    using (var writer = new System.IO.StreamWriter(ms))
-                    {
-                        writer.Write(basketJson);
-
-                        writer.Flush();
-
-                        ms.Position = 0;
-
-                        //var attachment = new System.Net.Mail.Attachment(ms, $"{basketKey}.json", System.Net.Mime.MediaTypeNames.Text.Plain);
-
-                        //message.Attachments.Add(attachment);
-
-                        if (basketKey == null && basketJson == null)
-                        {
-                            message.Body = $@"<head>
-<style type=""text/css"">
-    body {{ line-height: 11.75pt; font-size: 13pt; font-family: 'Courier New'}}
-</style></head><body>The following exception occurred attempting to process portal.B2BOrderImport records:<br/><br/><br/>
-                                {ex.ToString().Replace(Environment.NewLine, "<br/><br/>")}
-</body>";
-                        }
-                        else
-                        {
-                            message.Body = $@"<head>
-<style type=""text/css"">
-    body {{ line-height: 11.75pt; font-size: 13pt; font-family: 'Courier New'}}
-</style></head><body>No OrderImportHead record has been created as one or more exceptions were raised while processing the basket.<br/><br/><br/>
-                                {ex.ToString().Replace(Environment.NewLine, "<br/><br/>")}
-<br/>
-<br/>
-{basketJson}
-</body>";
-                        }
-
-                        await client.SendMailAsync(message);
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
+                conn.Close();
             }
 
             return 0;

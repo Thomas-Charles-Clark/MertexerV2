@@ -466,8 +466,9 @@ namespace Tester
 
             //EDAReplacementTestSuite.TOELINESearchByOrderNumbersTest("MERTEX", TesterFramework.FetchOrderHeadIDs(10));
 
-            var toelineResults = EDAReplacementTestSuite.TOELINESearchByOrderNumbersTest("MERTEX", @"[{ ""OrderID"": ""4708935"" }]");
+            //var toelineResults = EDAReplacementTestSuite.TOELINESearchByOrderNumbersTest("MERTEX", @"[{ ""OrderID"": ""4708935"" }]");
 
+            B2BOrderImport.SiphonOldTradeSiteOrders("MERTEX");
 
             //var result = ContractPriceFunctions.Delete(uniVerseAccount, "K0098", null);
 

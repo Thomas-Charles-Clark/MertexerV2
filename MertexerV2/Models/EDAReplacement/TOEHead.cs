@@ -111,6 +111,8 @@ namespace MertexerV2.Models.EDAReplacement
 
         public string CarriageExempt { get; set; }
 
+        public bool CustomerHeldForFullDespatch { get; set; }
+
         public TOEHead(
             string orderId,
             string tradeAccountCode,
@@ -162,7 +164,8 @@ namespace MertexerV2.Models.EDAReplacement
             string deliveryReference,
             string deliveryType,
             string paymentTerms,
-            string carriageExempt)
+            string carriageExempt,
+            string customerHeldForFullDespatch)
         {
             TradeAccountCode = String.IsNullOrEmpty(tradeAccountCode) ? null : tradeAccountCode;
 
@@ -315,6 +318,8 @@ namespace MertexerV2.Models.EDAReplacement
             PaymentTerms = String.IsNullOrEmpty(paymentTerms) ? null : paymentTerms;
 
             CarriageExempt = String.IsNullOrEmpty(carriageExempt) ? null : carriageExempt;
+
+            CustomerHeldForFullDespatch = customerHeldForFullDespatch == "Y" ? true : false;
         }
 
         public override string ToString()

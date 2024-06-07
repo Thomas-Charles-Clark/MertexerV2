@@ -42,6 +42,7 @@ using System.Security.Cryptography.X509Certificates;
 using MertexerV2SQL;
 using System.Management.Instrumentation;
 using MertexerV2.PricingFunctions;
+using System.Text;
 
 namespace Tester
 {
@@ -466,9 +467,70 @@ namespace Tester
 
             //EDAReplacementTestSuite.TOELINESearchByOrderNumbersTest("MERTEX", TesterFramework.FetchOrderHeadIDs(10));
 
-            //var toelineResults = EDAReplacementTestSuite.TOELINESearchByOrderNumbersTest("MERTEX", @"[{ ""OrderID"": ""4708935"" }]");
+            var toelineResults = EDAReplacementTestSuite.TOELINESearchByOrderNumbersTest("MERTEX", @"[{ ""OrderID"": ""4722124"" },
+{ ""OrderID"": ""4715953"" },
+{ ""OrderID"": ""4714655"" },
+{ ""OrderID"": ""4714613"" },
+{ ""OrderID"": ""4712492"" },
+{ ""OrderID"": ""4710839"" },
+{ ""OrderID"": ""4706903"" },
+{ ""OrderID"": ""1140263001"" },
+{ ""OrderID"": ""4697012"" },
+{ ""OrderID"": ""4684166"" },
+{ ""OrderID"": ""4683508"" },
+{ ""OrderID"": ""4683282"" },
+{ ""OrderID"": ""4681161"" },
+{ ""OrderID"": ""1102698501"" },
+{ ""OrderID"": ""1102697901"" },
+{ ""OrderID"": ""1102698201"" },
+{ ""OrderID"": ""1102698101"" },
+{ ""OrderID"": ""1102697801"" },
+{ ""OrderID"": ""1102698001"" },
+{ ""OrderID"": ""1102698301"" },
+{ ""OrderID"": ""1102698401"" },
+{ ""OrderID"": ""1102697601"" },
+{ ""OrderID"": ""4674697"" },
+{ ""OrderID"": ""4669819"" },
+{ ""OrderID"": ""4621816"" },
+{ ""OrderID"": ""4625327"" },
+{ ""OrderID"": ""4625332"" },
+{ ""OrderID"": ""4631570"" },
+{ ""OrderID"": ""4631574"" },
+{ ""OrderID"": ""4631577"" },
+{ ""OrderID"": ""4631799"" },
+{ ""OrderID"": ""4631929"" },
+{ ""OrderID"": ""4632745"" }]");
 
-            B2BOrderImport.SiphonOldTradeSiteOrders("MERTEX");
+            //B2BOrderImport.SiphonOldTradeSiteOrders("MERTEX");
+
+            //var toelineResults = EDAReplacementTestSuite.TOELINESearchByOrderNumbersTest("MERTEX", @"[{ ""OrderID"": ""1158027901"" }]");
+
+            //var accounts = TradeAccountFunctions.Select("MERTEX", null).OfType<TradeAccount>();
+
+            //var offenders = accounts.Where(a =>
+            //    a.InvoiceAddressPostcode?.Length > 20 ||
+            //    a.DefaultDeliveryReference?.Length > 20 ||
+            //    a.Bankrupt?.Length > 20 ||
+            //    a.StatementAddressPostcode?.Length > 20 ||
+            //    a.UPSInvoiceAccountNumber?.Length > 20 ||
+            //    a.UPSTaxesDutyAccountNumber?.Length > 20 ||
+            //    a.DHLAccountNumber?.Length > 20 ||
+            //    a.TNTAccountNumber?.Length > 20 ||
+            //    a.DirectToCustomer?.Length > 20 ||
+            //    a.PartnerCompany?.Length > 20 ||
+            //    a.UserID?.Length > 20 ||
+            //    a.StoreName?.Length > 20 ||
+            //    a.TransferAddress?.Length > 20 ||
+            //    a.TransferPassword?.Length > 20
+            //).ToList();
+
+            //var sb = new StringBuilder();
+
+            //offenders.ForEach(o => { Console.WriteLine(o); sb.AppendLine(o.ToString()); });
+
+            //System.IO.File.WriteAllText("offenders.txt", sb.ToString());
+
+            //var toelineResults = EDAReplacementTestSuite.TOELINESearchByOrderNumbersTest("MERTEX", @"[{ ""OrderID"": ""4312243"" }]");
 
             //var result = ContractPriceFunctions.Delete(uniVerseAccount, "K0098", null);
 

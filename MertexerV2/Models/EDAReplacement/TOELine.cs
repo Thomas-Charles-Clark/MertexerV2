@@ -1,4 +1,5 @@
-﻿using MertexerV2.Utilities;
+﻿using MertexerV2.SQLFunctions;
+using MertexerV2.Utilities;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -187,7 +188,9 @@ namespace MertexerV2.Models.EDAReplacement
 
         public string ReleasedBy { get; set; }
 
-    public TOELine(
+        public IEnumerable<decimal?> AllocatedQuantities { get; set; }
+
+        public TOELine(
             string key,
             string orderId,
             string lineNumber,
@@ -225,7 +228,8 @@ namespace MertexerV2.Models.EDAReplacement
             string batches,
             string pieces,
             string releasedDate,
-            string releasedBy)
+            string releasedBy,
+            string allocatedQuantities)
         {
             Key = key;
 
@@ -356,11 +360,23 @@ namespace MertexerV2.Models.EDAReplacement
             }
 
             ReleasedBy = String.IsNullOrEmpty(ReleasedBy) ? null : releasedBy;
+
+            AllocatedQuantities = String.IsNullOrEmpty(allocatedQuantities) ? new decimal?[] { } : allocatedQuantities.Split(Framework.ValueMarkDelimiter).Select(p => Convert(p));
         }
 
         public override string ToString()
         {
             return JsonConvert.SerializeObject(this, Formatting.Indented);
+        }
+
+        public static decimal? Convert(string value)
+        {
+            if (Decimal.TryParse($"{value}", out decimal v))
+            {
+                return v;
+            }
+
+            return null;
         }
     }
 }

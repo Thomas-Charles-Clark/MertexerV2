@@ -348,7 +348,7 @@ namespace MertexerV2
 
                 var xDoc = XDocument.Parse(qe.Run("LIST_ORDER_LINES",
                     $@"ORDERNO=""{OrderHeadID}""",
-                    "ORDNO LINE DATEONFILE QTYORD.ORD WI.STDPROD TEXT.DESC CUS.ORD.REF STATUS WI.PARCEL.TRACK.URL CURSUG.DELDATE QTYCAN.ORD"));
+                    "ORDERNO LINE DATEONFILE QTYORD.ORD WI.STDPROD TEXT.DESC CUS.ORD.REF STATUS WI.PARCEL.TRACK.URL CURSUG.DELDATE QTYCAN.ORD"));
 
                 //eResultXML.LoadXml(result);
 

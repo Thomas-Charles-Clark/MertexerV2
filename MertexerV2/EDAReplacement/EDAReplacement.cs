@@ -75,6 +75,48 @@ namespace MertexerV2.EDAReplacement
             "SO.CUSTREQ.FULLDESP.DES"
         };
 
+        static readonly string[] toelineFields = new string[]
+        {
+            "ORDERNO",               // 0
+            "LINE",                  // 0
+            "CUS.ORD.REF",           // 33
+            "PRODCODE",              // 1
+            "PRODDESC",              // 0
+            "QTYORD.ORD",            // 94
+            "QTYCAN.ORD",            // 96
+            "BO.IND",                // 4
+            "STATUS",                // 79
+            "LINE.STAT.DES",         // 665
+            "SS.LINE.STAT.DATE.INT", // 667
+            "LINE.STAT.TIME.DES",    // 668
+            "DNNUMBER",              // 63
+            "DN.LINE.KEY",           // 65
+            "PERC.DISC",             // 18
+            "ORDPRICE",              // 6
+            "ORDVAL",                // 7
+            "DISCOUNT",              // 28
+            "VATVAL",                // 9
+            "SS.ORDPRICE.CUR",       // 81
+            "ORDVAL.CUR",            // 83
+            "DISCOUNT.CUR",          // 17
+            "VATVAL.CUR",            // 84
+            "VATCODE",               // 8
+            "VATRATE.DES",           // 16
+            "DESPDATE.INT",          // 0
+            "L.LOCCODE",             // 19
+            "PORDNO",                // 219
+            "PARTPRODCODE",          // 269
+            "RESERVE.FLAG",          // 311
+            "SS.CURSUG.DELDATE.ABS",  // 75.1
+            "SO.ALLOC.FULL.DES",      // 0 - TOEHEAD 655
+            "USER.TO.GUN.DES",       // 628
+            "MBATCH.NO",             // 70.M
+            "MPIECE.NO",            // 91.M
+            "SS.RELEASED.INT",      // 74
+            "RELEASED.BY",           // 0 - OEPLHEAD 355.6
+            "MBATCH.QTY",           // 89.M // We're just... hoping? pretending? that this is the allocated quantity. For now.
+        };
+
         [SqlFunction(DataAccess = DataAccessKind.Read,
             SystemDataAccess = SystemDataAccessKind.Read,
             FillRowMethodName = "ListTradeAccounts_FillRow",
@@ -621,46 +663,6 @@ namespace MertexerV2.EDAReplacement
                         selectStatement = $"DATEONFILE.INT <= {Framework.UniVerseDateString(ToDT.Value)}";
                 }
 
-                var fields = new string[] {
-                    "ORDERNO",               // 0
-                    "LINE",                  // 0
-                    "CUS.ORD.REF",           // 33
-                    "PRODCODE",              // 1
-                    "PRODDESC",              // 0
-                    "QTYORD.ORD",            // 94
-                    "QTYCAN.ORD",            // 96
-                    "BO.IND",                // 4
-                    "STATUS",                // 79
-                    "LINE.STAT.DES",         // 665
-                    "SS.LINE.STAT.DATE.INT", // 667
-                    "LINE.STAT.TIME.DES",    // 668
-                    "DNNUMBER",              // 63
-                    "DN.LINE.KEY",           // 65
-                    "PERC.DISC",             // 18
-                    "ORDPRICE",              // 6
-                    "ORDVAL",                // 7
-                    "DISCOUNT",              // 28
-                    "VATVAL",                // 9
-                    "SS.ORDPRICE.CUR",       // 81
-                    "ORDVAL.CUR",            // 83
-                    "DISCOUNT.CUR",          // 17
-                    "VATVAL.CUR",            // 84
-                    "VATCODE",               // 8
-                    "VATRATE.DES",           // 16
-                    "DESPDATE.INT",          // 0
-                    "L.LOCCODE",             // 19
-                    "PORDNO",                // 219
-                    "PARTPRODCODE",          // 269
-                    "RESERVE.FLAG",           // 311
-                    "SS.CURSUG.DELDATE.ABS",  // 75.1
-                    "SO.ALLOC.FULL.DES",      // 0 - TOEHEAD 655
-                    "USER.TO.GUN.DES",       // 628
-                    "MBATCH.NO",             // 70.M
-                    "MPIECE.NO",            // 91.M
-                    "SS.RELEASED.INT",      // 74
-                    "RELEASED.BY"           // 0 - OEPLHEAD 355.6
-                };
-
                 using (var ce = new CommandExecutor(UniVerseAccount))
                 {
                     var keys = ce.Arbitrary($"LIST TOELINE LINEKEY FMT\"20L\" WITH {selectStatement} AND LINEKEY LIKE ...*... ID.SUPP COL.HDR.SUPP COUNT.SUP")
@@ -677,7 +679,7 @@ namespace MertexerV2.EDAReplacement
                     {
                         var theseResults = new List<TOELine>();
 
-                        var records = toeline.ReadRecords(batch.ToArray(), fields);
+                        var records = toeline.ReadRecords(batch.ToArray(), toelineFields);
 
                         batch.ForEach(b =>
                         {
@@ -721,7 +723,8 @@ namespace MertexerV2.EDAReplacement
                                 batches: record.Record.Extract(34).StringValue,
                                 pieces: record.Record.Extract(35).StringValue,
                                 releasedDate: record.Record.Extract(36).StringValue,
-                                releasedBy: record.Record.Extract(37).StringValue
+                                releasedBy: record.Record.Extract(37).StringValue,
+                                allocatedQuantities: record.Record.Extract(38).StringValue
                             ));
                         });
 
@@ -758,46 +761,6 @@ namespace MertexerV2.EDAReplacement
 
             using (var qe = new QueryExecutor(UniVerseAccount))
             {
-                var fields = new string[] {
-                    "ORDERNO",               // 0
-                    "LINE",                  // 0
-                    "CUS.ORD.REF",           // 33
-                    "PRODCODE",              // 1
-                    "PRODDESC",              // 0
-                    "QTYORD.ORD",            // 94
-                    "QTYCAN.ORD",            // 96
-                    "BO.IND",                // 4
-                    "STATUS",                // 79
-                    "LINE.STAT.DES",         // 665
-                    "SS.LINE.STAT.DATE.INT", // 667
-                    "LINE.STAT.TIME.DES",    // 668
-                    "DNNUMBER",              // 63
-                    "DN.LINE.KEY",           // 65
-                    "PERC.DISC",             // 18
-                    "ORDPRICE",              // 6
-                    "ORDVAL",                // 7
-                    "DISCOUNT",              // 28
-                    "VATVAL",                // 9
-                    "SS.ORDPRICE.CUR",       // 81
-                    "ORDVAL.CUR",            // 83
-                    "DISCOUNT.CUR",          // 17
-                    "VATVAL.CUR",            // 84
-                    "VATCODE",               // 8
-                    "VATRATE.DES",           // 16
-                    "DESPDATE.INT",          // 0
-                    "L.LOCCODE",             // 19
-                    "PORDNO",                // 219
-                    "PARTPRODCODE",          // 269
-                    "RESERVE.FLAG",          // 311
-                    "SS.CURSUG.DELDATE.ABS",  // 75.1
-                    "SO.ALLOC.FULL.DES",      // 0 - TOEHEAD 655
-                    "USER.TO.GUN.DES",       // 628
-                    "MBATCH.NO",             // 70.M
-                    "MPIECE.NO",            // 91.M
-                    "SS.RELEASED.INT",      // 74
-                    "RELEASED.BY"           // 0 - OEPLHEAD 355.6
-                };
-
                 using (var ce = new CommandExecutor(UniVerseAccount))
                 {
                     var orderHeadChunks = ListExtension.Split(orderHeadIds, 50);
@@ -839,7 +802,7 @@ namespace MertexerV2.EDAReplacement
                     {
                         var theseResults = new List<TOELine>();
 
-                        var records = toeline.ReadRecords(batch.ToArray(), fields);
+                        var records = toeline.ReadRecords(batch.ToArray(), toelineFields);
 
                         batch.ForEach(b =>
                         {
@@ -883,7 +846,8 @@ namespace MertexerV2.EDAReplacement
                                 batches: record.Record.Extract(34).StringValue,
                                 pieces: record.Record.Extract(35).StringValue,
                                 releasedDate: record.Record.Extract(36).StringValue,
-                                releasedBy: record.Record.Extract(37).StringValue
+                                releasedBy: record.Record.Extract(37).StringValue,
+                                allocatedQuantities: record.Record.Extract(38).StringValue
                             ));
                         });
 
@@ -936,7 +900,8 @@ namespace MertexerV2.EDAReplacement
             out SqlString Batches,
             out SqlString Pieces,
             out SqlDateTime ReleasedDT,
-            out SqlString ReleasedBy
+            out SqlString ReleasedBy,
+            out SqlString AllocatedQuantities
             )
         {
             var result = (TOELine)obj;
@@ -1014,6 +979,8 @@ namespace MertexerV2.EDAReplacement
             ReleasedDT = result.ReleasedDT ?? SqlDateTime.Null;
 
             ReleasedBy = String.IsNullOrEmpty(result.ReleasedBy) ? SqlString.Null : result.ReleasedBy.TrimReduceTruncate(50);
+        
+            AllocatedQuantities = result.AllocatedQuantities.Any() ? JsonConvert.SerializeObject(result.AllocatedQuantities) : SqlString.Null;
         }
 
 

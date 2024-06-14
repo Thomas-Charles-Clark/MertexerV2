@@ -207,7 +207,7 @@ namespace MertexerV2.SQLFunctions
                 }
                 else
                 {
-                    if (tradeAccountNumber == "PORTALIMPORT")
+                    if (tradeAccountNumber == "PORTALIMPORT" || tradeAccountNumber == "C4F9FEB3ACE")
                     {
                         recipientEmail = orderImportFileEmail;
                     }
@@ -343,7 +343,7 @@ namespace MertexerV2.SQLFunctions
                                         transaction.Commit();
                                     }
 
-                                    byte orderImportTypeId = 0;
+                                    byte orderImportTypeId = 1;
 
                                     if (result.FileName.Contains("_SORDI_"))
                                         orderImportTypeId = 1;

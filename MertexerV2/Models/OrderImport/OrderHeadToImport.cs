@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MertexerV2.Utilities;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -83,7 +85,7 @@ namespace MertexerV2.Models.OrderImport
 
             TradeOrderImportFileID = tradeOrderImportFileId;
             TradeAccountNumber = tradeAccountNumber;
-            OrderReference = orderReference;
+            OrderReference = orderReference?.Replace(Framework.FieldMark, '-')?.Replace(Framework.ValueMark, '-')?.Replace(Framework.SubValueMark, '-');
             DeliveryName = deliveryName;
             DeliveryAddressLine1 = deliveryAddressLine1;
             DeliveryAddressLine2 = deliveryAddressLine2;
@@ -138,7 +140,7 @@ namespace MertexerV2.Models.OrderImport
 
             TradeOrderImportFileID = tradeOrderImportFileId;
             TradeAccountNumber = tradeAccountNumber;
-            OrderReference = orderReference;
+            OrderReference = orderReference?.Replace(Framework.FieldMark, '-')?.Replace(Framework.ValueMark, '-')?.Replace(Framework.SubValueMark, '-'); ;
             DeliveryName = deliveryName;
             DeliveryAddressLine1 = deliveryAddressLine1;
             DeliveryAddressLine2 = deliveryAddressLine2;
@@ -188,7 +190,7 @@ namespace MertexerV2.Models.OrderImport
 
             TradeOrderImportFileID = tradeOrderImportFileId;
             TradeAccountNumber = tradeAccountNumber;
-            OrderReference = orderReference;
+            OrderReference = orderReference?.Replace(Framework.FieldMark, '-')?.Replace(Framework.ValueMark, '-')?.Replace(Framework.SubValueMark, '-'); ;
             DeliveryReference = delRef;
             DeliveryName = deliveryName;
             DeliveryAddressLine1 = deliveryAddressLine1;

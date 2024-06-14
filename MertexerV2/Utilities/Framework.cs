@@ -38,6 +38,7 @@ namespace MertexerV2.Utilities
             NullValueHandling = NullValueHandling.Ignore,
             ContractResolver = new OrderedContractResolver()
         };
+        public static readonly char FieldMark = (char)254;
         public static readonly char ValueMark = (char)253;
         public static readonly char SubValueMark = (char)252;
 
@@ -45,6 +46,7 @@ namespace MertexerV2.Utilities
         public static readonly char[] UnixNewLineDelimiter = new char[] { '\n' };
         public static readonly char[] SpaceDelimiter = new char[] { ' ' };
         public static readonly char[] AsteriskDelimiter = new char[] { '*' };
+        public static readonly char[] FieldMarkDelimiter = new char[] { (char)254 };
         public static readonly char[] ValueMarkDelimiter = new char[] { (char)253 };
         public static readonly char[] SubValueMarkDelimiter = new char[] { (char)252 };
 

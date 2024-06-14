@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MertexerV2.Utilities;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -31,7 +33,7 @@ namespace MertexerV2.Models.OrderImport
             ProductCode = productCode;
             Quantity = quantity;
             Type = type;
-            LineReference = lineReference;
+            LineReference = lineReference?.Replace(Framework.FieldMark, '-')?.Replace(Framework.ValueMark, '-')?.Replace(Framework.SubValueMark, '-'); ;
             Memo = memo;
             DiscountPercentage = discountPercentage;
             PromoCode = promoCode;

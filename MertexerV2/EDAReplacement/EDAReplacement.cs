@@ -609,7 +609,7 @@ namespace MertexerV2.EDAReplacement
             FillRowMethodName = "FetchOrderLines_FillRow",
             TableDefinition = "")]
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
-        public static IEnumerable FetchOrderLines(string UniVerseAccount, string OrderLineID, int? OrderHeadID, byte? LineStatusID, DateTime? FromDT, DateTime? ToDT)
+        public static IEnumerable FetchOrderLines(string UniVerseAccount, string OrderLineID, int? OrderHeadID, byte? LineStatusLessThanID, DateTime? FromDT, DateTime? ToDT)
         {
             var results = new List<TOELine>();
 
@@ -639,12 +639,12 @@ namespace MertexerV2.EDAReplacement
                     }
                 }
 
-                if (LineStatusID != null)
+                if (LineStatusLessThanID != null)
                 {
                     if (selectStatement != "")
-                        selectStatement += $" AND STATUS = \"{LineStatusID}\"";
+                        selectStatement += $" AND STATUS LT \"{LineStatusLessThanID}\"";
                     else
-                        selectStatement = $"STATUS = \"{LineStatusID}\"";
+                        selectStatement = $"STATUS LT \"{LineStatusLessThanID}\"";
                 }
 
                 if (FromDT != null)
@@ -662,7 +662,7 @@ namespace MertexerV2.EDAReplacement
                     else
                         selectStatement = $"DATEONFILE.INT <= {Framework.UniVerseDateString(ToDT.Value)}";
                 }
-
+                 
                 using (var ce = new CommandExecutor(UniVerseAccount))
                 {
                     var keys = ce.Arbitrary($"LIST TOELINE LINEKEY FMT\"20L\" WITH {selectStatement} AND LINEKEY LIKE ...*... ID.SUPP COL.HDR.SUPP COUNT.SUP")
@@ -744,19 +744,51 @@ namespace MertexerV2.EDAReplacement
             FillRowMethodName = "FetchOrderLines_FillRow",
             TableDefinition = "")]
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
-        public static IEnumerable FetchOrderLinesForOrderHeads(string UniVerseAccount, string OrderHeadIDs)
+        public static IEnumerable FetchOrderLinesForOrderHeads(string UniVerseAccount, string OrderHeadIDs, byte? LineStatusLessThanID, DateTime? FromDate, DateTime? ToDate)
         {
             var results = new List<TOELine>();
 
+            var selectStatement = "";
+
             var orderHeadIds = new List<OrderHead>();
+
+            if (String.IsNullOrEmpty(OrderHeadIDs) && LineStatusLessThanID == null && FromDate == null && ToDate == null)
+            {
+                throw new Exception("No non-null search parameters were provided: refusing to query TOELINE.");
+            }
 
             if (!String.IsNullOrEmpty(OrderHeadIDs))
             {
                 orderHeadIds = JsonConvert.DeserializeObject<List<OrderHead>>(OrderHeadIDs);
             }
-            else
+
+            if (LineStatusLessThanID != null)
             {
-                throw new Exception("OrderHeadIDs was NULL or empty: refusing to query TOELINE.");
+                if (selectStatement != "")
+                    selectStatement += $" AND STATUS LT {LineStatusLessThanID}\"";
+                else
+                    selectStatement = $"STATUS LT \"{LineStatusLessThanID}\"";
+            }
+
+            if (FromDate != null)
+            {
+                if (selectStatement != "")
+                    selectStatement += $" AND DATEONFILE.INT >= {Framework.UniVerseDateString(FromDate.Value)}";
+                else
+                    selectStatement = $"DATEONFILE.INT >= {Framework.UniVerseDateString(FromDate.Value)}";
+            }
+
+            if (ToDate != null)
+            {
+                if (FromDate == null)
+                {
+                    throw new Exception("ToDT provided without FromDT: refusing to query TOELINE.");
+                }
+
+                if (selectStatement != "")
+                    selectStatement += $" AND DATEONFILE.INT <= {Framework.UniVerseDateString(ToDate.Value)}";
+                else
+                    selectStatement = $"DATEONFILE.INT <= {Framework.UniVerseDateString(ToDate.Value)}";
             }
 
             using (var qe = new QueryExecutor(UniVerseAccount))
@@ -771,13 +803,29 @@ namespace MertexerV2.EDAReplacement
 
 #if DEBUG
                     var stopWatch = new System.Diagnostics.Stopwatch();
-                    Console.WriteLine($"Fetching OrderLine Keys for {orderHeadIds.Count} OrderHeadIDs...");
+                    Console.WriteLine($"Searching for OrderLine Keys across: {orderHeadIds?.Count} Order IDs; LineStatus < {LineStatusLessThanID}; FromDT: {FromDate?.ToString("dd/MM/yyyy")}; ToDT: {ToDate?.ToString("dd/MM/yyyy")}");
                     stopWatch.Start();
 #endif
 
-                    orderHeadChunks.ForEach((orderHeadChunk) =>
+                    if (orderHeadIds.Any())
                     {
-                        var thisString = $"LIST TOELINE LINEKEY FMT\"20L\" WITH ORDERNO = {String.Join(" ", orderHeadChunk.Select(p => p.OrderID))} AND LINEKEY LIKE ...*... ID.SUPP COL.HDR.SUPP COUNT.SUP";
+                        orderHeadChunks.ForEach((orderHeadChunk) =>
+                        {
+                            var thisString = $"LIST TOELINE LINEKEY FMT\"20L\" WITH ORDERNO = {String.Join(" ", orderHeadChunk.Select(p => p.OrderID))} {(String.IsNullOrEmpty(selectStatement) ? "" : selectStatement)} AND LINEKEY LIKE ...*... ID.SUPP COL.HDR.SUPP COUNT.SUP";
+                            var thisResult = ce.Arbitrary(thisString);
+                            var theseKeys = thisResult
+                                .Split(new string[] { System.Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
+                                .ToList();
+
+                            lock (locker)
+                            {
+                                keys.AddRange(theseKeys);
+                            }
+                        });
+                    }
+                    else
+                    {
+                        var thisString = $"LIST TOELINE LINEKEY FMT\"20L\" WITH {selectStatement} AND LINEKEY LIKE ...*... ID.SUPP COL.HDR.SUPP COUNT.SUP";
                         var thisResult = ce.Arbitrary(thisString);
                         var theseKeys = thisResult
                             .Split(new string[] { System.Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
@@ -787,7 +835,7 @@ namespace MertexerV2.EDAReplacement
                         {
                             keys.AddRange(theseKeys);
                         }
-                    });
+                    }
 
 #if DEBUG
                     stopWatch.Stop();

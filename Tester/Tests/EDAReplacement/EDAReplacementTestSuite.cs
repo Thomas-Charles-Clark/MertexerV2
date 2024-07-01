@@ -90,11 +90,11 @@ namespace Tester.Tests.EDAReplacement
             Console.WriteLine(TesterFramework.WavyLineBreak);
         }
 
-        public static List<TOELine> TOELINESearchByOrderNumbersTest(string uniVerseAccount, string orderHeadIds)
+        public static List<TOELine> TOELINESearchByOrderNumbersTest(string uniVerseAccount, string orderHeadIds, byte? lineStatusLessThanId, DateTime? fromDt, DateTime? toDt)
         {
             Console.WriteLine(TesterFramework.WavyLineBreak);
 
-            Console.WriteLine("Beginning EDAReplacementTestSuite TOELINE Search by Order Numbers Tests...");
+            Console.WriteLine("Beginning EDAReplacementTestSuite TOELINE Search Tests...");
 
             Console.WriteLine(TesterFramework.WavyLineBreak);
 
@@ -102,7 +102,7 @@ namespace Tester.Tests.EDAReplacement
 
             stopWatch.Start();
 
-            var results = MertexerV2.EDAReplacement.EDAReplacement.FetchOrderLinesForOrderHeads(uniVerseAccount, orderHeadIds)
+            var results = MertexerV2.EDAReplacement.EDAReplacement.FetchOrderLinesForOrderHeads(uniVerseAccount, orderHeadIds, lineStatusLessThanId, fromDt, toDt)
                 .OfType<TOELine>().ToList();
 
             stopWatch.Stop();
@@ -113,9 +113,9 @@ namespace Tester.Tests.EDAReplacement
 
             Console.ForegroundColor = ConsoleColor.Green;
 
-            Console.WriteLine($"EDAReplacementTestSuite TOELINE Search by Order Numbers parallel operation returned {results.Count} in {stopWatch.Elapsed:g}");
+            Console.WriteLine($"EDAReplacementTestSuite TOELINE Search parallel operation returned {results.Count} in {stopWatch.Elapsed:g}");
 
-            Console.WriteLine($"EDAReplacementTestSuite TOELINE Search by Order Numbers Test Complete.");
+            Console.WriteLine($"EDAReplacementTestSuite TOELINE Search Test Complete.");
 
             Console.WriteLine(TesterFramework.WavyLineBreak);
 

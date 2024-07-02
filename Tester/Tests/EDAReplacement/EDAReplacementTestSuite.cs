@@ -60,7 +60,37 @@ namespace Tester.Tests.EDAReplacement
             return results;
         }
 
-        public static void TOELINESearchTest(string uniVerseAccount, string lineKey, int? orderNumber, byte? lineStatusId, DateTime? fromDt, DateTime? toDt)
+        //public static void TOELINESearchTest(string uniVerseAccount, string lineKey, int? orderNumber, byte? lineStatusId, DateTime? fromDt, DateTime? toDt)
+        //{
+        //    Console.WriteLine(TesterFramework.WavyLineBreak);
+
+        //    Console.WriteLine("Beginning EDAReplacementTestSuite TOELINE Search Tests...");
+
+        //    Console.WriteLine(TesterFramework.WavyLineBreak);
+
+        //    var stopWatch = new Stopwatch();
+
+        //    stopWatch.Start();
+
+        //    var results = MertexerV2.EDAReplacement.EDAReplacement.FetchOrderLines(uniVerseAccount, lineKey, orderNumber, lineStatusId, fromDt, toDt)
+        //        .OfType<TOELine>().ToList();
+
+        //    stopWatch.Stop();
+
+        //    Console.ForegroundColor = ConsoleColor.Yellow;
+
+        //    Console.WriteLine(JsonConvert.SerializeObject(results, Formatting.Indented));
+
+        //    Console.ForegroundColor = ConsoleColor.Green;
+
+        //    Console.WriteLine($"EDAReplacementTestSuite TOELINE parallel operation returned {results.Count} in {stopWatch.Elapsed:g}");
+
+        //    Console.WriteLine($"EDAReplacementTestSuite TOELINE Search Test Complete.");
+
+        //    Console.WriteLine(TesterFramework.WavyLineBreak);
+        //}
+
+        public static List<TOELine> TOELINESearchByOrderNumbersTest(string uniVerseAccount, string orderHeadIds, bool? lineStatusLessThan5, DateTime? fromDt, DateTime? toDt)
         {
             Console.WriteLine(TesterFramework.WavyLineBreak);
 
@@ -72,44 +102,14 @@ namespace Tester.Tests.EDAReplacement
 
             stopWatch.Start();
 
-            var results = MertexerV2.EDAReplacement.EDAReplacement.FetchOrderLines(uniVerseAccount, lineKey, orderNumber, lineStatusId, fromDt, toDt)
+            var results = MertexerV2.EDAReplacement.EDAReplacement.FetchOrderLines(uniVerseAccount, orderHeadIds, lineStatusLessThan5, fromDt, toDt)
                 .OfType<TOELine>().ToList();
 
             stopWatch.Stop();
 
             Console.ForegroundColor = ConsoleColor.Yellow;
 
-            Console.WriteLine(JsonConvert.SerializeObject(results, Formatting.Indented));
-
-            Console.ForegroundColor = ConsoleColor.Green;
-
-            Console.WriteLine($"EDAReplacementTestSuite TOELINE parallel operation returned {results.Count} in {stopWatch.Elapsed:g}");
-
-            Console.WriteLine($"EDAReplacementTestSuite TOELINE Search Test Complete.");
-
-            Console.WriteLine(TesterFramework.WavyLineBreak);
-        }
-
-        public static List<TOELine> TOELINESearchByOrderNumbersTest(string uniVerseAccount, string orderHeadIds, byte? lineStatusLessThanId, DateTime? fromDt, DateTime? toDt)
-        {
-            Console.WriteLine(TesterFramework.WavyLineBreak);
-
-            Console.WriteLine("Beginning EDAReplacementTestSuite TOELINE Search Tests...");
-
-            Console.WriteLine(TesterFramework.WavyLineBreak);
-
-            var stopWatch = new Stopwatch();
-
-            stopWatch.Start();
-
-            var results = MertexerV2.EDAReplacement.EDAReplacement.FetchOrderLinesForOrderHeads(uniVerseAccount, orderHeadIds, lineStatusLessThanId, fromDt, toDt)
-                .OfType<TOELine>().ToList();
-
-            stopWatch.Stop();
-
-            Console.ForegroundColor = ConsoleColor.Yellow;
-
-            Console.WriteLine(JsonConvert.SerializeObject(results, Formatting.Indented));
+            //Console.WriteLine(JsonConvert.SerializeObject(results, Formatting.Indented));
 
             Console.ForegroundColor = ConsoleColor.Green;
 

@@ -502,7 +502,6 @@ namespace Tester
             //{ ""OrderID"": ""4632745"" }]");
 
 
-            var toelineResults = EDAReplacementTestSuite.TOELINESearchByOrderNumbersTest("MERTEX", null, 3, DateTime.Now.AddDays(-3), DateTime.Now.AddDays(-1));
 
             //B2BOrderImport.SiphonOldTradeSiteOrders("MERTEX");
 
@@ -609,6 +608,10 @@ namespace Tester
 
             //Item("SLCUST", "PH03155");
 
+
+            var toelineResults = EDAReplacementTestSuite.TOELINESearchByOrderNumbersTest("MERTEX", null, true, null, null).OfType<TOELine>();
+
+            var foundLine = toelineResults.Where(t => t.OrderID == "4729359H").ToList();
 
             Console.ForegroundColor = ConsoleColor.Green;
 

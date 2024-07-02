@@ -604,147 +604,147 @@ namespace MertexerV2.EDAReplacement
         }
 
 
-        [SqlFunction(DataAccess = DataAccessKind.Read,
-            SystemDataAccess = SystemDataAccessKind.Read,
-            FillRowMethodName = "FetchOrderLines_FillRow",
-            TableDefinition = "")]
-        [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
-        public static IEnumerable FetchOrderLines(string UniVerseAccount, string OrderLineID, int? OrderHeadID, byte? LineStatusLessThanID, DateTime? FromDT, DateTime? ToDT)
-        {
-            var results = new List<TOELine>();
+        //[SqlFunction(DataAccess = DataAccessKind.Read,
+        //    SystemDataAccess = SystemDataAccessKind.Read,
+        //    FillRowMethodName = "FetchOrderLines_FillRow",
+        //    TableDefinition = "")]
+        //[System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
+        //public static IEnumerable FetchOrderLines(string UniVerseAccount, string OrderLineID, int? OrderHeadID, byte? LineStatusLessThanID, DateTime? FromDT, DateTime? ToDT)
+        //{
+        //    var results = new List<TOELine>();
 
-            if (String.IsNullOrEmpty(OrderLineID) && OrderHeadID == null && FromDT == null && ToDT == null)
-            {
-                throw new Exception("LineKey, OrderHeadID and SinceDT are all NULL: refusing to query TOELINE.");
-            }
+        //    if (String.IsNullOrEmpty(OrderLineID) && OrderHeadID == null && FromDT == null && ToDT == null)
+        //    {
+        //        throw new Exception("LineKey, OrderHeadID and SinceDT are all NULL: refusing to query TOELINE.");
+        //    }
 
-            using (var qe = new QueryExecutor(UniVerseAccount))
-            {
-                var selectStatement = $"";
+        //    using (var qe = new QueryExecutor(UniVerseAccount))
+        //    {
+        //        var selectStatement = $"";
 
-                if (!String.IsNullOrEmpty(OrderLineID))
-                {
-                    selectStatement = $"@ID = {OrderLineID}";
-                }
+        //        if (!String.IsNullOrEmpty(OrderLineID))
+        //        {
+        //            selectStatement = $"@ID = {OrderLineID}";
+        //        }
 
-                if (OrderHeadID != null)
-                {
-                    if (selectStatement != "")
-                    {
-                        selectStatement += $" AND ORDERNO = {OrderHeadID}";
-                    }
-                    else
-                    {
-                        selectStatement = $"ORDERNO = {OrderHeadID}";
-                    }
-                }
+        //        if (OrderHeadID != null)
+        //        {
+        //            if (selectStatement != "")
+        //            {
+        //                selectStatement += $" AND ORDERNO = {OrderHeadID}";
+        //            }
+        //            else
+        //            {
+        //                selectStatement = $"ORDERNO = {OrderHeadID}";
+        //            }
+        //        }
 
-                if (LineStatusLessThanID != null)
-                {
-                    if (selectStatement != "")
-                        selectStatement += $" AND STATUS LT \"{LineStatusLessThanID}\"";
-                    else
-                        selectStatement = $"STATUS LT \"{LineStatusLessThanID}\"";
-                }
+        //        if (LineStatusLessThanID != null)
+        //        {
+        //            if (selectStatement != "")
+        //                selectStatement += $" AND STATUS LT \"{LineStatusLessThanID}\"";
+        //            else
+        //                selectStatement = $"STATUS LT \"{LineStatusLessThanID}\"";
+        //        }
 
-                if (FromDT != null)
-                {
-                    if (selectStatement != "")
-                        selectStatement += $" AND DATEONFILE.INT >= {Framework.UniVerseDateString(FromDT.Value)}";
-                    else
-                        selectStatement = $"DATEONFILE.INT >= {Framework.UniVerseDateString(FromDT.Value)}";
-                }
+        //        if (FromDT != null)
+        //        {
+        //            if (selectStatement != "")
+        //                selectStatement += $" AND DATEONFILE.INT >= {Framework.UniVerseDateString(FromDT.Value)}";
+        //            else
+        //                selectStatement = $"DATEONFILE.INT >= {Framework.UniVerseDateString(FromDT.Value)}";
+        //        }
 
-                if (ToDT != null)
-                {
-                    if (selectStatement != "")
-                        selectStatement += $" AND DATEONFILE.INT <= {Framework.UniVerseDateString(ToDT.Value)}";
-                    else
-                        selectStatement = $"DATEONFILE.INT <= {Framework.UniVerseDateString(ToDT.Value)}";
-                }
+        //        if (ToDT != null)
+        //        {
+        //            if (selectStatement != "")
+        //                selectStatement += $" AND DATEONFILE.INT <= {Framework.UniVerseDateString(ToDT.Value)}";
+        //            else
+        //                selectStatement = $"DATEONFILE.INT <= {Framework.UniVerseDateString(ToDT.Value)}";
+        //        }
                  
-                using (var ce = new CommandExecutor(UniVerseAccount))
-                {
-                    var keys = ce.Arbitrary($"LIST TOELINE LINEKEY FMT\"20L\" WITH {selectStatement} AND LINEKEY LIKE ...*... ID.SUPP COL.HDR.SUPP COUNT.SUP")
-                        .Split(new string[] { System.Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
-                        .ToList();
+        //        using (var ce = new CommandExecutor(UniVerseAccount))
+        //        {
+        //            var keys = ce.Arbitrary($"LIST TOELINE LINEKEY FMT\"20L\" WITH {selectStatement} AND LINEKEY LIKE ...*... ID.SUPP COL.HDR.SUPP COUNT.SUP")
+        //                .Split(new string[] { System.Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
+        //                .ToList();
 
-                    var batches = ListExtension.Split(keys, 1000);
+        //            var batches = ListExtension.Split(keys, 1000);
 
-                    var toeline = ce.Session.CreateUniFile("TOELINE");
+        //            var toeline = ce.Session.CreateUniFile("TOELINE");
 
-                    var locker = new object();
+        //            var locker = new object();
 
-                    Parallel.ForEach(batches, (batch) =>
-                    {
-                        var theseResults = new List<TOELine>();
+        //            Parallel.ForEach(batches, (batch) =>
+        //            {
+        //                var theseResults = new List<TOELine>();
 
-                        var records = toeline.ReadRecords(batch.ToArray(), toelineFields);
+        //                var records = toeline.ReadRecords(batch.ToArray(), toelineFields);
 
-                        batch.ForEach(b =>
-                        {
-                            var record = records[b];
+        //                batch.ForEach(b =>
+        //                {
+        //                    var record = records[b];
 
-                            theseResults.Add(new TOELine(
-                                key: b,
-                                orderId: record.Record.Extract(1).StringValue,
-                                lineNumber: record.Record.Extract(2).StringValue,
-                                customerLineReference: record.Record.Extract(3).StringValue,
-                                productCode: record.Record.Extract(4).StringValue,
-                                productDescription: record.Record.Extract(5).StringValue,
-                                quantityOrdered: record.Record.Extract(6).StringValue,
-                                quantityCancelled: record.Record.Extract(7).StringValue,
-                                backOrderIndicator: record.Record.Extract(8).StringValue,
-                                lineStatusId: record.Record.Extract(9).StringValue,
-                                detailedLineStatus: record.Record.Extract(10).StringValue,
-                                lineStatusDate: record.Record.Extract(11).StringValue,
-                                lineStatusTime: record.Record.Extract(12).StringValue,
-                                deliveryNoteNumber: record.Record.Extract(13).StringValue,
-                                deliveryNoteLineKey: record.Record.Extract(14).StringValue,
-                                discountPercentage: record.Record.Extract(15).StringValue,
-                                unitValueSterling: record.Record.Extract(16).StringValue,
-                                lineValueSterling: record.Record.Extract(17).StringValue,
-                                lineDiscountValueSterling: record.Record.Extract(18).StringValue,
-                                lineVATValueSterling: record.Record.Extract(19).StringValue,
-                                unitValueCurrency: record.Record.Extract(20).StringValue,
-                                lineValueCurrency: record.Record.Extract(21).StringValue,
-                                lineDiscountValueCurrency: record.Record.Extract(22).StringValue,
-                                lineVATValueCurrency: record.Record.Extract(23).StringValue,
-                                vatCode: record.Record.Extract(24).StringValue,
-                                vatRate: record.Record.Extract(25).StringValue,
-                                estimatedDespatchDate: record.Record.Extract(26).StringValue,
-                                stockLocation: record.Record.Extract(27).StringValue,
-                                purchaseOrderLineId: record.Record.Extract(28).StringValue,
-                                partnerProductCode: record.Record.Extract(29).StringValue,
-                                reserveIndicator: record.Record.Extract(30).StringValue,
-                                currentSuggestedDeliveryDate: record.Record.Extract(31).StringValue,
-                                allocateAtPicking: record.Record.Extract(32).StringValue,
-                                pickedBy: record.Record.Extract(33).StringValue,
-                                batches: record.Record.Extract(34).StringValue,
-                                pieces: record.Record.Extract(35).StringValue,
-                                releasedDate: record.Record.Extract(36).StringValue,
-                                releasedBy: record.Record.Extract(37).StringValue,
-                                allocatedQuantities: record.Record.Extract(38).StringValue
-                            ));
-                        });
+        //                    theseResults.Add(new TOELine(
+        //                        key: b,
+        //                        orderId: record.Record.Extract(1).StringValue,
+        //                        lineNumber: record.Record.Extract(2).StringValue,
+        //                        customerLineReference: record.Record.Extract(3).StringValue,
+        //                        productCode: record.Record.Extract(4).StringValue,
+        //                        productDescription: record.Record.Extract(5).StringValue,
+        //                        quantityOrdered: record.Record.Extract(6).StringValue,
+        //                        quantityCancelled: record.Record.Extract(7).StringValue,
+        //                        backOrderIndicator: record.Record.Extract(8).StringValue,
+        //                        lineStatusId: record.Record.Extract(9).StringValue,
+        //                        detailedLineStatus: record.Record.Extract(10).StringValue,
+        //                        lineStatusDate: record.Record.Extract(11).StringValue,
+        //                        lineStatusTime: record.Record.Extract(12).StringValue,
+        //                        deliveryNoteNumber: record.Record.Extract(13).StringValue,
+        //                        deliveryNoteLineKey: record.Record.Extract(14).StringValue,
+        //                        discountPercentage: record.Record.Extract(15).StringValue,
+        //                        unitValueSterling: record.Record.Extract(16).StringValue,
+        //                        lineValueSterling: record.Record.Extract(17).StringValue,
+        //                        lineDiscountValueSterling: record.Record.Extract(18).StringValue,
+        //                        lineVATValueSterling: record.Record.Extract(19).StringValue,
+        //                        unitValueCurrency: record.Record.Extract(20).StringValue,
+        //                        lineValueCurrency: record.Record.Extract(21).StringValue,
+        //                        lineDiscountValueCurrency: record.Record.Extract(22).StringValue,
+        //                        lineVATValueCurrency: record.Record.Extract(23).StringValue,
+        //                        vatCode: record.Record.Extract(24).StringValue,
+        //                        vatRate: record.Record.Extract(25).StringValue,
+        //                        estimatedDespatchDate: record.Record.Extract(26).StringValue,
+        //                        stockLocation: record.Record.Extract(27).StringValue,
+        //                        purchaseOrderLineId: record.Record.Extract(28).StringValue,
+        //                        partnerProductCode: record.Record.Extract(29).StringValue,
+        //                        reserveIndicator: record.Record.Extract(30).StringValue,
+        //                        currentSuggestedDeliveryDate: record.Record.Extract(31).StringValue,
+        //                        allocateAtPicking: record.Record.Extract(32).StringValue,
+        //                        pickedBy: record.Record.Extract(33).StringValue,
+        //                        batches: record.Record.Extract(34).StringValue,
+        //                        pieces: record.Record.Extract(35).StringValue,
+        //                        releasedDate: record.Record.Extract(36).StringValue,
+        //                        releasedBy: record.Record.Extract(37).StringValue,
+        //                        allocatedQuantities: record.Record.Extract(38).StringValue
+        //                    ));
+        //                });
 
-                        lock (locker)
-                        {
-                            results.AddRange(theseResults);
-                        }
-                    });
-                }
-            }
+        //                lock (locker)
+        //                {
+        //                    results.AddRange(theseResults);
+        //                }
+        //            });
+        //        }
+        //    }
 
-            return new ArrayList(results);
-        }
+        //    return new ArrayList(results);
+        //}
 
         [SqlFunction(DataAccess = DataAccessKind.Read,
             SystemDataAccess = SystemDataAccessKind.Read,
             FillRowMethodName = "FetchOrderLines_FillRow",
             TableDefinition = "")]
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
-        public static IEnumerable FetchOrderLinesForOrderHeads(string UniVerseAccount, string OrderHeadIDs, byte? LineStatusLessThanID, DateTime? FromDate, DateTime? ToDate)
+        public static IEnumerable FetchOrderLines(string UniVerseAccount, string OrderHeadIDs, bool? LineStatusLessThan5, DateTime? FromDate, DateTime? ToDate)
         {
             var results = new List<TOELine>();
 
@@ -752,7 +752,7 @@ namespace MertexerV2.EDAReplacement
 
             var orderHeadIds = new List<OrderHead>();
 
-            if (String.IsNullOrEmpty(OrderHeadIDs) && LineStatusLessThanID == null && FromDate == null && ToDate == null)
+            if (String.IsNullOrEmpty(OrderHeadIDs) && LineStatusLessThan5 == null && FromDate == null && ToDate == null)
             {
                 throw new Exception("No non-null search parameters were provided: refusing to query TOELINE.");
             }
@@ -762,12 +762,27 @@ namespace MertexerV2.EDAReplacement
                 orderHeadIds = JsonConvert.DeserializeObject<List<OrderHead>>(OrderHeadIDs);
             }
 
-            if (LineStatusLessThanID != null)
+            if (LineStatusLessThan5 != null)
             {
-                if (selectStatement != "")
-                    selectStatement += $" AND STATUS LT {LineStatusLessThanID}\"";
+                var lineStatus = "";
+
+                if (LineStatusLessThan5.Value == true)
+                {
+                    lineStatus = "PRODCODE.LIVE > \"1\"";
+                }
                 else
-                    selectStatement = $"STATUS LT \"{LineStatusLessThanID}\"";
+                {
+                    lineStatus = "PRODCODE.LIVE > \"1\"";
+                }
+
+                if (selectStatement != "")
+                {
+                    selectStatement += $" AND {lineStatus}";
+                }
+                else
+                {
+                    selectStatement = lineStatus;
+                }
             }
 
             if (FromDate != null)
@@ -803,7 +818,7 @@ namespace MertexerV2.EDAReplacement
 
 #if DEBUG
                     var stopWatch = new System.Diagnostics.Stopwatch();
-                    Console.WriteLine($"Searching for OrderLine Keys across: {orderHeadIds?.Count} Order IDs; LineStatus < {LineStatusLessThanID}; FromDT: {FromDate?.ToString("dd/MM/yyyy")}; ToDT: {ToDate?.ToString("dd/MM/yyyy")}");
+                    Console.WriteLine($"Searching for OrderLine Keys across: {orderHeadIds?.Count} Order IDs; LineStatus < 5 ? {LineStatusLessThan5}; FromDT: {FromDate?.ToString("dd/MM/yyyy")}; ToDT: {ToDate?.ToString("dd/MM/yyyy")}");
                     stopWatch.Start();
 #endif
 
@@ -837,12 +852,14 @@ namespace MertexerV2.EDAReplacement
                         }
                     }
 
+                    keys = keys.Where(k => !k.Contains(" not found")).ToList();
+
 #if DEBUG
                     stopWatch.Stop();
                     Console.WriteLine($"Fetched {keys.Count} OrderLine Keys in {stopWatch.Elapsed}");
 #endif
 
-                    var batches = ListExtension.Split(keys, 1000);
+                    var batches = ListExtension.Split(keys, 100);
 
                     var toeline = ce.Session.CreateUniFile("TOELINE");
 

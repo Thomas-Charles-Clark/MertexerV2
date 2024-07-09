@@ -102,14 +102,14 @@ namespace Tester.Tests.EDAReplacement
 
             stopWatch.Start();
 
-            var results = MertexerV2.EDAReplacement.EDAReplacement.FetchOrderLines(uniVerseAccount, orderHeadIds, lineStatusLessThan5, fromDt, toDt)
+            var results = MertexerV2.EDAReplacement.EDAReplacement.FetchOrderLinesForOrderHeads(uniVerseAccount, orderHeadIds, lineStatusLessThan5, fromDt, toDt)
                 .OfType<TOELine>().ToList();
 
             stopWatch.Stop();
 
             Console.ForegroundColor = ConsoleColor.Yellow;
 
-            //Console.WriteLine(JsonConvert.SerializeObject(results, Formatting.Indented));
+            Console.WriteLine(JsonConvert.SerializeObject(results, Formatting.Indented));
 
             Console.ForegroundColor = ConsoleColor.Green;
 

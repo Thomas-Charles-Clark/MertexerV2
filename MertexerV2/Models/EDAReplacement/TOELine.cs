@@ -190,6 +190,10 @@ namespace MertexerV2.Models.EDAReplacement
 
         public IEnumerable<decimal?> AllocatedQuantities { get; set; }
 
+        public string PickingHeadID { get; set; }
+
+        public string PickingLineID { get; set; }
+
         public TOELine(
             string key,
             string orderId,
@@ -229,7 +233,9 @@ namespace MertexerV2.Models.EDAReplacement
             string pieces,
             string releasedDate,
             string releasedBy,
-            string allocatedQuantities)
+            string allocatedQuantities,
+            string pickingHeadId,
+            string pickingLineId)
         {
             Key = key;
 
@@ -362,6 +368,10 @@ namespace MertexerV2.Models.EDAReplacement
             ReleasedBy = String.IsNullOrEmpty(ReleasedBy) ? null : releasedBy;
 
             AllocatedQuantities = String.IsNullOrEmpty(allocatedQuantities) ? new decimal?[] { } : allocatedQuantities.Split(Framework.ValueMarkDelimiter).Select(p => Convert(p));
+
+            PickingHeadID = String.IsNullOrEmpty(pickingHeadId) ? null : pickingHeadId;
+
+            PickingLineID = String.IsNullOrEmpty(pickingLineId) ? null : pickingLineId;
         }
 
         public override string ToString()

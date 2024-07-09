@@ -136,6 +136,8 @@
     <Compile Include="GeneralFunctions\DeliveryTerms_Upsert.cs" />
     <Compile Include="GeneralFunctions\OrderCategory_Select.cs" />
     <Compile Include="GeneralFunctions\OrderCategory_Upsert.cs" />
+    <Compile Include="GeneralFunctions\Operator_Select.cs" />
+    <Compile Include="GeneralFunctions\Operator_Upsert.cs" />
     <Compile Include="GeneralFunctions\Reason_Upsert.cs" />
     <Compile Include="GeneralFunctions\Reason_Select.cs" />
     <Compile Include="InvoiceFunctions\CreditController_Select.cs" />
@@ -150,6 +152,7 @@
     <Compile Include="Models\CustomerCare\CustomerCareRecordHead.cs" />
     <Compile Include="Models\CustomerCare\CustomerCareRecordLine.cs" />
     <Compile Include="Models\General\DeliveryTerms.cs" />
+    <Compile Include="Models\General\Operator.cs" />
     <Compile Include="Models\General\Reason.cs" />
     <Compile Include="Models\Invoices\InvoiceTerms.cs" />
     <Compile Include="Models\Order\OrderCategory.cs" />

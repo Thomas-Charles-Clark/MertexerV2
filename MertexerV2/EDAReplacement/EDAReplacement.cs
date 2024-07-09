@@ -115,6 +115,8 @@ namespace MertexerV2.EDAReplacement
             "SS.RELEASED.INT",      // 74
             "RELEASED.BY",           // 0 - OEPLHEAD 355.6
             "MBATCH.QTY",           // 89.M // We're just... hoping? pretending? that this is the allocated quantity. For now.
+            "PL.DOC.NO",            //  34
+            "PL.LINE.KEY"           //  35
         };
 
         [SqlFunction(DataAccess = DataAccessKind.Read,
@@ -551,7 +553,7 @@ namespace MertexerV2.EDAReplacement
             OrderID = String.IsNullOrEmpty(result.OrderID) ? SqlString.Null : result.OrderID.TrimReduceTruncate(50);
             CustomerOrderReference = String.IsNullOrEmpty(result.CustomerOrderReference) ? SqlString.Null : result.CustomerOrderReference.TrimReduceTruncate(500);
             OrderDT = result.OrderDT ?? SqlDateTime.Null;
-            OrderTaker = String.IsNullOrEmpty(result.OrderTaker) ? SqlString.Null : result.OrderTaker;
+            OrderTaker = String.IsNullOrEmpty(result.OrderTaker) ? SqlString.Null : result.OrderTaker.TrimReduceTruncate(10);
             OrderPriorty = result.OrderPriority ?? SqlByte.Null;
             AllocationPriority = result.AllocationPriority ?? SqlByte.Null;
             HoldOrder = result.HoldOrder;
@@ -744,7 +746,7 @@ namespace MertexerV2.EDAReplacement
             FillRowMethodName = "FetchOrderLines_FillRow",
             TableDefinition = "")]
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
-        public static IEnumerable FetchOrderLines(string UniVerseAccount, string OrderHeadIDs, bool? LineStatusLessThan5, DateTime? FromDate, DateTime? ToDate)
+        public static IEnumerable FetchOrderLinesForOrderHeads(string UniVerseAccount, string OrderHeadIDs, bool? LineStatusLessThan5, DateTime? FromDate, DateTime? ToDate)
         {
             var results = new List<TOELine>();
 
@@ -912,7 +914,9 @@ namespace MertexerV2.EDAReplacement
                                 pieces: record.Record.Extract(35).StringValue,
                                 releasedDate: record.Record.Extract(36).StringValue,
                                 releasedBy: record.Record.Extract(37).StringValue,
-                                allocatedQuantities: record.Record.Extract(38).StringValue
+                                allocatedQuantities: record.Record.Extract(38).StringValue,
+                                pickingHeadId: record.Record.Extract(39).StringValue,
+                                pickingLineId: record.Record.Extract(40).StringValue
                             ));
                         });
 
@@ -966,7 +970,9 @@ namespace MertexerV2.EDAReplacement
             out SqlString Pieces,
             out SqlDateTime ReleasedDT,
             out SqlString ReleasedBy,
-            out SqlString AllocatedQuantities
+            out SqlString AllocatedQuantities,
+            out SqlString PickingHeadID,
+            out SqlString PickingLineID
             )
         {
             var result = (TOELine)obj;
@@ -1046,6 +1052,10 @@ namespace MertexerV2.EDAReplacement
             ReleasedBy = String.IsNullOrEmpty(result.ReleasedBy) ? SqlString.Null : result.ReleasedBy.TrimReduceTruncate(50);
         
             AllocatedQuantities = result.AllocatedQuantities.Any() ? JsonConvert.SerializeObject(result.AllocatedQuantities) : SqlString.Null;
+
+            PickingHeadID = String.IsNullOrEmpty(result.PickingHeadID) ? SqlString.Null : result.PickingHeadID.TrimReduceTruncate(25);
+
+            PickingLineID = String.IsNullOrEmpty(result.PickingLineID) ? SqlString.Null : result.PickingLineID.TrimReduceTruncate(30);
         }
 
 
@@ -3439,7 +3449,7 @@ namespace MertexerV2.EDAReplacement
 
             string Batches,
             string DespatchedQuantities,
-            string InvoicedQuantities,
+            string InvoicedQuantities, 
             IBMU2.UODOTNET.UniFile OEFindParcel,
             IEnumerable<CodeDescription> Hauliers)
         {
@@ -3501,7 +3511,7 @@ namespace MertexerV2.EDAReplacement
 
                         var trackingUrl = String.IsNullOrEmpty(oefindparcel.Record.Extract(1).StringValue) ? null : oefindparcel.Record.Extract(1).StringValue;
 
-                        if (trackingUrl == null && (HaulierCode == "UPS" || HaulierCode == "UCP"))
+                        if (trackingUrl == null && (HaulierCode == "UPS" || HaulierCode == "UCP" || HaulierCode == "UWE"))
                         {
                             var haulier = Hauliers.Where(p => p.Code == HaulierCode).Select(p => p.Errata).Single();
                             trackingUrl = $"{haulier["Webparcel"]}{parcelIds[i]}{haulier["Webparcel2"]}";

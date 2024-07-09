@@ -926,6 +926,11 @@ For further assistance, please contact <a href=""mailto:itsupport@designersguild
                             }
                         }
 
+                        if (String.IsNullOrEmpty(line.OrderReference))
+                        {
+                            result.LineValidationFailures.Add(new LineValidationResult(lineNumber, "2. Order Reference", $"\"{line.OrderReference}\" null. Please provide a unique order reference."));
+                        }
+
                         if (line.OrderReference?.Length > 50)
                         {
                             result.LineValidationFailures.Add(new LineValidationResult(lineNumber, "2. Order Reference", $"\"{line.OrderReference}\" is over-length. Maximum length: 50"));

@@ -69,6 +69,8 @@ namespace MertexerV2.ProductFunctions
             out SqlString Postcode,
             out SqlString CountryCode,
             out SqlString Currency,
+            out SqlString PhoneNumber,
+            out SqlString EmailAddress,
             out SqlDecimal DutyPercentage,
             out SqlDecimal InlandChargesPercentage,
             out SqlDecimal MiscellaneousPercentage,
@@ -94,6 +96,8 @@ namespace MertexerV2.ProductFunctions
             MiscellaneousPercentage = p.MiscellaneousPercentage ?? SqlDecimal.Null;
             ImportChargePerUnit = p.ImportChargePerUnit ?? SqlDecimal.Null;
             MiscellaneousCharge = p.MiscellaneousCharge ?? SqlDecimal.Null;
+            PhoneNumber = p.PhoneNumber?.TrimReduceTruncate(20);
+            EmailAddress = p.Email?.TrimReduceTruncate(254);
         }
     }
 }

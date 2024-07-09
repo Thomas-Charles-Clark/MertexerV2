@@ -543,7 +543,21 @@ namespace Tester
 
             //var headresults = EDAReplacementTestSuite.FetchDespatchNoteHeads(uniVerseAccount, "[{ DespatchHeadID: \"4701346-1\" }]");
 
-            //var lineresults = EDAReplacementTestSuite.FetchDespatchNoteLines(uniVerseAccount, "[{ DespatchLineID: \"4320536-1*1\" }]");
+            //var lineresults = EDAReplacementTestSuite.FetchDespatchNoteLines(uniVerseAccount, "[{ DespatchLineID: \"1149663201-1*1\", HaulierCode: \"UWE\" }]");
+
+            var operators = OperatorFunctions.Select(uniVerseAccount, null).OfType<Operator>().ToList();
+
+            operators.ForEach(op => Console.WriteLine(op));
+
+            Console.WriteLine($"Saw {operators.Count()} results in {stopwatch.Elapsed}");
+
+
+            //var suppliers = SupplierFunctions.Select(uniVerseAccount, null).OfType<MertexerV2.Models.Product.Supplier>().ToList();
+
+            //suppliers.ForEach(op => Console.WriteLine(op));
+
+            //Console.WriteLine($"Saw {suppliers.Count()} results in {stopwatch.Elapsed}");
+
 
             //Console.WriteLine($"Saw {stockResults.Count} results in {stopwatch.Elapsed}");
 
@@ -609,9 +623,7 @@ namespace Tester
             //Item("SLCUST", "PH03155");
 
 
-            var toelineResults = EDAReplacementTestSuite.TOELINESearchByOrderNumbersTest("MERTEX", null, true, null, null).OfType<TOELine>();
-
-            var foundLine = toelineResults.Where(t => t.OrderID == "4729359H").ToList();
+            //var toelineResults = EDAReplacementTestSuite.TOELINESearchByOrderNumbersTest("MERTEX", @"[{ ""OrderID"": ""1148767201"" }]", null, null, null).OfType<TOELine>();
 
             Console.ForegroundColor = ConsoleColor.Green;
 

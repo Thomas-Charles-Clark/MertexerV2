@@ -128,9 +128,23 @@ namespace MertexerV2.Models.Product
         /// <summary>
         /// Currency
         /// </summary>
+        [UniVerseIndex(95)]
+        [UniVerseFieldName("EMAIL")]
+        public string Email { get; set; }
+
+        /// <summary>
+        /// Currency
+        /// </summary>
         [UniVerseIndex(100)]
         [UniVerseFieldName("CURRENCY")]
         public string Currency { get; set; }
+
+        /// <summary>
+        /// Currency
+        /// </summary>
+        [UniVerseIndex(124)]
+        [UniVerseFieldName("STD.TELEPHONE")]
+        public string PhoneNumber { get; set; }
 
         [UniVerseForeignKey("Currency", "MertexerV2.Models.ExchangeRate.ExchangeRate")]
         public virtual ExchangeRate.ExchangeRate ExchangeRate { get; set; }

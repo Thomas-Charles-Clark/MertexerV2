@@ -194,6 +194,24 @@ namespace MertexerV2.Models.EDAReplacement
 
         public string PickingLineID { get; set; }
 
+        public int? ReserveExpiryDate { get; set; }
+
+        public DateTime? ReserveExpiryDT
+        {
+            get
+            {
+                if (ReserveExpiryDate != null)
+                {
+                    var date = Framework.DateTimeFromUniVerseOffset(ReserveExpiryDate.Value);
+
+                    return date;
+                }
+
+                return null;
+            }
+            set { }
+        }
+
         public TOELine(
             string key,
             string orderId,
@@ -235,7 +253,8 @@ namespace MertexerV2.Models.EDAReplacement
             string releasedBy,
             string allocatedQuantities,
             string pickingHeadId,
-            string pickingLineId)
+            string pickingLineId,
+            string reserveExpiryDate)
         {
             Key = key;
 
@@ -372,6 +391,11 @@ namespace MertexerV2.Models.EDAReplacement
             PickingHeadID = String.IsNullOrEmpty(pickingHeadId) ? null : pickingHeadId;
 
             PickingLineID = String.IsNullOrEmpty(pickingLineId) ? null : pickingLineId;
+
+            if (Int32.TryParse(reserveExpiryDate, out int rd))
+            {
+                ReserveExpiryDate = rd;
+            }
         }
 
         public override string ToString()

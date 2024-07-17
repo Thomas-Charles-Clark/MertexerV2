@@ -129,6 +129,7 @@
     <Compile Include="Tests\Credit\CreditTestSuite.cs" />
     <Compile Include="Tests\EDAReplacement\EDAReplacementTestSuite.cs" />
     <Compile Include="Tests\Framework\FrameworkTestSuite.cs" />
+    <Compile Include="Tests\Invoicing\SalesAnalysisTestSuite.cs" />
     <Compile Include="Tests\LineStatus\LineStatusTestSuite.cs" />
     <Compile Include="Tests\Ordering\OrderTestSuite.cs" />
     <Compile Include="Tests\OrderSearch\OrderSearchTestSuite.cs" />
@@ -148,16 +149,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MertexerV2SQL\MertexerV2SQL.csproj">
-      <Project>{f80e2ee8-aa0d-4da4-9674-f7672d24559f}</Project>
-      <Name>MertexerV2SQL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MertexerV2\MertexerV2.csproj">
-      <Project>{7386a9df-c273-4fca-acc7-b58fb51ca52c}</Project>
-      <Name>MertexerV2</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Tests\ValidateCSV\KnownBad\" />
     <Folder Include="Tests\ValidateCSV\KnownGood\" />
   </ItemGroup>
@@ -173,6 +164,12 @@
     </Content>
     <Content Include="ExternalDependencies\UODOTNET.dll" />
     <Content Include="OIdComments.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MertexerV2\MertexerV2.csproj">
+      <Project>{7386a9df-c273-4fca-acc7-b58fb51ca52c}</Project>
+      <Name>MertexerV2</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

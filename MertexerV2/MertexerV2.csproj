@@ -164,6 +164,7 @@
     <Compile Include="Models\Retail\RetailModels.cs" />
     <Compile Include="Models\Retail\RetailTill.cs" />
     <Compile Include="Models\Retail\RetailTillSession.cs" />
+    <Compile Include="Models\SalesAnalysis\SalesAnalysis.cs" />
     <Compile Include="Models\Stock\B2CEnquiryDataFetch2.cs" />
     <Compile Include="Models\Stock\B2CEnquiryProductGroup.cs" />
     <Compile Include="Models\Stock\B2CEnquiryStockLocation.cs" />
@@ -197,6 +198,7 @@
     <Compile Include="ProductFunctions\Transport_Select.cs" />
     <Compile Include="ProductFunctions\Transport_Upsert.cs" />
     <Compile Include="RetailFunctions\TillFunctions.cs" />
+    <Compile Include="InvoiceFunctions\SalesAnalysis_Select.cs" />
     <Compile Include="StockFunctions\StockLocation_Select.cs" />
     <Compile Include="StockFunctions\StockLocation_Upsert.cs" />
     <Compile Include="TradeAccountFunctions\TradeAccountContactType_Select.cs" />

@@ -159,43 +159,43 @@ namespace Tester.Tests.Account
             }
         }
 
-        public static List<MertexPCALookupResult> AddressBookSearch(string tradeDataSourceJson, PassPCAPredictFind objSearch)
-        {
-            try
-            {
-                TesterFramework.SetConsoleColourTesting();
+        //public static List<MertexPCALookupResult> AddressBookSearch(string tradeDataSourceJson, PassPCAPredictFind objSearch)
+        //{
+        //    try
+        //    {
+        //        TesterFramework.SetConsoleColourTesting();
 
-                Console.WriteLine(TesterFramework.WavyLineBreak);
+        //        Console.WriteLine(TesterFramework.WavyLineBreak);
 
-                Console.WriteLine("AccountTestSuite AddressBookSearch Test...");
+        //        Console.WriteLine("AccountTestSuite AddressBookSearch Test...");
 
-                Console.WriteLine(TesterFramework.WavyLineBreak);
+        //        Console.WriteLine(TesterFramework.WavyLineBreak);
 
-                var result = MertexerV2SQL.Accounts.AccountFunctionsUniSQL.AddressBookSearch(tradeDataSourceJson, objSearch);
+        //        var result = MertexerV2SQL.Accounts.AccountFunctionsUniSQL.AddressBookSearch(tradeDataSourceJson, objSearch);
 
-                Console.WriteLine(JsonConvert.SerializeObject(result, Formatting.Indented));
+        //        Console.WriteLine(JsonConvert.SerializeObject(result, Formatting.Indented));
 
-                Console.WriteLine($"Saw {result.Count} Results.");
+        //        Console.WriteLine($"Saw {result.Count} Results.");
 
-                Console.WriteLine(TesterFramework.WavyLineBreak);
+        //        Console.WriteLine(TesterFramework.WavyLineBreak);
 
-                Console.WriteLine($"AccountTestSuite AddressBookSearch Test Complete.");
+        //        Console.WriteLine($"AccountTestSuite AddressBookSearch Test Complete.");
 
-                Console.WriteLine(TesterFramework.WavyLineBreak);
+        //        Console.WriteLine(TesterFramework.WavyLineBreak);
 
-                return result;
-            }
-            catch (Exception ex)
-            {
-                TesterFramework.SetConsoleColourError();
+        //        return result;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        TesterFramework.SetConsoleColourError();
 
-                Console.WriteLine($"\n{ex.ToString().Replace(System.Environment.NewLine, $"{System.Environment.NewLine}")}");
+        //        Console.WriteLine($"\n{ex.ToString().Replace(System.Environment.NewLine, $"{System.Environment.NewLine}")}");
 
-                Console.WriteLine("\nAccountTestSuite AddressBookSearch Test Failed");
+        //        Console.WriteLine("\nAccountTestSuite AddressBookSearch Test Failed");
 
-                return null;
-            }
-        }
+        //        return null;
+        //    }
+        //}
 
         public static void AccountBatchSelect(string uniVerseAccount, string tradeAccountListJson)
         {

@@ -116,7 +116,8 @@ namespace MertexerV2.EDAReplacement
             "RELEASED.BY",           // 0 - OEPLHEAD 355.6
             "MBATCH.QTY",           // 89.M // We're just... hoping? pretending? that this is the allocated quantity. For now.
             "PL.DOC.NO",            //  34
-            "PL.LINE.KEY"           //  35
+            "PL.LINE.KEY",           //  35
+            "SS.RESERVE.DATE.INT.DES" // 0 (<312>)
         };
 
         [SqlFunction(DataAccess = DataAccessKind.Read,
@@ -916,7 +917,8 @@ namespace MertexerV2.EDAReplacement
                                 releasedBy: record.Record.Extract(37).StringValue,
                                 allocatedQuantities: record.Record.Extract(38).StringValue,
                                 pickingHeadId: record.Record.Extract(39).StringValue,
-                                pickingLineId: record.Record.Extract(40).StringValue
+                                pickingLineId: record.Record.Extract(40).StringValue,
+                                reserveExpiryDate: record.Record.Extract(41).StringValue
                             ));
                         });
 
@@ -972,7 +974,8 @@ namespace MertexerV2.EDAReplacement
             out SqlString ReleasedBy,
             out SqlString AllocatedQuantities,
             out SqlString PickingHeadID,
-            out SqlString PickingLineID
+            out SqlString PickingLineID,
+            out SqlDateTime ReserveExpiryDT
             )
         {
             var result = (TOELine)obj;
@@ -1056,6 +1059,8 @@ namespace MertexerV2.EDAReplacement
             PickingHeadID = String.IsNullOrEmpty(result.PickingHeadID) ? SqlString.Null : result.PickingHeadID.TrimReduceTruncate(25);
 
             PickingLineID = String.IsNullOrEmpty(result.PickingLineID) ? SqlString.Null : result.PickingLineID.TrimReduceTruncate(30);
+
+            ReserveExpiryDT = result.ReserveExpiryDT ?? SqlDateTime.Null;
         }
 
 

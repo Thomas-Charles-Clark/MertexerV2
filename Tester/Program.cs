@@ -39,10 +39,11 @@ using MertexerV2.EDAReplacement;
 using static System.Collections.Specialized.BitVector32;
 using MertexerV2.Models.CustomerCare;
 using System.Security.Cryptography.X509Certificates;
-using MertexerV2SQL;
+//using MertexerV2SQL;
 using System.Management.Instrumentation;
 using MertexerV2.PricingFunctions;
 using System.Text;
+using Tester.Tests.LineStatus;
 
 namespace Tester
 {
@@ -545,11 +546,19 @@ namespace Tester
 
             //var lineresults = EDAReplacementTestSuite.FetchDespatchNoteLines(uniVerseAccount, "[{ DespatchLineID: \"1149663201-1*1\", HaulierCode: \"UWE\" }]");
 
-            var operators = OperatorFunctions.Select(uniVerseAccount, null).OfType<Operator>().ToList();
 
-            operators.ForEach(op => Console.WriteLine(op));
 
-            Console.WriteLine($"Saw {operators.Count()} results in {stopwatch.Elapsed}");
+            //var operators = OperatorFunctions.Select(uniVerseAccount, null).OfType<Operator>().ToList();
+
+            //operators.ForEach(op => Console.WriteLine(op));
+
+            //Console.WriteLine($"Saw {operators.Count()} results in {stopwatch.Elapsed}");
+
+
+            var oesanalLines = SalesAnalysisTestSuite.Select(uniVerseAccount, null, DateTime.Now.AddMonths(-1), null);
+
+            Console.WriteLine($"Saw {oesanalLines.Count()} results in {stopwatch.Elapsed}");
+
 
 
             //var suppliers = SupplierFunctions.Select(uniVerseAccount, null).OfType<MertexerV2.Models.Product.Supplier>().ToList();

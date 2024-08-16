@@ -516,5 +516,23 @@ namespace MertexerV2.Models.SalesAnalysis
         [UniVerseIndex(123)]
         [UniVerseFieldName("ORDER.CATAGORY.DES")]
         public byte OrderCategoryCode { get; set; }
+
+        public new string ToString()
+        {
+            var t = typeof(SalesAnalysis);
+
+            var properties = t.GetProperties();
+
+            var csvdata = new StringBuilder();
+
+            var data = new List<object>();
+
+            foreach (var f in properties)
+            {
+                data.Add(f.GetValue(this));
+            }
+
+            return String.Join(",", data);
+        }
     }
 }

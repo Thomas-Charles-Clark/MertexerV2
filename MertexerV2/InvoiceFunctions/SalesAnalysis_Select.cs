@@ -35,12 +35,12 @@ namespace MertexerV2.InvoiceFunctions
 
                 if (FromDT != null)
                 {
-                    filters.Add(new Tuple<string, string, string>("DOCDATE", ">=", Framework.UniVerseDateString(FromDT.Value)));
+                    filters.Add(new Tuple<string, string, string>("SS.DOCDATE.DES", ">=", Framework.UniVerseDateString(FromDT.Value)));
                 }
 
                 if (ToDT != null)
                 {
-                    filters.Add(new Tuple<string, string, string>("DOCDATE", "<=", Framework.UniVerseDateString(ToDT.Value)));
+                    filters.Add(new Tuple<string, string, string>("SS.DOCDATE.DES", "<=", Framework.UniVerseDateString(ToDT.Value)));
                 }
 
                 // non parallel, 2k batch, 52k records, last month, about 6 minutes 9s
@@ -48,18 +48,44 @@ namespace MertexerV2.InvoiceFunctions
 
                 if (filters.Any())
                 {
-                    foreach (var r in Selector<SalesAnalysis>.Filter(
+#if DEBUG
+                    var results = Selector<SalesAnalysis>.Filter(
                         filters,
                         true,
                         false,
-                        2000,
+                        1000,
+                        UniVerseAccount);
+
+                    foreach (var r in results)
+                    {
+                        yield return r;
+                    }
+#else
+                    foreach (var r in Selector<SalesAnalysis>.FilterNonParallel(
+                        filters,
+                        true,
+                        false,
+                        1000,
                         UniVerseAccount))
                     {
                         yield return r;
                     }
+#endif
                 }
                 else
                 {
+#if DEBUG
+                    var results = Selector<SalesAnalysis>.SelectAll(
+                        true,
+                        false,
+                        50,
+                        UniVerseAccount);
+
+                    foreach (var r in results)
+                    {
+                        yield return r;
+                    }
+#else
                     foreach (var r in Selector<SalesAnalysis>.SelectAllNonParallel(
                         true,
                         false,
@@ -68,17 +94,18 @@ namespace MertexerV2.InvoiceFunctions
                     {
                         yield return r;
                     }
+#endif
                 }
             }
             else
             {
                 var results = Selector<SalesAnalysis>.Select(
-                    JsonConvert.DeserializeObject<IEnumerable<SalesAnalysisCode>>(SalesAnalysisIDs).Select(p => p.SalesAnalysisID),
-                    true,
-                    false,
-                    50,
-                    UniVerseAccount)
-                    .ToList();
+                   JsonConvert.DeserializeObject<IEnumerable<SalesAnalysisCode>>(SalesAnalysisIDs).Select(p => p.SalesAnalysisID),
+                   true,
+                   false,
+                   50,
+                   UniVerseAccount)
+                   .ToList();
 
                 foreach (var r in results)
                 {

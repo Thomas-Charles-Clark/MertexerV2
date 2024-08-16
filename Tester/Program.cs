@@ -44,6 +44,8 @@ using System.Management.Instrumentation;
 using MertexerV2.PricingFunctions;
 using System.Text;
 using Tester.Tests.LineStatus;
+using System.IO;
+using MertexerV2.Models.SalesAnalysis;
 
 namespace Tester
 {
@@ -554,12 +556,38 @@ namespace Tester
 
             //Console.WriteLine($"Saw {operators.Count()} results in {stopwatch.Elapsed}");
 
+            var dfi = System.Globalization.DateTimeFormatInfo.InvariantInfo;
 
-            var oesanalLines = SalesAnalysisTestSuite.Select(uniVerseAccount, null, DateTime.Now.AddMonths(-1), null);
+            //var oesanalLines = SalesAnalysisTestSuite.Select(uniVerseAccount, @"[{ ""SalesAnalysisID"": ""16572616"" }]", null, null);
+
+            var oesanalLines = SalesAnalysisTestSuite.Select(uniVerseAccount, null, DateTime.ParseExact("2023/08/01", "yyyy/MM/dd", dfi), DateTime.ParseExact("2023/08/31", "yyyy/MM/dd", dfi));
+
+            //System.IO.File.WriteAllText("oesanal-2023-08.json", JsonConvert.SerializeObject(oesanalLines));
+
+            var sb = new StringBuilder();
+            
+            using (var sw = new StreamWriter("oesanal-August-23.csv", true))
+            {
+                var t = typeof(SalesAnalysis);
+
+                var properties = t.GetProperties();
+
+                var data = new List<object>();
+
+                foreach (var f in properties)
+                {
+                    data.Add(f.Name);
+                }
+
+                sw.WriteLine(String.Join(",", data));
+
+                foreach (var ol in oesanalLines)
+                {
+                    sw.WriteLine(ol.ToString());
+                }
+            }
 
             Console.WriteLine($"Saw {oesanalLines.Count()} results in {stopwatch.Elapsed}");
-
-
 
             //var suppliers = SupplierFunctions.Select(uniVerseAccount, null).OfType<MertexerV2.Models.Product.Supplier>().ToList();
 

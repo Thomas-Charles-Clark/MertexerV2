@@ -9,7 +9,7 @@ namespace MertexerV2.Models.Stock
     internal class B2CEnquiryProductGroup
     {
         public string Name { get; set; }
-        public List<ProductCodeStockCheckMinimum> ProductCodes { get; set; }
-        public List<B2CEnquiryStockLocation> StockLocations { get; set; }
+        public List<ProductCodeStockCheckMinimum> ProductCodes { get; set; } = new List<ProductCodeStockCheckMinimum>();
+        public List<B2CEnquiryStockLocation> StockLocations { get; set; } = new List<B2CEnquiryStockLocation>();
     }
 }

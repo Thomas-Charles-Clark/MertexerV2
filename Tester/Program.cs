@@ -374,6 +374,8 @@ namespace Tester
 
             ////var singularStockResult = Stock.B2CEnquiry_Singular("FRL5272/01", "WH").OfType<B2CEnquiryResult>().ToList();
 
+            //var stockResults = Stock.B2CEnquiry(@"{ ""ProductGroups"": [{""Name"":""Fabric"",""StockLocations"":[{""Code"":""WH""}]},{""Name"":""Wallpaper"",""StockLocations"":[{""Code"":""WH""}]},{""Name"":""Samples"",""StockLocations"":[{""Code"":""SR""}],""ProductCodes"":[{""ProductCode"":""P559\/08\/R"",""StockCheckMinimum"":-9999.00}]},{""Name"":""Furniture"",""StockLocations"":[{""Code"":""KRFURN""},{""Code"":""MHSFURN""},{""Code"":""PRF""},{""Code"":""WH""}]},{""Name"":""Fenwick"",""StockLocations"":[{""Code"":""FOL""},{""Code"":""FTW""},{""Code"":""FKI""},{""Code"":""FBC""},{""Code"":""FCA""},{""Code"":""FNC""},{""Code"":""FCO""},{""Code"":""FBO""},{""Code"":""FYO""},{""Code"":""FBR""}]},{""Name"":""EverythingElse"",""StockLocations"":[{""Code"":""EC""},{""Code"":""GPS""},{""Code"":""KR""},{""Code"":""MHS""},{""Code"":""NFS""},{""Code"":""NGS""},{""Code"":""WH""}]}] }").OfType<B2CEnquiryResult>().ToList();
+
             //Console.ForegroundColor = ConsoleColor.Yellow;
 
             //stockResults.ForEach(r => Console.WriteLine(r));
@@ -556,38 +558,40 @@ namespace Tester
 
             //Console.WriteLine($"Saw {operators.Count()} results in {stopwatch.Elapsed}");
 
-            var dfi = System.Globalization.DateTimeFormatInfo.InvariantInfo;
+            //var dfi = System.Globalization.DateTimeFormatInfo.InvariantInfo;
 
             //var oesanalLines = SalesAnalysisTestSuite.Select(uniVerseAccount, @"[{ ""SalesAnalysisID"": ""16572616"" }]", null, null);
 
-            var oesanalLines = SalesAnalysisTestSuite.Select(uniVerseAccount, null, DateTime.ParseExact("2023/08/01", "yyyy/MM/dd", dfi), DateTime.ParseExact("2023/08/31", "yyyy/MM/dd", dfi));
+            //var oesanalLines = SalesAnalysisTestSuite.Select(uniVerseAccount, null, DateTime.ParseExact("2023/08/01", "yyyy/MM/dd", dfi), DateTime.ParseExact("2023/08/31", "yyyy/MM/dd", dfi));
 
             //System.IO.File.WriteAllText("oesanal-2023-08.json", JsonConvert.SerializeObject(oesanalLines));
 
-            var sb = new StringBuilder();
-            
-            using (var sw = new StreamWriter("oesanal-August-23.csv", true))
-            {
-                var t = typeof(SalesAnalysis);
 
-                var properties = t.GetProperties();
+            //var sb = new StringBuilder();
 
-                var data = new List<object>();
+            //using (var sw = new StreamWriter("oesanal-August-23.csv", true))
+            //{
+            //    var t = typeof(SalesAnalysis);
 
-                foreach (var f in properties)
-                {
-                    data.Add(f.Name);
-                }
+            //    var properties = t.GetProperties();
 
-                sw.WriteLine(String.Join(",", data));
+            //    var data = new List<object>();
 
-                foreach (var ol in oesanalLines)
-                {
-                    sw.WriteLine(ol.ToString());
-                }
-            }
+            //    foreach (var f in properties)
+            //    {
+            //        data.Add(f.Name);
+            //    }
 
-            Console.WriteLine($"Saw {oesanalLines.Count()} results in {stopwatch.Elapsed}");
+            //    sw.WriteLine(String.Join(",", data));
+
+            //    foreach (var ol in oesanalLines)
+            //    {
+            //        sw.WriteLine(ol.ToString());
+            //    }
+            //}
+
+            //Console.WriteLine($"Saw {oesanalLines.Count()} results in {stopwatch.Elapsed}");
+
 
             //var suppliers = SupplierFunctions.Select(uniVerseAccount, null).OfType<MertexerV2.Models.Product.Supplier>().ToList();
 

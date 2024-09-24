@@ -96,6 +96,7 @@ namespace MertexerV2.Models.Invoices
         /// Carriage Value
         /// </summary>
         [UniVerseIndex(19)]
+        [UniVerseConversion("MR22")]
         [UniVerseFieldName("CARRIAGE")]
         public decimal? CarriageValue  { get; set; }
 
@@ -103,6 +104,7 @@ namespace MertexerV2.Models.Invoices
         /// Carriage Value (Currency)
         /// </summary>
         [UniVerseIndex(26)]
+        [UniVerseConversion("MR22")]
         [UniVerseFieldName("CARRIAGE.CUR")]
         public decimal? CarriageValueCurrency { get; set; }
 
@@ -112,5 +114,5 @@ namespace MertexerV2.Models.Invoices
         [UniVerseIndex(45)]
         [UniVerseFieldName("CURRENCY")]
         public string CurrencyCode { get; set; }
-}
+    }
 }

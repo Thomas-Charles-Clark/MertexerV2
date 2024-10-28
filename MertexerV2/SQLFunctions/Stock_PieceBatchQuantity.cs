@@ -163,7 +163,7 @@ namespace MertexerV2.SQLFunctions
                                 piece: pieces[i],
                                 pickable: Convert.ToBoolean(Convert.ToInt32(String.IsNullOrEmpty(pickableFlagArray[i]) ? "1" : pickableFlagArray[i])),
                                 rack: rackNames[i],
-                                rackType: rackTypesArray[i],
+                                rackType: rackTypesArray?.Length > i ? rackTypesArray[i] : null,
                                 quantity: Convert.ToDecimal(rackFreeLengthsArray[i]),
                                 onReserve: String.IsNullOrEmpty(reservesArray[i]) ? null : (decimal?)Convert.ToDecimal(reservesArray[i]),
                                 poNumber: null,

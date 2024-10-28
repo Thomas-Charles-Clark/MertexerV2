@@ -170,6 +170,8 @@
     <Compile Include="Models\Stock\B2CEnquiryStockLocation.cs" />
     <Compile Include="Models\Stock\ProductCodeStockCheckMinimum.cs" />
     <Compile Include="Models\Stock\StockLocation.cs" />
+    <Compile Include="Models\Tracking_Consignments\Consignment.cs" />
+    <Compile Include="Models\Tracking_Consignments\ConsignmentLine.cs" />
     <Compile Include="Models\TradeAccount\TradeAccountContact.cs" />
     <Compile Include="Models\TradeAccount\TradeAccountContactType.cs" />
     <Compile Include="Models\TradeAccount\TradeAccountCurrentBalance.cs" />

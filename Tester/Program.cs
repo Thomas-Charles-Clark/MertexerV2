@@ -22,7 +22,6 @@ using MertexerV2.GeneralFunctions.Pricing;
 using MertexerV2.ProductFunctions;
 using MertexerV2.Models.Product;
 using MertexerV2.Models.Pricing;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using MertexerV2.Models.General;
 using MertexerV2.Models.Invoices;
 using System.Globalization;
@@ -36,7 +35,6 @@ using System.CodeDom;
 using MertexerV2.RetailFunctions;
 using System.Diagnostics.Tracing;
 using MertexerV2.EDAReplacement;
-using static System.Collections.Specialized.BitVector32;
 using MertexerV2.Models.CustomerCare;
 using System.Security.Cryptography.X509Certificates;
 //using MertexerV2SQL;
@@ -548,7 +546,28 @@ namespace Tester
 
             //var headresults = EDAReplacementTestSuite.FetchDespatchNoteHeads(uniVerseAccount, "[{ DespatchHeadID: \"4701346-1\" }]");
 
-            //var lineresults = EDAReplacementTestSuite.FetchDespatchNoteLines(uniVerseAccount, "[{ DespatchLineID: \"1149663201-1*1\", HaulierCode: \"UWE\" }]");
+            //var lineresults = EDAReplacementTestSuite.FetchDespatchNoteLines(uniVerseAccount, @"[{ 
+            //    DespatchLineID: ""1145660302-2*1"", 
+            //    HaulierCode: ""UWE""
+            //}, {
+            //    DespatchLineID: ""1145660302-2*2"", 
+            //    HaulierCode: ""UWE""
+            //}, {
+            //    DespatchLineID: ""1145660302-2*3"", 
+            //    HaulierCode: ""UWE""
+            //}, {
+            //    DespatchLineID: ""1145660302-2*4"", 
+            //    HaulierCode: ""UWE""
+            //}, {
+            //    DespatchLineID: ""1145660302-2*5"", 
+            //    HaulierCode: ""UWE""
+            //}, {
+            //    DespatchLineID: ""1145660302-2*6"", 
+            //    HaulierCode: ""UWE""
+            //}, {
+            //    DespatchLineID: ""1145660302-3*1"", 
+            //    HaulierCode: ""UWE""
+            //}]");
 
 
 
@@ -651,6 +670,41 @@ namespace Tester
             //    .OfType<POPriceListExplosion>().ToList();
 
             //results.ForEach(r => Console.WriteLine(r));
+
+            //var results = Stock.BatchPiece("PDG718/01", "EMB", "S", 1).OfType<BatchPieceResult>().ToList();
+
+            //results.ForEach(r =>
+            //{
+
+            //    SqlString Type = null;
+            //    SqlString ProductCode = null;
+            //    SqlDecimal StockCheckMinimum = 0.0M;
+            //    SqlString LocationCode = null;
+            //    SqlString Batch = null;
+            //    SqlString Piece = null;
+            //    SqlBoolean Pickable = false;
+            //    SqlString Rack = null;
+            //    SqlString RackType = null;
+            //    SqlDecimal Quantity = 0.0M;
+            //    SqlDecimal OnReserve = 0.0M;
+            //    SqlDateTime PODate = DateTime.Now;
+            //    SqlString POMessage = null;
+            //    SqlBoolean POStatus = false;
+            //    SqlBoolean CallOff = false;
+
+            //    Stock.BatchPiece_FillRow(r, out Type, out ProductCode, out StockCheckMinimum, out LocationCode,
+            //        out Batch,
+            //        out Piece,
+            //        out Pickable,
+            //        out Rack,
+            //        out RackType,
+            //        out Quantity,
+            //        out OnReserve,
+            //        out PODate,
+            //        out POMessage,
+            //        out POStatus,
+            //        out CallOff);
+            //});
 
 
             //Stock.BatchPiece("F1723/57", "WH", "S");

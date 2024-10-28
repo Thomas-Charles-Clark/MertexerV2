@@ -1,6 +1,7 @@
 ﻿using MertexerV2.Models;
 using MertexerV2.Models.EDAReplacement;
 using MertexerV2.Models.General;
+using MertexerV2.Models.Tracking_Consignments;
 using MertexerV2.SQLFunctions;
 using MertexerV2.Utilities;
 using Microsoft.SqlServer.Server;
@@ -2477,7 +2478,7 @@ namespace MertexerV2.EDAReplacement
                 16,  //"CARRIAGE"
                 60,  //"CARRIAGE.CUR"
                 7,   //"TOELINEP"
-                40   //"PARCEL"
+                40,   //"PARCEL"
             };
 
             int[] toelineFields = new int[]
@@ -2939,7 +2940,7 @@ namespace MertexerV2.EDAReplacement
                 16,  //"CARRIAGE"
                 60,  //"CARRIAGE.CUR"
                 7,   //"TOELINEP"
-                40   //"PARCEL"
+                40,  //"PARCEL"
             };
 
             int[] toelineFields = new int[]
@@ -3516,7 +3517,7 @@ namespace MertexerV2.EDAReplacement
 
                         var trackingUrl = String.IsNullOrEmpty(oefindparcel.Record.Extract(1).StringValue) ? null : oefindparcel.Record.Extract(1).StringValue;
 
-                        if (trackingUrl == null && (HaulierCode == "UPS" || HaulierCode == "UCP" || HaulierCode == "UWE"))
+                        if (trackingUrl == null && (HaulierCode == "UPS" || HaulierCode == "UCP" || HaulierCode == "UWE" || HaulierCode == "UC4"))
                         {
                             var haulier = Hauliers.Where(p => p.Code == HaulierCode).Select(p => p.Errata).Single();
                             trackingUrl = $"{haulier["Webparcel"]}{parcelIds[i]}{haulier["Webparcel2"]}";
@@ -3680,6 +3681,20 @@ namespace MertexerV2.EDAReplacement
             ProductCode = String.IsNullOrEmpty(result.ProductCode) ? SqlString.Null : result.ProductCode.TrimReduceTruncate(20);
 
             ParcelJSON = result.Parcels.Any() ? JsonConvert.SerializeObject(result.Parcels) : SqlString.Null;
+        }
+
+        public static void FetchConsignmentLines_FillRow(
+            object obj,
+            out SqlString ConsignmentLineID,
+            out SqlString OrderLineID,
+            out SqlString OriginalParcelID
+            )
+        {
+            var result = (ConsignmentLine)obj;
+
+            ConsignmentLineID = String.IsNullOrEmpty(result.ConsignmentLineID) ? SqlString.Null : result.ConsignmentLineID.TrimReduceTruncate(30);
+            OrderLineID = String.IsNullOrEmpty(result.OrderLineID) ? SqlString.Null : result.OrderLineID.TrimReduceTruncate(30);
+            OriginalParcelID = String.IsNullOrEmpty(result.OriginalParcelID) ? SqlString.Null : result.OriginalParcelID.TrimReduceTruncate(30);
         }
 
 

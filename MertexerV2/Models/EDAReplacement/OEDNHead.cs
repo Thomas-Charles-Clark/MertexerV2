@@ -70,7 +70,7 @@ namespace MertexerV2.Models.EDAReplacement
         public List<ParcelContent> ParcelContents { get; set; }
 
         public Parcel(
-            string parcelNumber, 
+            string parcelNumber,
             string parcelId,
             string haulierCode,
             string trackingUrl)
@@ -137,13 +137,16 @@ namespace MertexerV2.Models.EDAReplacement
         public decimal QuantityDespatched { get; set; }
         public decimal? QuantityInvoiced { get; set; }
 
+        public string OriginalParcelID { get; set; }
+
         public ParcelContent(
             string pid, 
             string b,
             string p,
             string pc,
             decimal q,
-            decimal? iq = null)
+            decimal? iq = null,
+            string originalParcelId = null)
         {
             ParcelID = pid;
             Batch = b;
@@ -151,6 +154,7 @@ namespace MertexerV2.Models.EDAReplacement
             ProductCode = pc;
             QuantityDespatched = q;
             QuantityInvoiced = iq;
+            OriginalParcelID = originalParcelId;
         }
     }
 

@@ -499,10 +499,10 @@ namespace MertexerV2.ProductFunctions
             FRLPartNumber = p.FRLPartNumber?.TrimReduceTruncate(50);
             FoliaPartNumber = p.FoliaPartNumber?.TrimReduceTruncate(50);
             PriceListDeliveryBand = p.PriceListDeliveryBand?.TrimReduceTruncate(10);
-            SpareField11 = p.SpareField11?.TrimReduceTruncate(20);
-            SpareField12 = p.SpareField12?.TrimReduceTruncate(20);
-            SpareField13 = p.SpareField13?.TrimReduceTruncate(20);
-            SpareField14 = p.SpareField14?.TrimReduceTruncate(20);
+            SpareField11 = p.SpareField11?.TrimReduceTruncate(100);
+            SpareField12 = p.SpareField12?.TrimReduceTruncate(100);
+            SpareField13 = p.SpareField13?.TrimReduceTruncate(100);
+            SpareField14 = p.SpareField14?.TrimReduceTruncate(100);
         }
     }
 }

@@ -91,26 +91,31 @@ namespace MertexerV2.GeneralFunctions
 
                 var results = new List<T>();
 
-                try
-                {
                     if (keys.Any())
                     {
                         //var extantRecords = uniFile.ReadRecords(keys.ToArray());
 
                         foreach (var key in keys)
                         {
-                            var extantRecord = uniFile.Read(key);
-
-                            //var extantRecord = extantRecords.GetRecord(key).Record;
-
-                            var result = UniVerseSerializer.Deserialize(typeof(T).AssemblyQualifiedName, key, extantRecord, applyConversions);
-
-                            if (selectChildEntities)
+                            try
                             {
-                                ProcessForeignKeys(typeof(T).GetProperties().Where(p => Attribute.IsDefined(p, typeof(UniVerseForeignKeyAttribute))), ref result, applyConversions, selectChildEntities, batchSize, uniVerseAccount);
-                            }
+                                var extantRecord = uniFile.Read(key);
 
-                            results.Add((T)result);
+                                //var extantRecord = extantRecords.GetRecord(key).Record;
+
+                                var result = UniVerseSerializer.Deserialize(typeof(T).AssemblyQualifiedName, key, extantRecord, applyConversions);
+
+                                if (selectChildEntities)
+                                {
+                                    ProcessForeignKeys(typeof(T).GetProperties().Where(p => Attribute.IsDefined(p, typeof(UniVerseForeignKeyAttribute))), ref result, applyConversions, selectChildEntities, batchSize, uniVerseAccount);
+                                }
+
+                                results.Add((T)result);
+                            }
+                            catch (UniFileException)
+                            {
+                                // not bothered: if a key isn't found, don't return a record for it.
+                            }
                         }
                     }
                     else
@@ -142,36 +147,43 @@ namespace MertexerV2.GeneralFunctions
                         Console.WriteLine($"SelectAll<{typeof(T).Name}>.Execute Stage One batch processing:");
                         Console.WriteLine();
 #endif
-
                         Parallel.ForEach(batches, (batch) =>
                         {
-                            var extantRecords = uniFile.ReadRecords(batch.ToArray());
-
-                            var thisBatchResults = new List<T>();
-
-                            foreach (var key in batch)
+                            try
                             {
-                                var extantRecord = extantRecords.GetRecord(key).Record;
+                                var extantRecords = uniFile.ReadRecords(batch.ToArray());
 
-                                var result = UniVerseSerializer.Deserialize(typeof(T).AssemblyQualifiedName, key, extantRecord, applyConversions);
+                                var thisBatchResults = new List<T>();
 
-                                if (selectChildEntities)
+                                foreach (var key in batch)
                                 {
-                                    ProcessForeignKeys(typeof(T).GetProperties().Where(p => Attribute.IsDefined(p, typeof(UniVerseForeignKeyAttribute))), ref result, applyConversions, selectChildEntities, batchSize, uniVerseAccount);
+                                    var extantRecord = extantRecords.GetRecord(key).Record;
+
+                                    var result = UniVerseSerializer.Deserialize(typeof(T).AssemblyQualifiedName, key, extantRecord, applyConversions);
+
+                                    if (selectChildEntities)
+                                    {
+                                        ProcessForeignKeys(typeof(T).GetProperties().Where(p => Attribute.IsDefined(p, typeof(UniVerseForeignKeyAttribute))), ref result, applyConversions, selectChildEntities, batchSize, uniVerseAccount);
+                                    }
+
+                                    thisBatchResults.Add((T)result);
                                 }
 
-                                thisBatchResults.Add((T)result);
-                            }
-
-                            lock (locker)
-                            {
-                                results.AddRange(thisBatchResults);
+                                lock (locker)
+                                {
+                                    results.AddRange(thisBatchResults);
 
 #if DEBUG
-                                Console.SetCursorPosition(0, Console.CursorTop);
-                                Console.Write($"Batch: {++batchCounter} - {sw.Elapsed}");
+                                    Console.SetCursorPosition(0, Console.CursorTop);
+                                    Console.Write($"Batch: {++batchCounter} - {sw.Elapsed}");
 #endif
 
+                                }
+                            }
+                            catch (UniFileException)
+                            {
+                                // not bothered: if a key in this batch isn't found, don't return the batch.
+                                // this is the point at which Matt's batch reduction magic in SQL whittles the batch down in size to eventually 1.
                             }
                         });
                     }
@@ -185,13 +197,7 @@ namespace MertexerV2.GeneralFunctions
                     //#endif
 
                     return results;
-                }
-                catch (UniFileException _)
-                {
-                    // not bothered: if a key isn't found, don't return a record for it.
-                }
 
-                return results;
             }
         }
 
@@ -299,7 +305,7 @@ namespace MertexerV2.GeneralFunctions
 
                 query += "ID.SUPP COL.HDR.SUPP COUNT.SUP";
 
-                var keys = ce.Arbitrary(query)
+                var keys = ce.Arbitrary(query, timeoutSeconds: 120)
                 .Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
                 .ToList();
 
@@ -395,7 +401,7 @@ namespace MertexerV2.GeneralFunctions
 
                 query += "ID.SUPP COL.HDR.SUPP COUNT.SUP";
 
-                var keys = ce.Arbitrary(query)
+                var keys = ce.Arbitrary(query, timeoutSeconds: 120)
                 .Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
                 .ToList();
 
@@ -649,11 +655,11 @@ namespace MertexerV2.GeneralFunctions
 //                            }
 
 //#endif
-                            fkProp.SetValue(result, instance);
-
                             //Console.WriteLine();
                             //Console.WriteLine();
                         }
+
+                        fkProp.SetValue(result, instance);
                     }
                 }
                 else
@@ -668,6 +674,17 @@ namespace MertexerV2.GeneralFunctions
             }
         }
 
+        /// <summary>
+        /// This does not yet handle fetching child entities where the relationship between
+        /// parent and child does not utilise child's key field
+        /// </summary>
+        /// <param name="typeName"></param>
+        /// <param name="key"></param>
+        /// <param name="applyConversions"></param>
+        /// <param name="selectChildEntities"></param>
+        /// <param name="batchSize"></param>
+        /// <param name="uniVerseAccount"></param>
+        /// <returns></returns>
         internal static object SelectChildEntity(string typeName, string key = null, bool applyConversions = true, bool selectChildEntities = true, short batchSize = 1000, string uniVerseAccount = "MERTEX")
         {
             if (key == null)

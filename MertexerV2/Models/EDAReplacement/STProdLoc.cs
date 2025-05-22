@@ -17,11 +17,6 @@ namespace MertexerV2.Models.EDAReplacement
         public string Code { get; set; }
     }
 
-    public class PurchaseOrderHead
-    {
-        public string PurchaseOrderHeadID { get; set; }
-    }
-
     public class STProdLoc
     {
         public string ProductCode { get; set; }

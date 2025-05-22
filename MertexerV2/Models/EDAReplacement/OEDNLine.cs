@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -33,6 +34,7 @@ namespace MertexerV2.Models.EDAReplacement
         public string DespatchHeadID { get; set; }
         public string DespatchLineID { get; set; }
         public string ProductCode { get; set; }
+        public IEnumerable<string> OriginalParcelIDs { get; set; }
         public List<Parcel> Parcels { get; set; }
 
         public string ParcelJSON
@@ -52,6 +54,7 @@ namespace MertexerV2.Models.EDAReplacement
             string despatchLineId,
             string despatchHeadId,
             string productCode,
+            IEnumerable<string> originalParcelIds,
             List<Parcel> parcels)
         {
             Source = String.IsNullOrEmpty(source) ? null : source;
@@ -61,6 +64,8 @@ namespace MertexerV2.Models.EDAReplacement
             DespatchLineID = String.IsNullOrEmpty(despatchLineId) ? null : despatchLineId;
 
             ProductCode = String.IsNullOrEmpty(productCode) ? null : productCode;
+
+            OriginalParcelIDs = originalParcelIds;
 
             Parcels = parcels;
         }

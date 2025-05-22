@@ -61,13 +61,15 @@ namespace MertexerV2.ProductFunctions
         public static void CollectionSelect_FillRow(
             object obj,
             out SqlString Code,
-            out SqlString Name
+            out SqlString Name,
+            out SqlDateTime LaunchDT
             )
         {
             var p = (Collection)obj;
 
             Code = p.Key?.TrimReduceTruncate(10);
             Name = p.Name?.TrimReduceTruncate(100);
+            LaunchDT = p.LaunchDT ?? SqlDateTime.Null;
         }
     }
 }

@@ -45,5 +45,39 @@ namespace Tester.Tests.LineStatus
 
             return results;
         }
+
+
+        public static IEnumerable<SalesAnalysisHistory> HistorySelect(string uniVerseAccount, string salesAnalysisIds, DateTime? fromDt, DateTime? toDt)
+        {
+            Console.WriteLine(TesterFramework.WavyLineBreak);
+
+            Console.WriteLine("Beginning SalesAnalysisHistory Tests...");
+
+            Console.WriteLine(TesterFramework.WavyLineBreak);
+
+            var stopWatch = new Stopwatch();
+
+            stopWatch.Start();
+
+            var results = MertexerV2.InvoiceFunctions.SalesAnalysisFunctions.HistorySelect(uniVerseAccount, salesAnalysisIds, fromDt, toDt).OfType<SalesAnalysisHistory>().ToList();
+
+            stopWatch.Stop();
+
+            Console.WriteLine($"SalesAnalysisHistory parallel operation returned {results.Count} in {stopWatch.Elapsed:g}");
+
+            Console.WriteLine($"SalesAnalysisHistory Tests Complete.");
+
+            Console.WriteLine(TesterFramework.WavyLineBreak);
+
+            //Console.Beep(37, 300);
+            //Console.Beep(2820, 300);
+            //System.Threading.Thread.Sleep(20);
+            //Console.Beep(2800, 190);
+            //Console.Beep(2800, 190);
+            //System.Threading.Thread.Sleep(20);
+            //Console.Beep(3800, 300);
+
+            return results;
+        }
     }
 }

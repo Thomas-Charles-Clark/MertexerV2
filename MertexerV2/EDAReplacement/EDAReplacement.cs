@@ -73,7 +73,11 @@ namespace MertexerV2.EDAReplacement
             "DELIVERY.TYPE.TDW",
             "TERMS",
             "CARR.EXEMPT",
-            "SO.CUSTREQ.FULLDESP.DES"
+            "SO.CUSTREQ.FULLDESP.DES",
+            "ATLAS.DELANA",
+            "ATLAS.INVANA",
+            "ATLAS.DTCANA",
+            "ATLAS.STORENAME"
         };
 
         static readonly string[] toelineFields = new string[]
@@ -349,7 +353,11 @@ namespace MertexerV2.EDAReplacement
                                 deliveryType: record.Record.Extract(48).StringValue,
                                 paymentTerms: record.Record.Extract(49).StringValue,
                                 carriageExempt: record.Record.Extract(50).StringValue,
-                                customerHeldForFullDespatch: record.Record.Extract(51).StringValue
+                                customerHeldForFullDespatch: record.Record.Extract(51).StringValue,
+                                jLEdgeAtlasDeliveryAnaNo: record.Record.Extract(52).StringValue,
+                                jLEdgeAtlasInvoiceAnaNo: record.Record.Extract(53).StringValue,
+                                jLEdgeAtlasDirectToCustomerAnaNo: record.Record.Extract(54).StringValue,
+                                jLEdgeAtlasStoreName: record.Record.Extract(55).StringValue
                             ));
                         });
 
@@ -474,7 +482,11 @@ namespace MertexerV2.EDAReplacement
                                     deliveryType: record.Record.Extract(48).StringValue,
                                     paymentTerms: record.Record.Extract(49).StringValue,
                                     carriageExempt: record.Record.Extract(50).StringValue,
-                                    customerHeldForFullDespatch: record.Record.Extract(51).StringValue
+                                    customerHeldForFullDespatch: record.Record.Extract(51).StringValue,
+                                    jLEdgeAtlasDeliveryAnaNo: record.Record.Extract(52).StringValue,
+                                    jLEdgeAtlasInvoiceAnaNo: record.Record.Extract(53).StringValue,
+                                    jLEdgeAtlasDirectToCustomerAnaNo: record.Record.Extract(54).StringValue,
+                                    jLEdgeAtlasStoreName: record.Record.Extract(55).StringValue
                                 ));
                             });
 
@@ -546,7 +558,11 @@ namespace MertexerV2.EDAReplacement
             out SqlString DeliveryType,
             out SqlString PaymentTerms,
             out SqlString CarriageExempt,
-            out SqlBoolean CustomerHeldForFullDespatch)
+            out SqlBoolean CustomerHeldForFullDespatch,
+            out SqlString JLEdgeAtlasDeliveryAnaNo,
+            out SqlString JLEdgeAtlasInvoiceeAnaNo,
+            out SqlString JLEdgeAtlasDirectToCustomerAnaNo,
+            out SqlString JLEdgeAtlasStoreName)
         {
             var result = (TOEHead)obj;
 
@@ -605,6 +621,12 @@ namespace MertexerV2.EDAReplacement
             CarriageExempt = String.IsNullOrEmpty(result.CarriageExempt) ? SqlString.Null : result.CarriageExempt.TrimReduceTruncate(1);
 
             CustomerHeldForFullDespatch = result.CustomerHeldForFullDespatch;
+
+            JLEdgeAtlasDeliveryAnaNo = String.IsNullOrEmpty(result.JLEdgeAtlasDeliveryAnaNo) ? SqlString.Null : result.JLEdgeAtlasDeliveryAnaNo.TrimReduceTruncate(50);
+            JLEdgeAtlasInvoiceeAnaNo = String.IsNullOrEmpty(result.JLEdgeAtlasInvoiceeAnaNo) ? SqlString.Null : result.JLEdgeAtlasInvoiceeAnaNo.TrimReduceTruncate(50);
+            JLEdgeAtlasDirectToCustomerAnaNo = String.IsNullOrEmpty(result.JLEdgeAtlasDirectToCustomerAnaNo) ? SqlString.Null : result.JLEdgeAtlasDirectToCustomerAnaNo.TrimReduceTruncate(50);
+            JLEdgeAtlasStoreName = String.IsNullOrEmpty(result.JLEdgeAtlasStoreName) ? SqlString.Null : result.JLEdgeAtlasStoreName.TrimReduceTruncate(50);
+
         }
 
 
@@ -666,7 +688,7 @@ namespace MertexerV2.EDAReplacement
         //            else
         //                selectStatement = $"DATEONFILE.INT <= {Framework.UniVerseDateString(ToDT.Value)}";
         //        }
-                 
+
         //        using (var ce = new CommandExecutor(UniVerseAccount))
         //        {
         //            var keys = ce.Arbitrary($"LIST TOELINE LINEKEY FMT\"20L\" WITH {selectStatement} AND LINEKEY LIKE ...*... ID.SUPP COL.HDR.SUPP COUNT.SUP")
@@ -768,6 +790,7 @@ namespace MertexerV2.EDAReplacement
 
             if (LineStatusLessThan5 != null)
             {
+
                 var lineStatus = "";
 
                 if (LineStatusLessThan5.Value == true)
@@ -1205,359 +1228,361 @@ namespace MertexerV2.EDAReplacement
             FreeStock = result.FreeStock;
         }
 
-        [SqlFunction(DataAccess = DataAccessKind.Read,
-            SystemDataAccess = SystemDataAccessKind.Read,
-            FillRowMethodName = "FetchPurchaseOrders_FillRow",
-            TableDefinition = "")]
-        [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
-        public static IEnumerable FetchPurchaseOrders(string UniVerseAccount, string PurchaseOrderHeads, DateTime? FromDT, DateTime? ToDT)
-        {
-            var results = new List<POHead>();
+        //[SqlFunction(DataAccess = DataAccessKind.Read,
+        //    SystemDataAccess = SystemDataAccessKind.Read,
+        //    FillRowMethodName = "FetchPurchaseOrders_FillRow",
+        //    TableDefinition = "")]
+        //[System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
+        //public static IEnumerable FetchPurchaseOrders(string UniVerseAccount, string PurchaseOrderHeads, DateTime? FromDT, DateTime? ToDT)
+        //{
+        //    var results = new List<POHead>();
 
-            using (var qe = new QueryExecutor(UniVerseAccount))
-            {
-                var selectStatement = $"";
-
-
-                if (FromDT != null)
-                {
-                    if (selectStatement != "")
-                        selectStatement += $" AND DATEONFILE.INT >= {Framework.UniVerseDateString(FromDT.Value)}";
-                    else
-                        selectStatement = $"WITH DATEONFILE.INT >= {Framework.UniVerseDateString(FromDT.Value)}";
-                }
-
-                if (ToDT != null)
-                {
-                    if (selectStatement != "")
-                        selectStatement += $" AND DATEONFILE.INT <= {Framework.UniVerseDateString(ToDT.Value)}";
-                    else
-                        selectStatement = $"WITH DATEONFILE.INT <= {Framework.UniVerseDateString(ToDT.Value)}";
-                }
-
-                string[] fields = new string[] {
-                    "PONO",
-                    "SORDNO",
-                    "ORDERSTATUS",
-                    "LOCATION",
-                    "SS.F2",
-                    "SUPPLIER",
-                    "ORDERPROCESS",
-                    "AUTHOR.CODE",
-                    "CALLOFF.DES",
-                    "DEL.NAME",
-                    "DEL.ADDR1",
-                    "DEL.ADDR2",
-                    "DEL.ADDR3",
-                    "DEL.ADDR4",
-                    "DEL.PC",
-                    "DEL.PHONE"
-                };
-
-                var poheadKeys = new List<string>();
-
-                using (var ce = new CommandExecutor(UniVerseAccount))
-                {
-                    if (!String.IsNullOrEmpty(PurchaseOrderHeads))
-                    {
-                        var poheads = JsonConvert.DeserializeObject<List<PurchaseOrderHead>>(PurchaseOrderHeads).Select(p => p.PurchaseOrderHeadID).ToList();
-
-                        var poheadChunks = ListExtension.Split(poheads, 100);
-
-                        poheadChunks.ForEach((poheadChunk) =>
-                        {
-                            var thisString = $"LIST POHEAD PONO FMT\"80L\" {String.Join(" ", poheadChunk)} {selectStatement} ID.SUPP COL.HDR.SUPP COUNT.SUP";
-                            var thisResult = ce.Arbitrary(thisString);
-                            var theseKeys = thisResult
-                                .Split(new string[] { System.Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
-                                .ToList();
-
-                            poheadKeys.AddRange(theseKeys);
-                        });
-                    }
-                    else
-                    {
-                        var thisString = $"LIST POHEAD PONO FMT\"80L\" {selectStatement} ID.SUPP COL.HDR.SUPP COUNT.SUP";
-                        var thisResult = ce.Arbitrary(thisString);
-                        var theseKeys = thisResult
-                            .Split(new string[] { System.Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
-                            .ToList();
-
-                        poheadKeys.AddRange(theseKeys);
-                    }
-
-                    var batches = ListExtension.Split(poheadKeys, 1000);
-
-                    var pohead = ce.Session.CreateUniFile("POHEAD");
-
-                    var locker = new object();
-
-                    Parallel.ForEach(batches, (batch) =>
-                    {
-                        var theseResults = new List<POHead>();
-
-                        var records = pohead.ReadRecords(batch.ToArray(), fields);
-
-                        batch.ForEach(b =>
-                        {
-                            var record = records[b];
-
-                            theseResults.Add(new POHead(
-                                poNumber: record.Record.Extract(1).StringValue,
-                                orderId: record.Record.Extract(2).StringValue,
-                                orderStatus: record.Record.Extract(3).StringValue,
-                                stockLocation: record.Record.Extract(4).StringValue,
-                                dateOnFile: record.Record.Extract(5).StringValue,
-                                supplier: record.Record.Extract(6).StringValue,
-                                processCode: record.Record.Extract(7).StringValue,
-                                authoriserCode: record.Record.Extract(8).StringValue,
-                                callOffIndicator: record.Record.Extract(9).StringValue,
-                                deliveryName: record.Record.Extract(10).StringValue,
-                                deliveryAddressLine1: record.Record.Extract(11).StringValue,
-                                deliveryAddressLine2: record.Record.Extract(12).StringValue,
-                                deliveryTown: record.Record.Extract(13).StringValue,
-                                deliveryCounty: record.Record.Extract(14).StringValue,
-                                deliveryPostcode: record.Record.Extract(15).StringValue,
-                                deliveryPhone: record.Record.Extract(16).StringValue
-                            ));
-                        });
-
-                        lock (locker)
-                        {
-                            results.AddRange(theseResults);
-                        }
-                    });
-                }
-            }
-
-            return new ArrayList(results);
-        }
+        //    using (var qe = new QueryExecutor(UniVerseAccount))
+        //    {
+        //        var selectStatement = $"";
 
 
-        public static void FetchPurchaseOrders_FillRow(
-            object obj,
-            out SqlString PurchaseOrderHeadID,
-            out SqlString OrderID,
-            out SqlByte OrderStatus,
-            out SqlString StockLocation,
-            out SqlDateTime DateOnFile,
-            out SqlString Supplier,
-            out SqlString ProcessCode,
-            out SqlString AuthoriserCode,
-            out SqlBoolean CallOffIndicator,
-            out SqlString DeliveryName,
-            out SqlString DeliveryAddressLine1,
-            out SqlString DeliveryAddressLine2,
-            out SqlString DeliveryTown,
-            out SqlString DeliveryCounty,
-            out SqlString DeliveryPostcode,
-            out SqlString DeliveryPhone
-            )
-        {
-            var result = (POHead)obj;
+        //        if (FromDT != null)
+        //        {
+        //            if (selectStatement != "")
+        //                selectStatement += $" AND DATEONFILE.INT >= {Framework.UniVerseDateString(FromDT.Value)}";
+        //            else
+        //                selectStatement = $"WITH DATEONFILE.INT >= {Framework.UniVerseDateString(FromDT.Value)}";
+        //        }
 
-            PurchaseOrderHeadID = String.IsNullOrEmpty(result.PurchaseOrderHeadID) ? SqlString.Null : result.PurchaseOrderHeadID.TrimReduceTruncate(25);
+        //        if (ToDT != null)
+        //        {
+        //            if (selectStatement != "")
+        //                selectStatement += $" AND DATEONFILE.INT <= {Framework.UniVerseDateString(ToDT.Value)}";
+        //            else
+        //                selectStatement = $"WITH DATEONFILE.INT <= {Framework.UniVerseDateString(ToDT.Value)}";
+        //        }
 
-            OrderID = String.IsNullOrEmpty(result.OrderID) ? SqlString.Null : result.OrderID.TrimReduceTruncate(25);
+        //        string[] fields = new string[] {
+        //            "PONO",
+        //            "SORDNO",
+        //            "ORDERSTATUS",
+        //            "LOCATION",
+        //            "SS.F2",
+        //            "SUPPLIER",
+        //            "ORDERPROCESS",
+        //            "AUTHOR.CODE",
+        //            "CALLOFF.DES",
+        //            "DEL.NAME",
+        //            "DEL.ADDR1",
+        //            "DEL.ADDR2",
+        //            "DEL.ADDR3",
+        //            "DEL.ADDR4",
+        //            "DEL.PC",
+        //            "DEL.PHONE"
+        //        };
 
-            OrderStatus = result.PurchaseOrderStatusID ?? SqlByte.Null;
+        //        var poheadKeys = new List<string>();
 
-            StockLocation = String.IsNullOrEmpty(result.StockLocationCode) ? SqlString.Null : result.StockLocationCode.TrimReduceTruncate(10);
+        //        using (var ce = new CommandExecutor(UniVerseAccount))
+        //        {
+        //            if (!String.IsNullOrEmpty(PurchaseOrderHeads))
+        //            {
+        //                var poheads = JsonConvert.DeserializeObject<List<PurchaseOrderHead>>(PurchaseOrderHeads).Select(p => p.PurchaseOrderHeadID).ToList();
 
-            DateOnFile = result.DateOnFile ?? SqlDateTime.Null;
+        //                var poheadChunks = ListExtension.Split(poheads, 100);
 
-            Supplier = String.IsNullOrEmpty(result.SupplierCode) ? SqlString.Null : result.SupplierCode.TrimReduceTruncate(50);
+        //                poheadChunks.ForEach((poheadChunk) =>
+        //                {
+        //                    var thisString = $"LIST POHEAD PONO FMT\"80L\" {String.Join(" ", poheadChunk)} {selectStatement} ID.SUPP COL.HDR.SUPP COUNT.SUP";
+        //                    var thisResult = ce.Arbitrary(thisString);
+        //                    var theseKeys = thisResult
+        //                        .Split(new string[] { System.Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
+        //                        .ToList();
 
-            ProcessCode = String.IsNullOrEmpty(result.ProcessCode) ? SqlString.Null : result.ProcessCode.TrimReduceTruncate(10);
+        //                    poheadKeys.AddRange(theseKeys);
+        //                });
+        //            }
+        //            else
+        //            {
+        //                var thisString = $"LIST POHEAD PONO FMT\"80L\" {selectStatement} ID.SUPP COL.HDR.SUPP COUNT.SUP";
+        //                var thisResult = ce.Arbitrary(thisString);
+        //                var theseKeys = thisResult
+        //                    .Split(new string[] { System.Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
+        //                    .ToList();
 
-            AuthoriserCode = String.IsNullOrEmpty(result.AuthoriserCode) ? SqlString.Null : result.AuthoriserCode.TrimReduceTruncate(10);
+        //                poheadKeys.AddRange(theseKeys);
+        //            }
 
-            CallOffIndicator = result.CallOffIndicator;
+        //            var batches = ListExtension.Split(poheadKeys, 1000);
 
-            DeliveryName = String.IsNullOrEmpty(result.DeliveryName) ? SqlString.Null : result.DeliveryName.TrimReduceTruncate(50);
+        //            var pohead = ce.Session.CreateUniFile("POHEAD");
 
-            DeliveryAddressLine1 = String.IsNullOrEmpty(result.DeliveryAddressLine1) ? SqlString.Null : result.DeliveryAddressLine1.TrimReduceTruncate(60);
+        //            var locker = new object();
 
-            DeliveryAddressLine2 = String.IsNullOrEmpty(result.DeliveryAddressLine2) ? SqlString.Null : result.DeliveryAddressLine2.TrimReduceTruncate(60);
+        //            Parallel.ForEach(batches, (batch) =>
+        //            {
+        //                var theseResults = new List<POHead>();
 
-            DeliveryTown = String.IsNullOrEmpty(result.DeliveryTown) ? SqlString.Null : result.DeliveryTown.TrimReduceTruncate(50);
+        //                var records = pohead.ReadRecords(batch.ToArray(), fields);
 
-            DeliveryCounty = String.IsNullOrEmpty(result.DeliveryCounty) ? SqlString.Null : result.DeliveryCounty.TrimReduceTruncate(40);
+        //                batch.ForEach(b =>
+        //                {
+        //                    var record = records[b];
 
-            DeliveryPostcode = String.IsNullOrEmpty(result.DeliveryPostcode) ? SqlString.Null : result.DeliveryPostcode.TrimReduceTruncate(20);
+        //                    theseResults.Add(new POHead(
+        //                        poNumber: record.Record.Extract(1).StringValue,
+        //                        orderId: record.Record.Extract(2).StringValue,
+        //                        orderStatus: record.Record.Extract(3).StringValue,
+        //                        stockLocation: record.Record.Extract(4).StringValue,
+        //                        dateOnFile: record.Record.Extract(5).StringValue,
+        //                        supplier: record.Record.Extract(6).StringValue,
+        //                        processCode: record.Record.Extract(7).StringValue,
+        //                        authoriserCode: record.Record.Extract(8).StringValue,
+        //                        callOffIndicator: record.Record.Extract(9).StringValue,
+        //                        deliveryName: record.Record.Extract(10).StringValue,
+        //                        deliveryAddressLine1: record.Record.Extract(11).StringValue,
+        //                        deliveryAddressLine2: record.Record.Extract(12).StringValue,
+        //                        deliveryTown: record.Record.Extract(13).StringValue,
+        //                        deliveryCounty: record.Record.Extract(14).StringValue,
+        //                        deliveryPostcode: record.Record.Extract(15).StringValue,
+        //                        deliveryPhone: record.Record.Extract(16).StringValue
+        //                    ));
+        //                });
 
-            DeliveryPhone = String.IsNullOrEmpty(result.DeliveryPhone) ? SqlString.Null : result.DeliveryPhone.TrimReduceTruncate(20);
-        }
+        //                lock (locker)
+        //                {
+        //                    results.AddRange(theseResults);
+        //                }
+        //            });
+        //        }
+        //    }
 
-
-        [SqlFunction(DataAccess = DataAccessKind.Read,
-            SystemDataAccess = SystemDataAccessKind.Read,
-            FillRowMethodName = "FetchPurchaseOrderDetails_FillRow",
-            TableDefinition = "")]
-        [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
-        public static IEnumerable FetchPurchaseOrderDetails(string UniVerseAccount, string PurchaseOrderHeads)
-        {
-            var results = new List<PODetail>();
-
-            using (var qe = new QueryExecutor(UniVerseAccount))
-            {
-                var selectStatement = $"";
-
-                if (!String.IsNullOrEmpty(PurchaseOrderHeads))
-                {
-                    var pos = JsonConvert.DeserializeObject<List<PurchaseOrderHead>>(PurchaseOrderHeads);
-
-                    selectStatement = $"@ID = {String.Join(" ", pos)}";
-                }
-
-                string[] fields = new string[] {
-                    "DETAILKEY",
-                    "SORDNO",
-                    "PRODCODE",
-                    "CONV.QTY",
-                    "RCVDQTY",
-                    "SS.DATEREQUIRED.INT",
-                    "SS.DATEPROMISED.INT",
-                    "SS.EXPARRIVAL.INT",
-                    "DATE.CONFIRMED",
-                    "DELETED",
-                    "LNCOMPLETE",
-                    "LINENO",
-                    "ORDERPRICE",
-                    "ORDPRICE.CUR",
-                    "CONV.PURCONV",
-                    "FINISHERS.REF",
-                    "SUBMIT",
-                    "SS.POHEADKEY",
-                    "PROM.CH.REASON"
-                };
-
-                var podetailKeys = new List<string>();
-
-                using (var ce = new CommandExecutor(UniVerseAccount))
-                {
-                    if (!String.IsNullOrEmpty(PurchaseOrderHeads))
-                    {
-                        var poheads = JsonConvert.DeserializeObject<List<PurchaseOrderHead>>(PurchaseOrderHeads).Select(p => p.PurchaseOrderHeadID).ToList();
-
-                        var poheadChunks = ListExtension.Split(poheads, 100);
-
-                        poheadChunks.ForEach((poheadChunk) =>
-                        {
-                            var thisString = $"LIST PODETAIL DETAILKEY FMT\"80L\" WITH SS.POHEADKEY = {String.Join(" ", poheadChunk)} ID.SUPP COL.HDR.SUPP COUNT.SUP";
-                            var thisResult = ce.Arbitrary(thisString);
-                            var theseKeys = thisResult
-                                .Split(new string[] { System.Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
-                                .ToList();
-
-                            podetailKeys.AddRange(theseKeys);
-                        });
-                    }
-                    else
-                    {
-                        var thisString = $"LIST PODETAIL DETAILKEY FMT\"80L\" ID.SUPP COL.HDR.SUPP COUNT.SUP";
-                        var thisResult = ce.Arbitrary(thisString);
-                        var theseKeys = thisResult
-                            .Split(new string[] { System.Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
-                            .ToList();
-
-                        podetailKeys.AddRange(theseKeys);
-                    }
-
-                    var batches = ListExtension.Split(podetailKeys, 1000);
-
-                    var podetail = ce.Session.CreateUniFile("PODETAIL");
-
-                    var locker = new object();
-
-                    Parallel.ForEach(batches, (batch) =>
-                    {
-                        var theseResults = new List<PODetail>();
-
-                        var records = podetail.ReadRecords(batch.ToArray(), fields);
-
-                        batch.ForEach(b =>
-                        {
-                            var record = records[b];
-
-                            theseResults.Add(new PODetail(
-                                purchaseOrderLineId: record.Record.Extract(1).StringValue,
-                                orderId: record.Record.Extract(2).StringValue,
-                                productCode: record.Record.Extract(3).StringValue,
-                                orderedQuantity: record.Record.Extract(4).StringValue,
-                                receivedQuantity: record.Record.Extract(5).StringValue,
-                                dateRequired: record.Record.Extract(6).StringValue,
-                                datePromised: record.Record.Extract(7).StringValue,
-                                dateExpected: record.Record.Extract(8).StringValue,
-                                isDateConfirmed: record.Record.Extract(9).StringValue,
-                                deleted: record.Record.Extract(10).StringValue,
-                                lineComplete: record.Record.Extract(11).StringValue,
-                                purchaseOrderLineNumber: record.Record.Extract(12).StringValue,
-                                orderPrice: record.Record.Extract(13).StringValue,
-                                orderPriceCurr: record.Record.Extract(14).StringValue,
-                                stockUnitCode: record.Record.Extract(15).StringValue,
-                                supplierProductCode: record.Record.Extract(16).StringValue,
-                                sampleRequired: record.Record.Extract(17).StringValue,
-                                purchaseOrderHead: record.Record.Extract(18).StringValue,
-                                statusDescription: record.Record.Extract(19).StringValue
-                            ));
-                        });
-
-                        lock (locker)
-                        {
-                            results.AddRange(theseResults);
-                        }
-                    });
-                }
-            }
-
-            return new ArrayList(results);
-        }
+        //    return new ArrayList(results);
+        //}
 
 
-        public static void FetchPurchaseOrderDetails_FillRow(
-            object obj,
-            out SqlString PurchaseOrderLineID,
-            out SqlString PurchaseOrderNumber,
-            out SqlString OrderID,
-            out SqlString ProductCode,
-            out SqlDecimal OrderedQuantity,
-            out SqlDecimal ReceivedQuantity,
-            out SqlDateTime PromisedDT,
-            out SqlDateTime ExpectedDT,
-            out SqlBoolean IsDateConfirmed,
-            out SqlBoolean Deleted,
-            out SqlBoolean IsLineComplete,
-            out SqlInt16 PurchaseOrderLineNumber,
-            out SqlDecimal LineUnitPriceSTG,
-            out SqlDecimal LineUnitPriceCURR,
-            out SqlString StockUnitCode,
-            out SqlString SupplierProductCode,
-            out SqlBoolean SampleRequired,
-            out SqlString PurchaseOrderStatusDescription
-            )
-        {
-            var result = (PODetail)obj;
+        //public static void FetchPurchaseOrders_FillRow(
+        //    object obj,
+        //    out SqlString PurchaseOrderHeadID,
+        //    out SqlString OrderID,
+        //    out SqlByte OrderStatus,
+        //    out SqlString StockLocation,
+        //    out SqlDateTime DateOnFile,
+        //    out SqlString Supplier,
+        //    out SqlString ProcessCode,
+        //    out SqlString AuthoriserCode,
+        //    out SqlBoolean CallOffIndicator,
+        //    out SqlString DeliveryName,
+        //    out SqlString DeliveryAddressLine1,
+        //    out SqlString DeliveryAddressLine2,
+        //    out SqlString DeliveryTown,
+        //    out SqlString DeliveryCounty,
+        //    out SqlString DeliveryPostcode,
+        //    out SqlString DeliveryPhone
+        //    )
+        //{
+        //    var result = (POHead)obj;
 
-            PurchaseOrderLineID = String.IsNullOrEmpty(result.PurchaseOrderLineID) ? SqlString.Null : result.PurchaseOrderLineID.TrimReduceTruncate(30);
-            PurchaseOrderNumber = String.IsNullOrEmpty(result.PurchaseOrderHeadID) ? SqlString.Null : result.PurchaseOrderHeadID.TrimReduceTruncate(25);
-            OrderID = String.IsNullOrEmpty(result.OrderID) ? SqlString.Null : result.OrderID.TrimReduceTruncate(25);
-            ProductCode = String.IsNullOrEmpty(result.ProductCode) ? SqlString.Null : result.ProductCode.TrimReduceTruncate(50);
-            OrderedQuantity = result.OrderQuantity ?? SqlDecimal.Null;
-            ReceivedQuantity = result.ReceivedQuantity ?? SqlDecimal.Null;
-            PromisedDT = result.DatePromised ?? SqlDateTime.Null;
-            ExpectedDT = result.DateExpected ?? SqlDateTime.Null;
-            IsDateConfirmed = result.IsDateConfirmed;
-            Deleted = result.Deleted;
-            IsLineComplete = result.LineComplete;
-            PurchaseOrderLineNumber = result.PurchaseOrderLineNumber ?? SqlInt16.Null;
-            LineUnitPriceSTG = result.LineUnitPriceSTG ?? SqlDecimal.Null;
-            LineUnitPriceCURR = result.LineUnitPriceCURR ?? SqlDecimal.Null;
-            StockUnitCode = String.IsNullOrEmpty(result.StockUnitCode) ? SqlString.Null : result.StockUnitCode.TrimReduceTruncate(10);
-            SupplierProductCode = String.IsNullOrEmpty(result.SupplierProductCode) ? SqlString.Null : result.SupplierProductCode.TrimReduceTruncate(50);
-            SampleRequired = result.SampleRequired;
-            PurchaseOrderStatusDescription = String.IsNullOrEmpty(result.PurchaseOrderStatusDescription) ? SqlString.Null : result.PurchaseOrderStatusDescription.TrimReduceTruncate(255);
-        }
+        //    PurchaseOrderHeadID = String.IsNullOrEmpty(result.PurchaseOrderHeadID) ? SqlString.Null : result.PurchaseOrderHeadID.TrimReduceTruncate(25);
+
+        //    OrderID = String.IsNullOrEmpty(result.OrderID) ? SqlString.Null : result.OrderID.TrimReduceTruncate(25);
+
+        //    OrderStatus = result.PurchaseOrderStatusID ?? SqlByte.Null;
+
+        //    StockLocation = String.IsNullOrEmpty(result.StockLocationCode) ? SqlString.Null : result.StockLocationCode.TrimReduceTruncate(10);
+
+        //    DateOnFile = result.DateOnFile ?? SqlDateTime.Null;
+
+        //    Supplier = String.IsNullOrEmpty(result.SupplierCode) ? SqlString.Null : result.SupplierCode.TrimReduceTruncate(50);
+
+        //    ProcessCode = String.IsNullOrEmpty(result.ProcessCode) ? SqlString.Null : result.ProcessCode.TrimReduceTruncate(10);
+
+        //    AuthoriserCode = String.IsNullOrEmpty(result.AuthoriserCode) ? SqlString.Null : result.AuthoriserCode.TrimReduceTruncate(10);
+
+        //    CallOffIndicator = result.CallOffIndicator;
+
+        //    DeliveryName = String.IsNullOrEmpty(result.DeliveryName) ? SqlString.Null : result.DeliveryName.TrimReduceTruncate(50);
+
+        //    DeliveryAddressLine1 = String.IsNullOrEmpty(result.DeliveryAddressLine1) ? SqlString.Null : result.DeliveryAddressLine1.TrimReduceTruncate(60);
+
+        //    DeliveryAddressLine2 = String.IsNullOrEmpty(result.DeliveryAddressLine2) ? SqlString.Null : result.DeliveryAddressLine2.TrimReduceTruncate(60);
+
+        //    DeliveryTown = String.IsNullOrEmpty(result.DeliveryTown) ? SqlString.Null : result.DeliveryTown.TrimReduceTruncate(50);
+
+        //    DeliveryCounty = String.IsNullOrEmpty(result.DeliveryCounty) ? SqlString.Null : result.DeliveryCounty.TrimReduceTruncate(40);
+
+        //    DeliveryPostcode = String.IsNullOrEmpty(result.DeliveryPostcode) ? SqlString.Null : result.DeliveryPostcode.TrimReduceTruncate(20);
+
+        //    DeliveryPhone = String.IsNullOrEmpty(result.DeliveryPhone) ? SqlString.Null : result.DeliveryPhone.TrimReduceTruncate(20);
+        //}
+
+
+        //[SqlFunction(DataAccess = DataAccessKind.Read,
+        //    SystemDataAccess = SystemDataAccessKind.Read,
+        //    FillRowMethodName = "FetchPurchaseOrderDetails_FillRow",
+        //    TableDefinition = "")]
+        //[System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
+        //public static IEnumerable FetchPurchaseOrderDetails(string UniVerseAccount, string PurchaseOrderHeads)
+        //{
+        //    var results = new List<PODetail>();
+
+        //    using (var qe = new QueryExecutor(UniVerseAccount))
+        //    {
+        //        var selectStatement = $"";
+
+        //        if (!String.IsNullOrEmpty(PurchaseOrderHeads))
+        //        {
+        //            var pos = JsonConvert.DeserializeObject<List<PurchaseOrderHeadCode>>(PurchaseOrderHeads);
+
+        //            selectStatement = $"@ID = {String.Join(" ", pos)}";
+        //        }
+
+        //        string[] fields = new string[] {
+        //            "DETAILKEY",
+        //            "SORDNO",
+        //            "PRODCODE",
+        //            "CONV.QTY",
+        //            "RCVDQTY",
+        //            "SS.DATEREQUIRED.INT",
+        //            "SS.DATEPROMISED.INT",
+        //            "SS.EXPARRIVAL.INT",
+        //            "DATE.CONFIRMED",
+        //            "DELETED",
+        //            "LNCOMPLETE",
+        //            "LINENO",
+        //            "ORDERPRICE",
+        //            "ORDPRICE.CUR",
+        //            "CONV.PURCONV",
+        //            "FINISHERS.REF",
+        //            "SUBMIT",
+        //            "SS.POHEADKEY",
+        //            "PROM.CH.REASON"
+        //        };
+
+        //        var podetailKeys = new List<string>();
+
+        //        using (var ce = new CommandExecutor(UniVerseAccount))
+        //        {
+        //            if (!String.IsNullOrEmpty(PurchaseOrderHeads))
+        //            {
+        //                var poheads = JsonConvert.DeserializeObject<List<PurchaseOrderHeadCode>>(PurchaseOrderHeads).Select(p => p.PurchaseOrderHeadID).ToList();
+
+        //                var poheadChunks = ListExtension.Split(poheads, 100);
+
+        //                poheadChunks.ForEach((poheadChunk) =>
+        //                {
+        //                    var thisString = $"LIST PODETAIL DETAILKEY FMT\"80L\" WITH SS.POHEADKEY = {String.Join(" ", poheadChunk)} ID.SUPP COL.HDR.SUPP COUNT.SUP";
+        //                    var thisResult = ce.Arbitrary(thisString);
+        //                    var theseKeys = thisResult
+        //                        .Split(new string[] { System.Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
+        //                        .ToList();
+
+        //                    podetailKeys.AddRange(theseKeys);
+        //                });
+        //            }
+        //            else
+        //            {
+        //                var thisString = $"LIST PODETAIL DETAILKEY FMT\"80L\" ID.SUPP COL.HDR.SUPP COUNT.SUP";
+        //                var thisResult = ce.Arbitrary(thisString);
+        //                var theseKeys = thisResult
+        //                    .Split(new string[] { System.Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
+        //                    .ToList();
+
+        //                podetailKeys.AddRange(theseKeys);
+        //            }
+
+        //            var batches = ListExtension.Split(podetailKeys, 1000);
+
+        //            var podetail = ce.Session.CreateUniFile("PODETAIL");
+
+        //            var locker = new object();
+
+        //            Parallel.ForEach(batches, (batch) =>
+        //            {
+        //                var theseResults = new List<PODetail>();
+
+        //                var records = podetail.ReadRecords(batch.ToArray(), fields);
+
+        //                batch.ForEach(b =>
+        //                {
+        //                    var record = records[b];
+
+        //                    theseResults.Add(new PODetail(
+        //                        purchaseOrderLineId: record.Record.Extract(1).StringValue,
+        //                        orderId: record.Record.Extract(2).StringValue,
+        //                        productCode: record.Record.Extract(3).StringValue,
+        //                        orderedQuantity: record.Record.Extract(4).StringValue,
+        //                        receivedQuantity: record.Record.Extract(5).StringValue,
+        //                        dateRequired: record.Record.Extract(6).StringValue,
+        //                        datePromised: record.Record.Extract(7).StringValue,
+        //                        dateExpected: record.Record.Extract(8).StringValue,
+        //                        isDateConfirmed: record.Record.Extract(9).StringValue,
+        //                        deleted: record.Record.Extract(10).StringValue,
+        //                        lineComplete: record.Record.Extract(11).StringValue,
+        //                        purchaseOrderLineNumber: record.Record.Extract(12).StringValue,
+        //                        orderPrice: record.Record.Extract(13).StringValue,
+        //                        orderPriceCurr: record.Record.Extract(14).StringValue,
+        //                        stockUnitCode: record.Record.Extract(15).StringValue,
+        //                        supplierProductCode: record.Record.Extract(16).StringValue,
+        //                        sampleRequired: record.Record.Extract(17).StringValue,
+        //                        purchaseOrderHead: record.Record.Extract(18).StringValue,
+        //                        statusDescription: record.Record.Extract(19).StringValue
+        //                    ));
+        //                });
+
+        //                lock (locker)
+        //                {
+        //                    results.AddRange(theseResults);
+        //                }
+        //            });
+        //        }
+        //    }
+
+        //    return new ArrayList(results);
+        //}
+
+
+        //public static void FetchPurchaseOrderDetails_FillRow(
+        //    object obj,
+        //    out SqlString PurchaseOrderLineID,
+        //    out SqlString PurchaseOrderNumber,
+        //    out SqlString OrderID,
+        //    out SqlString ProductCode,
+        //    out SqlDecimal OrderedQuantity,
+        //    out SqlDecimal ReceivedQuantity,
+        //    out SqlDateTime PromisedDT,
+        //    out SqlDateTime ExpectedDT,
+        //    out SqlBoolean IsDateConfirmed,
+        //    out SqlBoolean Deleted,
+        //    out SqlBoolean IsLineComplete,
+        //    out SqlInt16 PurchaseOrderLineNumber,
+        //    out SqlDecimal LineUnitPriceSTG,
+        //    out SqlDecimal LineUnitPriceCURR,
+        //    out SqlString StockUnitCode,
+        //    out SqlString SupplierProductCode,
+        //    out SqlBoolean SampleRequired,
+        //    out SqlString PurchaseOrderStatusDescription,
+        //    out SqlString PurchaseOrderStatusInterpreted
+        //    )
+        //{
+        //    var result = (PODetail)obj;
+
+        //    PurchaseOrderLineID = String.IsNullOrEmpty(result.PurchaseOrderLineID) ? SqlString.Null : result.PurchaseOrderLineID.TrimReduceTruncate(30);
+        //    PurchaseOrderNumber = String.IsNullOrEmpty(result.PurchaseOrderHeadID) ? SqlString.Null : result.PurchaseOrderHeadID.TrimReduceTruncate(25);
+        //    OrderID = String.IsNullOrEmpty(result.OrderID) ? SqlString.Null : result.OrderID.TrimReduceTruncate(25);
+        //    ProductCode = String.IsNullOrEmpty(result.ProductCode) ? SqlString.Null : result.ProductCode.TrimReduceTruncate(50);
+        //    OrderedQuantity = result.OrderQuantity ?? SqlDecimal.Null;
+        //    ReceivedQuantity = result.ReceivedQuantity ?? SqlDecimal.Null;
+        //    PromisedDT = result.DatePromised ?? SqlDateTime.Null;
+        //    ExpectedDT = result.DateExpected ?? SqlDateTime.Null;
+        //    IsDateConfirmed = result.IsDateConfirmed;
+        //    Deleted = result.Deleted;
+        //    IsLineComplete = result.LineComplete;
+        //    PurchaseOrderLineNumber = result.PurchaseOrderLineNumber ?? SqlInt16.Null;
+        //    LineUnitPriceSTG = result.LineUnitPriceSTG ?? SqlDecimal.Null;
+        //    LineUnitPriceCURR = result.LineUnitPriceCURR ?? SqlDecimal.Null;
+        //    StockUnitCode = String.IsNullOrEmpty(result.StockUnitCode) ? SqlString.Null : result.StockUnitCode.TrimReduceTruncate(10);
+        //    SupplierProductCode = String.IsNullOrEmpty(result.SupplierProductCode) ? SqlString.Null : result.SupplierProductCode.TrimReduceTruncate(50);
+        //    SampleRequired = result.SampleRequired;
+        //    PurchaseOrderStatusDescription = String.IsNullOrEmpty(result.PurchaseOrderStatusDescription) ? SqlString.Null : result.PurchaseOrderStatusDescription.TrimReduceTruncate(255);
+        //    PurchaseOrderStatusInterpreted = String.IsNullOrEmpty(result.PurchaseOrderStatusInterpreted) ? SqlString.Null : result.PurchaseOrderStatusInterpreted.TrimReduceTruncate(10);
+        //}
 
         [SqlFunction(DataAccess = DataAccessKind.Read,
             SystemDataAccess = SystemDataAccessKind.Read,
@@ -2478,7 +2503,7 @@ namespace MertexerV2.EDAReplacement
                 16,  //"CARRIAGE"
                 60,  //"CARRIAGE.CUR"
                 7,   //"TOELINEP"
-                40,   //"PARCEL"
+                40  //"PARCEL"
             };
 
             int[] toelineFields = new int[]
@@ -2586,7 +2611,7 @@ namespace MertexerV2.EDAReplacement
                         var widths = record.Record.Extract(11).StringValue?.Split(Framework.ValueMarkDelimiter, StringSplitOptions.RemoveEmptyEntries);
                         var heights = record.Record.Extract(12).StringValue?.Split(Framework.ValueMarkDelimiter, StringSplitOptions.RemoveEmptyEntries);
                         var depths = record.Record.Extract(13).StringValue?.Split(Framework.ValueMarkDelimiter, StringSplitOptions.RemoveEmptyEntries);
-
+                        
                         for (var i = 0; i < parcelNumbers.Length; i++)
                         {
                             parcels.Add(new Parcel(
@@ -2675,7 +2700,7 @@ namespace MertexerV2.EDAReplacement
                         var widths = record.Record.Extract(11).StringValue?.Split(Framework.ValueMarkDelimiter, StringSplitOptions.RemoveEmptyEntries);
                         var heights = record.Record.Extract(12).StringValue?.Split(Framework.ValueMarkDelimiter, StringSplitOptions.RemoveEmptyEntries);
                         var depths = record.Record.Extract(13).StringValue?.Split(Framework.ValueMarkDelimiter, StringSplitOptions.RemoveEmptyEntries);
-
+                        
                         for (var i = 0; i < parcelNumbers.Length; i++)
                         {
                             parcels.Add(new Parcel(
@@ -2766,7 +2791,7 @@ namespace MertexerV2.EDAReplacement
                         var widths = record.Record.Extract(11).StringValue?.Split(Framework.ValueMarkDelimiter, StringSplitOptions.RemoveEmptyEntries);
                         var heights = record.Record.Extract(12).StringValue?.Split(Framework.ValueMarkDelimiter, StringSplitOptions.RemoveEmptyEntries);
                         var depths = record.Record.Extract(13).StringValue?.Split(Framework.ValueMarkDelimiter, StringSplitOptions.RemoveEmptyEntries);
-
+                        
                         // not guaranteed to have ANY weights, widths, heights or depths
 
                         for (var i = 0; i < parcelNumbers.Length; i++)
@@ -2940,7 +2965,7 @@ namespace MertexerV2.EDAReplacement
                 16,  //"CARRIAGE"
                 60,  //"CARRIAGE.CUR"
                 7,   //"TOELINEP"
-                40,  //"PARCEL"
+                40  //"PARCEL"
             };
 
             int[] toelineFields = new int[]
@@ -3043,7 +3068,7 @@ namespace MertexerV2.EDAReplacement
                         var widths = record.Record.Extract(11).StringValue?.Split(Framework.ValueMarkDelimiter, StringSplitOptions.RemoveEmptyEntries);
                         var heights = record.Record.Extract(12).StringValue?.Split(Framework.ValueMarkDelimiter, StringSplitOptions.RemoveEmptyEntries);
                         var depths = record.Record.Extract(13).StringValue?.Split(Framework.ValueMarkDelimiter, StringSplitOptions.RemoveEmptyEntries);
-
+                        
                         // not guaranteed to have ANY weights, widths, heights or depths
 
                         for (var i = 0; i < parcelNumbers.Length; i++)
@@ -3259,7 +3284,8 @@ namespace MertexerV2.EDAReplacement
                 30, //"PIECE"
                 31, //"BATCH"
                 42, //"DESPQTY.STK"
-                55  //"INVQTY.ORD"
+                55,  //"INVQTY.ORD"
+                122 // "ORIG.PCL.TDW" // this is specific to shipments ("consignments")
             };
 
             using (var ce = new CommandExecutor(UniVerseAccount))
@@ -3351,7 +3377,8 @@ namespace MertexerV2.EDAReplacement
                             source: "OEPLLINE",
                             despatchLineId: b.DespatchLineID,
                             despatchHeadId: record.Record.Extract(1).StringValue,
-                            productCode: record.Record.Extract(2).StringValue,
+                            productCode: record.Record.Extract(2).StringValue, 
+                            originalParcelIds: record.Record.Extract(9).StringValue?.Split(Framework.ValueMark),
                             ProcessParcelInformationLineLevel(
                                 HaulierCode: b.HaulierCode,
                                 ProductCode: record.Record.Extract(2).StringValue,
@@ -3361,6 +3388,7 @@ namespace MertexerV2.EDAReplacement
                                 Batches: record.Record.Extract(6).StringValue,
                                 DespatchedQuantities: record.Record.Extract(7).StringValue,
                                 InvoicedQuantities: record.Record.Extract(8).StringValue,
+                                OriginalParcelIDs: record.Record.Extract(9).StringValue,
                                 OEFindParcel: oefindparcel,
                                 Hauliers: hauliers)
                         ));
@@ -3387,6 +3415,7 @@ namespace MertexerV2.EDAReplacement
                             despatchLineId: b.DespatchLineID,
                             despatchHeadId: record.Record.Extract(1).StringValue,
                             productCode: record.Record.Extract(2).StringValue,
+                            originalParcelIds: record.Record.Extract(9).StringValue?.Split(Framework.ValueMark),
                             ProcessParcelInformationLineLevel(
                                 HaulierCode: b.HaulierCode,
                                 ProductCode: record.Record.Extract(2).StringValue,
@@ -3396,6 +3425,7 @@ namespace MertexerV2.EDAReplacement
                                 Batches: record.Record.Extract(6).StringValue,
                                 DespatchedQuantities: record.Record.Extract(7).StringValue,
                                 InvoicedQuantities: record.Record.Extract(8).StringValue,
+                                OriginalParcelIDs: record.Record.Extract(9).StringValue,
                                 OEFindParcel: oefindparcel,
                                 Hauliers: hauliers)
                         ));
@@ -3422,6 +3452,7 @@ namespace MertexerV2.EDAReplacement
                             despatchLineId: b.DespatchLineID,
                             despatchHeadId: record.Record.Extract(1).StringValue,
                             productCode: record.Record.Extract(2).StringValue,
+                            originalParcelIds: record.Record.Extract(9).StringValue?.Split(Framework.ValueMark),
                             ProcessParcelInformationLineLevel(
                                 HaulierCode: b.HaulierCode,
                                 ProductCode: record.Record.Extract(2).StringValue,
@@ -3431,6 +3462,7 @@ namespace MertexerV2.EDAReplacement
                                 Batches: record.Record.Extract(6).StringValue,
                                 DespatchedQuantities: record.Record.Extract(7).StringValue,
                                 InvoicedQuantities: record.Record.Extract(8).StringValue,
+                                OriginalParcelIDs: record.Record.Extract(9).StringValue,
                                 OEFindParcel: oefindparcel,
                                 Hauliers: hauliers)
                         ));
@@ -3452,10 +3484,10 @@ namespace MertexerV2.EDAReplacement
             string ParcelNumbers,
             string ParcelIDs,
             string Pieces,
-
             string Batches,
             string DespatchedQuantities,
-            string InvoicedQuantities, 
+            string InvoicedQuantities,
+            string OriginalParcelIDs,
             IBMU2.UODOTNET.UniFile OEFindParcel,
             IEnumerable<CodeDescription> Hauliers)
         {
@@ -3476,6 +3508,10 @@ namespace MertexerV2.EDAReplacement
                 var batches = Batches.Split(Framework.ValueMarkDelimiter, StringSplitOptions.RemoveEmptyEntries);
                 var despatchedQuantities = DespatchedQuantities.Split(Framework.ValueMarkDelimiter, StringSplitOptions.RemoveEmptyEntries);
                 var invoicedQuantities = InvoicedQuantities.Split(Framework.ValueMarkDelimiter, StringSplitOptions.RemoveEmptyEntries);
+
+                OriginalParcelIDs = OriginalParcelIDs ?? "";
+
+                var originalParcelIds = OriginalParcelIDs.Split(Framework.ValueMarkDelimiter, StringSplitOptions.RemoveEmptyEntries);
 
                 if (batches.Length < parcelNumbers.Length && Batches.Contains(Framework.SubValueMark))
                 {
@@ -3608,7 +3644,8 @@ namespace MertexerV2.EDAReplacement
                                 piece,
                                 ProductCode,
                                 Convert.ToDecimal(theseDespatchedQuantities[j]) / 1000,
-                                Convert.ToDecimal(theseInvoicedQuantities[j]) / 1000
+                                Convert.ToDecimal(theseInvoicedQuantities[j]) / 1000,
+                                originalParcelIds.Length > i ? originalParcelIds[i] : null
                             ));
                         }
 
@@ -3667,6 +3704,7 @@ namespace MertexerV2.EDAReplacement
             out SqlString DespatchLineID,
             out SqlString Source,
             out SqlString ProductCode,
+            out SqlString OriginalParcelIDs,
             out SqlString ParcelJSON
             )
         {
@@ -3679,6 +3717,8 @@ namespace MertexerV2.EDAReplacement
             Source = String.IsNullOrEmpty(result.Source) ? SqlString.Null : result.Source.TrimReduceTruncate(20);
 
             ProductCode = String.IsNullOrEmpty(result.ProductCode) ? SqlString.Null : result.ProductCode.TrimReduceTruncate(20);
+
+            OriginalParcelIDs = result.OriginalParcelIDs.Any() ? JsonConvert.SerializeObject(result.OriginalParcelIDs) : SqlString.Null;
 
             ParcelJSON = result.Parcels.Any() ? JsonConvert.SerializeObject(result.Parcels) : SqlString.Null;
         }

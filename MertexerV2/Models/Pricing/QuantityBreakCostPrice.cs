@@ -2,6 +2,7 @@
 using MertexerV2.Models.ExchangeRate;
 using MertexerV2.Models.Pricing;
 using MertexerV2.Models.Product;
+using MertexerV2.Models.Supplier;
 using MertexerV2.Utilities;
 
 using Newtonsoft.Json;

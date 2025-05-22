@@ -9,8 +9,10 @@ using System.Threading.Tasks;
 using MertexerV2.Models.ExchangeRate;
 using Newtonsoft.Json;
 using MertexerV2.ProductFunctions;
+using MertexerV2.Models.SalesAnalysis;
+using MertexerV2.Models.PurchaseLedger;
 
-namespace MertexerV2.Models.Product
+namespace MertexerV2.Models.Supplier
 {
     [UniVerseFileName("PLSUP")]
     public class Supplier : UniVerseSerializationBase<string>
@@ -77,6 +79,14 @@ namespace MertexerV2.Models.Product
         [UniVerseIndex(1, 6)]
         [UniVerseFieldName("Postcode")]
         public string Postcode { get; set; }
+
+        /// <summary>
+        /// Documents
+        /// </summary>
+        [UniVerseIndex(19)]
+        [UniVerseFieldName("TLINK")]
+        [UniVerseMultiValue]
+        public IEnumerable<string> DocumentReferences { get; set; }
 
         /// <summary>
         /// CountryCode
@@ -146,7 +156,62 @@ namespace MertexerV2.Models.Product
         [UniVerseFieldName("STD.TELEPHONE")]
         public string PhoneNumber { get; set; }
 
+        [UniVerseIndex(11)]
+        [UniVerseFieldName("SEL1")]
+        public string SEL1 { get; set; }
+
+        public string DSEL1
+        {
+            get
+            {
+                return PLSEL1?.Description;
+            }
+        }
+
+        [UniVerseIndex(12)]
+        [UniVerseFieldName("SEL2")]
+        public string SEL2 { get; set; }
+
+        public string DSEL2
+        {
+            get
+            {
+                return PLSEL2?.Description;
+            }
+        }
+
+        [UniVerseIndex(13)]
+        [UniVerseFieldName("SEL3")]
+        public string SEL3 { get; set; }
+
+        public string DSEL3
+        {
+            get
+            {
+                return PLSEL3?.Description;
+            }
+        }
+
+        [UniVerseForeignKey("SEL1", "MertexerV2.Models.Supplier.PLSEL1")]
+        public virtual PLSEL1 PLSEL1 { get; set; }
+
+        [UniVerseForeignKey("SEL2", "MertexerV2.Models.Supplier.PLSEL2")]
+        public virtual PLSEL2 PLSEL2 { get; set; }
+
+        [UniVerseForeignKey("SEL3", "MertexerV2.Models.Supplier.PLSEL3")]
+        public virtual PLSEL3 PLSEL3 { get; set; }
+
         [UniVerseForeignKey("Currency", "MertexerV2.Models.ExchangeRate.ExchangeRate")]
         public virtual ExchangeRate.ExchangeRate ExchangeRate { get; set; }
+
+        [UniVerseForeignKey("DocumentReferences", "MertexerV2.Models.PurchaseLedger.PurchaseLedgerTransfer")]
+        public virtual IEnumerable<PurchaseLedgerTransfer> PurchaseLedgerTransferRecords { get; set; } = new List<PurchaseLedgerTransfer>();
+
+        [UniVerseForeignKey("DocumentReferences", "MertexerV2.Models.PurchaseLedger.PurchaseLedgerTransfer")]
+        public virtual IEnumerable<PurchaseLedgerTransfer> PurchaseLedgerTransferRecordsCurrency { get; set; } = new List<PurchaseLedgerTransfer>();
+
+        public virtual IEnumerable<PurchaseLedgerInvoiceRegister> PurchaseLedgerRegisterEntries_Invoice { get; set; } = new List<PurchaseLedgerInvoiceRegister>();
+
+        public virtual IEnumerable<PurchaseLedgerCreditRegister> PurchaseLedgerRegisterEntries_Credit { get; set; } = new List<PurchaseLedgerCreditRegister>();
     }
 }

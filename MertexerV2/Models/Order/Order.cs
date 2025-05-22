@@ -651,6 +651,42 @@ namespace MertexerV2.Models
         public string RetailPaymentReferences { get; set; }
 
         /// <summary>
+        /// 97.
+        /// B2B Ready
+        /// If Y then the trade site is configured not to auto create orders for confirmed baskets 
+        /// and this basket has been created on the trade site and the user has confirmed their order.
+        /// </summary>
+        public string B2BReadyOrCreateViaPortal { get; set; }
+
+        /// <summary>
+        /// 98.
+        /// Atlas Delivery ANA Number
+        /// JLP Atlas Delivery ANA Number
+        /// </summary>
+        public string AtlasDeliveryANANumber { get; set; }
+
+        /// <summary>
+        /// 99.
+        /// Atlas Invoicee ANA Number
+        /// JLP Atlas ANA Number
+        /// </summary>
+        public string AtlasInvoiceeANANumber { get; set; }
+
+        /// <summary>
+        /// 100.
+        /// Atlas Direct to Customer ANA Number
+        /// JLP Atlas Direct to Customer ANA Number
+        /// </summary>
+        public string AtlasDirectToCustomerANANumber { get; set; }
+
+        /// <summary>
+        /// 101.
+        /// Atlas Store Name
+        /// JLP Atlas Store Name
+        /// </summary>
+        public string AtlasStoreName { get; set; }
+
+        /// <summary>
         /// Order Lines
         /// </summary>
         [JsonIgnore]
@@ -865,6 +901,16 @@ namespace MertexerV2.Models
 
             RetailPaymentReferences = orderHead["RetailPaymentReferences"]?.ToString();
 
+            B2BReadyOrCreateViaPortal = orderHead["AtlasDeliveryANANumber"]?.ToString();
+
+            AtlasDeliveryANANumber = orderHead["AtlasDeliveryANANumber"]?.ToString();
+
+            AtlasInvoiceeANANumber = orderHead["AtlasInvoiceeANANumber"]?.ToString();
+
+            AtlasDirectToCustomerANANumber = orderHead["AtlasDirectToCustomerANANumber"]?.ToString();
+
+            AtlasStoreName = orderHead["AtlasStoreName"]?.ToString();
+
             // Errant carriage returns cause mayhem.
 
             InvoiceTerms = InvoiceTerms.Replace(Environment.NewLine, "");
@@ -1063,6 +1109,16 @@ namespace MertexerV2.Models
 
             RetailPaymentReferences = RetailPaymentReferences.Replace(Environment.NewLine, "");
 
+            B2BReadyOrCreateViaPortal = B2BReadyOrCreateViaPortal.Replace(Environment.NewLine, "");
+
+            AtlasDeliveryANANumber = AtlasDeliveryANANumber.Replace(Environment.NewLine, "");
+
+            AtlasInvoiceeANANumber = AtlasInvoiceeANANumber.Replace(Environment.NewLine, "");
+
+            AtlasDirectToCustomerANANumber = AtlasDirectToCustomerANANumber.Replace(Environment.NewLine, "");
+
+            AtlasStoreName = AtlasStoreName.Replace(Environment.NewLine, "");
+
             // Urgh.
 
             OrderLines = new List<OrderLine>();
@@ -1177,7 +1233,12 @@ namespace MertexerV2.Models
 {SampleOrderOnly}
 {UseInvoiceAddress}
 {RetailPaymentComments}
-{RetailPaymentReferences}";
+{RetailPaymentReferences}
+{B2BReadyOrCreateViaPortal}
+{AtlasDeliveryANANumber}
+{AtlasInvoiceeANANumber}
+{AtlasDirectToCustomerANANumber}
+{AtlasStoreName}";
         }
 
         public string CreateOrderWebData()

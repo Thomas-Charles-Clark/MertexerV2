@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -27,6 +29,7 @@ namespace MertexerV2.Models.EDAReplacement
         public string SupplierProductCode { get; set; }
         public bool SampleRequired { get; set; }
         public string PurchaseOrderStatusDescription { get; set; }
+        public string PurchaseOrderStatusInterpreted { get; set; }
 
         public PODetail(
             string purchaseOrderLineId,
@@ -119,6 +122,31 @@ namespace MertexerV2.Models.EDAReplacement
             PurchaseOrderHeadID = String.IsNullOrEmpty(purchaseOrderHead) ? null : purchaseOrderHead;
 
             PurchaseOrderStatusDescription = String.IsNullOrEmpty(statusDescription) ? null : statusDescription;
+
+            PurchaseOrderStatusInterpreted = "";
+
+            if (lineComplete != "Y")
+            {
+                switch (isDateConfirmed)
+                {
+                    case "Y":
+                        PurchaseOrderStatusInterpreted = "PO Conf";
+                        break;
+                    case "N":
+                        PurchaseOrderStatusInterpreted = "PO Unconf";
+                        break;
+                    case "C":
+                        PurchaseOrderStatusInterpreted = "PO Check";
+                        break;
+                    default: 
+                        break;
+                }
+            }
+        }
+
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this, Formatting.Indented);
         }
     }
 }

@@ -41,5 +41,39 @@ namespace MertexerV2.Models.Product
         [UniVerseIndex(1)]
         [UniVerseFieldName("COLL.DESC.DES")]
         public string Name { get; set; }
+
+        public DateTime? LaunchDT { get; set; }
+
+        [UniVerseIndex(4)]
+        [UniVerseFieldName("SS.DATE.INTRO.DES.INT")]
+        public string DateIntroduced
+        {
+            get
+            {
+                if (LaunchDT.HasValue)
+                {
+                    return Framework.UniVerseDateString(LaunchDT.Value);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                if (!String.IsNullOrEmpty(value))
+                {
+                    if (Int32.TryParse(value, out int valInt))
+                    {
+                        LaunchDT = Framework.DateTimeFromUniVerseOffset(valInt);
+                    }
+                    else
+                    {
+
+                    }
+                }
+            }
+        }
+
     }
 }

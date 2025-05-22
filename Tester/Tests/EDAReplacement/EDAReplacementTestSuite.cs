@@ -1,5 +1,7 @@
 ﻿using MertexerV2.Models.EDAReplacement;
 using MertexerV2.Models.General;
+using MertexerV2.Models.PurchaseOrder;
+
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -152,7 +154,7 @@ namespace Tester.Tests.EDAReplacement
             Console.WriteLine(TesterFramework.WavyLineBreak);
         }
 
-        public static List<POHead> POHEADSearch(string uniVerseAccount, string purchaseOrderHeads, DateTime? fromDt, DateTime? toDt)
+        public static List<PurchaseOrderHead> PurchaseOrderHeadSearch(string uniVerseAccount, string purchaseOrderHeads, DateTime? fromDt, DateTime? toDt)
         {
             Console.WriteLine(TesterFramework.WavyLineBreak);
 
@@ -164,8 +166,8 @@ namespace Tester.Tests.EDAReplacement
 
             stopWatch.Start();
 
-            var results = MertexerV2.EDAReplacement.EDAReplacement.FetchPurchaseOrders(uniVerseAccount, purchaseOrderHeads, fromDt, toDt)
-                .OfType<POHead>().ToList();
+            var results = MertexerV2.POFunctions.PurchaseOrderHeadFunctions.Select(uniVerseAccount, purchaseOrderHeads, fromDt, toDt)
+                .OfType<PurchaseOrderHead>().ToList();
 
             stopWatch.Stop();
 
@@ -177,7 +179,7 @@ namespace Tester.Tests.EDAReplacement
 
             Console.ForegroundColor = ConsoleColor.Green;
 
-            Console.WriteLine($"EDAReplacementTestSuite POHEAD Search parallel operation returned {results.Count} in {stopWatch.Elapsed:g}");
+            Console.WriteLine($"EDAReplacementTestSuite POHEAD Search parallel operation returned {results.Count()} in {stopWatch.Elapsed:g}");
 
             var orderNumbers = results.Where(p => p.OrderID != null).ToList();
 
@@ -188,7 +190,7 @@ namespace Tester.Tests.EDAReplacement
             return results;
         }
 
-        public static List<PODetail> PODETAILSearch(string uniVerseAccount, string purchaseOrderHeads)
+        public static List<PurchaseOrderDetail> PurchaseOrderDetailSearch(string uniVerseAccount, string purchaseOrderHeads)
         {
             Console.WriteLine(TesterFramework.WavyLineBreak);
 
@@ -200,8 +202,8 @@ namespace Tester.Tests.EDAReplacement
 
             stopWatch.Start();
 
-            var results = MertexerV2.EDAReplacement.EDAReplacement.FetchPurchaseOrderDetails(uniVerseAccount, purchaseOrderHeads)
-                .OfType<PODetail>().ToList();
+            var results = MertexerV2.POFunctions.PurchaseOrderDetailFunctions.Select(uniVerseAccount, purchaseOrderHeads)
+                .OfType<PurchaseOrderDetail>().ToList();
 
             stopWatch.Stop();
 
@@ -211,7 +213,7 @@ namespace Tester.Tests.EDAReplacement
 
             Console.ForegroundColor = ConsoleColor.Green;
 
-            Console.WriteLine($"EDAReplacementTestSuite PODETAIL Search parallel operation returned {results.Count} in {stopWatch.Elapsed:g}");
+            Console.WriteLine($"EDAReplacementTestSuite PODETAIL Search parallel operation returned {results.Count()} in {stopWatch.Elapsed:g}");
 
             var orderNumbers = results.Where(p => p.OrderID != null).ToList();
 
@@ -522,6 +524,7 @@ namespace Tester.Tests.EDAReplacement
                           DespatchLineID,
                           Source,
                           ProductCode,
+                          OriginalParcelID,
                           ParcelJSON;
 
                 MertexerV2.EDAReplacement.EDAReplacement.FetchDespatchNoteLines_FillRow(
@@ -530,6 +533,7 @@ namespace Tester.Tests.EDAReplacement
                     out DespatchLineID,
                     out Source,
                     out ProductCode,
+                    out OriginalParcelID,
                     out ParcelJSON);
             });
 

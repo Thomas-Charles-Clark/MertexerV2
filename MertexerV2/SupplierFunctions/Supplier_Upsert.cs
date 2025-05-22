@@ -1,4 +1,5 @@
 ﻿using MertexerV2.Models.Product;
+using MertexerV2.Models.Supplier;
 using MertexerV2.Utilities;
 
 using Microsoft.SqlServer.Server;
@@ -51,7 +52,6 @@ namespace MertexerV2.ProductFunctions
                 UniUpsert<Supplier>.Upsert(SupplierJSON, uniVerseFile, UniVerseAccount);
 
                 uniVerseFile.UnlockRecord(supplier.Key);
-
             }
 
             return supplier.Key;

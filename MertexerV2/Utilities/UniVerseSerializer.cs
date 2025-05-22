@@ -264,6 +264,13 @@ namespace MertexerV2.Utilities
                     // if no UniVerseIndexAttribute was given, the field is not intended to be submitted.
                     if (indices != null)
                     {
+                        if ((int)indices[0].Value == 0)
+                        {
+                            var uniVerseFieldName = pi.GetCustomAttributesData().Where(cad => cad.AttributeType == typeof(UniVerseFieldNameAttribute))
+                                .SingleOrDefault()?
+                                .ConstructorArguments;
+                        }
+
                         // however if we have an index, we want to read that... field from the dyn array
                         var value = input.Extract((int)indices[0].Value, (int)indices[1].Value, (int)indices[2].Value).StringValue;
                         

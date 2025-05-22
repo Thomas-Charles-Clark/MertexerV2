@@ -117,7 +117,7 @@ namespace MertexerV2.Utilities
         }
 
 
-        public string Arbitrary(string command)
+        public string Arbitrary(string command, int timeoutSeconds = 15)
         {
             var cmd = Session.CreateUniCommand();
 
@@ -128,6 +128,8 @@ namespace MertexerV2.Utilities
             var stopWatch = new System.Diagnostics.Stopwatch();
 
             stopWatch.Start();
+
+            Session.Timeout = timeoutSeconds;
 
             cmd.Command = command;
             cmd.Execute();

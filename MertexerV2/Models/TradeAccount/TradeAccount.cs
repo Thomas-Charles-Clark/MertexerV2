@@ -989,6 +989,13 @@ namespace MertexerV2.Models
         public string CompanyRegistrationNumber { get; set; }
 
         /// <summary>
+        /// ANA Number
+        /// </summary>
+        [UniVerseIndex(397)]
+        [UniVerseFieldName("ANA.NUMBER")]
+        public string CustomersReference { get; set; }
+
+        /// <summary>
         /// Statement Telephone Number (?)
         /// </summary>
         [UniVerseIndex(398)]

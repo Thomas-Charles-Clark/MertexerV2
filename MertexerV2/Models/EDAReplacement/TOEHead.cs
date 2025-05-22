@@ -113,6 +113,16 @@ namespace MertexerV2.Models.EDAReplacement
 
         public bool CustomerHeldForFullDespatch { get; set; }
 
+        public string JLEdgeAtlasDeliveryAnaNo { get; set; }
+
+        public string JLEdgeAtlasDirectToCustomerAnaNo { get; set; }
+
+        public string JLEdgeAtlasInvoiceeAnaNo { get; set; }
+
+        public string JLEdgeAtlasStoreName { get; set; }
+
+
+
         public TOEHead(
             string orderId,
             string tradeAccountCode,
@@ -165,7 +175,11 @@ namespace MertexerV2.Models.EDAReplacement
             string deliveryType,
             string paymentTerms,
             string carriageExempt,
-            string customerHeldForFullDespatch)
+            string customerHeldForFullDespatch,
+            string jLEdgeAtlasDeliveryAnaNo,
+            string jLEdgeAtlasDirectToCustomerAnaNo,
+            string jLEdgeAtlasInvoiceAnaNo,
+            string jLEdgeAtlasStoreName)
         {
             TradeAccountCode = String.IsNullOrEmpty(tradeAccountCode) ? null : tradeAccountCode;
 
@@ -320,6 +334,14 @@ namespace MertexerV2.Models.EDAReplacement
             CarriageExempt = String.IsNullOrEmpty(carriageExempt) ? null : carriageExempt;
 
             CustomerHeldForFullDespatch = customerHeldForFullDespatch == "Y" ? true : false;
+
+            JLEdgeAtlasDeliveryAnaNo = jLEdgeAtlasDeliveryAnaNo;
+
+            JLEdgeAtlasDirectToCustomerAnaNo = jLEdgeAtlasDirectToCustomerAnaNo;
+
+            JLEdgeAtlasInvoiceeAnaNo = jLEdgeAtlasInvoiceAnaNo;
+
+            JLEdgeAtlasStoreName = jLEdgeAtlasStoreName;
         }
 
         public override string ToString()

@@ -760,13 +760,38 @@ namespace MertexerV2.Accounts
 
                         for (var i = 0; i < parcels.Count; i++)
                         {
-                            trackingDetails.Add(new ParcelTrackingDetail()
+                            var viable = true;
+
+                            if (!(parcels.Count > i))
                             {
-                                Parcel = parcels[i],
-                                ProductCodes = products[i],
-                                Descriptions = descriptions[i],
-                                TrackingURL = trackingUrls[i]
-                            });
+                                viable = false;
+                            }
+
+                            if (!(products.Count() > i))
+                            {
+                                viable = false;
+                            }
+
+                            if (!(descriptions.Count() > i))
+                            {
+                                viable = false;
+                            }
+
+                            if (!(trackingUrls.Count() > i))
+                            {
+                                viable = false;
+                            }
+
+                            if (viable)
+                            {
+                                trackingDetails.Add(new ParcelTrackingDetail()
+                                {
+                                    Parcel = parcels[i],
+                                    ProductCodes = products[i],
+                                    Descriptions = descriptions[i],
+                                    TrackingURL = trackingUrls[i]
+                                });
+                            }
                         }
                     });
 

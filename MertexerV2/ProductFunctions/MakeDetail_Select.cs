@@ -29,28 +29,68 @@ namespace MertexerV2.ProductFunctions
             DataAccess = DataAccessKind.Read,
             FillRowMethodName = "MakeDetailSelect_FillRow")]
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
-        public static IEnumerable Select(string UniVerseAccount, string MakeDetailCodes)
+        public static IEnumerable Select(string UniVerseAccount, string MakeDetailCodes, string ProductCode)
         {
             if (String.IsNullOrEmpty(MakeDetailCodes))
             {
-                foreach (var q in Selector<MakeDetail>.SelectAllNonParallel(
-                   true,
-                   false,
-                   50,
-                   UniVerseAccount))
+                if (String.IsNullOrEmpty(ProductCode))
                 {
-                    yield return q;
+                    foreach (var q in Selector<MakeDetail>.SelectAllNonParallel(
+                       true,
+                       false,
+                       50,
+                       UniVerseAccount))
+                    {
+                        yield return q;
+                    }
+                }
+                else
+                {
+                    var filters = new List<Tuple<string, string, string>>
+                    {
+                        new Tuple<string, string, string>("PRODCODE", "=", ProductCode)
+                    };
+
+                    foreach (var q in Selector<MakeDetail>.FilterNonParallel(
+                       filters,
+                       true,
+                       false,
+                       50,
+                       UniVerseAccount))
+                    {
+                        yield return q;
+                    }
                 }
             }
             else
             {
-                var results = Selector<MakeDetail>.Select(
-                    JsonConvert.DeserializeObject<IEnumerable<MakeDetailCode>>(MakeDetailCodes).Select(p => p.Code),
-                    true,
-                    false,
-                    50,
-                    UniVerseAccount)
+                var results = new List<MakeDetail>();
+
+                if (String.IsNullOrEmpty(ProductCode))
+                {
+                    results = Selector<MakeDetail>.Select(
+                        JsonConvert.DeserializeObject<IEnumerable<MakeDetailCode>>(MakeDetailCodes).Select(p => p.Code),
+                        true,
+                        false,
+                        50,
+                        UniVerseAccount)
+                        .ToList();
+                }
+                else
+                {
+                    var filters = new List<Tuple<string, string, string>>
+                    {
+                        new Tuple<string, string, string>("PRODCODE", "=", ProductCode)
+                    };
+
+                    results = Selector<MakeDetail>.FilterNonParallel(
+                       filters,
+                       true,
+                       false,
+                       50,
+                       UniVerseAccount)
                     .ToList();
+                }
 
                 foreach (var r in results)
                 {

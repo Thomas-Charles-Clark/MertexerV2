@@ -67,6 +67,7 @@ namespace MertexerV2.TradeAccountFunctions
             out SqlString MarketingEmail,
             out SqlString Website,
             out SqlString CompanyRegistrationNumber,
+            out SqlString CustomersReference,
             out SqlString EORINumber,
             out SqlString TaxID,
             out SqlString Currency,
@@ -273,6 +274,7 @@ namespace MertexerV2.TradeAccountFunctions
             SalesArea = result.SalesArea?.TrimReduceTruncate(10);
             SalesDivision = result.SalesDivision?.TrimReduceTruncate(3);
             CompanyRegistrationNumber = result.CompanyRegistrationNumber?.TrimReduceTruncate(50);
+            CustomersReference = result.CustomersReference?.TrimReduceTruncate(50);
             EORINumber = result.EORINumber?.TrimReduceTruncate(50);
             TaxID = result.TaxID?.TrimReduceTruncate(50);
             VATNumber = result.VATNumber?.TrimReduceTruncate(30);

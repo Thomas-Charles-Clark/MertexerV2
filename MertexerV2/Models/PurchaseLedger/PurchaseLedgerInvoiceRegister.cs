@@ -28,6 +28,7 @@ namespace MertexerV2.Models.PurchaseLedger
             typeof(PurchaseLedgerInvoiceRegister).GetProperties().ToList().ForEach(p => Framework.InitialiseUniProperty(this, p));
         }
 
+        [JsonAlsoUpdates("DocumentDate")]
         public DateTime? DocumentDT { get; set; }
 
         [UniVerseIndex(33)]
@@ -103,7 +104,7 @@ namespace MertexerV2.Models.PurchaseLedger
         public DateTime? DueDT { get; set; }
 
         [UniVerseIndex(38)]
-        [UniVerseFieldName("SS.DUEDATE.INT")]
+        [UniVerseFieldName("SS.INVDATE.INT")]
         public string DueDate
         {
             get
@@ -144,7 +145,7 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseFieldName("PAMOUNT")]
         [UniVerseMultiValue]
         [UniVerseConversion("MR22")]
-        public IEnumerable<decimal> AmountExVAT { get; set; }
+        public IEnumerable<decimal> AmountsExVAT { get; set; }
 
         /// <summary>
         /// Default: B("PL.B.DEFGLCODE")
@@ -201,6 +202,40 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseFieldName("TERMS")]
         public string PaymentTermsCode { get; set; }
 
+        [JsonAlsoUpdates("SettlementDate")]
+        public DateTime? SettlementDT { get; set; }
+
+        [UniVerseIndex(55)]
+        [UniVerseFieldName("SS.SETTLEMENTDATE.INT")]
+        public string SettlementDate
+        {
+            get
+            {
+                if (SettlementDT.HasValue)
+                {
+                    return Framework.UniVerseDateString(SettlementDT.Value);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                if (!String.IsNullOrEmpty(value))
+                {
+                    if (Int32.TryParse(value, out int valInt))
+                    {
+                        SettlementDT = Framework.DateTimeFromUniVerseOffset(valInt);
+                    }
+                    else
+                    {
+                        SettlementDT = null;
+                    }
+                }
+            }
+        }
+
         [UniVerseIndex(56)]
         [UniVerseFieldName("MEMO")]
         public string Memo { get; set; }
@@ -228,6 +263,11 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseFieldName("MEMO1")]
         [UniVerseMultiValue]
         public IEnumerable<string> OtherMemos { get; set; }
+
+        [UniVerseIndex(87)]
+        [UniVerseFieldName("DISPUTE")]
+        [UniVerseBooleanTrueWhen("D")]
+        public bool Disputed { get; set; }
 
         [JsonAlsoUpdates("ReceivedDate")]
         public DateTime? ReceivedDT { get; set; }
@@ -301,15 +341,18 @@ namespace MertexerV2.Models.PurchaseLedger
             }
         }
 
+        [UniVerseIndex(161)]
+        [UniVerseFieldName("CURRENCY")]
+        public string MertexCurrencyCode { get; set; }
+
         /// <summary>
         /// Default: P("PG.PLVATTAX,D.47.49..160")[M]
         /// Validation: C:PG.PLVATTAX,V.47.49..160
         /// </summary>
-        [UniVerseIndex(162)]
-        [UniVerseFieldName("EXRATE")]
+        [UniVerseIndex(162,1)]
+        [UniVerseFieldName("EXRATE.1")]
         [UniVerseConversion("MR66")]
-        [UniVerseMultiValue]
-        public IEnumerable<decimal> ExchangeRates { get; set; }
+        public decimal ExchangeRate { get; set; }
 
         /// <summary>
         /// Validation: M: AND P:VAL.CURRAMT,161

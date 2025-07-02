@@ -583,6 +583,8 @@ namespace MertexerV2.GeneralFunctions
 #if DEBUG
                 Console.ForegroundColor = ConsoleColor.Yellow;
 
+                Console.WriteLine("");
+                
                 Console.WriteLine($"SelectAllNonParallel<{typeof(T).Name}>.Execute processed {results.Count} x {typeof(T).AssemblyQualifiedName} from {fileName}");
 
                 Console.ForegroundColor = ConsoleColor.Green;

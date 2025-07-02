@@ -41,7 +41,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
             }
             else
             {
-                foreach (var invoice in Selector<PurchaseLedgerInvoiceRegister>.Select(
+                foreach (var invoice in Selector<BudgetHolder>.Select(
                     JsonConvert.DeserializeObject<IEnumerable<BudgetHolderCode>>(BudgetHolderCodes).Select(p => p.Code),
                     true,
                     false,

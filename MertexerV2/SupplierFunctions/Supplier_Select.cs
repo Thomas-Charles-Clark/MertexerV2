@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 
 using Supplier = MertexerV2.Models.Supplier.Supplier;
 
-namespace MertexerV2.ProductFunctions
+namespace MertexerV2.SupplierFunctions
 {
     public class SupplierCode
     {
@@ -231,7 +231,10 @@ namespace MertexerV2.ProductFunctions
             out SqlDecimal MiscellaneousPercentage,
             out SqlDecimal ImportChargePerUnit,
             out SqlDecimal MiscellaneousCharge,
-            out SqlString BudgetHolderCode
+            out SqlString BudgetHolderCode,
+            out SqlString PaymentTermsCode,
+            out SqlString SupplierTypeCode,
+            out SqlString VATCode
             )
         {
             var p = (Supplier)obj;
@@ -255,6 +258,9 @@ namespace MertexerV2.ProductFunctions
             PhoneNumber = p.PhoneNumber?.TrimReduceTruncate(20);
             EmailAddress = p.Email?.TrimReduceTruncate(254);
             BudgetHolderCode = p.SEL3?.TrimReduceTruncate(50);
+            PaymentTermsCode = p.PaymentTermsCode?.TrimReduceTruncate(10);
+            SupplierTypeCode = p.SEL1?.TrimReduceTruncate(10);
+            VATCode = p.VATCode?.TrimReduceTruncate(10);
         }
         
 
@@ -290,7 +296,7 @@ namespace MertexerV2.ProductFunctions
                         UniVerseAccount
                     ).ToList();
 
-                var sel1 = Selector<PLSEL1>.SelectAllNonParallel(
+                var sel1 = Selector<SupplierType>.SelectAllNonParallel(
                         applyConversions: true,
                         selectChildEntities: false,
                         batchSize: 1000,
@@ -457,7 +463,7 @@ namespace MertexerV2.ProductFunctions
                     UniVerseAccount
                 ).ToList();
 
-            var sel1 = Selector<PLSEL1>.SelectAllNonParallel(
+            var sel1 = Selector<SupplierType>.SelectAllNonParallel(
                     applyConversions: true,
                     selectChildEntities: false,
                     batchSize: 1000,

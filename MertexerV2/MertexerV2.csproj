@@ -140,6 +140,12 @@
     <Compile Include="GeneralFunctions\Operator_Upsert.cs" />
     <Compile Include="GeneralFunctions\Reason_Upsert.cs" />
     <Compile Include="GeneralFunctions\Reason_Select.cs" />
+    <Compile Include="GeneralLedgerFunctions\GeneralLedgerAnalysisGroupC_Select.cs" />
+    <Compile Include="GeneralLedgerFunctions\GeneralLedgerAnalysisGroupS_Select.cs" />
+    <Compile Include="GeneralLedgerFunctions\GeneralLedgerAnalysisGroupD_Select.cs" />
+    <Compile Include="GeneralLedgerFunctions\GeneralLedgerAccountType_Select.cs" />
+    <Compile Include="GeneralLedgerFunctions\GeneralLedgerGroup_Select.cs" />
+    <Compile Include="GeneralLedgerFunctions\GeneralLedgerCode_Select.cs" />
     <Compile Include="InvoiceFunctions\CreditController_Select.cs" />
     <Compile Include="InvoiceFunctions\Bank_Select.cs" />
     <Compile Include="InvoiceFunctions\CreditController_Upsert.cs" />
@@ -152,6 +158,12 @@
     <Compile Include="Models\CustomerCare\CustomerCareRecordAction.cs" />
     <Compile Include="Models\CustomerCare\CustomerCareRecordHead.cs" />
     <Compile Include="Models\CustomerCare\CustomerCareRecordLine.cs" />
+    <Compile Include="Models\GeneralLedger\GeneralLedgerAnalysisCodeC.cs" />
+    <Compile Include="Models\GeneralLedger\GeneralLedgerAnalysisCodeS.cs" />
+    <Compile Include="Models\GeneralLedger\GeneralLedgerAnalysisCodeD.cs" />
+    <Compile Include="Models\GeneralLedger\GeneralLedgerCode.cs" />
+    <Compile Include="Models\GeneralLedger\GeneralLedgerAccountType.cs" />
+    <Compile Include="Models\GeneralLedger\GeneralLedgerGroup.cs" />
     <Compile Include="Models\General\DeliveryTerms.cs" />
     <Compile Include="Models\General\Operator.cs" />
     <Compile Include="Models\General\Reason.cs" />
@@ -179,7 +191,8 @@
     <Compile Include="Models\PurchaseLedger\PurchaseLedgerInvoiceRegister.cs" />
     <Compile Include="Models\Supplier\PLSEL2.cs" />
     <Compile Include="Models\Supplier\PLSEL3.cs" />
-    <Compile Include="Models\Supplier\PLSEL1.cs" />
+    <Compile Include="Models\Supplier\SupplierPaymentTerms.cs" />
+    <Compile Include="Models\Supplier\SupplierType.cs" />
     <Compile Include="Models\PurchaseLedger\PurchaseLedgerCreditRegister.cs" />
     <Compile Include="Models\Tracking_Consignments\Consignment.cs" />
     <Compile Include="Models\Tracking_Consignments\ConsignmentLine.cs" />
@@ -212,6 +225,10 @@
     <Compile Include="ProductFunctions\Transport_Upsert.cs" />
     <Compile Include="PurchaseLedgerFunctions\BudgetHolder_Select.cs" />
     <Compile Include="PurchaseLedgerFunctions\BudgetHolder_Upsert.cs" />
+    <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerCreditRegister_Select.cs" />
+    <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerCreditRegister_Upsert.cs" />
+    <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerCreditRegister_Insert.cs" />
+    <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerInvoiceRegister_Insert.cs" />
     <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerInvoiceRegister_Upsert.cs" />
     <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerInvoiceRegister_Select.cs" />
     <Compile Include="PurchaseOrderFunctions\PurchaseOrderDetail_Select.cs" />
@@ -220,6 +237,8 @@
     <Compile Include="InvoiceFunctions\SalesAnalysis_Select.cs" />
     <Compile Include="StockFunctions\StockLocation_Select.cs" />
     <Compile Include="StockFunctions\StockLocation_Upsert.cs" />
+    <Compile Include="SupplierFunctions\SupplierPaymentTerms_Select.cs" />
+    <Compile Include="SupplierFunctions\SupplierType_Select.cs" />
     <Compile Include="TradeAccountFunctions\TradeAccountContactType_Select.cs" />
     <Compile Include="TradeAccountFunctions\TradeAccountContactType_Upsert.cs" />
     <Compile Include="TradeAccountFunctions\TradeAccountTransactionHistory_Select.cs" />
@@ -501,6 +520,7 @@
     <Compile Include="Utilities\QueryExecutor.cs" />
     <Compile Include="Utilities\UniTestRecordBuilder.cs" />
     <Compile Include="Utilities\UniUpsert.cs" />
+    <Compile Include="Utilities\UniVerseBooleanTrueWhen.cs" />
     <Compile Include="Utilities\UniVerseSerializationBase.cs" />
     <Compile Include="Utilities\UniVerseSerializer.cs" />
     <Compile Include="Utilities\UniVerseFieldName.cs" />

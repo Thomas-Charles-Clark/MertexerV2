@@ -391,22 +391,33 @@ namespace MertexerV2.Utilities
                             {
                                 var b = false;
 
-                                if (Boolean.TryParse(value, out bool parsed))
+                                var truthCondition = pi.GetCustomAttributes(typeof(UniVerseBooleanTrueWhen), false)
+                                    .Cast<UniVerseBooleanTrueWhen>()
+                                    .SingleOrDefault();
+
+                                if (truthCondition != null)
                                 {
-                                    b = parsed;
+                                    b = (value == truthCondition.Value);
                                 }
                                 else
                                 {
-                                    switch (value)
+                                    if (Boolean.TryParse(value, out bool parsed))
                                     {
-                                        case "Y":
-                                            b = true;
-                                            break;
-                                        case "N":
-                                            b = false;
-                                            break;
-                                        default:
-                                            break;
+                                        b = parsed;
+                                    }
+                                    else
+                                    {
+                                        switch (value)
+                                        {
+                                            case "Y":
+                                                b = true;
+                                                break;
+                                            case "N":
+                                                b = false;
+                                                break;
+                                            default:
+                                                break;
+                                        }
                                     }
                                 }
 

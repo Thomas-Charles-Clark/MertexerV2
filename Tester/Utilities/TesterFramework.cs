@@ -140,7 +140,7 @@ namespace Tester.Utilities
         public static string FetchTradeAccountListJson(int count, string tradeAccountCode)
         {
 #if DEBUG
-            using (var conn = new SqlConnection("Data Source=vm-sql1;Initial Catalog=Flock;Integrated Security=True"))
+            using (var conn = new SqlConnection("Data Source=vm-sql;Initial Catalog=Flock;Integrated Security=True"))
 #else
             using (var conn = new SqlConnection("context connection=true"))
 #endif
@@ -159,7 +159,7 @@ namespace Tester.Utilities
         public static string FetchPurchaseOrderInvoiceRegisterJson()
         {
 #if DEBUG
-            using (var conn = new SqlConnection("Data Source=vm-sql1;Initial Catalog=Flock;Integrated Security=True"))
+            using (var conn = new SqlConnection("Data Source=vm-sql;Initial Catalog=Flock;Integrated Security=True"))
 #else
             using (var conn = new SqlConnection("context connection=true"))
 #endif
@@ -167,38 +167,83 @@ namespace Tester.Utilities
                 try
                 {
                     return String.Join("", conn.Query<string>($@"
-	SELECT 
+	SELECT TOP 1
 		N'DELETEME' AS [Code],
-		[DocumentDT],
-		[OnFileDT],
-		[ItemReference],
-		[DueDT],
-		[SupplierReference],
-		[AmountExVATs],
-		JSON_QUERY([GeneralLedgerCodes]) AS [GeneralLedgerCodes],
-		JSON_QUERY([VATCodes]) AS [VATCodes],
-		JSON_QUERY([VATTaxes]) AS [VATTaxes],
-		JSON_QUERY([VATValues]) AS [VATValues],
-		[AmountSterling],
-		[PaymentTermsCode],
-		[Memo],
-		[VATBalance],
-		[DocumentBalance],
-		[OtherMemos],
-		[ReceivedDT],
-		[PassedTo],
-		[PassedToDT],
-		[AmountCurrency],
-		JSON_QUERY([ExchangeRates]) AS [ExchangeRates]
-	FROM clr.fnc_Mertex_PurchaseLedgerInvoiceRegister_Select(
-		N'MERTEX',
-		NULL,
-		NULL,
-		DATEADD(WEEK, -1, GETDATE()),
-		NULL,
-		NULL,
-		NULL
-	) FOR JSON PATH, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER"));
+       [DocumentDT],
+       [OnFileDT],
+       [ItemReference],
+       [DueDT],
+       [SupplierReference],
+       JSON_QUERY([AmountsExVAT]) AS AmountsExVat,
+       JSON_QUERY([GeneralLedgerCodes]) AS GeneralLedgerCodes,
+       JSON_QUERY([VATCodes]) AS VATCodes,
+       JSON_QUERY([VATTaxes]) AS VATTaxes,
+       JSON_QUERY([VATValues]) AS VATValues,
+       [AmountSterling],
+       [PaymentTermsCode],
+       [Memo],
+       [VATBalance],
+       [DocumentBalance],
+       JSON_QUERY([OtherMemos]) AS OtherMemos,
+       [ReceivedDT],
+       [PassedTo],
+       [PassedToDT],
+       [AmountCurrency],
+       JSON_QUERY([ExchangeRates]) AS ExchangeRates
+	FROM clr.[fnc_Mertex_PurchaseLedgerCreditNoteRegister_Select](
+        N'MERTEX', 
+        NULL, 
+        NULL, 
+        NULL, 
+        NULL, 
+        NULL, 
+        NULL
+    ) FOR JSON PATH, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER"));
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+        }
+
+
+        public static string FetchPurchaseOrderCreditRegisterJson()
+        {
+#if DEBUG
+            using (var conn = new SqlConnection("Data Source=vm-sql;Initial Catalog=Flock;Integrated Security=True"))
+#else
+            using (var conn = new SqlConnection("context connection=true"))
+#endif
+            {
+                try
+                {
+                    return String.Join("", conn.Query<string>($@"
+	SELECT TOP 1
+	   N'DELETEME' AS [Code],
+       [DocumentDT],
+       [OnFileDT],
+       [ItemReference],
+       [DueDT],
+       [SupplierReference],
+       JSON_QUERY([AmountsExVAT]) AS AmountsExVat,
+       JSON_QUERY([GeneralLedgerCodes]) AS GeneralLedgerCodes,
+       JSON_QUERY([VATCodes]) AS VATCodes,
+       JSON_QUERY([VATTaxes]) AS VATTaxes,
+       JSON_QUERY([VATValues]) AS VATValues,
+       [AmountSterling],
+       [PaymentTermsCode],
+       [Memo],
+       [VATBalance],
+       [DocumentBalance],
+       JSON_QUERY([OtherMemos]) AS OtherMemos,
+       [ReceivedDT],
+       [PassedTo],
+       [PassedToDT],
+       [AmountCurrency],
+       JSON_QUERY([ExchangeRates]) AS ExchangeRates
+FROM clr.[fnc_Mertex_PurchaseLedgerCreditNoteRegister_Select](N'MERTEX', NULL, NULL, NULL, NULL, NULL, NULL)
+FOR JSON PATH, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER"));
                 }
                 finally
                 {

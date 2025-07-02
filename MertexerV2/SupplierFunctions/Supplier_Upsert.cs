@@ -10,7 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MertexerV2.ProductFunctions
+namespace MertexerV2.SupplierFunctions
 {
     public static partial class SupplierFunctions
     {

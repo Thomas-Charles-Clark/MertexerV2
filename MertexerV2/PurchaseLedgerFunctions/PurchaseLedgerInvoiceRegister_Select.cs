@@ -28,7 +28,16 @@ namespace MertexerV2.PurchaseLedgerFunctions
             DataAccess = DataAccessKind.Read,
             FillRowMethodName = "InvoiceRegisterSelect_FillRow")]
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
-        public static IEnumerable Select(string UniVerseAccount, string InvoiceRegisterCodes, string SupplierCode, DateTime? DocumentDT_From, DateTime? DocumentDT_To, DateTime? DueDT_From, DateTime? DueDT_To)
+        public static IEnumerable Select(
+            string UniVerseAccount, 
+            string InvoiceRegisterCodes, 
+            string SupplierCode, 
+            DateTime? DocumentDT_From, 
+            DateTime? DocumentDT_To, 
+            DateTime? DueDT_From, 
+            DateTime? DueDT_To,
+            DateTime? OnFileDT_From,
+            DateTime? OnFileDT_To)
         {
             if (String.IsNullOrEmpty(InvoiceRegisterCodes))
             {
@@ -56,17 +65,42 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                 if (DueDT_To.HasValue)
                 {
-                    filters.Add(new Tuple<string, string, string>("SS.DUEDATE.INT", ">=", Framework.UniVerseDateString(DueDT_To.Value)));
+                    filters.Add(new Tuple<string, string, string>("SS.DUEDATE.INT", "<=", Framework.UniVerseDateString(DueDT_To.Value)));
                 }
 
-                foreach (var invoice in Selector<PurchaseLedgerInvoiceRegister>.FilterNonParallel(
-                    filters,
-                    true,
-                    false,
-                    100,
-                    UniVerseAccount))
+                if (OnFileDT_From.HasValue)
                 {
-                    yield return invoice;
+                    filters.Add(new Tuple<string, string, string>("SS.DATEONFILE.INT", ">=", Framework.UniVerseDateString(OnFileDT_From.Value)));
+                }
+
+                if (OnFileDT_To.HasValue)
+                {
+                    filters.Add(new Tuple<string, string, string>("SS.DATEONFILE.INT", "<=", Framework.UniVerseDateString(OnFileDT_To.Value)));
+                }
+
+                if (filters.Any())
+                {
+                    foreach (var invoice in Selector<PurchaseLedgerInvoiceRegister>.FilterNonParallel(
+                        filters,
+                        true,
+                        false,
+                        100,
+                        UniVerseAccount))
+                    {
+                        yield return invoice;
+                    }
+                }
+                else
+                {
+                    foreach (var invoice in Selector<PurchaseLedgerInvoiceRegister>.SelectAllNonParallel(
+                        true,
+                        false,
+                        100,
+                        UniVerseAccount)
+                        .ToList())
+                    {
+                        yield return invoice;
+                    }
                 }
             }
             else
@@ -107,7 +141,10 @@ namespace MertexerV2.PurchaseLedgerFunctions
             out SqlString PassedTo,
             out SqlDateTime PassedToDT,
             out SqlDecimal AmountCurrency,
-            out SqlString ExchangeRates
+            out SqlDecimal ExchangeRate,
+            out SqlBoolean Dispute,
+            out SqlDateTime SettlementDT,
+            out SqlString MertexCurrencyCode
             )
         {
             var result = (PurchaseLedgerInvoiceRegister)obj;
@@ -124,7 +161,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
             SupplierReference = result.SupplierReference?.TrimReduceTruncate(50);
 
-            AmountsExVAT = result.AmountExVAT.Any() ? JsonConvert.SerializeObject(result.AmountExVAT) : SqlString.Null;
+            AmountsExVAT = result.AmountsExVAT.Any() ? JsonConvert.SerializeObject(result.AmountsExVAT) : SqlString.Null;
 
             GeneralLedgerCodes = result.GeneralLedgerCodes.Any() ? JsonConvert.SerializeObject(result.GeneralLedgerCodes) : SqlString.Null;
 
@@ -154,7 +191,13 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
             AmountCurrency = result.AmountCurrency;
 
-            ExchangeRates = result.ExchangeRates.Any() ? JsonConvert.SerializeObject(result.ExchangeRates) : SqlString.Null;
+            ExchangeRate = result.ExchangeRate;
+
+            Dispute = result.Disputed;
+
+            SettlementDT = result.SettlementDT ?? SqlDateTime.Null;
+
+            MertexCurrencyCode = result.MertexCurrencyCode?.TrimReduceTruncate(20);
         }
     }
 }

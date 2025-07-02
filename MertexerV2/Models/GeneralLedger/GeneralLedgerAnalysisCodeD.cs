@@ -1,0 +1,37 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+using MertexerV2.Utilities;
+
+namespace MertexerV2.Models.GeneralLedger
+{
+    [UniVerseFileName("GLALYS")]
+    public class GeneralLedgerAnalysisCodeD : UniVerseSerializationBase<string>
+    {
+        public GeneralLedgerAnalysisCodeD(string key) : base(key)
+        {
+
+        }
+
+        public GeneralLedgerAnalysisCodeD() : base()
+        {
+            Initialise();
+        }
+
+        public override void Initialise()
+        {
+            typeof(GeneralLedgerAnalysisCodeD).GetProperties().ToList().ForEach(p => Framework.InitialiseUniProperty(this, p));
+        }
+
+        [UniVerseIndex(1)]
+        [UniVerseFieldName("TITLE")]
+        public string Name { get; set; }
+
+        [UniVerseIndex(2)]
+        [UniVerseFieldName("GLGROUP")]
+        public string ReportGroup { get; set; }
+    }
+}

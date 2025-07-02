@@ -1,15 +1,8 @@
 ﻿using MertexerV2.Utilities;
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using MertexerV2.Models.ExchangeRate;
 using Newtonsoft.Json;
-using MertexerV2.ProductFunctions;
-using MertexerV2.Models.SalesAnalysis;
 using MertexerV2.Models.PurchaseLedger;
 
 namespace MertexerV2.Models.Supplier
@@ -35,7 +28,7 @@ namespace MertexerV2.Models.Supplier
 
         public void Upsert(string uniVerseAccount = "MERTEX")
         {
-            SupplierFunctions.Upsert(uniVerseAccount, JsonConvert.SerializeObject(this));
+            SupplierFunctions.SupplierFunctions.Upsert(uniVerseAccount, JsonConvert.SerializeObject(this));
         }
 
         /// <summary>
@@ -192,8 +185,17 @@ namespace MertexerV2.Models.Supplier
             }
         }
 
+        [UniVerseIndex(20)]
+        [UniVerseFieldName("TERMS")]
+        public string PaymentTermsCode { get; set; }
+
+
+        [UniVerseIndex(58)]
+        [UniVerseFieldName("VATNORM")]
+        public string VATCode { get; set; }
+
         [UniVerseForeignKey("SEL1", "MertexerV2.Models.Supplier.PLSEL1")]
-        public virtual PLSEL1 PLSEL1 { get; set; }
+        public virtual SupplierType PLSEL1 { get; set; }
 
         [UniVerseForeignKey("SEL2", "MertexerV2.Models.Supplier.PLSEL2")]
         public virtual PLSEL2 PLSEL2 { get; set; }

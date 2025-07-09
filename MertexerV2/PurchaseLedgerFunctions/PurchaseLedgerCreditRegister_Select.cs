@@ -125,7 +125,6 @@ namespace MertexerV2.PurchaseLedgerFunctions
             out SqlDateTime DocumentDT,
             out SqlDateTime OnFileDT,
             out SqlString ItemReference,
-            out SqlDateTime DueDT,
             out SqlString SupplierReference,
             out SqlString AmountsExVAT,
             out SqlString GeneralLedgerCodes,
@@ -141,10 +140,11 @@ namespace MertexerV2.PurchaseLedgerFunctions
             out SqlDateTime ReceivedDT,
             out SqlString PassedTo,
             out SqlDateTime PassedToDT,
-            out SqlString CurrencyCode,
             out SqlDecimal AmountCurrency,
             out SqlDecimal ExchangeRate,
-            out SqlBoolean Dispute
+            out SqlString Dispute,
+            out SqlString DisputeMemo,
+            out SqlString MertexCurrencyCode
             )
         {
             var result = (PurchaseLedgerCreditRegister)obj;
@@ -159,11 +159,9 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
             ItemReference = result.ItemReference?.TrimReduceTruncate(50);
 
-            DueDT = result.DueDT ?? SqlDateTime.Null;
-
             SupplierReference = result.SupplierReference?.TrimReduceTruncate(50);
 
-            AmountsExVAT = result.AmountsExVat.Any() ? JsonConvert.SerializeObject(result.AmountsExVat) : SqlString.Null;
+            AmountsExVAT = result.AmountsExVAT.Any() ? JsonConvert.SerializeObject(result.AmountsExVAT) : SqlString.Null;
 
             GeneralLedgerCodes = result.GeneralLedgerCodes.Any() ? JsonConvert.SerializeObject(result.GeneralLedgerCodes) : SqlString.Null;
 
@@ -191,13 +189,15 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
             PassedToDT = result.PassedToDT ?? SqlDateTime.Null;
 
-            CurrencyCode = result.Currency?.TrimReduceTruncate(10) ?? SqlString.Null;
+            MertexCurrencyCode = result.MertexCurrencyCode?.TrimReduceTruncate(10) ?? SqlString.Null;
 
             AmountCurrency = result.AmountCurrency;
 
             ExchangeRate = result.ExchangeRate;
 
-            Dispute = result.Disputed;
+            Dispute = result.Disputed?.TrimReduceTruncate(1) ?? SqlString.Null;
+
+            DisputeMemo = result.DisputeMemo?.TrimReduceTruncate(255) ?? SqlString.Null;
         }
     }
 }

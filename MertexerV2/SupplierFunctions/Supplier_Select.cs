@@ -222,6 +222,7 @@ namespace MertexerV2.SupplierFunctions
             out SqlString Town,
             out SqlString County,
             out SqlString Postcode,
+            out SqlString SortName,
             out SqlString CountryCode,
             out SqlString Currency,
             out SqlString PhoneNumber,
@@ -248,6 +249,7 @@ namespace MertexerV2.SupplierFunctions
             Town = p.Town?.TrimReduceTruncate(50);
             County = p.County?.TrimReduceTruncate(40);
             Postcode = p.Postcode?.TrimReduceTruncate(20);
+            SortName = p.SortName?.TrimReduceTruncate(100);
             CountryCode = p.CountryCode?.TrimReduceTruncate(3);
             Currency = p.Currency?.TrimReduceTruncate(10);
             DutyPercentage = p.DutyPercentage ?? SqlDecimal.Null;

@@ -176,6 +176,8 @@ namespace Tester
 
 
             //var results = TillFunctions.FetchRetailTillSessions(uniVerseAccount).OfType<RetailTillSession>().ToList();
+
+
             //var tills = TillFunctions.FetchOpenTills(uniVerseAccount).OfType<RetailTill>().ToList();
 
             //foreach (var r in results)
@@ -514,7 +516,7 @@ namespace Tester
 
 
 
-            //B2BOrderImport.SiphonOldTradeSiteOrders("MERTEX");
+            B2BOrderImport.SiphonOldTradeSiteOrders("MERTEX");
 
             //var toelineResults = EDAReplacementTestSuite.TOELINESearchByOrderNumbersTest("MERTEX", @"[{ ""OrderID"": ""1158027901"" }]");
 
@@ -771,14 +773,14 @@ namespace Tester
 
             //var resultA = MertexerV2.PurchaseLedgerFunctions.PurchaseLedgerInvoiceRegisterFunctions.Insert(uniVerseAccount, "314260");
 
-            var resultB = MertexerV2.PurchaseLedgerFunctions.PurchaseLedgerInvoiceRegisterFunctions.Insert(uniVerseAccount, "DELETEME").OfType<string>().ToList();
+            //var resultB = MertexerV2.PurchaseLedgerFunctions.PurchaseLedgerInvoiceRegisterFunctions.Insert(uniVerseAccount, "DELETEME").OfType<string>().ToList();
 
-            Console.WriteLine($"{resultB.Count} results");
+            //Console.WriteLine($"{resultB.Count} results");
 
-            foreach (var s in resultB)
-            {
-                Console.WriteLine(s);
-            }
+            //foreach (var s in resultB)
+            //{
+            //    Console.WriteLine(s);
+            //}
 
             //var results = EDAReplacementTestSuite.PurchaseOrderDetailSearch(uniVerseAccount, @"[{""PurchaseOrderHeadID"":""P265482""},{""PurchaseOrderHeadID"":""P265483""},{""PurchaseOrderHeadID"":""P265484""},{""PurchaseOrderHeadID"":""P265485""},{""PurchaseOrderHeadID"":""P265486""},{""PurchaseOrderHeadID"":""P265487""},{""PurchaseOrderHeadID"":""P265488""},{""PurchaseOrderHeadID"":""P265489""},{""PurchaseOrderHeadID"":""P265490""},{""PurchaseOrderHeadID"":""P265491""},{""PurchaseOrderHeadID"":""P265492""},{""PurchaseOrderHeadID"":""P265493""},{""PurchaseOrderHeadID"":""P265494""},{""PurchaseOrderHeadID"":""P265495""},{""PurchaseOrderHeadID"":""P265496""},{""PurchaseOrderHeadID"":""P265497""},{""PurchaseOrderHeadID"":""P265498""},{""PurchaseOrderHeadID"":""P265499""},{""PurchaseOrderHeadID"":""P265500""},{""PurchaseOrderHeadID"":""P265501""},{""PurchaseOrderHeadID"":""P265502""},{""PurchaseOrderHeadID"":""P265503""},{""PurchaseOrderHeadID"":""P265504""},{""PurchaseOrderHeadID"":""P265505""},{""PurchaseOrderHeadID"":""P265506""},{""PurchaseOrderHeadID"":""P265507""},{""PurchaseOrderHeadID"":""P265508""},{""PurchaseOrderHeadID"":""P265509""},{""PurchaseOrderHeadID"":""P265510""},{""PurchaseOrderHeadID"":""P265511""},{""PurchaseOrderHeadID"":""P265512""},{""PurchaseOrderHeadID"":""P265513""},{""PurchaseOrderHeadID"":""P265514""},{""PurchaseOrderHeadID"":""P265515""},{""PurchaseOrderHeadID"":""P265516""},{""PurchaseOrderHeadID"":""P265517""},{""PurchaseOrderHeadID"":""P265518""},{""PurchaseOrderHeadID"":""P265519""},{""PurchaseOrderHeadID"":""P265520""},{""PurchaseOrderHeadID"":""P265521""},{""PurchaseOrderHeadID"":""P265522""},{""PurchaseOrderHeadID"":""P265523""},{""PurchaseOrderHeadID"":""P265524""},{""PurchaseOrderHeadID"":""P265525""},{""PurchaseOrderHeadID"":""P265526""},{""PurchaseOrderHeadID"":""P265527""},{""PurchaseOrderHeadID"":""P265528""},{""PurchaseOrderHeadID"":""P265529""},{""PurchaseOrderHeadID"":""P265530""},{""PurchaseOrderHeadID"":""P265531""},{""PurchaseOrderHeadID"":""P265532""},{""PurchaseOrderHeadID"":""P265533""},{""PurchaseOrderHeadID"":""P265534""},{""PurchaseOrderHeadID"":""P265535""},{""PurchaseOrderHeadID"":""P265536""},{""PurchaseOrderHeadID"":""P265537""},{""PurchaseOrderHeadID"":""P265538""},{""PurchaseOrderHeadID"":""P265539""},{""PurchaseOrderHeadID"":""P265540""},{""PurchaseOrderHeadID"":""P265541""},{""PurchaseOrderHeadID"":""P265542""},{""PurchaseOrderHeadID"":""P265543""},{""PurchaseOrderHeadID"":""P265544""},{""PurchaseOrderHeadID"":""P265545""},{""PurchaseOrderHeadID"":""P265546""},{""PurchaseOrderHeadID"":""P265547""},{""PurchaseOrderHeadID"":""P265548""},{""PurchaseOrderHeadID"":""P265549""},{""PurchaseOrderHeadID"":""P265550""},{""PurchaseOrderHeadID"":""P265551""},{""PurchaseOrderHeadID"":""P265552""},{""PurchaseOrderHeadID"":""P265553""},{""PurchaseOrderHeadID"":""P265554""},{""PurchaseOrderHeadID"":""P265555""},{""PurchaseOrderHeadID"":""P265556""},{""PurchaseOrderHeadID"":""P265557""},{""PurchaseOrderHeadID"":""P265558""},{""PurchaseOrderHeadID"":""P265559""},{""PurchaseOrderHeadID"":""P265560""},{""PurchaseOrderHeadID"":""P265561""},{""PurchaseOrderHeadID"":""P265562""},{""PurchaseOrderHeadID"":""P265563""},{""PurchaseOrderHeadID"":""P265564""},{""PurchaseOrderHeadID"":""P265565""},{""PurchaseOrderHeadID"":""P265566""},{""PurchaseOrderHeadID"":""P265567""},{""PurchaseOrderHeadID"":""P265568""},{""PurchaseOrderHeadID"":""P265569""},{""PurchaseOrderHeadID"":""P265570""},{""PurchaseOrderHeadID"":""P265571""},{""PurchaseOrderHeadID"":""P265572""},{""PurchaseOrderHeadID"":""P265573""},{""PurchaseOrderHeadID"":""P265574""},{""PurchaseOrderHeadID"":""P265575""},{""PurchaseOrderHeadID"":""P265576""},{""PurchaseOrderHeadID"":""P265577""},{""PurchaseOrderHeadID"":""P265578""},{""PurchaseOrderHeadID"":""P265579""},{""PurchaseOrderHeadID"":""P265580""},{""PurchaseOrderHeadID"":""P265581""},{""PurchaseOrderHeadID"":""P265582""},{""PurchaseOrderHeadID"":""P265583""},{""PurchaseOrderHeadID"":""P265584""},{""PurchaseOrderHeadID"":""P265585""},{""PurchaseOrderHeadID"":""P265586""},{""PurchaseOrderHeadID"":""P265587""},{""PurchaseOrderHeadID"":""P265588""},{""PurchaseOrderHeadID"":""P265589""},{""PurchaseOrderHeadID"":""P265590""},{""PurchaseOrderHeadID"":""P265591""},{""PurchaseOrderHeadID"":""P265592""},{""PurchaseOrderHeadID"":""P265593""},{""PurchaseOrderHeadID"":""P265594""},{""PurchaseOrderHeadID"":""P265595""},{""PurchaseOrderHeadID"":""P265596""},{""PurchaseOrderHeadID"":""P265597""},{""PurchaseOrderHeadID"":""P265598""},{""PurchaseOrderHeadID"":""P265599""},{""PurchaseOrderHeadID"":""P265600""},{""PurchaseOrderHeadID"":""P265601""},{""PurchaseOrderHeadID"":""P265602""},{""PurchaseOrderHeadID"":""P265603""},{""PurchaseOrderHeadID"":""P265604""},{""PurchaseOrderHeadID"":""P265605""},{""PurchaseOrderHeadID"":""P265606""},{""PurchaseOrderHeadID"":""P265607""},{""PurchaseOrderHeadID"":""P265608""},{""PurchaseOrderHeadID"":""P265609""},{""PurchaseOrderHeadID"":""P265610""},{""PurchaseOrderHeadID"":""P265611""},{""PurchaseOrderHeadID"":""P265612""},{""PurchaseOrderHeadID"":""P265613""},{""PurchaseOrderHeadID"":""P265614""},{""PurchaseOrderHeadID"":""P265615""},{""PurchaseOrderHeadID"":""P265616""},{""PurchaseOrderHeadID"":""P265617""},{""PurchaseOrderHeadID"":""P265618""},{""PurchaseOrderHeadID"":""P265619""},{""PurchaseOrderHeadID"":""P265620""},{""PurchaseOrderHeadID"":""P265621""},{""PurchaseOrderHeadID"":""P265622""},{""PurchaseOrderHeadID"":""P265623""},{""PurchaseOrderHeadID"":""P265624""},{""PurchaseOrderHeadID"":""P265625""},{""PurchaseOrderHeadID"":""P265626""},{""PurchaseOrderHeadID"":""P265627""},{""PurchaseOrderHeadID"":""P265628""},{""PurchaseOrderHeadID"":""P265629""},{""PurchaseOrderHeadID"":""P265630""},{""PurchaseOrderHeadID"":""P265631""},{""PurchaseOrderHeadID"":""P265632""},{""PurchaseOrderHeadID"":""P265633""},{""PurchaseOrderHeadID"":""P265634""},{""PurchaseOrderHeadID"":""P265635""},{""PurchaseOrderHeadID"":""P265636""},{""PurchaseOrderHeadID"":""P265637""},{""PurchaseOrderHeadID"":""P265638""},{""PurchaseOrderHeadID"":""P265639""},{""PurchaseOrderHeadID"":""P265640""},{""PurchaseOrderHeadID"":""P265641""},{""PurchaseOrderHeadID"":""P265642""},{""PurchaseOrderHeadID"":""P265643""},{""PurchaseOrderHeadID"":""P265644""},{""PurchaseOrderHeadID"":""P265645""},{""PurchaseOrderHeadID"":""P265646""},{""PurchaseOrderHeadID"":""P265647""},{""PurchaseOrderHeadID"":""P265648""},{""PurchaseOrderHeadID"":""P265649""},{""PurchaseOrderHeadID"":""P265650""},{""PurchaseOrderHeadID"":""P265651""},{""PurchaseOrderHeadID"":""P265652""},{""PurchaseOrderHeadID"":""P265653""},{""PurchaseOrderHeadID"":""P265654""},{""PurchaseOrderHeadID"":""P265655""},{""PurchaseOrderHeadID"":""P265656""},{""PurchaseOrderHeadID"":""P265657""},{""PurchaseOrderHeadID"":""P265658""},{""PurchaseOrderHeadID"":""P265659""},{""PurchaseOrderHeadID"":""P265660""},{""PurchaseOrderHeadID"":""P265661""},{""PurchaseOrderHeadID"":""P265662""},{""PurchaseOrderHeadID"":""P265663""},{""PurchaseOrderHeadID"":""P265664""},{""PurchaseOrderHeadID"":""P265665""},{""PurchaseOrderHeadID"":""P265666""},{""PurchaseOrderHeadID"":""P265667""},{""PurchaseOrderHeadID"":""P265668""},{""PurchaseOrderHeadID"":""P265669""},{""PurchaseOrderHeadID"":""P26567""},{""PurchaseOrderHeadID"":""P265670""},{""PurchaseOrderHeadID"":""P265671""},{""PurchaseOrderHeadID"":""P265672""},{""PurchaseOrderHeadID"":""P265673""},{""PurchaseOrderHeadID"":""P265674""},{""PurchaseOrderHeadID"":""P265675""},{""PurchaseOrderHeadID"":""P265676""},{""PurchaseOrderHeadID"":""P265677""},{""PurchaseOrderHeadID"":""P265678""},{""PurchaseOrderHeadID"":""P265679""},{""PurchaseOrderHeadID"":""P265680""},{""PurchaseOrderHeadID"":""P265681""},{""PurchaseOrderHeadID"":""P265682""},{""PurchaseOrderHeadID"":""P265683""},{""PurchaseOrderHeadID"":""P265684""},{""PurchaseOrderHeadID"":""P265685""},{""PurchaseOrderHeadID"":""P265686""},{""PurchaseOrderHeadID"":""P265687""},{""PurchaseOrderHeadID"":""P265688""},{""PurchaseOrderHeadID"":""P265689""},{""PurchaseOrderHeadID"":""P265690""},{""PurchaseOrderHeadID"":""P265691""},{""PurchaseOrderHeadID"":""P265692""},{""PurchaseOrderHeadID"":""P265693""},{""PurchaseOrderHeadID"":""P265694""},{""PurchaseOrderHeadID"":""P265695""},{""PurchaseOrderHeadID"":""P265696""},{""PurchaseOrderHeadID"":""P265697""},{""PurchaseOrderHeadID"":""P265698""},{""PurchaseOrderHeadID"":""P265699""},{""PurchaseOrderHeadID"":""P265700""},{""PurchaseOrderHeadID"":""P265701""},{""PurchaseOrderHeadID"":""P265702""},{""PurchaseOrderHeadID"":""P265703""},{""PurchaseOrderHeadID"":""P265704""},{""PurchaseOrderHeadID"":""P265705""},{""PurchaseOrderHeadID"":""P265706""},{""PurchaseOrderHeadID"":""P265707""},{""PurchaseOrderHeadID"":""P265708""},{""PurchaseOrderHeadID"":""P265709""},{""PurchaseOrderHeadID"":""P265710""},{""PurchaseOrderHeadID"":""P265711""},{""PurchaseOrderHeadID"":""P265712""},{""PurchaseOrderHeadID"":""P265713""},{""PurchaseOrderHeadID"":""P265714""},{""PurchaseOrderHeadID"":""P265715""},{""PurchaseOrderHeadID"":""P265716""},{""PurchaseOrderHeadID"":""P265717""},{""PurchaseOrderHeadID"":""P265718""},{""PurchaseOrderHeadID"":""P265719""},{""PurchaseOrderHeadID"":""P265720""},{""PurchaseOrderHeadID"":""P265721""},{""PurchaseOrderHeadID"":""P265722""},{""PurchaseOrderHeadID"":""P265723""},{""PurchaseOrderHeadID"":""P265724""},{""PurchaseOrderHeadID"":""P265725""},{""PurchaseOrderHeadID"":""P265726""},{""PurchaseOrderHeadID"":""P265727""},{""PurchaseOrderHeadID"":""P265728""},{""PurchaseOrderHeadID"":""P265729""},{""PurchaseOrderHeadID"":""P265730""},{""PurchaseOrderHeadID"":""P265731""},{""PurchaseOrderHeadID"":""P265732""},{""PurchaseOrderHeadID"":""P265733""},{""PurchaseOrderHeadID"":""P265734""},{""PurchaseOrderHeadID"":""P265735""},{""PurchaseOrderHeadID"":""P265736""},{""PurchaseOrderHeadID"":""P265737""},{""PurchaseOrderHeadID"":""P265738""},{""PurchaseOrderHeadID"":""P265739""},{""PurchaseOrderHeadID"":""P265740""},{""PurchaseOrderHeadID"":""P265741""},{""PurchaseOrderHeadID"":""P265742""},{""PurchaseOrderHeadID"":""P265743""},{""PurchaseOrderHeadID"":""P265744""},{""PurchaseOrderHeadID"":""P265745""},{""PurchaseOrderHeadID"":""P265746""},{""PurchaseOrderHeadID"":""P265747""},{""PurchaseOrderHeadID"":""P265748""},{""PurchaseOrderHeadID"":""P265749""},{""PurchaseOrderHeadID"":""P265750""},{""PurchaseOrderHeadID"":""P265751""},{""PurchaseOrderHeadID"":""P265752""},{""PurchaseOrderHeadID"":""P265753""},{""PurchaseOrderHeadID"":""P265754""},{""PurchaseOrderHeadID"":""P265755""},{""PurchaseOrderHeadID"":""P265756""},{""PurchaseOrderHeadID"":""P265757""},{""PurchaseOrderHeadID"":""P265758""},{""PurchaseOrderHeadID"":""P265759""},{""PurchaseOrderHeadID"":""P265760""},{""PurchaseOrderHeadID"":""P265761""},{""PurchaseOrderHeadID"":""P265762""},{""PurchaseOrderHeadID"":""P265763""},{""PurchaseOrderHeadID"":""P265764""},{""PurchaseOrderHeadID"":""P265765""},{""PurchaseOrderHeadID"":""P265766""},{""PurchaseOrderHeadID"":""P265767""},{""PurchaseOrderHeadID"":""P265768""},{""PurchaseOrderHeadID"":""P265769""},{""PurchaseOrderHeadID"":""P265770""},{""PurchaseOrderHeadID"":""P265771""},{""PurchaseOrderHeadID"":""P265772""},{""PurchaseOrderHeadID"":""P265773""},{""PurchaseOrderHeadID"":""P265774""},{""PurchaseOrderHeadID"":""P265775""},{""PurchaseOrderHeadID"":""P265776""},{""PurchaseOrderHeadID"":""P265777""},{""PurchaseOrderHeadID"":""P265778""},{""PurchaseOrderHeadID"":""P265779""},{""PurchaseOrderHeadID"":""P265780""},{""PurchaseOrderHeadID"":""P265781""},{""PurchaseOrderHeadID"":""P265804""},{""PurchaseOrderHeadID"":""P265807""},{""PurchaseOrderHeadID"":""P265808""},{""PurchaseOrderHeadID"":""P265810""},{""PurchaseOrderHeadID"":""P265811""},{""PurchaseOrderHeadID"":""P265812""},{""PurchaseOrderHeadID"":""P265813""},{""PurchaseOrderHeadID"":""P265814""},{""PurchaseOrderHeadID"":""P265815""},{""PurchaseOrderHeadID"":""P265816""},{""PurchaseOrderHeadID"":""P265817""},{""PurchaseOrderHeadID"":""P265818""},{""PurchaseOrderHeadID"":""P265819""},{""PurchaseOrderHeadID"":""P265820""},{""PurchaseOrderHeadID"":""P265821""},{""PurchaseOrderHeadID"":""P265822""},{""PurchaseOrderHeadID"":""P265823""},{""PurchaseOrderHeadID"":""P265824""},{""PurchaseOrderHeadID"":""P265825""},{""PurchaseOrderHeadID"":""P265826""},{""PurchaseOrderHeadID"":""P265828""},{""PurchaseOrderHeadID"":""P265831""},{""PurchaseOrderHeadID"":""P265832""},{""PurchaseOrderHeadID"":""P265838""},{""PurchaseOrderHeadID"":""P265839""},{""PurchaseOrderHeadID"":""P265841""},{""PurchaseOrderHeadID"":""P265843""},{""PurchaseOrderHeadID"":""P265853""},{""PurchaseOrderHeadID"":""P265874""},{""PurchaseOrderHeadID"":""P265880""},{""PurchaseOrderHeadID"":""P265890""},{""PurchaseOrderHeadID"":""P265898""},{""PurchaseOrderHeadID"":""P265916""},{""PurchaseOrderHeadID"":""P265920""},{""PurchaseOrderHeadID"":""P265952""},{""PurchaseOrderHeadID"":""P265959""},{""PurchaseOrderHeadID"":""P265992""},{""PurchaseOrderHeadID"":""P265993""},{""PurchaseOrderHeadID"":""P265994""},{""PurchaseOrderHeadID"":""P265995""},{""PurchaseOrderHeadID"":""P265996""},{""PurchaseOrderHeadID"":""P265997""},{""PurchaseOrderHeadID"":""P265998""},{""PurchaseOrderHeadID"":""P265999""},{""PurchaseOrderHeadID"":""P266000""},{""PurchaseOrderHeadID"":""P266027""},{""PurchaseOrderHeadID"":""P266030""},{""PurchaseOrderHeadID"":""P266032""},{""PurchaseOrderHeadID"":""P266045""},{""PurchaseOrderHeadID"":""P266046""},{""PurchaseOrderHeadID"":""P266047""},{""PurchaseOrderHeadID"":""P266048""},{""PurchaseOrderHeadID"":""P266088""},{""PurchaseOrderHeadID"":""P266090""},{""PurchaseOrderHeadID"":""P266105""},{""PurchaseOrderHeadID"":""P266113""},{""PurchaseOrderHeadID"":""P266124""},{""PurchaseOrderHeadID"":""P266129""},{""PurchaseOrderHeadID"":""P266130""},{""PurchaseOrderHeadID"":""P266131""},{""PurchaseOrderHeadID"":""P266132""},{""PurchaseOrderHeadID"":""P266133""},{""PurchaseOrderHeadID"":""P266172""},{""PurchaseOrderHeadID"":""P266174""},{""PurchaseOrderHeadID"":""P266196""},{""PurchaseOrderHeadID"":""P266227""},{""PurchaseOrderHeadID"":""P266235""},{""PurchaseOrderHeadID"":""P266236""},{""PurchaseOrderHeadID"":""P266237""},{""PurchaseOrderHeadID"":""P266238""},{""PurchaseOrderHeadID"":""P266239""},{""PurchaseOrderHeadID"":""P266240""},{""PurchaseOrderHeadID"":""P266241""},{""PurchaseOrderHeadID"":""P266242""},{""PurchaseOrderHeadID"":""P266243""},{""PurchaseOrderHeadID"":""P266244""},{""PurchaseOrderHeadID"":""P266245""},{""PurchaseOrderHeadID"":""P266246""},{""PurchaseOrderHeadID"":""P266247""},{""PurchaseOrderHeadID"":""P266274""},{""PurchaseOrderHeadID"":""P266278""},{""PurchaseOrderHeadID"":""P266279""},{""PurchaseOrderHeadID"":""P266286""},{""PurchaseOrderHeadID"":""P266295""},{""PurchaseOrderHeadID"":""P266314""},{""PurchaseOrderHeadID"":""P266342""},{""PurchaseOrderHeadID"":""P266351""},{""PurchaseOrderHeadID"":""P266352""},{""PurchaseOrderHeadID"":""P266378""},{""PurchaseOrderHeadID"":""P266392""},{""PurchaseOrderHeadID"":""P266414""},{""PurchaseOrderHeadID"":""P266442""},{""PurchaseOrderHeadID"":""P266462""},{""PurchaseOrderHeadID"":""P266467""},{""PurchaseOrderHeadID"":""P266469""},{""PurchaseOrderHeadID"":""P266470""},{""PurchaseOrderHeadID"":""P266471""},{""PurchaseOrderHeadID"":""P266473""},{""PurchaseOrderHeadID"":""P266475""},{""PurchaseOrderHeadID"":""P266476""},{""PurchaseOrderHeadID"":""P266479""},{""PurchaseOrderHeadID"":""P266480""},{""PurchaseOrderHeadID"":""P266482""},{""PurchaseOrderHeadID"":""P266484""},{""PurchaseOrderHeadID"":""P266485""},{""PurchaseOrderHeadID"":""P266494""},{""PurchaseOrderHeadID"":""P266495""},{""PurchaseOrderHeadID"":""P266519""},{""PurchaseOrderHeadID"":""P266529""},{""PurchaseOrderHeadID"":""P266552""},{""PurchaseOrderHeadID"":""P266557""}]");
 
@@ -837,8 +839,11 @@ namespace Tester
             //        out Unallocated,
             //        out Approved,
             //        out PassedTo);
-            //}
+            ////}
 
+            //File.WriteAllText("PLINVREG.DICT.txt", Dictionary("PLINVREG"));
+
+            //File.WriteAllText("PLCRNREG.DICT.txt", Dictionary("PLCRNREG"));
 
             Console.ForegroundColor = ConsoleColor.Green;
 
@@ -853,28 +858,28 @@ namespace Tester
             Console.ReadKey();
         }
 
-        private static void Dictionary(string fileName, string database = "MERTEX")
+        private static string Dictionary(string fileName, string database = "MERTEX")
         {
             using (var ce = new CommandExecutor(database))
             {
-                string dict = ce.Dictionary(fileName);
+                return ce.Dictionary(fileName);
             }
         }
 
-        private static void DictionaryXML(string fileName, string database = "MERTEX")
+        private static string DictionaryXML(string fileName, string database = "MERTEX")
         {
             using (var ce = new CommandExecutor(database))
             {
-                string dict = ce.DictionaryXML(fileName);
+                return ce.DictionaryXML(fileName);
             }
         }
 
 
-        private static void DictionaryVertical(string fileName)
+        private static string DictionaryVertical(string fileName)
         {
             using (var ce = new CommandExecutor())
             {
-                string dict = ce.DictionaryVertical(fileName);
+                return ce.DictionaryVertical(fileName);
             }
         }
 
@@ -892,7 +897,7 @@ namespace Tester
             return result;
         }
 
-        private static void Item(string fileName, string recordId, bool lineSuppression = true, string universeAccount = "MERTEX")
+        private static string Item(string fileName, string recordId, bool lineSuppression = true, string universeAccount = "MERTEX")
         {
             var item = "";
 
@@ -901,7 +906,7 @@ namespace Tester
                 item = ce.Item(fileName, recordId, lineSuppression);
             }
 
-            Console.WriteLine(item);
+            return item;
         }
 
         public static int WTAccessInternalImportDenial(string universeAccount)

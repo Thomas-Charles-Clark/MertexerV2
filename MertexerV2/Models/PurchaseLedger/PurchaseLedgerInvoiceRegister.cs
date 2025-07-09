@@ -104,7 +104,7 @@ namespace MertexerV2.Models.PurchaseLedger
         public DateTime? DueDT { get; set; }
 
         [UniVerseIndex(38)]
-        [UniVerseFieldName("SS.INVDATE.INT")]
+        [UniVerseFieldName("SS.DUEDATE.INT")]
         public string DueDate
         {
             get
@@ -256,9 +256,11 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseConversion("MR22")]
         public decimal DocumentBalance { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
+        [UniVerseIndex(80)]
+        [UniVerseFieldName("DISCAMT")]
+        [UniVerseConversion("MR22")]
+        public decimal? DiscountAmount { get; set; }
+
         [UniVerseIndex(82)]
         [UniVerseFieldName("MEMO1")]
         [UniVerseMultiValue]
@@ -266,8 +268,11 @@ namespace MertexerV2.Models.PurchaseLedger
 
         [UniVerseIndex(87)]
         [UniVerseFieldName("DISPUTE")]
-        [UniVerseBooleanTrueWhen("D")]
-        public bool Disputed { get; set; }
+        public string Disputed { get; set; }
+
+        [UniVerseIndex(88)]
+        [UniVerseFieldName("DISPMEMO")]
+        public string DisputeMemo { get; set; }
 
         [JsonAlsoUpdates("ReceivedDate")]
         public DateTime? ReceivedDT { get; set; }
@@ -341,6 +346,11 @@ namespace MertexerV2.Models.PurchaseLedger
             }
         }
 
+        [UniVerseIndex(160)]
+        [UniVerseFieldName("DISCPERC")]
+        [UniVerseConversion("MR33")]
+        public decimal? DiscountPercentage { get; set; }
+
         [UniVerseIndex(161)]
         [UniVerseFieldName("CURRENCY")]
         public string MertexCurrencyCode { get; set; }
@@ -350,7 +360,7 @@ namespace MertexerV2.Models.PurchaseLedger
         /// Validation: C:PG.PLVATTAX,V.47.49..160
         /// </summary>
         [UniVerseIndex(162,1)]
-        [UniVerseFieldName("EXRATE.1")]
+        [UniVerseFieldName("XRATE.1")]
         [UniVerseConversion("MR66")]
         public decimal ExchangeRate { get; set; }
 

@@ -74,6 +74,13 @@ namespace MertexerV2.Models.Supplier
         public string Postcode { get; set; }
 
         /// <summary>
+        /// Postcode
+        /// </summary>
+        [UniVerseIndex(2)]
+        [UniVerseFieldName("SORTNAME")]
+        public string SortName { get; set; }
+
+        /// <summary>
         /// Documents
         /// </summary>
         [UniVerseIndex(19)]

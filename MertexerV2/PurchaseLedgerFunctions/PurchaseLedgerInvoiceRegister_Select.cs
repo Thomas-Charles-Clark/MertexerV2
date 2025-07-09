@@ -29,18 +29,20 @@ namespace MertexerV2.PurchaseLedgerFunctions
             FillRowMethodName = "InvoiceRegisterSelect_FillRow")]
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
         public static IEnumerable Select(
-            string UniVerseAccount, 
-            string InvoiceRegisterCodes, 
-            string SupplierCode, 
-            DateTime? DocumentDT_From, 
-            DateTime? DocumentDT_To, 
-            DateTime? DueDT_From, 
+            string UniVerseAccount,
+            string InvoiceRegisterCodes,
+            string SupplierCode,
+            DateTime? DocumentDT_From,
+            DateTime? DocumentDT_To,
+            DateTime? DueDT_From,
             DateTime? DueDT_To,
             DateTime? OnFileDT_From,
             DateTime? OnFileDT_To)
         {
             if (String.IsNullOrEmpty(InvoiceRegisterCodes))
             {
+                int p = 0;
+
                 var filters = new List<Tuple<string, string, string>>();
 
                 if (!String.IsNullOrEmpty(SupplierCode))
@@ -142,7 +144,8 @@ namespace MertexerV2.PurchaseLedgerFunctions
             out SqlDateTime PassedToDT,
             out SqlDecimal AmountCurrency,
             out SqlDecimal ExchangeRate,
-            out SqlBoolean Dispute,
+            out SqlString Dispute,
+            out SqlString DisputeMemo,
             out SqlDateTime SettlementDT,
             out SqlString MertexCurrencyCode
             )
@@ -194,6 +197,8 @@ namespace MertexerV2.PurchaseLedgerFunctions
             ExchangeRate = result.ExchangeRate;
 
             Dispute = result.Disputed;
+
+            DisputeMemo = result.DisputeMemo?.TrimReduceTruncate(255) ?? SqlString.Null;
 
             SettlementDT = result.SettlementDT ?? SqlDateTime.Null;
 

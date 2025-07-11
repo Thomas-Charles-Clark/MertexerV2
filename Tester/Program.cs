@@ -1,3 +1,4 @@
+using MertexerV2;
 using MertexerV2.Models.Status;
 using MertexerV2.Models.VAT;
 using MertexerV2.Models.EORI;
@@ -7,7 +8,6 @@ using System;
 using System.Linq;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using MertexerV2;
 using Tester.Utilities;
 using MertexerV2.Models.PreAllocation;
 using Tester.Tests.OrderSearch;
@@ -45,6 +45,8 @@ using Tester.Tests.LineStatus;
 using System.IO;
 using MertexerV2.Models.SalesAnalysis;
 using MertexerV2.Models.PurchaseLedger;
+using MertexerV2.SupplierFunctions;
+using MertexerV2.Models.Supplier;
 
 namespace Tester
 {
@@ -52,6 +54,14 @@ namespace Tester
     {
         static void Main()
         {
+            JsonConvert.DefaultSettings = () => {
+                return new JsonSerializerSettings()
+                {
+                    Formatting = Formatting.Indented,
+                    NullValueHandling = NullValueHandling.Include
+                };
+            };
+
             Console.ForegroundColor = ConsoleColor.Green; 
 
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -514,9 +524,11 @@ namespace Tester
             //{ ""OrderID"": ""4631929"" },
             //{ ""OrderID"": ""4632745"" }]");
 
+            var results = SupplierPaymentTermsFunctions.Select("MERTEX", null).OfType<SupplierPaymentTerms>().ToList();
 
+            Console.WriteLine(JsonConvert.SerializeObject(results));
 
-            B2BOrderImport.SiphonOldTradeSiteOrders("MERTEX");
+            //B2BOrderImport.SiphonOldTradeSiteOrders("MERTEX");
 
             //var toelineResults = EDAReplacementTestSuite.TOELINESearchByOrderNumbersTest("MERTEX", @"[{ ""OrderID"": ""1158027901"" }]");
 

@@ -82,7 +82,7 @@ namespace MertexerV2.SupplierFunctions
             string sel2d,
             string sel3,
             string sel3d,
-            PurchaseLedgerTransfer plt) : base(supRef, supName, supCur, plt.Key)
+            PurchaseLedgerTransaction plt) : base(supRef, supName, supCur, plt.Key)
         {
             Sel1 = sel1;
             Sel1D = sel1d;
@@ -96,7 +96,7 @@ namespace MertexerV2.SupplierFunctions
             ItemReference = plt.ItemReference;
             OriginalValue = plt.OriginalValue;
             Balance = plt.Balance;
-            Disputed = plt.Disputed == "D";
+            Disputed = plt.Dispute == "D";
             Division = plt.Division;
             Unallocated = plt.Unallocated == 0 ? 0 : plt.Unallocated * -1;
             Approved = true;
@@ -291,7 +291,7 @@ namespace MertexerV2.SupplierFunctions
 
             if (String.IsNullOrEmpty(SupplierCode))
             {
-                var tpltrans = Selector<PurchaseLedgerTransfer>.SelectAllNonParallel(
+                var tpltrans = Selector<PurchaseLedgerTransaction>.SelectAllNonParallel(
                         applyConversions: true,
                         selectChildEntities: false,
                         batchSize: 1000,

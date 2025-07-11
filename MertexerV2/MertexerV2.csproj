@@ -180,7 +180,7 @@
     <Compile Include="Models\Retail\RetailModels.cs" />
     <Compile Include="Models\Retail\RetailTill.cs" />
     <Compile Include="Models\Retail\RetailTillSession.cs" />
-    <Compile Include="Models\PurchaseLedger\PurchaseLedgerTransfer.cs" />
+    <Compile Include="Models\PurchaseLedger\PurchaseLedgerTransaction.cs" />
     <Compile Include="Models\SalesAnalysis\SalesAnalysis.cs" />
     <Compile Include="Models\SalesAnalysis\SalesAnalysisHistory.cs" />
     <Compile Include="Models\Stock\B2CEnquiryDataFetch2.cs" />
@@ -228,7 +228,10 @@
     <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerCreditRegister_Select.cs" />
     <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerCreditRegister_Upsert.cs" />
     <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerCreditRegister_Insert.cs" />
+    <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerTransaction_Insert.cs" />
     <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerInvoiceRegister_Insert.cs" />
+    <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerTransaction_Select.cs" />
+    <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerTransaction_Upsert.cs" />
     <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerInvoiceRegister_Upsert.cs" />
     <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerInvoiceRegister_Select.cs" />
     <Compile Include="PurchaseOrderFunctions\PurchaseOrderDetail_Select.cs" />

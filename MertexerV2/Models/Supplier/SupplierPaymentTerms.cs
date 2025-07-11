@@ -32,7 +32,6 @@ namespace MertexerV2.Models.Supplier
 
         [UniVerseIndex(2)]
         [UniVerseFieldName("DAYS")]
-        [UniVerseConversion("MR33")]
         public byte? Days { get; set; }
 
         [UniVerseIndex(3)]

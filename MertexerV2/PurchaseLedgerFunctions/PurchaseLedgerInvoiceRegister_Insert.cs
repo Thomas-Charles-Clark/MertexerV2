@@ -27,47 +27,6 @@ namespace MertexerV2.PurchaseLedgerFunctions
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
         public static IEnumerable Insert(string UniVerseAccount, string PurchaseLedgerInvoiceRegisterJSON)
         {
-            //var results = new ArrayList();
-
-            //var fileName = typeof(PurchaseLedgerInvoiceRegister).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
-            //        .Cast<UniVerseFileNameAttribute>()
-            //        .Single()
-            //        .FileName;
-
-            //foreach (var invoice in Selector<PurchaseLedgerInvoiceRegister>.Select(
-            //    new[] { Code },
-            //    true,
-            //    false,
-            //    100,
-            //    UniVerseAccount)
-            //    .ToList())
-            //{
-            //    results.Add(invoice.ToString());
-            //}
-
-            //if (results.Count == 0)
-            //{
-            //    using (var ce = new CommandExecutor(UniVerseAccount))
-            //    {
-            //        var uniVerseFile = ce.Session.CreateUniFile(fileName);
-
-            //        var dataSet = new IBMU2.UODOTNET.UniDataSet(ce.Session);
-
-            //        dataSet.Insert(Code);
-
-            //        uniVerseFile.WriteRecords(dataSet);
-
-            //        results.Add(Code);
-            //    }
-            //}
-            //else 
-            //{
-
-            //    throw new Exception($"{Code} already exists on {fileName}");
-            //}
-
-            //return results;
-
             var invoiceRegisterEntry = JsonConvert.DeserializeObject<PurchaseLedgerInvoiceRegister>(PurchaseLedgerInvoiceRegisterJSON);
 
             var fileName = typeof(PurchaseLedgerInvoiceRegister).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)

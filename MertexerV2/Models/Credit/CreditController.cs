@@ -46,5 +46,20 @@ namespace MertexerV2.Models.Credit
         [UniVerseIndex(3)]
         [UniVerseFieldName("CONT.REGION")]
         public string Region { get; set; }
+
+        [UniVerseIndex(4)]
+        [UniVerseFieldName("MARKTYPES")]
+        [UniVerseMultiValue]
+        public IEnumerable<string> MarketCodes { get; set; }
+
+        [UniVerseIndex(5)]
+        [UniVerseFieldName("OECODEGROUPS")]
+        [UniVerseMultiValue]
+        public IEnumerable<string> TradeAccountGroupCodes { get; set; }
+
+        [UniVerseIndex(6)]
+        [UniVerseFieldName("LANGUAGES")]
+        [UniVerseMultiValue]
+        public IEnumerable<string> MertexLanguageCodes { get; set; }
     }
 }

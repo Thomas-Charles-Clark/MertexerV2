@@ -60,14 +60,20 @@ namespace MertexerV2.InvoiceFunctions
             out SqlString Code,
             out SqlString Name,
             out SqlString Email,
-            out SqlString Region)
+            out SqlString Region,
+            out SqlString MarketCodes,
+            out SqlString TradeAccountGroupCodes,
+            out SqlString MertexLanguageCodes)
         {
             var result = (CreditController)obj;
 
             Code = result.Key.TrimReduceTruncate(10);
             Name = result.Name?.TrimReduceTruncate(100) ?? SqlString.Null;
             Email = result.Email?.TrimReduceTruncate(254) ?? SqlString.Null;
-            Region = result.Region?.TrimReduceTruncate(50) ?? SqlString.Null;
+            Region = result.Region?.TrimReduceTruncate(200) ?? SqlString.Null;
+            MarketCodes = result.MarketCodes.Any() ? JsonConvert.SerializeObject(result.MarketCodes) : SqlString.Null;
+            TradeAccountGroupCodes = result.TradeAccountGroupCodes.Any() ? JsonConvert.SerializeObject(result.TradeAccountGroupCodes) : SqlString.Null;
+            MertexLanguageCodes = result.MertexLanguageCodes.Any() ? JsonConvert.SerializeObject(result.MertexLanguageCodes) : SqlString.Null;
         }
     }
 }

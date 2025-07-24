@@ -602,7 +602,7 @@ namespace MertexerV2.GeneralFunctions
 #if DEBUG
                 Console.ForegroundColor = ConsoleColor.Yellow;
 
-                Console.WriteLine($"Select<{typeof(T).Name}>.Execute ProcessForeignKeys: {fkAttr.PropertyName}");
+                //Console.WriteLine($"Select<{typeof(T).Name}>.Execute ProcessForeignKeys: {fkAttr.PropertyName}");
 
                 Console.ForegroundColor = ConsoleColor.Green;
 #endif

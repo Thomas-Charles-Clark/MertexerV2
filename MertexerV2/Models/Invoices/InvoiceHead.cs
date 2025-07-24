@@ -74,6 +74,13 @@ namespace MertexerV2.Models.Invoices
         /// <summary>
         /// Customer Reference
         /// </summary>
+        [UniVerseIndex(4)]
+        [UniVerseFieldName("TERMSCODE")]
+        public string Terms { get; set; }
+
+        /// <summary>
+        /// Customer Reference
+        /// </summary>
         [UniVerseIndex(5)]
         [UniVerseFieldName("CUSREF")]
         public string TradeAccountCode { get; set; }

@@ -201,6 +201,10 @@ namespace MertexerV2.Models.Supplier
         [UniVerseFieldName("VATNORM")]
         public string VATCode { get; set; }
 
+        [UniVerseIndex(132)]
+        [UniVerseFieldName("PERM.FAX")]
+        public bool AccountClosed { get; set; }
+
         [UniVerseForeignKey("SEL1", "MertexerV2.Models.Supplier.PLSEL1")]
         public virtual SupplierType PLSEL1 { get; set; }
 

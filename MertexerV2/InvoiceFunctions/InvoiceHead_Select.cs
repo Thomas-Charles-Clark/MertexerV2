@@ -73,7 +73,8 @@ namespace MertexerV2.InvoiceFunctions
             out SqlByte InvoiceOrCredit,
             out SqlDecimal CarriageValue,
             out SqlDecimal CarriageValueCurrency,
-            out SqlString CurrencyCode
+            out SqlString CurrencyCode,
+            out SqlString Terms
             )
         {
             var p = (InvoiceHead)obj;
@@ -86,6 +87,7 @@ namespace MertexerV2.InvoiceFunctions
             CarriageValue = p.CarriageValue ?? SqlDecimal.Null;
             CarriageValueCurrency = p.CarriageValueCurrency ?? SqlDecimal.Null;
             CurrencyCode = p.CurrencyCode ?? SqlString.Null;
+            Terms = p.Terms?.TrimReduceTruncate(10) ?? SqlString.Null;
         }
 
         [Microsoft.SqlServer.Server.SqlFunction(

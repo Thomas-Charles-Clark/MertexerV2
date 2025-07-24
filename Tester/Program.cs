@@ -47,6 +47,10 @@ using MertexerV2.Models.SalesAnalysis;
 using MertexerV2.Models.PurchaseLedger;
 using MertexerV2.SupplierFunctions;
 using MertexerV2.Models.Supplier;
+using MertexerV2.SalesLedgerFunctions;
+using MertexerV2.Models.SalesLedger;
+using MertexerV2.Models.Credit;
+using MertexerV2.PurchaseLedgerFunctions;
 
 namespace Tester
 {
@@ -524,9 +528,30 @@ namespace Tester
             //{ ""OrderID"": ""4631929"" },
             //{ ""OrderID"": ""4632745"" }]");
 
-            var results = SupplierPaymentTermsFunctions.Select("MERTEX", null).OfType<SupplierPaymentTerms>().ToList();
+            //var results = SupplierPaymentTermsFunctions.Select("MERTEX", null).OfType<SupplierPaymentTerms>().ToList();
 
-            Console.WriteLine(JsonConvert.SerializeObject(results));
+            //Console.WriteLine(JsonConvert.SerializeObject(results));
+
+
+            //var results = SalesLedgerTermsFunctions.Select("MERTEX", null).OfType<SalesLedgerTerms>().ToList();
+
+            //Console.WriteLine(JsonConvert.SerializeObject(results));
+
+            //Console.WriteLine();
+            //Console.WriteLine();
+            //Console.WriteLine();
+
+            //var codes = new List<SalesLedgerTransactionCode>() 
+            //{ 
+            //    new SalesLedgerTransactionCode()
+            //    {
+            //        Code = "SI5406614"
+            //    }
+            //};
+
+            //var transactionResults = SalesLedgerTransactionFunctions.Select("MERTEX", null, null, null, null, null, null, null, null).OfType<SalesLedgerTransaction>().ToList();
+
+            //Console.WriteLine($"Saw {transactionResults.Count} TSLTRANS records.");
 
             //B2BOrderImport.SiphonOldTradeSiteOrders("MERTEX");
 
@@ -778,8 +803,42 @@ namespace Tester
 
             //var purchaseLedgerCreditRegisterJson = TesterFramework.FetchPurchaseOrderInvoiceRegisterJson();
 
-            //var results = MertexerV2.PurchaseLedgerFunctions.PurchaseLedgerCreditRegisterFunctions
-            //.Select("MERTEX", null, null, null, null, null, null).OfType<PurchaseLedgerCreditRegister>().ToList();
+            //var controllers = CreditControllerFunctions.Select(uniVerseAccount, @"[{ ""Code"": ""02"" }]").OfType<CreditController>().ToList();
+
+            //Console.WriteLine(JsonConvert.SerializeObject(controllers));
+
+            //var results = SalesLedgerTransactionCurrencyFunctions.Select("MERTEX",
+            //    //@"[{ ""Code"": ""PI324493"" }]",
+            //    null,
+            //    null,
+            //    null,
+            //    null,
+            //    null,
+            //    null,
+            //    null,
+            //    null).OfType<SalesLedgerTransactionCurrency>().ToList();
+
+            ////Console.WriteLine(JsonConvert.SerializeObject(results));
+
+            //Console.WriteLine($"{results.Count} TPLTRANS.CUR records read");
+
+            var results = PurchaseLedgerTransactionCurrencyFunctions.Select("MERTEX",
+                //@"[{ ""Code"": ""PI324493"" }]",
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null).OfType<PurchaseLedgerTransactionCurrency>().ToList();
+
+            //Console.WriteLine(JsonConvert.SerializeObject(results));
+
+            Console.WriteLine($"{results.Count} TPLTRANS.CUR records read");
+
+
+
 
             //var results = MertexerV2.PurchaseLedgerFunctions.PurchaseLedgerCreditRegisterFunctions.Upsert("MERTEX", purchaseLedgerCreditRegisterJson).OfType<string>().ToList();
 
@@ -853,9 +912,16 @@ namespace Tester
             //        out PassedTo);
             ////}
 
-            //File.WriteAllText("PLINVREG.DICT.txt", Dictionary("PLINVREG"));
+            //File.WriteAllText("TPLTRANS.DICT.txt", Dictionary("TPLTRANS"));
 
-            //File.WriteAllText("PLCRNREG.DICT.txt", Dictionary("PLCRNREG"));
+            //File.WriteAllText("HISTTPLTRANS.DICT.txt", Dictionary("HISTTPLTRANS"));
+
+            //var recordId = "PI324493";
+
+            //File.WriteAllText($"LIST.ITEM TPLTRANS {recordId}.txt", Item("TPLTRANS", recordId, false));
+            //File.WriteAllText($"LIST.ITEM TPLTRANS.CUR {recordId}.txt", Item("TPLTRANS.CUR", recordId, false));
+            //File.WriteAllText($"LIST.ITEM HISTTPLTRANS {recordId}.txt", Item("HISTTPLTRANS", recordId, false));
+            //File.WriteAllText($"LIST.ITEM HISTTPLTRANS.CUR {recordId}.txt", Item("HISTTPLTRANS.CUR", recordId, false));
 
             Console.ForegroundColor = ConsoleColor.Green;
 

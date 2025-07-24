@@ -25,7 +25,7 @@ namespace MertexerV2.Utilities
         {
             var cmd = Session.CreateUniCommand();
 
-            cmd.Command = $"LIST.ITEM {fileName} {recordId} {(lineSup ? "LINE.SUP" : "")}";
+            cmd.Command = $"LIST.ITEM {fileName} {recordId} {(lineSup ? "LINE.SUPP" : "")}";
             cmd.Execute();
             var response_str = cmd.Response;
 

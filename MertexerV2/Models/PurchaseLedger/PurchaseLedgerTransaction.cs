@@ -208,7 +208,7 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseFieldName("NEXTAUTO")]
         [UniVerseConversion("MR22")]
         public decimal Payment { get; set; } // "next auto" ???
-
+        
         [UniVerseIndex(22)]
         [UniVerseFieldName("UNALLOCATED")]
         [UniVerseConversion("MR22")]
@@ -305,9 +305,7 @@ namespace MertexerV2.Models.PurchaseLedger
 
         [UniVerseIndex(30,1)]
         [UniVerseFieldName("XRATE.1")]
-        [UniVerseMultiValue]
         [UniVerseConversion("MR66")]
-
         public decimal MostRecentExchangeRate { get; set; }
 
         [UniVerseIndex(32)]
@@ -396,7 +394,6 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseConversion("MR22")]
         public decimal OutstandingAmount { get; set; }
     }
-
 
     [UniVerseFileName("TPLTRANS.CUR")]
     public class PurchaseLedgerTransferCurrency : PurchaseLedgerTransaction

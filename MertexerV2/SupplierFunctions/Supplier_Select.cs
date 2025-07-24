@@ -235,7 +235,8 @@ namespace MertexerV2.SupplierFunctions
             out SqlString BudgetHolderCode,
             out SqlString PaymentTermsCode,
             out SqlString SupplierTypeCode,
-            out SqlString VATCode
+            out SqlString VATCode,
+            out SqlBoolean AccountClosed
             )
         {
             var p = (Supplier)obj;
@@ -263,6 +264,7 @@ namespace MertexerV2.SupplierFunctions
             PaymentTermsCode = p.PaymentTermsCode?.TrimReduceTruncate(10);
             SupplierTypeCode = p.SEL1?.TrimReduceTruncate(10);
             VATCode = p.VATCode?.TrimReduceTruncate(10);
+            AccountClosed = p.AccountClosed;
         }
         
 

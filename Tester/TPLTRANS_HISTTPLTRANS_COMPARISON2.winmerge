@@ -1,0 +1,35 @@
+DICT HISTTPLTRANS    09:50:13am  24 Jul 2025  Page    1
+
+Field......... Type & Field........ Conversion.. Column......... Output Depth &
+Name.......... Field. Definition... Code........ Heading........ Format Assoc..
+               Number
+
+DOCDATE        A    1               D2/          Doc Date        8R     M
+DUEDATE        A    2               D2/          Due Date        8R     M
+TYPE           A    3                                            3L     M
+ITEMREF        A    4                            Item Ref        8L     M
+DOCNO          A    5                            Doc Ref.        7L     M
+VATDIS         A    6               MR22M          VAT/Disc      10R    M
+DEBIT          A    7               MR22M             Debit      10R    M
+CREDIT         A    8               MR22M            Credit      10R    M
+BALANCE        A    9               MR22M           Balance      10R    M
+PERIOD         A   10                            Pd              2R     M
+STATUS         A   11                                            1L     M
+SUPREF         A   12                            Sup. Ref        8L     M
+AGE            A   13                                            2R     M
+ORIGVAL        A   14               MR22M        Purch Ledger    10R    M
+DISPMEMO       A   15                            Reason          12L    M
+DISPUTE        A   16                            Disputed        1L     M
+ADJUST         A   17                                            1L     M
+DISC           A   18               MR33         Disc %          6R     M
+SELCHQ         A   19                                            1L     M
+DISCAMT        A   20               MR22           Discount      10R    M
+NEXTAUTO       A   21               MR22            Payment      10R    M
+UNALLOCATED    A   22               MR22M        Unallocated     8R     M
+DISCTAKEN      A   23               MR22          S D Taken      10R    M
+DISCT          A   24               MR22         Discount Taken  10R    M
+POSTDATE       A   25               D2/          Post Date       8R     M
+MEMO           A   26                            Memo            32L    M
+DATE.PAID      A   35               D2/          Date Paid       8R     M
+PONO           A   52                            Orders          8L     M
+DIVISION       A  114                            Dv              2L     M

@@ -169,6 +169,11 @@
     <Compile Include="Models\General\Operator.cs" />
     <Compile Include="Models\General\Reason.cs" />
     <Compile Include="Models\Invoices\InvoiceTerms.cs" />
+    <Compile Include="Models\PurchaseLedger\PurchaseLedgerInsertionResult.cs" />
+    <Compile Include="Models\PurchaseLedger\PurchaseLedgerRegisterHistory.cs" />
+    <Compile Include="Models\SalesAgent\SalesAgent.cs" />
+    <Compile Include="Models\SalesArea\SalesArea.cs" />
+    <Compile Include="Models\SalesMarket\SalesMarket.cs" />
     <Compile Include="Models\Order\OrderCategory.cs" />
     <Compile Include="Models\Order\DuplicateLineCheckResult.cs" />
     <Compile Include="Models\Pricing\ContractDiscount.cs" />
@@ -189,6 +194,7 @@
     <Compile Include="Models\SalesLedger\SalesLedgerTransactionCurrency.cs" />
     <Compile Include="Models\SalesLedger\SalesLedgerTransaction.cs" />
     <Compile Include="Models\SalesLedger\SalesLedgerTerms.cs" />
+    <Compile Include="Models\SalesRepresentative\SalesRepresentative.cs" />
     <Compile Include="Models\Stock\B2CEnquiryDataFetch2.cs" />
     <Compile Include="Models\Stock\B2CEnquiryProductGroup.cs" />
     <Compile Include="Models\Stock\B2CEnquiryStockLocation.cs" />
@@ -234,6 +240,7 @@
     <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerCreditRegister_Select.cs" />
     <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerCreditRegister_Upsert.cs" />
     <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerCreditRegister_Insert.cs" />
+    <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerInvoiceRegister_Delete.cs" />
     <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerTransaction_Insert.cs" />
     <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerInvoiceRegister_Insert.cs" />
     <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerTransactionCurrency_Select.cs" />
@@ -241,11 +248,16 @@
     <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerTransaction_Upsert.cs" />
     <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerInvoiceRegister_Upsert.cs" />
     <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerInvoiceRegister_Select.cs" />
+    <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerRegisterHistory_Select.cs" />
+    <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerRegisterHistory_Upsert.cs" />
     <Compile Include="PurchaseOrderFunctions\PurchaseOrderDetail_Select.cs" />
     <Compile Include="PurchaseOrderFunctions\PurchaseOrderHead_Select.cs" />
     <Compile Include="RetailFunctions\TillFunctions.cs" />
     <Compile Include="InvoiceFunctions\SalesAnalysis_Select.cs" />
+    <Compile Include="SalesLedgerFunctions\SalesRepresentative_Select.cs" />
+    <Compile Include="SalesLedgerFunctions\SalesArea_Select.cs" />
     <Compile Include="SalesLedgerFunctions\SalesLedgerTerms_Insert.cs" />
+    <Compile Include="SalesLedgerFunctions\SalesAgent_Select.cs" />
     <Compile Include="SalesLedgerFunctions\SalesLedgerTransaction_Insert.cs" />
     <Compile Include="SalesLedgerFunctions\SalesLedgerTerms_Select.cs" />
     <Compile Include="SalesLedgerFunctions\SalesLedgerTransactionCurrency_Select.cs" />
@@ -253,6 +265,8 @@
     <Compile Include="SalesLedgerFunctions\SalesLedgerTransaction_Select.cs" />
     <Compile Include="SalesLedgerFunctions\SalesLedgerTerms_Upsert.cs" />
     <Compile Include="SalesLedgerFunctions\SalesLedgerTransaction_Upsert.cs" />
+    <Compile Include="SalesMarketFunctions\SalesMarket_Select.cs" />
+    <Compile Include="SQLFunctions\PurchaseLedger.cs" />
     <Compile Include="StockFunctions\StockLocation_Select.cs" />
     <Compile Include="StockFunctions\StockLocation_Upsert.cs" />
     <Compile Include="SupplierFunctions\SupplierPaymentTerms_Select.cs" />
@@ -586,6 +600,7 @@
     <None Include="Notes\DropFunctions.sql" />
     <Content Include="Notes\Notes.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

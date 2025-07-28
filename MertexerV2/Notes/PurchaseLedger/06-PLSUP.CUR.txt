@@ -1,0 +1,34 @@
+Updates PLSUP.CUR
+
+
+95 MERTEX PL                     Purchase Ledger                    28 JUL 2025 
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ 
+³ TooÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄTransaction DefinitionsÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿   ³ 
+ÀÄÄÄÄ³ Tran Id               PINVIR.CUR.D                                 ³ÄÄÄÙ 
+     ³ Description           PL INVOICES                                  ³     
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄSecondary File UpdateÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿   
+³ File Update (Dict) : PLSUP.CUR                                            ³   
+³                                                                           ³   
+³ Update/Delete (U/D)  U                                                    ³   
+³ Update Condition                                                          ³   
+³ Data File (if diff)                                                       ³   
+³ Key Source           <39>                                                 ³   
+³                                                                           ³   
+³ Fld To Update  MV To Update    Oper   Value To Use                        ³   
+³ BALANCE                        +      <250>                               ³   
+³ NEXT                           +      B("PLAMOUNT,N250")                  ³   
+³ CURR                           +      B("PLAMOUNT,250")                   ³   
+³ TLINK                          I      <53>                                ³   
+³ PNEXT                          +      B("PLAMOUNT,N250")                  ³   
+³ PNEXT                          -      B("PLAMOUNT,N248.A")                ³   
+³ PCURR                          +      B("PLAMOUNT,250")                   ³
+³ PCURR                          -      B("PLAMOUNT,248.A")                 ³   
+³ PYTD________                   +      B("PLAMOUNT,Y250")                  ³   
+³ PYTD                           -      B("PLAMOUNT,Y248.A")                ³   
+³ INACT                          R      P("INACT")                          ³   
+³                                                                           ³   
+³                                                                           ³   
+³                                                                           ³   
+ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ   
+                                                                                
+F2-Save                                                                         

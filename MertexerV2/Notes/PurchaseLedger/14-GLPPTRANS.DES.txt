@@ -1,0 +1,34 @@
+Updates GLPPTRANS.DES
+
+95 MERTEX PL                     Purchase Ledger                    28 JUL 2025 
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ 
+³ TooÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄTransaction DefinitionsÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿   ³ 
+ÀÄÄÄÄ³ Tran Id               PINVIR.CUR.D                                 ³ÄÄÄÙ 
+     ³ Description           PL INVOICES                                  ³     
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄSecondary File UpdateÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿   
+³ File Update (Dict) : GLPPTRANS.DES                                        ³   
+³                                                                           ³   
+³ Update/Delete (U/D)  U                                                    ³   
+³ Update Condition                                                          ³   
+³ Data File (if diff)                                                       ³   
+³ Key Source           P("PG.BLD.GLPPTRANS.KEY,PIR")                        ³   
+³                                                                           ³   
+³ Fld To Update  MV To Update    Oper   Value To Use                        ³   
+³ PREPAY.SUPRE                   R      <39>                                ³   
+³ PREPAY.GLCOD                   R      <44,-1>                             ³   
+³ PREPAY.AMOUN                   R      <43,-1>                             ³   
+³ PREPAY.TRANS                   R      <53>                                ³   
+³ PREPAY.DOCTY                   R      "INV"                               ³   
+³ PREPAY.DOCDA                   R      <33>                                ³   
+³ PREPAY.DUEDA                   R      <38>                                ³   
+³ START.PD____                   R      <370,-1>                            ³   
+³ NO.PDS                         R      <371,-1>                            ³   
+³ SPLIT.EQUAL                    R      <372,-1>                            ³   
+³ SPLIT.AMOUNT                   R      REPL(@SVM,@VM,<373,-1>)             ³   
+³ SPLIT.MEMO                     R      REPL(@SVM,@VM,<374,-1>)             ³   
+³ PREPAY.MEMO                    R      IF(<375,-1>,<375,-1>,<83,-1>)       ³   
+³ EXP.GLCODE                     R      <376,-1>                            ³   
+ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ   
+                                                                                
+F2-Save                                                                         
+

@@ -1,0 +1,51 @@
+
+I suppose the big question here is: when do files get entered into PLREGISTER.HIST ?
+
+From playing around in PLAY, it very much seems as though there's a regular phantom running which, following a save to TPLEDG, writes to PLREGISTER.HIST
+
+Immediately after saving the PL Invoices from Register screen, I see a PI number: the purchase invoice ledger has been inserted to. It took perhaps fifteen seconds for a record to appear in PLREGISTER.HIST with the corresponding REGNO.
+However, I can't find a single phantom in PHRUN with anything to do with the PL subsystem!
+ARGH
+
+So there is an assumption which we could make here, namely that a Secondary File Update operation of type U will perform an INSERT if a given key is not found to UPDATE.
+This needs confirming with the SB/XA documentation
+
+
+
+*** FORTUNATELY *** PLREGISTER.HIST is a mere 9 fields, which I can readily write to - presupposing, of course, that I know WHAT TO WRITE! ***
+
+
+
+
+I'm certainly not inserting them in there, and this action is specified as U: Update. If Update doesn't find a record, does it throw an exception?
+What... happens? With this file? It seems like it should be a history of purchase ledger registration.
+
+Note: all the Value to Use fields come from the same source; TPLEDG. Are registry entries first written to TPLEDG from PLINVREG, and thence on to these other files?
+
+
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ Secondary File Update ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ   
+³ File Update (Dict) : PLREGISTER.HIST                                      ³   
+³                                                                           ³   
+³ Update/Delete (U/D)  U                                                    ³   
+³ Update Condition                                                          ³   
+³ Data File (if diff)                                                       ³   
+³ Key Source           "INV*":<199>                                         ³   
+³                                                                           ³   
+³ Fld To Update  MV To Update    Oper   Value To Use                        ³   
+³ REGNO                          R      <199>                               ³   
+³ DATEONFILE                     R      <36>                                ³   
+³ SUPREF                         R      <39>                                ³   
+³ DOCBAL                         R      <50>                                ³   
+³ CONVDATE                       R      @DATE                               ³   
+³ INVOICE.NO                     R      <53>                                ³   
+³ USER.ID                        R      @USER.ID                            ³   
+³ TRANTYPE                       R      "INV"                               ³   
+³ DELDATE                        R      ""                                  ³   
+³ DOCBAL                         R      DTOTAL                              ³   
+³                                                                           ³   
+³                                                                           ³   
+³                                                                           ³   
+³                                                                           ³   
+ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ   
+                                                                                
+																				

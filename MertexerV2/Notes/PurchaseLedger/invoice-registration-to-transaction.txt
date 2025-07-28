@@ -1,0 +1,365 @@
+#############################################################################
+#
+#	From Invoice & Credit Registry PLINVREG & PLCRNREG
+#	to Purchase Ledger!
+#
+#
+#############################################################################
+
+/L MERTEX.PLAY
+
+Purchase Ledger > Runtime > Post > Register > Invoice via Register > Invoices From Register
+
+
+
+[WHAT SCREEN IS THIS?]
+
+PL*PINVIR.CUR.DES
+
+/SD PLINVREG F3
+lists:
+
+EINVREG.CUR
+MPINVREG
+MPINVREG.CUR
+MPINVREG.CUR.DES
+TPINVREG.CUR1
+TPINVREG.CUR1.DES
+TPINVREG1
+
+Screen very much looks like TPINVREG.CUR1
+but is more likely to be TPINVREG.CUR1.DES as .DES indicates specific to us
+perhaps the "T" stands for "Transact"?
+
+
+Specify Invoice Registery Key takes you to Screen 2, showing you the register entry.
+
+F2 saves
+F6 is "Prepayment Apportionment" == what is Prepayment Apportionment? Do we need to concern ourselves with that?
+	=> PG.SET.PREPAY.APPORTION.DES,
+
+
+So we'll assume the screen we're looking at is PLINVREG > TPINVREG.CUR.DES
+
+
+Process After Screen Accept (F2 Save) ==
+
+P:(EXEC"B:PRUNIQUE.DES" ; EXEC "R")
+
+
+What is TPLEDG, some 200k records in there? Transaction Purchase Ledger? Some intermediary table?
+There are circa 350 fields in the dictionary for it, seems important?
+
+It IS important: the "Invoices from Register" menu function opens a screen demanding an Invoice Register no.
+This, if you /MP it, then F7 that, takes you to /FD for TPLEDG!
+
+So are we to assume that you're about to take from PLINVREG and and move a record to TPLEDG, how does it then get from TPLEDG to TPLTRANS ?
+
+Is TPLEDG the actually Purchase Ledger table? 
+
+So: /SD TPLEDG TPINVIR.CUR.DES1 presents us with this first input screen
+
+Accepting this screen runs
+
+TPLEDG*TPINVIR.CUR1
+
+Which is.... A PARAGRAPH! Hallelujah!
+
+
+
+
+
+
+
+
+
+After saving you're prompted immediately with a PInumber e.g. PI325102
+
+
+
+LIST.ITEM PLREGISTER.HIST INV*316000 11:25:12am  28 Jul 2025  PAGE    1         
+                                                                                
+    INV*316000                                                                  
+001 316000                                                                      
+002 21019                                                                       
+003 R0150                                                                       
+004 21029                                                                       
+005 PI325102                                                                    
+007 SW                                                                          
+008 INV                                                                         
+009 3675373                                                                     
+                                                                                
+                                                 
+
+/SB SCreen 2 shows "Approved Invoices" awaiting payment, which Sharon can then pay!
+
+You are "POST"ing from Register to Ledger = DOCDATE for PI325102 was say 18/07/25, but POSTDATE is 28/08/25.
+
+we can get to TGLEDGER via GLANNAM 
+
+
+
+
+
+/PL*PINVIR.CUR.DES invokes the screen of note
+We provide an Invoice Register number
+We then review the invoice register entry, code it appropriately to the general ledger codes as necessary, then hit F2 and we are immediately presented with our PI###### number.
+
+
+Process Definition - Transactions - PL*PINVIR.CUR.DES
+
+Oh, holy *SHIT*. 
+
+This transaction takes Field 53 (Document Reference) from TPLEDGE and uses it to update:
+
+                                                                                
+                                                                                
+   ÚÄÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄTransaction DefinitionsÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿     
+   ³ ³ Tran Id               PINVIR.CUR.D                                 ³     
+   ³ ³ Description           PL INVOICES                                  ³     
+   ³ ³ Tran Dict File        TPLEDG                                       ³     
+   ³ ³ Tran Data File                             ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ ³     
+   ³ ³ Screen Name           TPINVIR.CUR.>        ³ Files To Update     ³ ³     
+   ³ ³ Tran Key Source       <53>                 ³ PLREGISTER.HIST     ³ ³     
+   ³ ³                                            ³ PLINVREG            ³ ³     
+   ÀÄ³ Flds Reverse Sign                          ³ TPLTRANS            ³ ³     
+     ³                                            ³ TPLTRANS.CUR        ³ ³     
+     ³ Batch/Realtime (B/R)  R                    ³ PLSUP               ³ ³     
+     ³ Batch Screen Name                          ³ PLSUP.CUR           ³ ³     
+     ³ Fields To Total                            ³ CFVAT               ³ ³     
+     ³                                            ³ PLVATAUD            ³ ³     
+     ³                                            ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ³     
+     ³                                            ³ Other Sysids        ³ ³     
+     ³ Process Before Post                        ³                     ³ ³     
+     ³ Process After Post                         ³                     ³ ³     
+     ³ Process Before Cancel                      ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ ³     
+     ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ     
+                                                                                
+F2-Save F4-Del F10-Action                                                       
+
+                                                                                
+                                                                                
+   ÚÄÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄTransaction DefinitionsÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿     
+   ³ ³ Tran Id               PINVIR.CUR.D                                 ³     
+   ³ ³ Description           PL INVOICES                                  ³     
+   ³ ³ Tran Dict File        TPLEDG                                       ³     
+   ³ ³ Tran Data File                             ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ ³     
+   ³ ³ Screen Name           TPINVIR.CUR.         ³ Files To Update     ³ ³     
+   ³ ³ Tran Key Source       <53>                 ³ CFSTATS____________ ³ ³     
+   ³ ³                                            ³ GLBATCH             ³ ³     
+   ÀÄ³ Flds Reverse Sign                          ³ GLBATCHDATA         ³ ³     
+     ³                                            ³ PLADJAUDIT          ³ ³     
+     ³ Batch/Realtime (B/R)  R                    ³ PLSUPINV            ³ ³     
+     ³ Batch Screen Name                          ³ GLPPTRANS.DES       ³ ³     
+     ³ Fields To Total                            ³                     ³ ³     
+     ³                                            ³                     ³ ³     
+     ³                                            ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ³     
+     ³                                            ³ Other Sysids        ³ ³     
+     ³ Process Before Post                        ³                     ³ ³     
+     ³ Process After Post                         ³                     ³ ³     
+     ³ Process Before Cancel                      ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ ³     
+     ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ     
+                                                                                
+F2-Save F4-Del F10-Action                                                       
+
+
+
+So there's a "Transaction" which is executed when the register entry is posted to the ledger (with the appropriate GL coding)
+
+Aha. F2 on the PD.T screen and you get into the depths of each of the (in our case 14) other files and fields to be update!
+
+So! We're off to the races.
+
+PLREGISTER.HIST is UPDATED using "INV*:<199>" from TPLEDG
+(OR is it INSERTed into at this point?)
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+
+
+/SD TPLEDG TPINVIR.CUR.DES1
+
+This is the screen invoked when you use the menu pathway: Purchase Ledger > Runtime > Post > Register > Invoice via Register > Invoices From Register
+
+This demands as input a PLINVREG key on the first screen, then the second screen is the one in which you review (and appropriately GL code) the Registry entry.
+
+But it't all pointing at TPLEDG, which I've never... written to. So how the hell did PLINVREG and/or PLCRNREG records end up in TPLEDG ????
+
+aha! That's what's done first: your "Enter Invoice Registry Number" screen is saying "Which record from the registry would you like to write to TPLEDG?"
+
+Then when you've accepted that, you'll get an purchase ledger number which almost definitely will be different from your registry number
+but you can look up your registry number (PLINVREG or PLCRNREG) on TPLEDG via field <199>!
+
+
+315751	
+
+
+
+F2 saves the thing. 
+
+This executes TPLEDG*TPINV.CUR1, which is a paragraph defined in the PL system.
+
+Here it is:
+
+                                                            
+LOCAL L.CNT, L.TEMP
+*9678+
+IF CURRENCY # F("PLSUP",<39>)<100> THEN
+	DISP 3,'Incorrect currency for supplier entered'
+	XRATE = ""
+	EXIT {CURRENCY}
+END
+*9678-
+
+@VALUE = DTOTAL ; EXEC "DOCTOTAL" ; IF @RTN.FLAG THEN EXIT 1
+
+@VALUE = DTOTAL ; EXEC "DOCTOTAL2" ; IF @RTN.FLAG THEN EXIT 1
+
+IF VATCD1 = "" THEN ERROR "VAT BREAKDOWN MUST BE SPECIFIED"; EXIT 1
+
+POSTDATE = @DATE
+@RECORD<2> = @OTHER(4)
+@RECORD<3> = @OTHER(5)
+
+CALL PIUNIQUE
+
+* Changed for job 1936 to trap exchange rates to 6dp via PG.EXCHANGE
+***<248> = B("RFADJUST,48.162.3");* VATTAX.CUR
+***<180> = B("RFADJUST,80.162.3");* DISCADIS.CUR
+
+L.CNT = @CNT
+@CNT = 1
+L.TEMP = F("COMPANY","1")<83>
+IF L.TEMP = "" THEN L.TEMP = "STG"
+L.TEMP = ",":L.TEMP:",162,":CURRENCY:",N,R"
+WHILE VATCODE # "" DO
+VATTAX.CUR = P("PG.EXCHANGE,":VATTAX:L.TEMP)
+@CNT = @CNT + 1
+REPEAT
+@CNT = L.CNT
+DISCADIS.CUR = P("PG.EXCHANGE,":DISCAMT:L.TEMP)
+*
+EXEC "PG.EEC.WARN" ;*16656
+*
+EXIT
+																		  
+																		  
+																		  
+                                                                              
+ Source Code Id                                                               
+ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ 
+                                                                                
+
+
+
+
+
+But this is where the fun begins.
+
+It's all handled by what's termed a "Transcation". Transactions in SBXA allow the update of multiple target files based on a single save.
+
+So.
+
+Process Definition - Transactions - PL*PINVIR.CUR.DES
+
+or
+
+/PD.T PINVIR.CUR.DES
+
+Lists the details of the "Purchase Ledger Registry to Transaction" transaction definition.
+
+There are FOURTEEN files affected by this screen being saved (transaction being executed). This is performed in realtime. It is, as it happens, also practically instantaneous - the user
+is presented with a PI number immediately.
+
+
+ÚÄÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ Transaction Definitions ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿     
+Tran Id               PINVIR.CUR.DES                                    
+Description           PL INVOICES                                       
+Tran Dict File        TPLEDG                                            
+Tran Data File                             ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿      
+Screen Name           TPINVIR.CUR.DES1      Files To Update           
+Tran Key Source       <53>                  PLREGISTER.HIST           
+											PLINVREG                  
+Flds Reverse Sign                        	TPLTRANS                  
+											TPLTRANS.CUR              
+Batch/Realtime (B/R)  R                     PLSUP                     
+Batch Screen Name                           PLSUP.CUR                 
+Fields To Total                             CFVAT                     
+											PLVATAUD              
+											CFSTATS                   
+											GLBATCH                   
+ 					                        GLBATCHDATA               
+											PLADJAUDIT                
+											PLSUPINV                  
+											GLPPTRANS.DES             
+																	 
+																	
+										 ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´      
+										  Other Sysids              
+Process Before Post                                                   
+Process After Post                                                    
+Process Before Cancel                      ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ      
+ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ     
+
+Hitting F2 to save the transaction definition leads you to the further definition screens: "What should be done to each of the files listed to update? What fields should have what done to them?"
+	 
+We shall, in order, assess each of the fourteen files listed above:
+
+PLREGISTER.HIST
+PLINVREG
+TPLTRANS
+TPLTRANS.CUR
+PLSUP
+PLSUP.CUR
+CFVAT
+PLVATAUD
+CFSTATS
+GLBATCH
+GLBATCHDATA
+PLADJAUDIT
+PLSUPINV
+GLPPTRANS.DES
+
+Note: all the Value to Use fields in the subsequent save screens ("Secondary File Update") come from the same source; TPLEDG. Are registry entries first written to TPLEDG from PLINVREG, and thence on to these other files?
+Very probably. Compare the three: PLINVREG, PLCRNREG, and TPLEDG, to be sure.
+
+
+See this file's siblings.
+
+
+
+
+
+
+
+
+
+
+PLAY
+
+Entered invoice register no. 306665 against R0150 (Reflex)
+
+
+
+Fundamentally, we need to create:
+a TPLEDG record
+a PLREGISTER.HIST record
+update twelve or thirteen other files
+
+at what point do we create the TPLTRANS record? Stage 3. But Stage 3 is clearly defined as an Update operation!
+
+Do TPLTRANS records exist by virtue of having a PLINVREG or PLCRNREG record?
+
+
+Anywhere we see an U action, are we safe to assume we can attempt an UPSERT? That'd be... useful, as I already have the ability to UPSERT?
+
+After empirical testing (which was successful, after a fashion, we find this helpful line:
+https://docs.rocketsoftware.com/bundle/sbxa_dg_663/page/gry1644327657910.html
+"If U (Update) is entered in the Update/Delete field above then, if a record exists on file with a key, it is updated. If not, a new record is created with a key.")
+
+ 
+
+

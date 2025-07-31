@@ -147,7 +147,9 @@ namespace MertexerV2.PurchaseLedgerFunctions
             out SqlString Dispute,
             out SqlString DisputeMemo,
             out SqlDateTime SettlementDT,
-            out SqlString MertexCurrencyCode
+            out SqlString MertexCurrencyCode,
+            out SqlDecimal DiscountPercentage,
+            out SqlDecimal DiscountAmount
             )
         {
             var result = (PurchaseLedgerInvoiceRegister)obj;
@@ -162,7 +164,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
             DueDT = result.DueDT ?? SqlDateTime.Null;
 
-            SupplierReference = result.SupplierReference?.TrimReduceTruncate(50);
+            SupplierReference = result.SupplierCode?.TrimReduceTruncate(50);
 
             AmountsExVAT = result.AmountsExVAT.Any() ? JsonConvert.SerializeObject(result.AmountsExVAT) : SqlString.Null;
 
@@ -203,6 +205,10 @@ namespace MertexerV2.PurchaseLedgerFunctions
             SettlementDT = result.SettlementDT ?? SqlDateTime.Null;
 
             MertexCurrencyCode = result.MertexCurrencyCode?.TrimReduceTruncate(20);
+
+            DiscountPercentage = result.DiscountPercentage ?? SqlDecimal.Null;
+
+            DiscountAmount = result.DiscountAmount ?? SqlDecimal.Null;
         }
     }
 }

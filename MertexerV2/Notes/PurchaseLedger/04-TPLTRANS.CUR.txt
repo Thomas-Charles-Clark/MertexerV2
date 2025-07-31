@@ -1,4 +1,5 @@
 Updates TPLTRANS.CUR
+from TPLEDG
 
 95 MERTEX PL                     Purchase Ledger                    28 JUL 2025 
 ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ 
@@ -28,18 +29,18 @@ Updates TPLTRANS.CUR
 ³ SUPREF                         R      <39>                                ³   
 ³ AGE                            R      P("AGE")                            ³   
 ³ UNALLOCATED                    R      0                                   ³
-³ DISCAMT_____                   R      <180>                               ³   
+³ DISCAMT                        R      <180>                               ³   
 ³ POSTDATE                       R      <35>                                ³   
 ³ MEMO                           R      <56>                                ³   
 ³ DISCDATE                       R      <55>                                ³   
 ³ DISPUTE                        R      <87>                                ³   
 ³ DISPMEMO                       R      P("DMEMO")                          ³   
 ³ CURRENCY                       R      <161>                               ³   
-³ XRATE_______                   R      <162>                               ³   
+³ XRATE                          R      <162>                               ³   
 ³ REGNO                          R      "INV*":<199>                        ³   
 ³                                                                           ³   
 ³                                                                           ³   
 ³                                                                           ³   
 ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ   
                                                                                 
-F2-Save                                                                         
+F2-Save                                      

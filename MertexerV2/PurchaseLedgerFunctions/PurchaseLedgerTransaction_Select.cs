@@ -26,11 +26,11 @@ namespace MertexerV2.PurchaseLedgerFunctions
     {
         [Microsoft.SqlServer.Server.SqlFunction(
             DataAccess = DataAccessKind.Read,
-            FillRowMethodName = "PurchaseRegisterSelect_FillRow")]
+            FillRowMethodName = "PurchaseLedgerTransactionSelect_FillRow")]
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
         public static IEnumerable Select(
             string UniVerseAccount,
-            string PurchaseLedgerCodes,
+            string PurchaseLedgerTransactionCodes,
             string SupplierCode,
             DateTime? DocumentDT_From,
             DateTime? DocumentDT_To,
@@ -39,7 +39,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
             DateTime? PostDT_From,
             DateTime? PostDT_To)
         {
-            if (String.IsNullOrEmpty(PurchaseLedgerCodes))
+            if (String.IsNullOrEmpty(PurchaseLedgerTransactionCodes))
             {
                 int p = 0;
 
@@ -108,7 +108,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
             else
             {
                 foreach (var invoice in Selector<PurchaseLedgerTransaction>.Select(
-                    JsonConvert.DeserializeObject<IEnumerable<PurchaseLedgerTransactionCode>>(PurchaseLedgerCodes).Select(p => p.Code),
+                    JsonConvert.DeserializeObject<IEnumerable<PurchaseLedgerTransactionCode>>(PurchaseLedgerTransactionCodes).Select(p => p.Code),
                     true,
                     false,
                     100,
@@ -120,7 +120,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
             }
         }
 
-        public static void PurchaseRegisterSelect_FillRow(
+        public static void PurchaseLedgerTransactionSelect_FillRow(
             object obj,
             out SqlString Key,
             out SqlDateTime DocumentDT,

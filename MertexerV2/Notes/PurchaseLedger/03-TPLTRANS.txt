@@ -1,12 +1,12 @@
 Updates TPLTRANS
-
+from TPLEDG
 
 95 MERTEX PL                     Purchase Ledger                    28 JUL 2025 
 ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ 
 ³ TooÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄTransaction DefinitionsÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿   ³ 
 ÀÄÄÄÄ³ Tran Id               PINVIR.CUR.D                                 ³ÄÄÄÙ 
      ³ Description           PL INVOICES                                  ³     
-ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄSecondary File UpdateÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿   
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄSecondary File UpdateÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿   	Our Field Name
 ³ File Update (Dict) : TPLTRANS                                             ³   
 ³                                                                           ³   
 ³ Update/Delete (U/D)  U                                                    ³   
@@ -15,27 +15,27 @@ Updates TPLTRANS
 ³ Key Source           <53>                                                 ³   
 ³                                                                           ³   
 ³ Fld To Update  MV To Update    Oper   Value To Use                        ³   
-³ DOCDATE                        R      <33>                                ³   
-³ DUEDATE                        R      <38>                                ³   
-³ DISC                           R      <160>                               ³   
-³ TYPE                           R      "INV"                               ³   
-³ ITEMREF                        R      <37>                                ³   
-³ DOCNO                          R      <34>                                ³   
-³ VATDIS                         R      S(<48>)                             ³   
-³ CREDIT                         R      S(<43>)                             ³   
-³ BALANCE                        R      <50>                                ³   
-³ ORIGVAL                        R      <50>                                ³   
-³ PERIOD                         R      B("PL.B.PERIOD")                    ³   
-³ SUPREF                         R      <39>                                ³   
-³ AGE                            R      P("AGE")                            ³   
-³ UNALLOCATED                    R      0                                   ³   
-³ DISCAMT                        R      <80>                                ³   
-³ POSTDATE                       R      <35>                                ³   
-³ MEMO                           R      <56>                                ³   
-³ DISCDATE                       R      <55>                                ³   
-³ DISPUTE                        R      <87>                                ³   
-³ DISPMEMO                       R      P("DMEMO")                          ³   
-³ REGNO                          R      "INV*":<199>                        ³   
+³ DOCDATE                        R      <33>                                ³   	DocumentDT
+³ DUEDATE                        R      <38>                                ³   	DueDT
+³ DISC                           R      <160>                               ³   	DiscountPercentage
+³ TYPE                           R      "INV"                               ³   	TransactionType
+³ ITEMREF                        R      <37>                                ³   	ItemReference
+³ DOCNO                          R      <34>                                ³   	DocumentReference
+³ VATDIS                         R      S(<48>)                             ³   	VATDiscount
+³ CREDIT                         R      S(<43>)                             ³   	Credit
+³ BALANCE                        R      <50>                                ³   	Balance
+³ ORIGVAL                        R      <50>                                ³   	OriginalValueABS
+³ PERIOD                         R      B("PL.B.PERIOD")                    ³   	Period
+³ SUPREF                         R      <39>                                ³   	SupplierReference
+³ AGE                            R      P("AGE")                            ³   	Age
+³ UNALLOCATED                    R      0                                   ³   	UNALLOCATED
+³ DISCAMT                        R      <80>                                ³   	DiscountAmount
+³ POSTDATE                       R      <35>                                ³   	PostDT
+³ MEMO                           R      <56>                                ³  		Memo
+³ DISCDATE                       R      <55>                                ³   	DiscountCutOffDT
+³ DISPUTE                        R      <87>                                ³   	Dispute
+³ DISPMEMO                       R      P("DMEMO")                          ³   	DisputeMemo
+³ REGNO                          R      "INV*":<199>                        ³   	PurchaseLedgerRegisterNumber
 ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ   
                                                                                 
 F2-Save                                                                         

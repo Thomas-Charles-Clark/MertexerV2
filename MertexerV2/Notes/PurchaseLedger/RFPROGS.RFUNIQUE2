@@ -1,0 +1,96 @@
+                                                                                
+     RFUNIQUE2                                                                  
+0001 SUBROUTINE RFUNIQUE2                                                       
+0002          * WRITTEN BY   : PBP                                              
+0003          * DATE WRITTEN : 13/02/92 (SYSTEM BUILDER 5.1)                    
+0004          * SB+ VERSION  : 03/02/92                                         
+0005          *                                                                 
+0006          * BASED ON     : RFUNIQUE                                         
+0007          * COMMENTS     :                                                  
+0008          *                This Routine is a More Generalised version       
+0009          *                Of The RFUNIQUE Subroutine.                      
+0010          *                i)  If NOT UNIQUE,                               
+0011          *                    RTN.FLAG is set to "1" but there             
+0012          *                    is no error message given by this            
+0013          *                    routine.                                     
+0014          *                                                                 
+0015          *                ii) The Hard Codes Checks against RECORD         
+0016          *                    have been removed.                           
+0017          ***************************************************************   
+0018          * AMENDED BY : PBP                                                
+0019          * DATE       : 08/11/96                                           
+0020          * REASON     : CHECK ADDITIONAL FILES INCLUDING HISTORY           
+0021          * VERSION    : 2.1                                      
+0022          ***************************************************************         
+0023			$INCLUDE RFPROGS COMMON
+0024            PROG = 'RFUNIQUE2'                                              
+0025          *                                                                 
+0026          * SI=SALES INVOICES  SN=SALES CREDIT NOTES                        
+0027          * SR=SALES CASH RECEIPTS                                          
+0028          * SO=SALES OPENING BALANCE + OPENING ADJUSTMENTS                  
+0029          * SA=SALES ADJUSTMENTS- DEBIT + CREDIT JOURNALS                   
+0030          * PI=PURCHASE INVOICES  PN=PURCHASE CREDIT NOTES                  
+0031          * PA=PURCHASE ADJUSTMENTS- DEBIT + CREDIT JOURNALS                
+0032          * PC=PURCHASE OTHER PAYMENTS  PP=PETTY CASH                       
+0033          * PO=OPENING BALANCES + ADJUSTMENTS  PY=PURCHASE PAYMENTS         
+0034          *                                                                 
+0035            TYPE = PARAM                                                    
+0036            RTN.FLAG = 0                                                    
+0037            BEGIN CASE                                                      
+0038                  CASE TYPE[1,1]='S'                                        
+0039                       FILES='GLDOCREF.GLBATCH.GLBATCHDATA.TSLTRANS.SLBATCH.SLBATCHDATA'                                                               
+0040                       FILES=FILES:'.HISTTSLTRANS'                          
+0041                  CASE TYPE[1,1]='P'                                        
+0042                       FILES='GLDOCREF.GLBATCH.GLBATCHDATA.TPLTRANS.PLBATCH.PLBATCHDATA'                                                               
+0043                       FILES=FILES:'.HISTTPLTRANS'                          
+0044                  CASE 1                                                    
+0045                       CALL SB.DISP(3,'Invalid Type Entered In RFUNIQUE')   
+0046                       RTN.FLAG = 1                                         
+0047                       GOTO 999                                             
+0048           END CASE                                                         
+0049         *                                                                  
+0050           NO.OF.FILES=DCOUNT(FILES,'.')                                    
+0051           FOUND=0                                                          
+0052           FOR X = 1 TO NO.OF.FILES UNTIL FOUND                             
+0053               GOSUB 1000                                                   
+0054           NEXT X                                                           
+0055         *                                                                  
+0056         * RAS 05/06/91 IF P/L MANUAL CHEQUE PAYMENT ("PY") THEN ALSO CHECK FOR                                                                        
+0057         * EXISTENCE OF A CHQ WITH THE SAME NUMBER BUT PREFIXED             
+0058         * "PZ" WHICH WILL HAVE BEEN CREATED USING THE AUTOMATIC            
+0059         * PAYMENT ROUTINES                                                 
+0060         *                                                                  
+0061           IF TYPE = "PY" THEN                                              
+0062              TYPE = "PZ"                                                   
+0063              FOR X = 1 TO NO.OF.FILES UNTIL FOUND                          
+0064                  GOSUB 1000   
+0065			  NEXT X                                               
+0066              TYPE = "PY"                                                   
+0067              END                                                           
+0068         * END RAS 05/06/91                                                 
+0069         *                                                                  
+0070           IF FOUND THEN                                                    
+0071              RTN.FLAG = 1                                                  
+0072              END                                                           
+0073     999 *                                                                  
+0074           RETURN                                                           
+0075         *****************************************************************  
+0076 1000    * CHECK CURRENT FILE                                               
+0077           CHECK.KEY=TYPE:VALUE                                             
+0078           THIS.FILE=FIELD(FILES,'.',X)                                     
+0079           KEY.PRES = 0                                                     
+0080         * CALL SB.DISP(3,'CHECKING FOR KEY "':CHECK.KEY:'" ON FILE: ':THIS.FILE)                                                                      
+0081           OPEN "",THIS.FILE TO F.THIS.FILE THEN                            
+0082                READV TEMP FROM F.THIS.FILE,CHECK.KEY,1 THEN                
+0083                      KEY.PRES = 1                                          
+0084                      END ELSE                                              
+0085                      KEY.PRES = 0                 
+0086                      END                                                       
+0087                END ELSE                                                    
+0088                CALL SB.DISP(3,PROG:' ':THIS.FILE:' NOT OPENED')            
+0089                KEY.PRES = 0                                                
+0090                END                                                         
+0091           IF KEY.PRES THEN FOUND = FOUND + 1                               
+0092           RETURN                                                           
+PLAY>                                                                           
+F2-Save F4-Del F5-List F6-Menu F7-Edit                                          

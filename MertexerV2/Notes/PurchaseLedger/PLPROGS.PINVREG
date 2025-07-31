@@ -1,0 +1,96 @@
+LIST.ITEM PLPROGS WITH @ID = "PINVREG" 12:21:53pm  31 Jul 2025  PAGE    1       
+                                                                                
+    PINVREG                                                                     
+001     SUBROUTINE PINVREG                                                      
+002              * V1.1 FIX FOR @ACTION NOT SET BACK TO 1 IF ESCAPE BACK        
+003              *      LEADING TO INVOICE NUMBER NOT GENERATED...              
+004              * 27/09/97                                                     
+005              *                                                              
+006              * V1.2 PREVENT 'ALREADY ALLOCATED' MESSAGE IF IN               
+007              *      'AMEND' MODE. THE ERROR WILL NOW ONLY BE GIVEN          
+008              *      IN INSERT MODE.                                         
+009              *      ALSO HANDLES BATCH POSTING ON PLBATCHDATA               
+010              * 23/11/97                                                     
+011              *********************************************************      
+012      $INCLUDE RFPROGS COMMON                                                
+013      ENTRY=PARAM                                                            
+014      BEGIN CASE                                                             
+015      CASE ENTRY=1       ;*VERIFY AND READ IN                                
+016           GOSUB 30    ;* OPEN PLINVREG                                      
+017           IF RTN.FLAG THEN GOTO 999                                         
+018           ITEM.READ = 0                                                     
+019           OPEN "","PLBATCHDATA" TO F.PLBATCHDATA ELSE                       
+020                CALL SB.DISP(3,'PLBATCHDATA [E1]')
+021                RTN.FLAG = 1; GOTO 999                                       
+022           END                                                               
+023           IF KEY NE '' THEN                                                 
+024              READ RECORD FROM F.PLBATCHDATA, KEY THEN                       
+025                   PARMS(2) = ACTION                                         
+026                   ITEM.READ = 1                                             
+027              END                                                            
+028           END                                                               
+029           IF NOT(ITEM.READ) THEN                                            
+030              READ RECORD FROM PLINV, VALUE ELSE                             
+031                   CALL SB.DISP(3,VALUE:' Invoice Register not found')       
+032                   RTN.FLAG = 1                                              
+033                   GOTO 999                                                  
+034              END                                                            
+035           END                                                               
+036         * V1.2+                                                             
+037         * IF RECORD<1>="Y" THEN GOSUB 20 ; GOTO 999                         
+038           IF RECORD<1>="Y" AND ACTION = '1' THEN GOSUB 20 ; GOTO 999        
+039           IF ACTION = '1' THEN                                              
+040              RECORD<34>='';RECORD<53>=''                                    
+041           END                                               
+042         * V1.2-                                                             
+043         * V1.1+                                                             
+044           ACTION = 1                                                        
+045         * V1.1-                                                             
+046           IF RECORD<199> = "" THEN PARMS(2) = ACTION;* Save Genuine Action..                                                               
+047           ACTION = 2                                                        
+048         * RECORD<34>='';RECORD<53>='' ;* V1.2                               
+049      CASE ENTRY=2                                                           
+050           GOSUB 30                                                          
+051           READU REC FROM PLINV,RECORD<199> ELSE GOSUB 20;RELEASE PLINV;RETURN                                                                           
+052         * V1.2+                                                             
+053         * IF REC<1> NE '' THEN GOSUB 20; RELEASE PLINV;RETURN               
+054         * Only Validate if in INSERT Mode (as stored in PARMS(2))...        
+055         *                                                                   
+056           IF PARMS(2) = '1' THEN                                            
+057              IF REC<1> NE '' THEN GOSUB 20; RELEASE PLINV;RETURN            
+058           END                                                               
+059         * V1.2-                                                             
+060           VALUE=RECORD<199>                                                 
+061           WRITEV "Y" ON PLINV,RECORD<199>,1 
+062           NEWITEM=1                                                   
+063        *; CHECK THAT INV REGISTER STILL OK TO PROCEED OR IF DELETE BATCH TRANSACTION                                                                    
+064      CASE ENTRY=3                                                           
+065           IF ACTION = 1 OR ACTION = '' THEN                                 
+066              OK=OCONV(RECORD<199>,'TPLINVREG;X;;0')             
+067              IF OK NE RECORD<199> THEN GOSUB 20;  RETURN                    
+068              OK=OCONV(RECORD<199>,'TPLINVREG;X;;1')                         
+069              IF OK = 'Y' THEN GOSUB 20  ; RETURN                            
+070              END                                                            
+071      CASE ENTRY = 4                                                         
+072           IF ACTION = 3 THEN     ;* DELETE FRONM BATCH                      
+073              GOSUB 30                                                       
+074              WRITEV "" ON PLINV,RECORD<199>,1                               
+075           END                                                            
+076      CALL PIUNIQUE                                                     
+077      END CASE                                                               
+078      RTN.FLAG=0                                                             
+079 999 *                                                                       
+080      RETURN                                                                 
+081 *------------------------------------------                                                            
+082 20*                                                                         
+083         CALL SB.DISP(3,'Invoice Register Number already Allocated')         
+084         RTN.FLAG = 1                                                        
+085         RETURN                                                              
+086 *-------------------------------------------                                
+087 30*                                                                         
+088      OPEN '',"PLINVREG" TO PLINV ELSE                                       
+089        CALL SB.DISP(3,'PLINVREG FILE NOT FOUND')                            
+090        RTN.FLAG = 1                                                         
+091        END                                                                  
+092      RETURN                                                                 
+093     END                  

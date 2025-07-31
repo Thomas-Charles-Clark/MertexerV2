@@ -13,7 +13,7 @@ namespace MertexerV2.Utilities
 {
     public static class UniVerseSerializer
     {
-        public static string Serialize(PropertyInfo pi, object source, string uniVerseAccount = "MERTEX")
+        public static string Serialize(PropertyInfo pi, object source)//, string uniVerseAccount = "MERTEX")
         {
             var indices = pi.GetCustomAttributesData().Where(cad => cad.AttributeType == typeof(UniVerseIndexAttribute))
                 .SingleOrDefault()?
@@ -286,7 +286,14 @@ namespace MertexerV2.Utilities
                         {
                             var values = new List<string>();
 
-                            foreach (var val in value.Split(Framework.ValueMark))
+                            var splitMark = Framework.ValueMark;
+
+                            if (value.Contains(Framework.SubValueMark))
+                            {
+                                splitMark = Framework.SubValueMark;
+                            }
+
+                            foreach (var val in value.Split(splitMark))
                             {
                                 if (conversion != null && applyConversions == true)
                                 {

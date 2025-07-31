@@ -225,6 +225,10 @@ namespace MertexerV2.SupplierFunctions
             out SqlString SortName,
             out SqlString CountryCode,
             out SqlString Currency,
+            out SqlDecimal Balance,
+            out SqlString AccountPeriodBalances,
+            out SqlDecimal ThisPeriodBalance,
+            out SqlDecimal NextPeriodBalance,
             out SqlString PhoneNumber,
             out SqlString EmailAddress,
             out SqlDecimal DutyPercentage,
@@ -253,6 +257,10 @@ namespace MertexerV2.SupplierFunctions
             SortName = p.SortName?.TrimReduceTruncate(100);
             CountryCode = p.CountryCode?.TrimReduceTruncate(3);
             Currency = p.Currency?.TrimReduceTruncate(10);
+            Balance = p.Balance;
+            AccountPeriodBalances = p.AccountPeriodBalances?.Any() == true ? JsonConvert.SerializeObject(p.AccountPeriodBalances) : SqlString.Null;
+            ThisPeriodBalance = p.ThisPeriodBalance;
+            NextPeriodBalance = p.NextPeriodBalance;
             DutyPercentage = p.DutyPercentage ?? SqlDecimal.Null;
             InlandChargesPercentage = p.InlandChargesPercentage ?? SqlDecimal.Null;
             MiscellaneousPercentage = p.MiscellaneousPercentage ?? SqlDecimal.Null;
@@ -335,7 +343,7 @@ namespace MertexerV2.SupplierFunctions
 
                     r.PLSEL3 = sel3.FirstOrDefault(p => p.Key == r.SEL3);
 
-                    r.PurchaseLedgerRegisterEntries_Invoice = invReg.Where(p => p.SupplierReference == r.Key).ToList();
+                    r.PurchaseLedgerRegisterEntries_Invoice = invReg.Where(p => p.SupplierCode == r.Key).ToList();
 
                     r.PurchaseLedgerRegisterEntries_Credit = crnReg.Where(p => p.SupplierReference == r.Key).ToList();
 
@@ -369,7 +377,7 @@ namespace MertexerV2.SupplierFunctions
                     50,
                     UniVerseAccount);
 
-                result.PurchaseLedgerRegisterEntries_Invoice = invReg.Where(p => p.SupplierReference == result.Key).ToList();
+                result.PurchaseLedgerRegisterEntries_Invoice = invReg.Where(p => p.SupplierCode == result.Key).ToList();
 
                 result.PurchaseLedgerRegisterEntries_Credit = crnReg.Where(p => p.SupplierReference == result.Key).ToList();
 
@@ -511,7 +519,7 @@ namespace MertexerV2.SupplierFunctions
 
                     r.PLSEL3 = sel3.FirstOrDefault(p => p.Key == r.SEL3);
 
-                    r.PurchaseLedgerRegisterEntries_Invoice = invReg.Where(p => p.SupplierReference == r.Key).ToList();
+                    r.PurchaseLedgerRegisterEntries_Invoice = invReg.Where(p => p.SupplierCode == r.Key).ToList();
 
                     r.PurchaseLedgerRegisterEntries_Credit = crnReg.Where(p => p.SupplierReference == r.Key).ToList();
 
@@ -545,7 +553,7 @@ namespace MertexerV2.SupplierFunctions
                     1000,
                     UniVerseAccount);
 
-                result.PurchaseLedgerRegisterEntries_Invoice = invReg.Where(p => p.SupplierReference == result.Key).ToList();
+                result.PurchaseLedgerRegisterEntries_Invoice = invReg.Where(p => p.SupplierCode == result.Key).ToList();
 
                 result.PurchaseLedgerRegisterEntries_Credit = crnReg.Where(p => p.SupplierReference == result.Key).ToList();
 

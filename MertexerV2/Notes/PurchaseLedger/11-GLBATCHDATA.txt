@@ -12,7 +12,7 @@ Updates GLBATCHDATA
 ³ Update Condition                                                          ³   
 ³ Data File (if diff)                                                       ³   
 ³ Key Source           <53>                                                 ³   
-³                                                                           ³   
+³                                                                           ³   Our Field
 ³ Fld To Update  MV To Update    Oper   Value To Use                        ³   
 ³ TYPE                           R      "RFPOST"                            ³   
 ³ DOCREF                         R      <53>                                ³   

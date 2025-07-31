@@ -1,4 +1,5 @@
 Updates CFVAT
+from TPLEDG
 
 95 MERTEX PL                     Purchase Ledger                    28 JUL 2025 
 ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ 
@@ -11,15 +12,15 @@ Updates CFVAT
 ³ Update/Delete (U/D)  U                                                    ³   
 ³ Update Condition                                                          ³   
 ³ Data File (if diff)                                                       ³   
-³ Key Source           <47,-1>                                              ³   
-³                                                                           ³   
+³ Key Source           <47,-1>                                              ³   	
+³                                                                           ³   Our Field
 ³ Fld To Update  MV To Update    Oper   Value To Use                        ³   
-³ PINVT                          +      B("PLAMOUNT,48.X")                  ³   
-³ PINVV                          +      B("PLAMOUNT,49.X")                  ³   
-³ PQTTOT                         +      B("PLAMOUNT,48.X")                  ³   
-³ PQVTOT                         +      B("PLAMOUNT,49.X")                  ³   
-³ PNINVT                         +      B("PLAMOUNT,N48.X")                 ³   
-³ PNINVV                         +      B("PLAMOUNT,N49.X")                 ³   
+³ PINVT                          +      B("PLAMOUNT,48.X")                  ³   PurchaseInvoiceTax
+³ PINVV                          +      B("PLAMOUNT,49.X")                  ³   PurchaseInvoiceVAT
+³ PQTTOT                         +      B("PLAMOUNT,48.X")                  ³   PurchaseQuarterTaxTotal
+³ PQVTOT                         +      B("PLAMOUNT,49.X")                  ³   PurchaseQuarterVATTotal
+³ PNINVT                         +      B("PLAMOUNT,N48.X")                 ³   PurchaseNextPeriodInvoiceTax
+³ PNINVV                         +      B("PLAMOUNT,N49.X")                 ³   PurchaseNextPeriodInvoiceVAT
 ³                                                                           ³   
 ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ   
                                                                                 

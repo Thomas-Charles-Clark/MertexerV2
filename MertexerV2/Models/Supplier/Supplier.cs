@@ -81,12 +81,66 @@ namespace MertexerV2.Models.Supplier
         public string SortName { get; set; }
 
         /// <summary>
+        /// Balance
+        /// </summary>
+        [UniVerseIndex(15)]
+        [UniVerseConversion("MR22")]
+        [UniVerseFieldName("BALANCE")]
+        public decimal Balance { get; set; }
+
+        [UniVerseIndex(18)]
+        [UniVerseFieldName("ACBAL")]
+        [UniVerseConversion("MR22")]
+        [UniVerseMultiValue]
+        public IEnumerable<decimal> AccountPeriodBalances { get; set; }
+
+        [UniVerseIndex(18,1)]
+        [UniVerseFieldName("NEXT")]
+        [UniVerseConversion("MR22")]
+        [UniVerseMultiValue]
+        public decimal NextPeriodBalance { get; set; }
+
+        [UniVerseIndex(18, 2)]
+        [UniVerseFieldName("CURR")]
+        [UniVerseConversion("MR22")]
+        [UniVerseMultiValue]
+        public decimal ThisPeriodBalance { get; set; }
+
+        /// <summary>
         /// Documents
         /// </summary>
         [UniVerseIndex(19)]
         [UniVerseFieldName("TLINK")]
         [UniVerseMultiValue]
         public IEnumerable<string> DocumentReferences { get; set; }
+
+        [UniVerseIndex(21)]
+        [UniVerseFieldName("PURCH")]
+        [UniVerseConversion("MR22")]
+        [UniVerseMultiValue]
+        public IEnumerable<decimal> Purchases { get; set; }
+
+        [UniVerseIndex(21, 1)]
+        [UniVerseFieldName("PNEXT")]
+        [UniVerseConversion("MR22")]
+        [UniVerseMultiValue]
+        public decimal PurchasesNextPeriod { get; set; }
+
+        [UniVerseIndex(21, 2)]
+        [UniVerseFieldName("PCURR")]
+        [UniVerseConversion("MR22")]
+        [UniVerseMultiValue]
+        public decimal PurchasesThisPeriod { get; set; }
+
+        [UniVerseIndex(21, 3)]
+        [UniVerseFieldName("PYTD")]
+        [UniVerseConversion("MR22")]
+        [UniVerseMultiValue]
+        public decimal PurchasesYearToDate { get; set; }
+
+        [UniVerseIndex(22)]
+        [UniVerseFieldName("INACT")]
+        public byte PeriodsInactive { get; set; }
 
         /// <summary>
         /// CountryCode

@@ -136,7 +136,7 @@ namespace MertexerV2.Models.PurchaseLedger
 
         [UniVerseIndex(39)]
         [UniVerseFieldName("PSUPREF")]
-        public string SupplierReference { get; set; }
+        public string SupplierCode { get; set; }
 
         /// <summary>
         /// [no default]

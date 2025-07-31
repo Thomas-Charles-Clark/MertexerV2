@@ -90,7 +90,7 @@ namespace MertexerV2.Utilities
 
                 //Console.WriteLine(propertyName);
 
-                var pi = UpsertProperty(allProperties, jprop.Name, source, uniVerseFile, uniVerseAccount);
+                var pi = UpsertProperty(allProperties, jprop.Name, source, uniVerseFile);//, uniVerseAccount);
 
                 if (pi != null)
                 {
@@ -102,14 +102,14 @@ namespace MertexerV2.Utilities
 
                         foreach (var propName in alsoUpdatesList)
                         {
-                            UpsertProperty(allProperties, propName, source, uniVerseFile, uniVerseAccount);
+                            UpsertProperty(allProperties, propName, source, uniVerseFile);//, uniVerseAccount);
                         }
                     }
                 }
             }
         }
 
-        private static PropertyInfo UpsertProperty(IEnumerable<PropertyInfo> allProperties, string propertyName, T source, UniFile uniVerseFile, string uniVerseAccount)
+        private static PropertyInfo UpsertProperty(IEnumerable<PropertyInfo> allProperties, string propertyName, T source, UniFile uniVerseFile)//, string uniVerseAccount)
         {
             // Sometimes have to use JSON indirection to fill properties from other properties
 
@@ -141,7 +141,7 @@ namespace MertexerV2.Utilities
                 // if no UniVerseIndexAttribute was given, the field is not intended to be submitted.
                 if (indices != null)
                 {
-                    var value = UniVerseSerializer.Serialize(pi, source, uniVerseAccount);
+                    var value = UniVerseSerializer.Serialize(pi, source);//, uniVerseAccount);
 
                     var fieldIndex = (int)indices[0].Value;
 

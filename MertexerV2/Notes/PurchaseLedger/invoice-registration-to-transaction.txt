@@ -46,6 +46,14 @@ Process After Screen Accept (F2 Save) ==
 
 P:(EXEC"B:PRUNIQUE.DES" ; EXEC "R")
 
+³ Process Name    B:PRUNIQUE                                                  ³ 
+³ Description     SB+ conv built___________________                           ³ 
+³ Paragraph Lines                                                             ³ 
+³ @RECORD<2> = @OTHER(4)                                                      ³ 
+³ @RECORD<3> = @OTHER(5)                                                      ³ 
+³ @RECORD<2> = @OTHER(4)                                                      ³ 
+³ @RECORD<3> = @OTHER(5)                                                      ³ 
+³                                                                             ³ 
 
 What is TPLEDG, some 200k records in there? Transaction Purchase Ledger? Some intermediary table?
 There are circa 350 fields in the dictionary for it, seems important?
@@ -53,7 +61,7 @@ There are circa 350 fields in the dictionary for it, seems important?
 It IS important: the "Invoices from Register" menu function opens a screen demanding an Invoice Register no.
 This, if you /MP it, then F7 that, takes you to /FD for TPLEDG!
 
-So are we to assume that you're about to take from PLINVREG and and move a record to TPLEDG, how does it then get from TPLEDG to TPLTRANS ?
+So are we to assume that you're about to take from PLINVREG (or PLCRNREG) and and move a record to TPLEDG, how does it then get from TPLEDG to TPLTRANS...?
 
 Is TPLEDG the actually Purchase Ledger table? 
 
@@ -65,17 +73,28 @@ TPLEDG*TPINVIR.CUR1
 
 Which is.... A PARAGRAPH! Hallelujah!
 
+³ Process Name    TPLEDG*TPINVIR.CUR1                                         ³ 
+³ Dict File Name  TPLEDG                                                      ³ 
+³ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ ³ 
+³ Paragraph Lines                                                             ³ 
+³ @VALUE = PLINVREG ; CALL PINVREG,3 ; IF @RTN.FLAG THEN EXIT 1               ³ 
+³ CALL PINVREG,3                                                              ³ 
+³ @RECORD<2> = @OTHER(4)                                                      ³ 
+³ @RECORD<3> = @OTHER(5)                                                      ³ 
 
+[This paragraph appears to call PINVREG,3 twice... which is... strange, but whatever.] 
+                                                                                
+    PINVREG                                                                     
+001 V                                                                           
+002 /reflex/MERTEX.SW/PLPROGS.O/PINVREG                                         
+[...]                                           
+                                                                                
+> See PLPROGS.PINVREG.txt -- this eventually seems to call PIUNIQUE...
+> See also PLPROGS.PIUNIQUE.txt
 
+Essentially these are checks to ensure that the invoice registry entry we're attempting to process has not already been processed.
 
-
-
-
-
-
-After saving you're prompted immediately with a PInumber e.g. PI325102
-
-
+After saving you're prompted immediately with a PInumber e.g. PI325102... Which is... very quick, it must be said.
 
 LIST.ITEM PLREGISTER.HIST INV*316000 11:25:12am  28 Jul 2025  PAGE    1         
                                                                                 
@@ -88,34 +107,36 @@ LIST.ITEM PLREGISTER.HIST INV*316000 11:25:12am  28 Jul 2025  PAGE    1
 007 SW                                                                          
 008 INV                                                                         
 009 3675373                                                                     
-                                                                                
-                                                 
-
-/SB SCreen 2 shows "Approved Invoices" awaiting payment, which Sharon can then pay!
+                                                                                                        
+/SB Screen 2 shows "Approved Invoices" awaiting payment, which Sharon can then pay!
 
 You are "POST"ing from Register to Ledger = DOCDATE for PI325102 was say 18/07/25, but POSTDATE is 28/08/25.
 
 we can get to TGLEDGER via GLANNAM 
 
-
-
-
-
 /PL*PINVIR.CUR.DES invokes the screen of note
 We provide an Invoice Register number
 We then review the invoice register entry, code it appropriately to the general ledger codes as necessary, then hit F2 and we are immediately presented with our PI###### number.
 
+This screen appears to be providing properties to the transaction to be run?
 
 Process Definition - Transactions - PL*PINVIR.CUR.DES
 
+How and where did I find this... this link to this transaction?
+
+The transaction... somehow IS a screen? Not quite - it has a Screen Name, so the screen is defined / definable elsewhere
+Process Defns - Transactions - F5 GUI Parameters!
+
 Oh, holy *SHIT*. 
 
-This transaction takes Field 53 (Document Reference) from TPLEDGE and uses it to update:
+So. The save must be writing the invoice registry entry pretty much directly to TPLEDG.
 
-                                                                                
-                                                                                
+Then this transaction happens...
+
+This transaction takes (for the most part) Field 53 (Document Reference) from TPLEDGE and uses it to update:
+
    ÚÄÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄTransaction DefinitionsÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿     
-   ³ ³ Tran Id               PINVIR.CUR.D                                 ³     
+   ³ ³ Tran Id               PINVIR.CUR.DES                               ³     
    ³ ³ Description           PL INVOICES                                  ³     
    ³ ³ Tran Dict File        TPLEDG                                       ³     
    ³ ³ Tran Data File                             ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ ³     
@@ -127,25 +148,8 @@ This transaction takes Field 53 (Document Reference) from TPLEDGE and uses it to
      ³ Batch/Realtime (B/R)  R                    ³ PLSUP               ³ ³     
      ³ Batch Screen Name                          ³ PLSUP.CUR           ³ ³     
      ³ Fields To Total                            ³ CFVAT               ³ ³     
-     ³                                            ³ PLVATAUD            ³ ³     
-     ³                                            ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ³     
-     ³                                            ³ Other Sysids        ³ ³     
-     ³ Process Before Post                        ³                     ³ ³     
-     ³ Process After Post                         ³                     ³ ³     
-     ³ Process Before Cancel                      ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ ³     
-     ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ     
-                                                                                
-F2-Save F4-Del F10-Action                                                       
-
-                                                                                
-                                                                                
-   ÚÄÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄTransaction DefinitionsÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿     
-   ³ ³ Tran Id               PINVIR.CUR.D                                 ³     
-   ³ ³ Description           PL INVOICES                                  ³     
-   ³ ³ Tran Dict File        TPLEDG                                       ³     
-   ³ ³ Tran Data File                             ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ ³     
-   ³ ³ Screen Name           TPINVIR.CUR.         ³ Files To Update     ³ ³     
-   ³ ³ Tran Key Source       <53>                 ³ CFSTATS____________ ³ ³     
+     ³                                            ³ PLVATAUD            ³ ³    
+   ³ ³ Tran Key Source       <53>                 ³ CFSTATS             ³ ³     
    ³ ³                                            ³ GLBATCH             ³ ³     
    ÀÄ³ Flds Reverse Sign                          ³ GLBATCHDATA         ³ ³     
      ³                                            ³ PLADJAUDIT          ³ ³     
@@ -159,9 +163,8 @@ F2-Save F4-Del F10-Action
      ³ Process After Post                         ³                     ³ ³     
      ³ Process Before Cancel                      ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ ³     
      ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ     
-                                                                                
-F2-Save F4-Del F10-Action                                                       
 
+FOURTEEN FILES!!
 
 
 So there's a "Transaction" which is executed when the register entry is posted to the ledger (with the appropriate GL coding)
@@ -330,7 +333,7 @@ Very probably. Compare the three: PLINVREG, PLCRNREG, and TPLEDG, to be sure.
 See this file's siblings.
 
 
-
+Note: (S(x)) must mean "Sum"
 
 
 

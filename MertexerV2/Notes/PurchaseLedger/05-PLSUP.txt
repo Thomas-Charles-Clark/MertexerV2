@@ -1,4 +1,5 @@
 Updates PLSUP
+from TPLEDG
 
 95 MERTEX PL                     Purchase Ledger                    28 JUL 2025 
 ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ 
@@ -6,7 +7,7 @@ Updates PLSUP
 ÀÄÄÄÄ³ Tran Id               PINVIR.CUR.D                                 ³ÄÄÄÙ 
      ³ Description           PL INVOICES                                  ³     
 ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄSecondary File UpdateÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿   
-³ File Update (Dict) : PLSUP                                                ³   
+³ File Update (Dict) : PLSUP                                                ³   Our Field
 ³                                                                           ³   
 ³ Update/Delete (U/D)  U                                                    ³   
 ³ Update Condition                                                          ³   
@@ -14,14 +15,14 @@ Updates PLSUP
 ³ Key Source           <39>                                                 ³   
 ³                                                                           ³   
 ³ Fld To Update  MV To Update    Oper   Value To Use                        ³   
-³ BALANCE                        +      <50>                                ³   
-³ NEXT                           +      B("PLAMOUNT,N50")                   ³   
-³ CURR                           +      B("PLAMOUNT,50")                    ³   
-³ TLINK                          I      <53>                                ³   
-³ PNEXT                          +      B("PLAMOUNT,N43.A")                 ³   
-³ PCURR                          +      B("PLAMOUNT,43.A")                  ³   
-³ PYTD                           +      B("PLAMOUNT,Y43.A")                 ³   
-³ INACT                          R      P("INACT")                          ³   
+³ BALANCE                        +      <50>                                ³   Balance
+³ NEXT                           +      B("PLAMOUNT,N50")                   ³   NextPeriodBalance
+³ CURR                           +      B("PLAMOUNT,50")                    ³   ThisPeriodBalance
+³ TLINK                          I      <53>                                ³   DocumentReferences
+³ PNEXT                          +      B("PLAMOUNT,N43.A")                 ³   PurchasesNextPeriod
+³ PCURR                          +      B("PLAMOUNT,43.A")                  ³   PurchasesThisPeriod
+³ PYTD                           +      B("PLAMOUNT,Y43.A")                 ³   PurchasesYearToDate
+³ INACT                          R      P("INACT")                          ³   PeriodsInactive
 ³                                                                           ³   
 ³                                                                           ³   
 ³                                                                           ³   

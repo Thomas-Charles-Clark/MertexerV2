@@ -1,0 +1,50 @@
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄProcess Defn - ParagraphÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ 
+³ Process Name    PG.SET.PREPAY.APPORT                                        ³ 
+³ Description     Set Prepayment Apportionment Figu                           ³ 
+³ Dict File Name                                                              ³ 
+³ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ ³ 
+³ Paragraph Lines                                                             ³ 
+³ LOCAL L.PPCODES, L.SVWORK, L.CREDIT, L.AFT.VALUE___________________________ ³ 
+³ *                                                                           ³ 
+³ L.CREDIT    = (@PARAM"G0,1" = "CRN")                                        ³ 
+³ L.AFT.VALUE = (@PARAM"G1,1" = "Y")                                          ³ 
+³ L.SVWORK = @WORK ; @WORK = ""                                               ³ 
+³ *                                                                           ³ 
+³ IF @CNT > 0 THEN                                                            ³ 
+³    IF L.AFT.VALUE AND <370,-1> # "" THEN GOTO 999                           ³ 
+³    L.PPCODES = F("COMPANY","1")<205>                                        ³ 
+³    IF LOC(<44,-1>,L.PPCODES,@VM) THEN                                       ³ 
+³       @WORK<1> = <370,-1>                                                   ³ 
+³       @WORK<2> = <371,-1>                                                   ³ 
+³       @WORK<3> = <372,-1>                                                   ³ 
+³       IF L.CREDIT THEN                                                      ³ 
+³          @WORK<4> = (0 - <43,-1>)__________________________________________ ³ 
+³       ELSE                                                                  ³ 
+³          @WORK<4> = <43,-1>                                                 ³ 
+³       END                                                                   ³ 
+³       @WORK<6> = REPL(@SVM,@VM,<373,-1>)                                    ³ 
+³       @WORK<7> = REPL(@SVM,@VM,<374,-1>)                                    ³ 
+³       @WORK<8> = <375,-1>                                                   ³ 
+³       IF @WORK<8> = "" THEN @WORK<8> = <39>:" ":F("PLSUP",<39>)<1.1>        ³ 
+³       @WORK<9> = <376,-1>                                                   ³ 
+³       EXEC "I*TPLEDG*PP.APPORTION.DES"                                      ³ 
+³       IF NOT(@RTN.FLAG) THEN                                                ³ 
+³          <370,-1> = @WORK<1>                                                ³ 
+³          <371,-1> = @WORK<2>                                                ³ 
+³          <372,-1> = @WORK<3>                                                ³ 
+³          <373,-1> = REPL(@VM,@SVM,@WORK<6>)________________________________ ³ 
+³          <374,-1> = REPL(@VM,@SVM,@WORK<7>)                                 ³ 
+³          <375,-1> = @WORK<8>                                                ³ 
+³          <376,-1> = @WORK<9>                                                ³ 
+³       END                                                                   ³ 
+³       @RTN.FLAG = 0                                                         ³ 
+³    ELSE                                                                     ³ 
+³       IF NOT(L.AFT.VALUE) THEN                                              ³ 
+³          DISP 3,"This is not a Prepayment G/L Code."                        ³ 
+³          EXIT 1                                                             ³ 
+³       END                                                                   ³ 
+³    END                                                                      ³ 
+³ END                                                                         ³ 
+³ *                                                                           ³ 
+³ Source Code Id                                                              ³ 
+ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ              

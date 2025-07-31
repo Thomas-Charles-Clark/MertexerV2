@@ -21,6 +21,50 @@ namespace MertexerV2.PurchaseLedgerFunctions
 {
     public static partial class PurchaseLedgerTransactionFunctions
     {
+        internal static PurchaseLedgerTransaction InsertViaTransaction(ref UniSession session, string PurchaseLedgerTransactionJSON)
+        {
+            var purchaseLedgerTransactionEntry = JsonConvert.DeserializeObject<PurchaseLedgerTransaction>(PurchaseLedgerTransactionJSON);
+
+            var fileName = typeof(PurchaseLedgerTransaction).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
+                    .Cast<UniVerseFileNameAttribute>()
+                    .Single()
+                    .FileName;
+
+                var uniVerseFile = session.CreateUniFile(fileName);
+
+                try
+                {
+                    var extantRecord = uniVerseFile.ReadField(purchaseLedgerTransactionEntry.Key, 0).StringValue;
+
+                    if (!String.IsNullOrEmpty(extantRecord))
+                    {
+                        throw new Exception($"{purchaseLedgerTransactionEntry.Key} exists on {fileName}, INSERT fails");
+                    }
+                }
+                catch (IBMU2.UODOTNET.UniFileException)
+                {
+                    // extant record was not found: this is a creation request
+                    // create first (lock the entire file for as little time as possible)
+                    // then lock the specific record
+                    // then write all the fields
+                    // then unlock the record
+                    var dataSet = new IBMU2.UODOTNET.UniDataSet(session);
+                    dataSet.Insert(purchaseLedgerTransactionEntry.Key);
+
+                    //slcustFile.LockFile();
+                    uniVerseFile.WriteRecords(dataSet);
+                    //slcustFile.UnlockFile();
+                }
+
+                uniVerseFile.LockRecord(purchaseLedgerTransactionEntry.Key, 1);
+
+                UniUpsert<PurchaseLedgerTransaction>.Upsert(PurchaseLedgerTransactionJSON, uniVerseFile);
+
+                uniVerseFile.UnlockRecord(purchaseLedgerTransactionEntry.Key);
+
+            return purchaseLedgerTransactionEntry;
+        }
+
         [Microsoft.SqlServer.Server.SqlFunction(
             DataAccess = DataAccessKind.Read,
             FillRowMethodName = "TransactionInsert_FillRow")]

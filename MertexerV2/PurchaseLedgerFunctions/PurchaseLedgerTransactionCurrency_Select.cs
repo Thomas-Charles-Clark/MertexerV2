@@ -5,6 +5,9 @@ using System.Data.SqlTypes;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
+using IBMU2.UODOTNET;
+
 using MertexerV2.GeneralFunctions;
 using MertexerV2.Models.Pricing;
 using MertexerV2.Models.PurchaseLedger;
@@ -19,13 +22,13 @@ namespace MertexerV2.PurchaseLedgerFunctions
 {
     public static partial class PurchaseLedgerTransactionCurrencyFunctions
     {
-        [Microsoft.SqlServer.Server.SqlFunction(
-            DataAccess = DataAccessKind.Read,
-            FillRowMethodName = "PurchaseLedgerTransactionCurrencySelect_FillRow")]
+        [SqlFunction(
+        DataAccess = DataAccessKind.Read,
+        FillRowMethodName = "PurchaseLedgerTransactionCurrencySelect_FillRow")]
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
         public static IEnumerable Select(
             string UniVerseAccount,
-            string PurchaseLedgerCodes,
+            string PurchaseLedgerTransactionCodes,
             string SupplierCode,
             DateTime? DocumentDT_From,
             DateTime? DocumentDT_To,
@@ -34,7 +37,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
             DateTime? PostDT_From,
             DateTime? PostDT_To)
         {
-            if (String.IsNullOrEmpty(PurchaseLedgerCodes))
+            if (String.IsNullOrEmpty(PurchaseLedgerTransactionCodes))
             {
                 int p = 0;
 
@@ -102,7 +105,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
             else
             {
                 foreach (var invoice in Selector<PurchaseLedgerTransactionCurrency>.Select(
-                    JsonConvert.DeserializeObject<IEnumerable<PurchaseLedgerTransactionCode>>(PurchaseLedgerCodes).Select(p => p.Code),
+                    JsonConvert.DeserializeObject<IEnumerable<PurchaseLedgerTransactionCode>>(PurchaseLedgerTransactionCodes).Select(p => p.Code),
                     true,
                     false,
                     100,

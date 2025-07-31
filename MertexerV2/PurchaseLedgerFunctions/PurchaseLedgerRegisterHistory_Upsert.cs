@@ -16,7 +16,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
 {
     public static partial class PurchaseLedgerRegisterHistoryFunctions
     {
-        public static string Upsert(ref UniSession session, string PurchaseLedgerRegisterHistoryJSON)
+        public static string UpsertViaTransaction(ref UniSession session, string PurchaseLedgerRegisterHistoryJSON)
         {
             var purchaseLedgerHistoryRegisterEntry = JsonConvert.DeserializeObject<PurchaseLedgerRegisterHistory>(PurchaseLedgerRegisterHistoryJSON);
 

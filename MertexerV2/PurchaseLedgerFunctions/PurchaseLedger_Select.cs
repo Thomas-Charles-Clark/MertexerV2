@@ -1,0 +1,419 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data.SqlTypes;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using MertexerV2.GeneralFunctions;
+using MertexerV2.Models.Pricing;
+using MertexerV2.Models.PurchaseLedger;
+using MertexerV2.PricingFunctions;
+using MertexerV2.Utilities;
+
+using Microsoft.SqlServer.Server;
+
+using Newtonsoft.Json;
+
+namespace MertexerV2.PurchaseLedgerFunctions
+{
+    public class PurchaseLedgerCode
+    {
+        public string Code { get; set; }
+    }
+
+    public static partial class PurchaseLedgerFunctions
+    {
+        [Microsoft.SqlServer.Server.SqlFunction(
+            DataAccess = DataAccessKind.Read,
+            FillRowMethodName = "PurchaseLedgerSelect_FillRow")]
+        [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
+        public static IEnumerable Select(
+            string UniVerseAccount,
+            string PurchaseLedgerCodes,
+            string SupplierCode,
+            DateTime? DocumentDT_From,
+            DateTime? DocumentDT_To,
+            DateTime? DueDT_From,
+            DateTime? DueDT_To,
+            DateTime? PostDT_From,
+            DateTime? PostDT_To)
+        {
+            if (String.IsNullOrEmpty(PurchaseLedgerCodes))
+            {
+                int p = 0;
+
+                var filters = new List<Tuple<string, string, string>>();
+
+                if (!String.IsNullOrEmpty(SupplierCode))
+                {
+                    filters.Add(new Tuple<string, string, string>("SUPREF", "eq", SupplierCode));
+                }
+
+                if (DocumentDT_From.HasValue)
+                {
+                    filters.Add(new Tuple<string, string, string>("SS.DOCDATE.INT", ">=", Framework.UniVerseDateString(DocumentDT_From.Value)));
+                }
+
+                if (DocumentDT_To.HasValue)
+                {
+                    filters.Add(new Tuple<string, string, string>("SS.DOCDATE.INT", "<=", Framework.UniVerseDateString(DocumentDT_To.Value)));
+                }
+
+                if (DueDT_From.HasValue)
+                {
+                    filters.Add(new Tuple<string, string, string>("SS.DUEDATE.INT", ">=", Framework.UniVerseDateString(DueDT_From.Value)));
+                }
+
+                if (DueDT_To.HasValue)
+                {
+                    filters.Add(new Tuple<string, string, string>("SS.DUEDATE.INT", "<=", Framework.UniVerseDateString(DueDT_To.Value)));
+                }
+
+                if (PostDT_From.HasValue)
+                {
+                    filters.Add(new Tuple<string, string, string>("SS.POSTDATE.INT", ">=", Framework.UniVerseDateString(PostDT_From.Value)));
+                }
+
+                if (PostDT_To.HasValue)
+                {
+                    filters.Add(new Tuple<string, string, string>("SS.POSTDATE.INT", "<=", Framework.UniVerseDateString(PostDT_To.Value)));
+                }
+
+                if (filters.Any())
+                {
+                    foreach (var invoice in Selector<PurchaseLedger>.FilterNonParallel(
+                        filters,
+                        true,
+                        false,
+                        100,
+                        UniVerseAccount))
+                    {
+                        yield return invoice;
+                    }
+                }
+                else
+                {
+                    foreach (var invoice in Selector<PurchaseLedger>.SelectAllNonParallel(
+                        true,
+                        false,
+                        100,
+                        UniVerseAccount))
+                    {
+                        yield return invoice;
+                    }
+                }
+            }
+            else
+            {
+                foreach (var invoice in Selector<PurchaseLedger>.Select(
+                    JsonConvert.DeserializeObject<IEnumerable<PurchaseLedgerCode>>(PurchaseLedgerCodes).Select(p => p.Code),
+                    true,
+                    false,
+                    100,
+                    UniVerseAccount))
+                {
+                    yield return invoice;
+                }
+            }
+        }
+
+        public static void PurchaseLedgerSelect_FillRow(
+            object obj,
+            out SqlString Key,
+            out SqlString SourceTransactionDefinition,
+            out SqlDecimal DiscountPercentage,
+            out SqlByte Days,
+            out SqlByte DiscountNumber,
+            out SqlByte DiscountDecimals,
+            out SqlString SupplierCode,
+            out SqlBoolean ThisPeriodZero,
+            out SqlBoolean Period1Zero,
+            out SqlBoolean Period2Zero,
+            out SqlBoolean Period3Zero,
+            out SqlBoolean Period4Zero,
+            out SqlBoolean NoActivity,
+            out SqlBoolean BalanceZero,
+            out SqlBoolean DeletionValid,
+            out SqlBoolean ConfirmOnDelete,
+            out SqlBoolean NoOrderActivity,
+            out SqlBoolean NoCurrentTransactionsThisYear,
+            out SqlDateTime DocumentDT,
+            out SqlString DocumentNumber,
+            out SqlDateTime PostDT,
+            out SqlDateTime OnFileDT,
+            out SqlString SupplierInvoiceReference,
+            out SqlDateTime InvoiceDueDT,
+            out SqlString SupplierReference,
+            out SqlInt32 BankNumber,
+            out SqlInt32 BankAccountNumber,
+            out SqlString Amounts,
+            out SqlDecimal Amount,
+            out SqlString GeneralLedgerCodes,
+            out SqlString GeneralLedgerCode,
+            out SqlString VATCodes,
+            out SqlString VATCode,
+            out SqlString VATTaxes,
+            out SqlDecimal VATTax,
+            out SqlString VATableValues,
+            out SqlDecimal VATableValue,
+            out SqlDecimal DocumentTotal,
+            out SqlDecimal SterlingOriginalValue,
+            out SqlDecimal ExchangeRateDifference,
+            out SqlString DocumentReference,
+            out SqlString SettlementTerms,
+            out SqlString SettlementDueDTs,
+            out SqlDateTime SettlementDueDT,
+            out SqlString Memo,
+            out SqlDecimal SettlementDiscount,
+            out SqlString Key2,
+            out SqlString Key3,
+            out SqlDecimal VATBalance,
+            out SqlDecimal DocumentBalance,
+            out SqlDecimal AmountPaid,
+            out SqlDecimal CurrentlyUnallocated,
+            out SqlDecimal DiscountReceived,
+            out SqlDecimal CashOnAccount,
+            out SqlDecimal NotAllocated,
+            out SqlDecimal UnallocatedValue,
+            out SqlString DocumentNumbers,
+            out SqlString DocumentReferences,
+            out SqlString TransactionKeys,
+            out SqlString SupplierReferences,
+            out SqlString Indicator,
+            out SqlString Allocated,
+            out SqlBoolean OpenItem,
+            out SqlString Key4,
+            out SqlDecimal DiscountAmount,
+            out SqlString Allocations,
+            out SqlString OtherMemos,
+            out SqlString DisputeDocumentNumber,
+            out SqlString DisputeCustomerReference,
+            out SqlString DisputeIndicator,
+            out SqlString DisputeMemo,
+            out SqlBoolean OkayToClear,
+            out SqlString ReleasedBy,
+            out SqlString Details,
+            out SqlDecimal TransferAmount,
+            out SqlDecimal GoodsValue,
+            out SqlDecimal VATAmount,
+            out SqlDecimal TotalValue,
+            out SqlBoolean SetOpen,
+            out SqlString OpeningDTs,
+            out SqlString OpeningGoodsValue,
+            out SqlString OpeningVATAmounts,
+            out SqlString OpeningBalancesOutstanding,
+            out SqlString OpeningItemReferences,
+            out SqlString OpeningAges,
+            out SqlBoolean IsUnallocatedValueZero,
+            out SqlBoolean IsOnAccountZero,
+            out SqlBoolean IsThisPeriodZero,
+            out SqlBoolean TransferValid,
+            out SqlBoolean ConfirmChange,
+            out SqlBoolean AllocateCash,
+            out SqlDecimal TotalAllocated,
+            out SqlDateTime ReceivedDT,
+            out SqlString PassedTo,
+            out SqlDateTime PassedToDT,
+            out SqlString TemporaryMessage,
+            out SqlString GeneralLedgerCode9s,
+            out SqlString GeneralLedgerCode9,
+            out SqlString GeneralLedgerSubCodes,
+            out SqlString GeneralLedgerSubCode,
+            out SqlString RegisterReferences,
+            out SqlString RegisterEntryTypes,
+            out SqlDecimal TotalCashAllocated,
+            out SqlDecimal ChequeValue,
+            out SqlString ChequeAllocations,
+            out SqlDecimal SterlingChequeValue,
+            out SqlDecimal SettlementDiscountAmountInCurrency,
+            out SqlDecimal DiscountPercentage_Again,
+            out SqlString CurrencyCode,
+            out SqlString ExchangeRates,
+            out SqlDecimal ExchangeRateDifferences,
+            out SqlBoolean Foreign,
+            out SqlDecimal DiscountAmountInCurrency,
+            out SqlString Authoriser,
+            out SqlString DNMessages,
+            out SqlString DNDescriptions,
+            out SqlString DNQuantities,
+            out SqlString DNPrices,
+            out SqlString DNValues,
+            out SqlString DNVATCodes,
+            out SqlDecimal DNVATValue,
+            out SqlString PurchaseLedgerRegisterKey,
+            out SqlString OpeningGoodsValuesInCurrency,
+            out SqlString OpeningVATAmountsInCurrency,
+            out SqlString OpeningBalancesOutstandingInCurrency,
+            out SqlDecimal ExchangeRateDifferencesInCurrency,
+            out SqlDecimal DiscountAllowedInCurrency,
+            out SqlString AmountsPaidInCurrency,
+            out SqlString VATTaxesInCurrency,
+            out SqlDecimal AmountInCurrency,
+            out SqlDecimal UnallocatedAmountInCurrency,
+            out SqlString TransactionTypes,
+            out SqlString SupplierInvoiceKeys,
+            out SqlString Disputations,
+            out SqlString SettlementDTs,
+            out SqlString DiscountPercentages,
+            out SqlString SettlementDiscountAmounts,
+            out SqlString SettlementDiscountAmountsInCurrency,
+            out SqlString PrepaymentStartPeriods,
+            out SqlString PrepaymentNumberOfPeriods,
+            out SqlString PrepaymentsSplitEqually,
+            out SqlString PrepaymentSplitAmounts,
+            out SqlString PrepaymentSplitMemos,
+            out SqlString PrepaymentMemos,
+            out SqlString PrepaymentGeneralLedgerExpenseCodes
+            )
+        {
+            var p = (PurchaseLedger)obj;
+
+            Key = p.Key;
+            SourceTransactionDefinition = p.SourceTransactionDefinition;
+            DiscountPercentage = p.DiscountPercentage;
+            Days = p.Days;
+            DiscountNumber = p.DiscountNumber;
+            DiscountDecimals = p.DiscountDecimals;
+            SupplierCode = p.SupplierCode;
+            ThisPeriodZero = p.ThisPeriodZero;
+            Period1Zero = p.Period1Zero;
+            Period2Zero = p.Period2Zero;
+            Period3Zero = p.Period3Zero;
+            Period4Zero = p.Period4Zero;
+            NoActivity = p.NoActivity;
+            BalanceZero = p.BalanceZero;
+            DeletionValid = p.DeletionValid;
+            ConfirmOnDelete = p.ConfirmOnDelete;
+            NoOrderActivity = p.NoOrderActivity;
+            NoCurrentTransactionsThisYear = p.NoCurrentTransactionsThisYear;
+            DocumentDT = p.DocumentDT.HasValue ? p.DocumentDT.Value : SqlDateTime.Null;
+            DocumentNumber = p.DocumentNumber;
+            PostDT = p.PostDT.HasValue ? p.PostDT.Value : SqlDateTime.Null;
+            OnFileDT = p.OnFileDT.HasValue ? p.OnFileDT.Value : SqlDateTime.Null;
+            SupplierInvoiceReference = p.SupplierInvoiceReference;
+            InvoiceDueDT = p.InvoiceDueDT.HasValue ? p.InvoiceDueDT.Value : SqlDateTime.Null;
+            SupplierReference = p.SupplierReference;
+            BankNumber = p.BankNumber;
+            BankAccountNumber = p.BankAccountNumber;
+            Amounts = p.Amounts?.Any() == true ? JsonConvert.SerializeObject(p.Amounts) : SqlString.Null;
+            Amount = p.Amount;
+            GeneralLedgerCodes = p.GeneralLedgerCodes?.Any() == true ? JsonConvert.SerializeObject(p.GeneralLedgerCodes) : SqlString.Null;
+            GeneralLedgerCode = p.GeneralLedgerCode;
+            VATCodes = p.VATCodes?.Any() == true ? JsonConvert.SerializeObject(p.VATCodes) : SqlString.Null;
+            VATCode = p.VATCode;
+            VATTaxes = p.VATTaxes?.Any() == true ? JsonConvert.SerializeObject(p.VATTaxes) : SqlString.Null;
+            VATTax = p.VATTax;
+            VATableValues = p.VATableValues?.Any() == true ? JsonConvert.SerializeObject(p.VATableValues) : SqlString.Null;
+            VATableValue = p.VATableValue;
+            DocumentTotal = p.DocumentTotal;
+            SterlingOriginalValue = p.SterlingOriginalValue;
+            ExchangeRateDifference = p.ExchangeRateDifference;
+            DocumentReference = p.DocumentReference;
+            SettlementTerms = p.SettlementTerms;
+            SettlementDueDTs = p.SettlementDueDTs?.Any() == true ? JsonConvert.SerializeObject(p.SettlementDueDTs) : SqlString.Null;
+            SettlementDueDT = p.DueDT.HasValue ? p.DueDT.Value : SqlDateTime.Null;
+            Memo = p.Memo;
+            SettlementDiscount = p.SettlementDiscount;
+            Key2 = p.Key2;
+            Key3 = p.Key3;
+            VATBalance = p.VATBalance;
+            DocumentBalance = p.DocumentBalance;
+            AmountPaid = p.AmountPaid;
+            CurrentlyUnallocated = p.CurrentlyUnallocated;
+            DiscountReceived = p.DiscountReceived;
+            CashOnAccount = p.CashOnAccount;
+            NotAllocated = p.NotAllocated;
+            UnallocatedValue = p.UnallocatedValue;
+            DocumentNumbers = p.DocumentNumbers?.Any() == true ? JsonConvert.SerializeObject(p.DocumentNumbers) : SqlString.Null;
+            DocumentReferences = p.DocumentReferences?.Any() == true ? JsonConvert.SerializeObject(p.DocumentReferences) : SqlString.Null;
+            TransactionKeys = p.TransactionKeys?.Any() == true ? JsonConvert.SerializeObject(p.TransactionKeys) : SqlString.Null;
+            SupplierReferences = p.SupplierReferences?.Any() == true ? JsonConvert.SerializeObject(p.SupplierReferences) : SqlString.Null;
+            Indicator = p.Indicator;
+            Allocated = p.Allocated?.Any() == true ? JsonConvert.SerializeObject(p.Allocated) : SqlString.Null;
+            OpenItem = p.OpenItem;
+            Key4 = p.Key4;
+            DiscountAmount = p.DiscountAmount;
+            Allocations = p.Allocations?.Any() == true ? JsonConvert.SerializeObject(p.Allocations) : SqlString.Null;
+            OtherMemos = p.OtherMemos?.Any() == true ? JsonConvert.SerializeObject(p.OtherMemos) : SqlString.Null;
+            DisputeDocumentNumber = p.DisputeDocumentNumber;
+            DisputeCustomerReference = p.DisputeCustomerReference;
+            DisputeIndicator = p.DisputeIndicator;
+            DisputeMemo = p.DisputeMemo;
+            OkayToClear = p.OkayToClear;
+            ReleasedBy = p.ReleasedBy;
+            Details = p.Details;
+            TransferAmount = p.TransferAmount;
+            GoodsValue = p.GoodsValue;
+            VATAmount = p.VATAmount;
+            TotalValue = p.TotalValue;
+            SetOpen = p.SetOpen;
+            OpeningDTs = p.OpeningDTs?.Any() == true ? JsonConvert.SerializeObject(p.OpeningDTs) : SqlString.Null;
+            OpeningGoodsValue = p.OpeningGoodsValue?.Any() == true ? JsonConvert.SerializeObject(p.OpeningGoodsValue) : SqlString.Null;
+            OpeningVATAmounts = p.OpeningVATAmounts?.Any() == true ? JsonConvert.SerializeObject(p.OpeningVATAmounts) : SqlString.Null;
+            OpeningBalancesOutstanding = p.OpeningBalancesOutstanding?.Any() == true ? JsonConvert.SerializeObject(p.OpeningBalancesOutstanding) : SqlString.Null;
+            OpeningItemReferences = p.OpeningItemReferences?.Any() == true ? JsonConvert.SerializeObject(p.OpeningItemReferences) : SqlString.Null;
+            OpeningAges = p.OpeningAges?.Any() == true ? JsonConvert.SerializeObject(p.OpeningAges) : SqlString.Null;
+            IsUnallocatedValueZero = p.IsUnallocatedValueZero;
+            IsOnAccountZero = p.IsOnAccountZero;
+            IsThisPeriodZero = p.IsThisPeriodZero;
+            TransferValid = p.TransferValid;
+            ConfirmChange = p.ConfirmChange;
+            AllocateCash = p.AllocateCash;
+            TotalAllocated = p.TotalAllocated;
+            ReceivedDT = p.ReceivedDT.HasValue ? p.ReceivedDT.Value : SqlDateTime.Null;
+            PassedTo = p.PassedTo;
+            PassedToDT = p.PassedToDT.HasValue ? p.PassedToDT.Value : SqlDateTime.Null;
+            TemporaryMessage = p.TemporaryMessage;
+            GeneralLedgerCode9s = p.GeneralLedgerCode9s?.Any() == true ? JsonConvert.SerializeObject(p.GeneralLedgerCode9s) : SqlString.Null;
+            GeneralLedgerCode9 = p.GeneralLedgerCode9;
+            GeneralLedgerSubCodes = p.GeneralLedgerSubCodes?.Any() == true ? JsonConvert.SerializeObject(p.GeneralLedgerSubCodes) : SqlString.Null;
+            GeneralLedgerSubCode = p.GeneralLedgerSubCode;
+            RegisterReferences = p.RegisterReferences?.Any() == true ? JsonConvert.SerializeObject(p.RegisterReferences) : SqlString.Null;
+            RegisterEntryTypes = p.RegisterEntryTypes?.Any() == true ? JsonConvert.SerializeObject(p.RegisterEntryTypes) : SqlString.Null;
+            TotalCashAllocated = p.TotalCashAllocated;
+            ChequeValue = p.ChequeValue;
+            ChequeAllocations = p.ChequeAllocations?.Any() == true ? JsonConvert.SerializeObject(p.ChequeAllocations) : SqlString.Null;
+            SterlingChequeValue = p.SterlingChequeValue;
+            SettlementDiscountAmountInCurrency = p.SettlementDiscountAmountInCurrency;
+            DiscountPercentage_Again = p.DiscountPercentage_Again;
+            CurrencyCode = p.CurrencyCode;
+            ExchangeRates = p.ExchangeRates?.Any() == true ? JsonConvert.SerializeObject(p.ExchangeRates) : SqlString.Null;
+            ExchangeRateDifferences = p.ExchangeRateDifferences;
+            Foreign = p.Foreign;
+            DiscountAmountInCurrency = p.DiscountAmountInCurrency;
+            Authoriser = p.Authoriser;
+            DNMessages = p.DNMessages?.Any() == true ? JsonConvert.SerializeObject(p.DNMessages) : SqlString.Null;
+            DNDescriptions = p.DNDescriptions?.Any() == true ? JsonConvert.SerializeObject(p.DNDescriptions) : SqlString.Null;
+            DNQuantities = p.DNQuantities?.Any() == true ? JsonConvert.SerializeObject(p.DNQuantities) : SqlString.Null;
+            DNPrices = p.DNPrices?.Any() == true ? JsonConvert.SerializeObject(p.DNPrices) : SqlString.Null;
+            DNValues = p.DNValues?.Any() == true ? JsonConvert.SerializeObject(p.DNValues) : SqlString.Null;
+            DNVATCodes = p.DNVATCodes?.Any() == true ? JsonConvert.SerializeObject(p.DNVATCodes) : SqlString.Null;
+            DNVATValue = p.DNVATValue;
+            PurchaseLedgerRegisterKey = p.PurchaseLedgerRegisterKey;
+            OpeningGoodsValuesInCurrency = p.OpeningGoodsValuesInCurrency?.Any() == true ? JsonConvert.SerializeObject(p.OpeningGoodsValuesInCurrency) : SqlString.Null;
+            OpeningVATAmountsInCurrency = p.OpeningVATAmountsInCurrency?.Any() == true ? JsonConvert.SerializeObject(p.OpeningVATAmountsInCurrency) : SqlString.Null;
+            OpeningBalancesOutstandingInCurrency = p.OpeningBalancesOutstandingInCurrency?.Any() == true ? JsonConvert.SerializeObject(p.OpeningVATAmountsInCurrency) : SqlString.Null;
+            ExchangeRateDifferencesInCurrency = p.ExchangeRateDifferencesInCurrency;
+            DiscountAllowedInCurrency = p.DiscountAllowedInCurrency;
+            AmountsPaidInCurrency = p.AmountsPaidInCurrency?.Any() == true ? JsonConvert.SerializeObject(p.AmountsPaidInCurrency) : SqlString.Null;
+            VATTaxesInCurrency = p.VATTaxesInCurrency?.Any() == true ? JsonConvert.SerializeObject(p.VATTaxesInCurrency) : SqlString.Null;
+            AmountInCurrency = p.AmountInCurrency;
+            UnallocatedAmountInCurrency = p.UnallocatedAmountInCurrency;
+            TransactionTypes = p.TransactionTypes?.Any() == true ? JsonConvert.SerializeObject(p.TransactionTypes) : SqlString.Null;
+            SupplierInvoiceKeys = p.SupplierInvoiceKeys?.Any() == true ? JsonConvert.SerializeObject(p.SupplierInvoiceKeys) : SqlString.Null;
+            Disputations = p.Disputations?.Any() == true ? JsonConvert.SerializeObject(p.Disputations) : SqlString.Null;
+            SettlementDTs = p.SettlementDTs?.Any() == true ? JsonConvert.SerializeObject(p.SettlementDTs) : SqlString.Null;
+            DiscountPercentages = p.DiscountPercentages?.Any() == true ? JsonConvert.SerializeObject(p.DiscountPercentages) : SqlString.Null;
+            SettlementDiscountAmounts = p.SettlementDiscountAmounts?.Any() == true ? JsonConvert.SerializeObject(p.SettlementDiscountAmounts) : SqlString.Null;
+            SettlementDiscountAmountsInCurrency = p.SettlementDiscountAmountsInCurrency?.Any() == true ? JsonConvert.SerializeObject(p.SettlementDiscountAmountsInCurrency) : SqlString.Null;
+            PrepaymentStartPeriods = p.PrepaymentStartPeriods?.Any() == true ? JsonConvert.SerializeObject(p.PrepaymentStartPeriods) : SqlString.Null;
+            PrepaymentNumberOfPeriods = p.PrepaymentNumberOfPeriods?.Any() == true ? JsonConvert.SerializeObject(p.PrepaymentNumberOfPeriods) : SqlString.Null;
+            PrepaymentsSplitEqually = p.PrepaymentsSplitEqually?.Any() == true ? JsonConvert.SerializeObject(p.PrepaymentsSplitEqually) : SqlString.Null;
+            PrepaymentSplitAmounts = p.PrepaymentSplitAmounts?.Any() == true ? JsonConvert.SerializeObject(p.PrepaymentSplitAmounts) : SqlString.Null;
+            PrepaymentSplitMemos = p.PrepaymentSplitMemos?.Any() == true ? JsonConvert.SerializeObject(p.PrepaymentSplitMemos) : SqlString.Null;
+            PrepaymentMemos = p.PrepaymentMemos?.Any() == true ? JsonConvert.SerializeObject(p.PrepaymentMemos) : SqlString.Null;
+            PrepaymentGeneralLedgerExpenseCodes = p.PrepaymentGeneralLedgerExpenseCodes?.Any() == true ? JsonConvert.SerializeObject(p.PrepaymentGeneralLedgerExpenseCodes) : SqlString.Null;
+        }
+    }
+}

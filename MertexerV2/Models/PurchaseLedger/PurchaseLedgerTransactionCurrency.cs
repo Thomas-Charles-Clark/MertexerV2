@@ -261,7 +261,11 @@ namespace MertexerV2.Models.PurchaseLedger
         [JsonAlsoUpdates("DiscountCutOffDate")]
         public DateTime? DiscountCutOffDT { get; set; }
 
-        [UniVerseIndex(12)]
+        [UniVerseIndex(26)]
+        [UniVerseFieldName("MEMO")]
+        public string Memo { get; set; }
+
+        [UniVerseIndex(27)]
         [UniVerseFieldName("SS.DISCDATE.INT")]
         public string DiscountCutOffDate
         {

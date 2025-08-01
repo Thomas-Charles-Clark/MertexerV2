@@ -31,7 +31,7 @@ namespace MertexerV2.Models.PurchaseLedger
 
         [UniVerseIndex(1)]
         [UniVerseFieldName("REGNO")]
-        public int RegistryNumber { get; set; }
+        public string RegistryNumber { get; set; }
 
         public DateTime? OnFileDT { get; set; }
 

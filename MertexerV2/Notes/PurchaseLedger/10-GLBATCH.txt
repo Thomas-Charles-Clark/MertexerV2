@@ -12,11 +12,11 @@ Updates GLBATCH
 ³ Update Condition                                                          ³   
 ³ Data File (if diff)                                                       ³   
 ³ Key Source           <53>                                                 ³   
-³                                                                           ³   
+³                                                                           ³   Our Field
 ³ Fld To Update  MV To Update    Oper   Value To Use                        ³   
-³ TYPE                           R      "RFPOST"                            ³   
-³ DATAKEYS                       I      <53>                                ³   
-³ NORECS                         R      1                                   ³   
+³ TYPE                           R      "RFPOST"                            ³   "RFPOST"
+³ DATAKEYS                       I      <53>                                ³   DocumentReference
+³ NORECS                         R      1                                   ³   == 1
 ³                                                                           ³   
 ³                                                                           ³   
 ³                                                                           ³   

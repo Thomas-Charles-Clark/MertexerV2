@@ -26,11 +26,23 @@ namespace MertexerV2.Models.Company
             typeof(Company).GetProperties().ToList().ForEach(p => Framework.InitialiseUniProperty(this, p));
         }
 
+        [UniVerseIndex(10)]
+        [UniVerseFieldName("GLPER")]
+        public byte ThisGeneralLedgerPeriod { get; set; }
+
+        [UniVerseIndex(11)]
+        [UniVerseFieldName("GLPRDS")]
+        public byte NumberOfFinancialPeriods { get; set; }
+
         /// <summary>
         /// Currency
         /// </summary>
         [UniVerseIndex(83)]
         [UniVerseFieldName("CURRENCY")]
         public string Currency { get; set; }
+
+        [UniVerseIndex(134)]
+        [UniVerseFieldName("PLPER")]
+        public byte? ThisPurchaseLedgerPeriod { get; set; }
     }
 }

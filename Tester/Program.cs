@@ -56,6 +56,8 @@ using MertexerV2.Models.Company;
 
 using CFramework = ConsoleFramework.Framework;
 using MertexerV2.Models.ExchangeRate;
+using Newtonsoft.Json.Linq;
+using static System.Collections.Specialized.BitVector32;
 
 namespace Tester
 {
@@ -100,9 +102,29 @@ namespace Tester
 
             //CFramework.WriteSubHeading("End of Company VAT Records");
 
-            var registerEntry = Selector<PurchaseLedgerInvoiceRegister>.Select("305127", true, false, 10, uniVerseAccount);
+            var now = DateTime.Now;
 
-            var purchaseLedgerEntry = new MertexerV2.Models.PurchaseLedger.PurchaseLedger($"PI{registerEntry.Key}")
+            var invoiceRegisterKey = "316332";
+
+            var registerEntryJson = TesterFramework.FetchInvoiceRegistrationJSON(invoiceRegisterKey);// Selector<PurchaseLedgerInvoiceRegister>.Select("305127", true, false, 10, uniVerseAccount);
+
+            var registerEntryJObj = JObject.Parse(registerEntryJson);
+
+            var registerEntry = registerEntryJObj["invoiceRegisterEntry"].ToObject<PurchaseLedgerInvoiceRegister>();
+
+            var vatableValuesInCurrency = registerEntryJObj["vatEntries"].Children()["vatableAmountCurrency"].Values<decimal>().ToArray();
+
+            var vatTaxesInCurrency = registerEntryJObj["vatEntries"].Children()["vatAmountCurrency"].Values<decimal>().ToArray();
+
+            Console.WriteLine(JsonConvert.SerializeObject(registerEntryJObj));
+
+            var purchaseLedgerKey = $"PI{registerEntry.Key}";
+
+            var purchaseLedgerInvoiceKey = $"INV*{registerEntry.Key}";
+
+            var companyEntry = Selector<Company>.Select("1", true, false, 1, uniVerseAccount);
+
+            var purchaseLedgerEntry = new MertexerV2.Models.PurchaseLedger.PurchaseLedger(purchaseLedgerKey)
             {
                 DocumentDT = registerEntry.DocumentDT,
                 OnFileDT = registerEntry.OnFileDT,
@@ -113,16 +135,27 @@ namespace Tester
                 Amounts = registerEntry.AmountsExVAT,
                 GeneralLedgerCodes = registerEntry.GeneralLedgerCodes,
                 VATCodes = registerEntry.VATCodes,
-                VATTaxes = registerEntry.VATTaxes,
-                VATableValues = registerEntry.VATValues,
+                // if I don't write VATTAXES, will it just... somehow magically execute the process PG.PLVATTAX,D.47.49..160[M] ? No, not likely.
+                VATableValues = registerEntry.VATableValues,
                 DocumentTotal = registerEntry.AmountSterling,
                 SettlementTerms = registerEntry.PaymentTermsCode,
-                PostDT = DateTime.Now,
-                DueDT = registerEntry.SettlementDT, // Don't even. SettlementDT is field 55. DueDT is field 55,1. Come on.
+                PostDT = now,
+                // Would be good to settle this once and for all:
+                // SettlementDTs is 55.0M
+                // DueDT is field 55.1... so I imagine that if I only set 55 and then overwrite 55.1 with NULL,
+                // The end result is that 55 will be empty. So, belt and braces it is.
+                SettlementDueDTs = new List<DateTime?>() { registerEntry.SettlementDT },
+                DueDT = registerEntry.SettlementDT,
+                //
+                //
+
                 Memo = registerEntry.Memo,
                 VATBalance = registerEntry.VATBalance,
+                VATTaxes = registerEntry.VATTaxes,
+                VATTaxesInCurrency = vatTaxesInCurrency,
                 DocumentBalance = registerEntry.DocumentBalance,
-                DiscountAmount = registerEntry.DiscountAmount ?? 0.0m,
+                DiscountAmount = 0.0m, // we don't do discounts: LIST PLTERMS DISC
+                DiscountAmountInCurrency = 0.0M, // ""
                 OtherMemos = registerEntry.OtherMemos,
                 DisputeIndicator = registerEntry.Disputed,
                 DisputeMemo = registerEntry.DisputeMemo,
@@ -133,16 +166,150 @@ namespace Tester
                 CurrencyCode = registerEntry.MertexCurrencyCode,
                 ExchangeRates = new List<decimal>() { registerEntry.ExchangeRate },
                 AmountInCurrency = registerEntry.AmountCurrency,
+
+                // Prognostication: is this for some future period to worry about, or is it in the current period?
+                // All I can do is compare the Invoice Date (DocumentDT) with the current Month.
+                Future = registerEntry.DocumentDT?.Month > now.Month,
+
                 // Here we have exhausted the fields on PLINVREG.
                 // What further fields might TPLEDG need to provide to the subsequent... 14 operations in the transaction?
-
                 PurchaseLedgerRegisterKey = registerEntry.Key,
                 TransactionTypes = new List<string>() { "INV" },
                 DocumentReference = registerEntry.Key,
                 DocumentNumber = registerEntry.Key
             };
 
-            PurchaseLedgerFunctions.Insert(uniVerseAccount, JsonConvert.SerializeObject(purchaseLedgerEntry));
+            var purchaseLedgerHistoryEntry = new PurchaseLedgerRegisterHistory(purchaseLedgerInvoiceKey)
+            {
+                RegistryNumber = registerEntry.Key,
+                OnFileDT = registerEntry.OnFileDT,
+                SupplierReference = registerEntry.SupplierCode,
+                ConvertedDT = now,
+                CreditNumber = null,
+                InvoiceNumber = registerEntry.Key,
+                UserID = "TOM",
+                TransactionType = "INV",
+                DeletedDT = null,
+                DocumentTotal = registerEntry.AmountSterling
+            };
+
+            var currentPeriod = companyEntry.ThisPurchaseLedgerPeriod ?? companyEntry.ThisGeneralLedgerPeriod;
+
+            if (purchaseLedgerEntry.Future)
+            {
+                currentPeriod += 1;
+
+                if (currentPeriod > companyEntry.NumberOfFinancialPeriods)
+                {
+                    currentPeriod = 1;
+                }
+            }
+
+            var purchaseLedgerTransactionEntry = new PurchaseLedgerTransaction(purchaseLedgerEntry.DocumentReference)
+            {
+                DocumentDT = purchaseLedgerEntry.DocumentDT,
+                DueDT = purchaseLedgerEntry.InvoiceDueDT,
+                DiscountPercentage = purchaseLedgerEntry.DiscountPercentage_Again,
+                TransactionType = "INV",
+                ItemReference = purchaseLedgerEntry.SupplierInvoiceReference,
+                DocumentReference = purchaseLedgerEntry.DocumentNumber,
+                VATDiscount = purchaseLedgerEntry.VATTaxes.Sum(),
+                Credit = purchaseLedgerEntry.Amounts.Sum(),
+                Balance = purchaseLedgerEntry.DocumentTotal,
+                OriginalValueABS = purchaseLedgerEntry.DocumentTotal,
+                Period = currentPeriod,
+                SupplierReference = purchaseLedgerEntry.SupplierReference,
+                Age = purchaseLedgerEntry.Future == true ? 0 : 1,
+                Unallocated = 0.0m,
+                DiscountAmount = purchaseLedgerEntry.DiscountAmount,
+                PostDT = purchaseLedgerEntry.PostDT,
+                Memo = purchaseLedgerEntry.Memo,
+                DiscountCutOffDT = purchaseLedgerEntry.DueDT,
+                Dispute = purchaseLedgerEntry.DisputeIndicator,
+                DisputeMemo = purchaseLedgerEntry.DisputeMemo,
+                PurchaseLedgerRegisterNumber = purchaseLedgerInvoiceKey
+            };
+
+            var purchaseLedgerTransactionCurrencyEntry = new PurchaseLedgerTransactionCurrency(purchaseLedgerEntry.DocumentReference)
+            {
+                DocumentDT = purchaseLedgerEntry.DocumentDT,
+                DueDT = purchaseLedgerEntry.InvoiceDueDT,
+                DiscountPercentage = purchaseLedgerEntry.DiscountPercentage_Again,
+                TransactionType = "INV",
+                ItemReference = purchaseLedgerEntry.SupplierInvoiceReference,
+                DocumentReference = purchaseLedgerEntry.DocumentNumber,
+                VATDiscount = purchaseLedgerEntry.VATTaxesInCurrency.Sum(),
+                Credit = purchaseLedgerEntry.AmountInCurrency - purchaseLedgerEntry.VATTaxesInCurrency.Sum(),
+                Balance = purchaseLedgerEntry.AmountInCurrency,
+                OriginalValueABS = purchaseLedgerEntry.AmountInCurrency,
+                Period = currentPeriod,
+                SupplierReference = purchaseLedgerEntry.SupplierReference,
+                Age = purchaseLedgerEntry.Future == true ? 0 : 1,
+                Unallocated = 0.0m,
+                DiscountAmount = purchaseLedgerEntry.DiscountAmountInCurrency,
+                PostDT = purchaseLedgerEntry.PostDT,
+                Memo = purchaseLedgerEntry.Memo,
+                DiscountCutOffDT = purchaseLedgerEntry.DueDT,
+                Dispute = purchaseLedgerEntry.DisputeIndicator,
+                DisputeMemo = purchaseLedgerEntry.DisputeMemo,
+                CurrencyCode = purchaseLedgerEntry.CurrencyCode,
+                ExchangeRates = purchaseLedgerEntry.ExchangeRates,
+                PurchaseLedgerRegisterNumber = purchaseLedgerInvoiceKey
+            };
+
+            var supplierCurrencyEntry = Selector<MertexerV2.Models.Supplier.SupplierCurrency>.Select(purchaseLedgerEntry.SupplierCode, true, false, 1, uniVerseAccount);
+
+            var companyFilesVATEntry = Selector<CompanyVAT>.Select(purchaseLedgerEntry.VATCodes, true, false, 1, uniVerseAccount);
+
+            var purchaseLedgerVATAuditEntry = new PurchaseLedgerVATAudit(purchaseLedgerEntry.DocumentReference)
+            {
+
+            };
+
+
+            var supplierEntry = Selector<MertexerV2.Models.Supplier.Supplier>.Select(purchaseLedgerEntry.SupplierCode, true, false, 1, uniVerseAccount);
+
+
+            using (var qe = new QueryExecutor(uniVerseAccount))
+            {
+                var session = qe.Session;
+
+                var transaction = session.CreateUniTransaction();
+
+                transaction.Begin();
+
+                PurchaseLedgerFunctions.InsertViaTransaction(ref session, JsonConvert.SerializeObject(purchaseLedgerEntry));
+
+                PurchaseLedgerRegisterHistoryFunctions.InsertViaTransaction(ref session, JsonConvert.SerializeObject(purchaseLedgerHistoryEntry));
+
+                PurchaseLedgerInvoiceRegisterFunctions.DeleteViaTransaction(ref session, JsonConvert.SerializeObject(registerEntry));
+
+                PurchaseLedgerTransactionFunctions.InsertViaTransaction(ref session, JsonConvert.SerializeObject(purchaseLedgerTransactionEntry));
+
+                PurchaseLedgerTransactionCurrencyFunctions.InsertViaTransaction(ref session, JsonConvert.SerializeObject(purchaseLedgerTransactionCurrencyEntry));
+
+                /* Update the Supplier record */
+                supplierEntry.Balance += purchaseLedgerEntry.DocumentBalance;
+
+                supplierEntry.NextPeriodBalance += PurchaseLedgerFunctions.CalculatePurchaseLedgerAmount(
+                    session:            ref session,
+                    type:               "N",
+                    incomingValue:      purchaseLedgerEntry.DocumentTotal,
+                    sumMultiValues:     false,
+                    countMultiValues:   false
+                );
+
+
+
+
+                SupplierFunctions.UpsertViaTransaction(ref session, JsonConvert.SerializeObject(supplierEntry));
+
+                SupplierCurrencyFunctions.UpsertViaTransaction(ref session, JsonConvert.SerializeObject(supplierCurrencyEntry));
+
+
+
+                transaction.Commit();
+            }
 
             Console.WriteLine();
 

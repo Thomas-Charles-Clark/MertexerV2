@@ -22,15 +22,17 @@ namespace MertexerV2.PurchaseLedgerFunctions
 {
     public static partial class PurchaseLedgerInvoiceRegisterFunctions
     {
-        public static bool Delete(
+        internal static bool DeleteViaTransaction(
             ref UniSession session,
-            string invoiceRegisterCode)
+            string invoiceRegisterJSON)
         {
-            if (!String.IsNullOrEmpty(invoiceRegisterCode))
+            var invoiceRegisterEntry = JsonConvert.DeserializeObject<PurchaseLedgerInvoiceRegister>(invoiceRegisterJSON);
+
+            if (!String.IsNullOrEmpty(invoiceRegisterEntry.Key))
             {
                 var f = session.CreateUniFile("PLINVREG");
 
-                f.DeleteRecord(invoiceRegisterCode);
+                f.DeleteRecord(invoiceRegisterEntry.Key);
             }
             else
             {

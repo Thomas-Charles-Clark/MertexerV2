@@ -163,6 +163,11 @@ namespace MertexerV2.Models.PurchaseLedger
 
         [UniVerseIndex(11)]
         [UniVerseFieldName("STATUS")]
+        [UniVerseMultiValue]
+        public IEnumerable<string> Statuses { get; set; }
+
+        [UniVerseIndex(11,1)]
+        [UniVerseFieldName("STATUS")]
         public string Status { get; set; }
 
         [UniVerseIndex(12)]

@@ -132,7 +132,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
             out SqlString GeneralLedgerCodes,
             out SqlString VATCodes,
             out SqlString VATTaxes,
-            out SqlString VATValues,
+            out SqlString VATableValues,
             out SqlDecimal AmountSterling,
             out SqlString PaymentTermsCode,
             out SqlString Memo,
@@ -174,7 +174,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
             VATTaxes = result.VATTaxes.Any() ? JsonConvert.SerializeObject(result.VATTaxes) : SqlString.Null;
 
-            VATValues = result.VATValues.Any() ? JsonConvert.SerializeObject(result.VATValues) : SqlString.Null;
+            VATableValues = result.VATableValues.Any() ? JsonConvert.SerializeObject(result.VATableValues) : SqlString.Null;
 
             AmountSterling = result.AmountSterling;
 

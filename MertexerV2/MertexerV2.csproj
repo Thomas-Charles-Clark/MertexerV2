@@ -136,6 +136,7 @@
     <Compile Include="CompanyFilesFunctions\CompanyVAT_Select.cs" />
     <Compile Include="CompanyFilesFunctions\CompanyStats_Upsert.cs" />
     <Compile Include="CompanyFilesFunctions\CompanyVAT_Upsert.cs" />
+    <Compile Include="Friends.cs" />
     <Compile Include="GeneralFunctions\DeliveryTerms_Select.cs" />
     <Compile Include="GeneralFunctions\DeliveryTerms_Upsert.cs" />
     <Compile Include="GeneralFunctions\OrderCategory_Select.cs" />
@@ -190,6 +191,7 @@
     <Compile Include="Models\PurchaseLedger\PurchaseLedgerVATAudit.cs" />
     <Compile Include="Models\PurchaseLedger\PurchaseLedgerInsertionResult.cs" />
     <Compile Include="Models\PurchaseLedger\PurchaseLedgerRegisterHistory.cs" />
+    <Compile Include="PurchaseLedgerFunctions\PurchaseLedger_InternalFunctions.cs" />
     <Compile Include="Models\SalesAgent\SalesAgent.cs" />
     <Compile Include="Models\SalesArea\SalesArea.cs" />
     <Compile Include="Models\SalesMarket\SalesMarket.cs" />
@@ -257,6 +259,7 @@
     <Compile Include="ProductFunctions\Transport_Upsert.cs" />
     <Compile Include="PurchaseLedgerFunctions\BudgetHolder_Select.cs" />
     <Compile Include="PurchaseLedgerFunctions\BudgetHolder_Upsert.cs" />
+    <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerRegisterHistory_Insert.cs" />
     <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerSupplierInvoice_Insert.cs" />
     <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerSupplierInvoice_Select.cs" />
     <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerSupplierInvoice_Upsert.cs" />

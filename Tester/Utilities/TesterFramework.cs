@@ -321,6 +321,27 @@ FOR JSON PATH, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER"));
 
         }
 
+        public static string FetchInvoiceRegistrationJSON(string invoiceRegisterKey)
+        {
+            using (var conn = new SqlConnection("Data Source=vm-sql1;Initial Catalog=Flock;Integrated Security=True"))
+            {
+                try
+                {
+                    var result = String.Join("", conn.QueryAsync<string>("IncomingEmail.InvoiceRegisterEntry_SubmitToPurchaseLedger_Select", new
+                    {
+                        InvoiceRegisterKey = invoiceRegisterKey
+                    }, null, 30, CommandType.StoredProcedure).Result);
+
+                    return result;
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+
+        }
+
         public static string ModifyReserveLine(string tradeDataSourceJson, PassReserveLine objLine)
         {
             return JsonConvert.SerializeObject(MertexerV2.Accounts.AccountFunctions.ModifyReserveLine(tradeDataSourceJson, objLine), Formatting.Indented);

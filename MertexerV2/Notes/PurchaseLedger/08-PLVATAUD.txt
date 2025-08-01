@@ -1,4 +1,4 @@
-Updates CFVATAUD
+Updates PLVATAUD
 from TPLEDG
 
 95 MERTEX PL                     Purchase Ledger                    28 JUL 2025 
@@ -13,16 +13,16 @@ from TPLEDG
 ³ Update Condition                                                          ³   
 ³ Data File (if diff)                                                       ³   
 ³ Key Source           <53>                                                 ³   
-³                                                                           ³   
+³                                                                           ³   Our Field
 ³ Fld To Update  MV To Update    Oper   Value To Use                        ³   
-³ DOCDATE                        R      <33>                                ³   
-³ TYPE                           R      "INV"                               ³   
-³ SUPREF                         R      <39>                                ³   
-³ TOTDUE                         R      <50>                                ³   
-³ CODE                           R      <47>                                ³   
-³ VALUE                          R      <49>                                ³   
-³ VATAMT                         R      <48>                                ³   
-³ NEXT                           R      <154>                               ³   
+³ DOCDATE                        R      <33>                                ³   DocumentDT
+³ TYPE                           R      "INV"                               ³   "INV"
+³ SUPREF                         R      <39>                                ³   SupplierReference
+³ TOTDUE                         R      <50>                                ³   DocumentTotal
+³ CODE                           R      <47>                                ³   VATCodes
+³ VALUE                          R      <49>                                ³   VATableValues
+³ VATAMT                         R      <48>                                ³   VATTaxes
+³ NEXT                           R      <154>                               ³   Future (weird one)
 ³                                                                           ³   
 ³                                                                           ³   
 ³                                                                           ³   

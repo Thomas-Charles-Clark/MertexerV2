@@ -81,6 +81,12 @@
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>tester.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="ConsoleFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=400bf6308ea2d0c9, processorArchitecture=MSIL">
       <HintPath>..\packages\ConsoleFramework.1.0.4\lib\net472\ConsoleFramework.dll</HintPath>
@@ -150,6 +156,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="tester.snk" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Tests\ValidateCSV\KnownBad\" />

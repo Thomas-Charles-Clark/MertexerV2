@@ -3,13 +3,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
-using MertexerV2.Models.Credit;
+
 using MertexerV2.Models.PurchaseLedger;
 using MertexerV2.Utilities;
 
 using Microsoft.SqlServer.Server;
 
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace MertexerV2.SQLFunctions
@@ -22,6 +21,8 @@ namespace MertexerV2.SQLFunctions
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
         public static IEnumerable InsertFromInvoiceRegistry(string UniVerseAccount, string PurchaseLedgerInvoiceRegistryJSON)
         {
+            throw new NotImplementedException();
+
             /*
                 In order, we need to UPSERT to the following files.
 
@@ -92,13 +93,13 @@ namespace MertexerV2.SQLFunctions
                     var purchaseLedgerRegistryHistoryUpsert = PurchaseLedgerFunctions.PurchaseLedgerRegisterHistoryFunctions.UpsertViaTransaction(ref session, PurchaseLedgerInvoiceRegistryJSON);
 
                     // 2.
-                    var purchaseLedgerRegistryDeletion = PurchaseLedgerFunctions.PurchaseLedgerInvoiceRegisterFunctions.Delete(ref session, purchaseLedgerInvoiceRegistryKey);
+                    var purchaseLedgerRegistryDeletion = PurchaseLedgerFunctions.PurchaseLedgerInvoiceRegisterFunctions.DeleteViaTransaction(ref session, purchaseLedgerInvoiceRegistryKey);
 
                     // 3.
                     var purchaseLedgerTransactionUpsert = PurchaseLedgerFunctions.PurchaseLedgerTransactionFunctions.InsertViaTransaction(ref session, purchaseLedgerTransactionJSON);
 
                     // 4.
-                    var purchaseLedgerTransactionCurrencyUpsert = PurchaseLedgerFunctions.PurchaseLedgerTransactionCurrencyFunctions.Insert(ref session, purchaseLedgerTransactionCurrencyJSON);
+                    var purchaseLedgerTransactionCurrencyUpsert = PurchaseLedgerFunctions.PurchaseLedgerTransactionCurrencyFunctions.InsertViaTransaction(ref session, purchaseLedgerTransactionCurrencyJSON);
 
                     // 5.
                     var supplierUpsert = SupplierFunctions.SupplierFunctions.UpsertViaTransaction(ref session, supplierUpsertJSON);
@@ -150,8 +151,6 @@ namespace MertexerV2.SQLFunctions
             {
                 Key = purchaseLedgerKey
             };
-
-            throw new NotImplementedException();
 
             return new ArrayList(new List<PurchaseLedgerInsertionResult>() { result });
         }

@@ -21,7 +21,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
 {
     public static partial class PurchaseLedgerFunctions
     {
-        internal static PurchaseLedger Insert(ref UniSession session, string PurchaseLedgerJSON)
+        internal static PurchaseLedger InsertViaTransaction(ref UniSession session, string PurchaseLedgerJSON)
         {
             var PurchaseLedgerEntry = JsonConvert.DeserializeObject<PurchaseLedger>(PurchaseLedgerJSON);
 

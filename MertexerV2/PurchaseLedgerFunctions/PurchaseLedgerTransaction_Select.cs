@@ -134,6 +134,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
             out SqlDecimal Balance,
             out SqlByte Period,
             out SqlString Status,
+            out SqlString Statuses,
             out SqlString SupplierReference,
             out SqlInt32 Age,
             out SqlDecimal OriginalValueABS,
@@ -181,6 +182,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
             Balance = result.Balance;
             Period = result.Period;
             Status = result.Status.TrimReduceTruncate(1);
+            Statuses = result.Statuses?.Any() ? JsonConvert.SerializeObject(result.Statuses) : SqlString.Null;
             SupplierReference = result.SupplierReference?.TrimReduceTruncate(50) ?? SqlString.Null;
             Age = result.Age;
             OriginalValueABS = result.OriginalValueABS;

@@ -4,5 +4,6 @@
 // a specific target and scoped to a namespace, type, member, etc.
 
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "I'll do what I want, thank you very much.", Scope = "namespaceanddescendants", Target = "~N:MertexerV2")]

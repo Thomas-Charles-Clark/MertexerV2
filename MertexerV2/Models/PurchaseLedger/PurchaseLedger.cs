@@ -1064,9 +1064,12 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseMultiValue]
         public IEnumerable<decimal> ChequeAllocations { get; set; }
 
+        /// <summary>
+        /// This is used in determining which period is set on the ledger: current period or next period?
+        /// </summary>
         [UniVerseIndex(154)]
         [UniVerseFieldName("GLPOST")]
-        public string Future { get; set; }
+        public bool Future { get; set; }
 
         /// <summary>
         /// Default Value: (<152> * "1000" / <162>)[S][M]
@@ -1081,6 +1084,9 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseConversion("MR33")]
         public decimal SettlementDiscountAmountInCurrency { get; set; }
 
+        /// <summary>
+        /// Don't ask me.
+        /// </summary>
         [UniVerseIndex(160)]
         [UniVerseFieldName("DISCPERC")]
         [UniVerseConversion("MR33")]

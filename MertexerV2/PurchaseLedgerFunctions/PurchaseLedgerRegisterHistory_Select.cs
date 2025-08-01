@@ -17,6 +17,11 @@ using Newtonsoft.Json;
 
 namespace MertexerV2.PurchaseLedgerFunctions
 {
+    public class PurchaseLedgerRegisterHistoryCode
+    {
+        public string Code { get; set; }
+    }
+
     public static partial class PurchaseLedgerRegisterHistoryFunctions
     {
         [Microsoft.SqlServer.Server.SqlFunction(
@@ -25,54 +30,59 @@ namespace MertexerV2.PurchaseLedgerFunctions
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
         public static IEnumerable Select(
             string UniVerseAccount,
-            string PurchaseLedgerRegisterHistoryCodes)
+            string PurchaseLedgerRegisterHistoryCodes,
+            string SupplierCode,
+            DateTime? DocumentDT_From,
+            DateTime? DocumentDT_To,
+            DateTime? DueDT_From,
+            DateTime? DueDT_To,
+            DateTime? ConvertedDT_From,
+            DateTime? ConvertedDT_To)
         {
-            throw new NotImplementedException();
-
             if (String.IsNullOrEmpty(PurchaseLedgerRegisterHistoryCodes))
             {
                 int p = 0;
 
                 var filters = new List<Tuple<string, string, string>>();
 
-                //if (!String.IsNullOrEmpty(SupplierCode))
-                //{
-                //    filters.Add(new Tuple<string, string, string>("SUPREF", "eq", SupplierCode));
-                //}
+                if (!String.IsNullOrEmpty(SupplierCode))
+                {
+                    filters.Add(new Tuple<string, string, string>("SUPREF", "eq", SupplierCode));
+                }
 
-                //if (DocumentDT_From.HasValue)
-                //{
-                //    filters.Add(new Tuple<string, string, string>("SS.DOCDATE.INT", ">=", Framework.UniVerseDateString(DocumentDT_From.Value)));
-                //}
+                if (DocumentDT_From.HasValue)
+                {
+                    filters.Add(new Tuple<string, string, string>("SS.DOCDATE.INT", ">=", Framework.UniVerseDateString(DocumentDT_From.Value)));
+                }
 
-                //if (DocumentDT_To.HasValue)
-                //{
-                //    filters.Add(new Tuple<string, string, string>("SS.DOCDATE.INT", "<=", Framework.UniVerseDateString(DocumentDT_To.Value)));
-                //}
+                if (DocumentDT_To.HasValue)
+                {
+                    filters.Add(new Tuple<string, string, string>("SS.DOCDATE.INT", "<=", Framework.UniVerseDateString(DocumentDT_To.Value)));
+                }
 
-                //if (DueDT_From.HasValue)
-                //{
-                //    filters.Add(new Tuple<string, string, string>("SS.DUEDATE.INT", ">=", Framework.UniVerseDateString(DueDT_From.Value)));
-                //}
+                if (DueDT_From.HasValue)
+                {
+                    filters.Add(new Tuple<string, string, string>("SS.DUEDATE.INT", ">=", Framework.UniVerseDateString(DueDT_From.Value)));
+                }
 
-                //if (DueDT_To.HasValue)
-                //{
-                //    filters.Add(new Tuple<string, string, string>("SS.DUEDATE.INT", "<=", Framework.UniVerseDateString(DueDT_To.Value)));
-                //}
+                if (DueDT_To.HasValue)
+                {
+                    filters.Add(new Tuple<string, string, string>("SS.DUEDATE.INT", "<=", Framework.UniVerseDateString(DueDT_To.Value)));
+                }
 
-                //if (PostDT_From.HasValue)
-                //{
-                //    filters.Add(new Tuple<string, string, string>("SS.POSTDATE.INT", ">=", Framework.UniVerseDateString(PostDT_From.Value)));
-                //}
+                if (ConvertedDT_From.HasValue)
+                {
+                    filters.Add(new Tuple<string, string, string>("SS.CONVDATE.INT", ">=", Framework.UniVerseDateString(ConvertedDT_From.Value)));
+                }
 
-                //if (PostDT_To.HasValue)
-                //{
-                //    filters.Add(new Tuple<string, string, string>("SS.POSTDATE.INT", "<=", Framework.UniVerseDateString(PostDT_To.Value)));
-                //}
+                if (ConvertedDT_To.HasValue)
+                {
+                    filters.Add(new Tuple<string, string, string>("SS.CONVDATE.INT", "<=", Framework.UniVerseDateString(ConvertedDT_To.Value)));
+                }
 
                 if (filters.Any())
                 {
-                    foreach (var invoice in Selector<PurchaseLedgerTransaction>.FilterNonParallel(
+                    foreach (var invoice in Selector<PurchaseLedgerRegisterHistory>.FilterNonParallel(
                         filters,
                         true,
                         false,
@@ -84,12 +94,11 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 }
                 else
                 {
-                    foreach (var invoice in Selector<PurchaseLedgerTransaction>.SelectAllNonParallel(
+                    foreach (var invoice in Selector<PurchaseLedgerRegisterHistory>.SelectAllNonParallel(
                         true,
                         false,
                         100,
-                        UniVerseAccount)
-                        .ToList())
+                        UniVerseAccount))
                     {
                         yield return invoice;
                     }
@@ -97,13 +106,12 @@ namespace MertexerV2.PurchaseLedgerFunctions
             }
             else
             {
-                foreach (var invoice in Selector<PurchaseLedgerTransaction>.Select(
-                    JsonConvert.DeserializeObject<IEnumerable<PurchaseLedgerTransactionCode>>(PurchaseLedgerRegisterHistoryCodes).Select(p => p.Code),
+                foreach (var invoice in Selector<PurchaseLedgerRegisterHistory>.Select(
+                    JsonConvert.DeserializeObject<IEnumerable<PurchaseLedgerRegisterHistoryCode>>(PurchaseLedgerRegisterHistoryCodes).Select(p => p.Code),
                     true,
                     false,
                     100,
-                    UniVerseAccount)
-                    .ToList())
+                    UniVerseAccount))
                 {
                     yield return invoice;
                 }

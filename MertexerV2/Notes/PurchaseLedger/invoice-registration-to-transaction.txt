@@ -270,7 +270,7 @@ Process Definition - Transactions - PL*PINVIR.CUR.DES
 
 or
 
-/PD.T PINVIR.CUR.DES
+/PD.T PL*PINVIR.CUR.DES
 
 Lists the details of the "Purchase Ledger Registry to Transaction" transaction definition.
 
@@ -355,6 +355,7 @@ update twelve or thirteen other files
 at what point do we create the TPLTRANS record? Stage 3. But Stage 3 is clearly defined as an Update operation!
 
 Do TPLTRANS records exist by virtue of having a PLINVREG or PLCRNREG record?
+No; the screen which the transaction begets creates the PLEDG record from which the further operations in the transaction are performed.
 
 
 Anywhere we see an U action, are we safe to assume we can attempt an UPSERT? That'd be... useful, as I already have the ability to UPSERT?
@@ -365,4 +366,23 @@ https://docs.rocketsoftware.com/bundle/sbxa_dg_663/page/gry1644327657910.html
 
  
 
+We must be very, VERY careful with each of the operations performed on fields throughout the files affected by this transaction.
+Some are additions, some are subtractions, some are insertions, some are replacements. Etc.
+
+Operations List:
+
++  Add
+-  Subtract
+*  Multiply
+/  Divide
+|  DiVide -no rounding
+:  Concatenate
+=  Make Equal To
+I  Insert
+D  DeLete Multi-val
+R  Replace curr value
+IAL Up left justify
+IAR uP right justify
+IDL dOwn left justify
+IDR doWn right justify
 

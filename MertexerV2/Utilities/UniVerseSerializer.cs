@@ -368,6 +368,14 @@ namespace MertexerV2.Utilities
                                 {
                                     pi.SetValue(result, values.Select(v => String.IsNullOrEmpty(v) ? (byte?)null : Convert.ToByte(v)));
                                 }
+                                else if (pi.PropertyType == typeof(IEnumerable<sbyte>))
+                                {
+                                    pi.SetValue(result, values.Select(v => String.IsNullOrEmpty(v) ? (sbyte)0 : Convert.ToSByte(v)));
+                                }
+                                else if (pi.PropertyType == typeof(IEnumerable<sbyte?>))
+                                {
+                                    pi.SetValue(result, values.Select(v => String.IsNullOrEmpty(v) ? (sbyte?)null : Convert.ToSByte(v)));
+                                }
                             }
                         }
                         else
@@ -479,6 +487,17 @@ namespace MertexerV2.Utilities
                                 byte? i = conversion == null ? (byte?)null : 0;
 
                                 if (Byte.TryParse(value, out byte parsed))
+                                {
+                                    i = parsed;
+                                }
+
+                                pi.SetValue(result, i);
+                            }
+                            else if (pi.PropertyType == typeof(sbyte) || pi.PropertyType == typeof(sbyte?))
+                            {
+                                sbyte? i = conversion == null ? (sbyte?)null : 0;
+
+                                if (SByte.TryParse(value, out sbyte parsed))
                                 {
                                     i = parsed;
                                 }

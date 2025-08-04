@@ -89,17 +89,17 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseFieldName("VALUE")]
         [UniVerseConversion("MR22")]
         [UniVerseMultiValue]
-        public IEnumerable<decimal> VATValues { get; set; }
+        public IEnumerable<decimal> VATableValues { get; set; }
 
         [UniVerseIndex(7)]
         [UniVerseFieldName("VATAMT")]
         [UniVerseConversion("MR22")]
         [UniVerseMultiValue]
-        public IEnumerable<decimal> VATAmounts { get; set; }
+        public IEnumerable<decimal> VATTaxes { get; set; }
 
         [UniVerseIndex(8)]
         [UniVerseFieldName("NEXT")]
-        public byte NextPeriod { get; set; }
+        public bool NextPeriod { get; set; }
 
         [UniVerseIndex(9)]
         [UniVerseFieldName("CURRENCY.DES")]

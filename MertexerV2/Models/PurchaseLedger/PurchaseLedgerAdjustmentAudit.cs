@@ -149,7 +149,7 @@ namespace MertexerV2.Models.PurchaseLedger
 
         [UniVerseIndex(14)]
         [UniVerseFieldName("TIME")]
-        public int Time { get; set; }
+        public string Time { get; set; }
 
         [UniVerseIndex(20)]
         [UniVerseFieldName("DISPUTE")]

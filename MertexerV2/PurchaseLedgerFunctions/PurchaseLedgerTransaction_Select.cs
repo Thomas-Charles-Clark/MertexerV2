@@ -127,7 +127,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
             out SqlString TransactionType,
             out SqlString ItemReference,
             out SqlDecimal OriginalValue,
-            out SqlString DocumentReference,
+            out SqlString DocumentNumber,
             out SqlDecimal VATDiscount,
             out SqlDecimal Debit,
             out SqlDecimal Credit,
@@ -175,14 +175,14 @@ namespace MertexerV2.PurchaseLedgerFunctions
             TransactionType = result.TransactionType?.TrimReduceTruncate(10) ?? SqlString.Null;
             ItemReference = result.ItemReference?.TrimReduceTruncate(50) ?? SqlString.Null;
             OriginalValue = result.OriginalValue;
-            DocumentReference = result.DocumentReference?.TrimReduceTruncate(50) ?? SqlString.Null;
+            DocumentNumber = result.DocumentNumber?.TrimReduceTruncate(50) ?? SqlString.Null;
             VATDiscount = result.VATDiscount;
             Debit = result.Debit;
             Credit = result.Credit;
             Balance = result.Balance;
             Period = result.Period;
             Status = result.Status.TrimReduceTruncate(1);
-            Statuses = result.Statuses?.Any() ? JsonConvert.SerializeObject(result.Statuses) : SqlString.Null;
+            Statuses = result.Statuses?.Any() == true ? JsonConvert.SerializeObject(result.Statuses) : SqlString.Null;
             SupplierReference = result.SupplierReference?.TrimReduceTruncate(50) ?? SqlString.Null;
             Age = result.Age;
             OriginalValueABS = result.OriginalValueABS;

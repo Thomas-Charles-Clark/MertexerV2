@@ -14,13 +14,13 @@ Updates GLBATCHDATA
 ³ Key Source           <53>                                                 ³   
 ³                                                                           ³   Our Field
 ³ Fld To Update  MV To Update    Oper   Value To Use                        ³   
-³ TYPE                           R      "RFPOST"                            ³   
-³ DOCREF                         R      <53>                                ³   
-³ PREFIX                         R      "P"                                 ³   
-³ DOCDATE                        R      <33>                                ³   
-³ POSTDATE                       R      <35>                                ³   
-³ SUPREF                         R      <39>                                ³   
-³ AMOUNT                         R      <43>                                ³
+³ TYPE                           R      "RFPOST"                            ³   Type
+³ DOCREF                         R      <53>                                ³   DocumentReference
+³ PREFIX                         R      "P"                                 ³   Prefix
+³ DOCDATE                        R      <33>                                ³   DocumentDT
+³ POSTDATE                       R      <35>                                ³   PostDT
+³ SUPREF                         R      <39>                                ³   SupplierReference
+³ AMOUNT                         R      <43>                                ³	Amount
 ³ GLCODE                         R      <44>                                ³   
 ³ VATTAX                         R      S(<48>)                             ³   
 ³ DOCTOT                         R      <50>                                ³   

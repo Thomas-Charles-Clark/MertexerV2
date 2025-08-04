@@ -170,7 +170,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
             TransactionType = result.TransactionType?.TrimReduceTruncate(10) ?? SqlString.Null;
             ItemReference = result.ItemReference?.TrimReduceTruncate(50) ?? SqlString.Null;
             OriginalValue = result.OriginalValue;
-            DocumentReference = result.DocumentReference?.TrimReduceTruncate(50) ?? SqlString.Null;
+            DocumentReference = result.DocumentNumber?.TrimReduceTruncate(50) ?? SqlString.Null;
             VATDiscount = result.VATDiscount;
             Debit = result.Debit;
             Credit = result.Credit;

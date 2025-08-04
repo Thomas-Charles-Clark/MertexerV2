@@ -443,9 +443,9 @@ namespace MertexerV2.Models.PurchaseLedger
         public decimal VATableValue { get; set; }
 
         [UniVerseIndex(50)]
-        [UniVerseFieldName("DTOTAL")]
+        [UniVerseFieldName("TOTDUE")] // "CHQTOTAL/DTOTAL/RDTOTAL/STGAMT/STGCHQTOTAL/TOTDUE"
         [UniVerseConversion("MR22")]
-        public decimal DocumentTotal { get; set; }
+        public decimal TotalDueInSterling { get; set; }
 
         [UniVerseIndex(51)]
         [UniVerseFieldName("STGORIGVAL")]

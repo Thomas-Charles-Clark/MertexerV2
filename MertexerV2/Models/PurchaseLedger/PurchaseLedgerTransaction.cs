@@ -135,7 +135,7 @@ namespace MertexerV2.Models.PurchaseLedger
 
         [UniVerseIndex(5)]
         [UniVerseFieldName("DOCNO")]
-        public string DocumentReference { get; set; }
+        public string DocumentNumber { get; set; }
 
         [UniVerseIndex(6)]
         [UniVerseFieldName("VATDIS")]

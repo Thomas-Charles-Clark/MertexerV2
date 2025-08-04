@@ -143,7 +143,7 @@ namespace MertexerV2.Models.GeneralLedger
         [UniVerseIndex(32)]
         [UniVerseFieldName("GLSUB")]
         [UniVerseMultiValue]
-        public IEnumerable<decimal> GeneralLedgerSubAnalysis { get; set; }
+        public IEnumerable<string> GeneralLedgerSubCodes { get; set; }
 
         [UniVerseIndex(36)]
         [UniVerseFieldName("PREFIX")]

@@ -2,11 +2,11 @@ Updates PLSUP
 from TPLEDG
 
 95 MERTEX PL                     Purchase Ledger                    28 JUL 2025 
-ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ 
-³ TooÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄTransaction DefinitionsÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿   ³ 
-ÀÄÄÄÄ³ Tran Id               PINVIR.CUR.D                                 ³ÄÄÄÙ 
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ 
+³  ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ Transaction Definitions ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿  ³ 
+ÀÄÄÄÄ³ Tran Id               PINVIR.CUR.D                                 ³ÄÙ 
      ³ Description           PL INVOICES                                  ³     
-ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄSecondary File UpdateÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿   
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ Secondary File Update ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿   
 ³ File Update (Dict) : PLSUP                                                ³
 ³                                                                           ³   
 ³ Update/Delete (U/D)  U                                                    ³   
@@ -16,7 +16,7 @@ from TPLEDG
 ³                                                                           ³   Our Field   
 ³ Fld To Update  MV To Update    Oper   Value To Use                        ³   
 ³ BALANCE                        +      <50>                                ³   Balance
-³ NEXT                           +      B("PLAMOUNT,N50")                   ³   NextPeriodBalance
+³ NEXT                           +      B("PLAMOUNT,N50")                   ³   NextPeriodBalance == Execute PLAMOUNT [NEXT PERIOD] using field 50!
 ³ CURR                           +      B("PLAMOUNT,50")                    ³   ThisPeriodBalance
 ³ TLINK                          I      <53>                                ³   DocumentReferences
 ³ PNEXT                          +      B("PLAMOUNT,N43.A")                 ³   PurchasesNextPeriod
@@ -58,13 +58,13 @@ CT PLPROGS PLAMOUNT
 0020    L=LEN(ENTRY)                                                            
 0021    NO=NO[2,L-1]                     
 0022    END                                                                     
-0023 IF MULTI=1 THEN TYPE = FIELD(NO,".",2)                                     
-0024 IF MULTI=1 THEN NO = FIELD(NO,".",1)                                       
-0025 IF RECORD<154> = '' THEN                                                   
+0023 IF MULTI=1 THEN TYPE = FIELD(NO,".",2)              * TYPE = A or X                        
+0024 IF MULTI=1 THEN NO = FIELD(NO,".",1)                * NO 	= Field Number        
+0025 IF RECORD<154> = '' THEN                            * IF FUTURE = '' AND NEXT = 0 THEN JUMP TO CALCULATING                        
 0026    IF NXT=0 THEN GOSUB 200                                                 
 0027    RETURN                                                                  
 0028    END                                                                     
-0029 IF NXT=1 THEN GOSUB 200;RETURN                                             
+0029 IF NXT=1 THEN GOSUB 200;RETURN                		 * IF NEXT THEN JUMP TO CALCULATING                             
 0030 IF YEAR=0 THEN RETURN                                                      
 0031 *-                                                                         
 0032 * Use PL period if separate PL or GL period if GL/PL combined              

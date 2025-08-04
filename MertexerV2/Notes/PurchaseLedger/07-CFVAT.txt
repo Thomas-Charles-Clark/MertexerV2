@@ -41,7 +41,7 @@ CT PLPROGS PLAMOUNT
 0006 * U:PLAMOUNT,N62   U:PLAMOUNT,Y62   U:PLAMOUNT,43.A  U:PLAMOUNT,N43.A      
 0007 * U:PLAMOUNT,48.X                                                          
 0008 * N=NXT  Y=YTD FIGURE   62=RECORD NO    43.A = ADD SUM OF ALL MULTI-VALUES 
-0009 *                                       43.X = ADD ONLY CNT MULTI-VALUE    
+0009 *                                       43.X = ADD ONLY C[URRE]NT MULTI-VALUE   
 0010 ENTRY = PARAM                                                              
 0011 RTN.FLAG=0                                                                 
 0012 VALUE=''                                                                   
@@ -76,7 +76,7 @@ CT PLPROGS PLAMOUNT
 0041 200*  ;* WORK OUT VALUE                                                    
 0042      BEGIN CASE                                                            
 0043       CASE MULTI = 0                                                       
-0044         VALUE = RECORD<NO>                                   
+0044         VALUE = RECORD<NO>                                   				
 0045       CASE MULTI = 1 AND TYPE = "A"                                        
 0046         MAX = DCOUNT(RECORD<NO>,VM)                                        
 0047         FOR I = 1 TO MAX                                                   
@@ -86,5 +86,5 @@ CT PLPROGS PLAMOUNT
 0051         VALUE = VALUE + RECORD<NO,CNT>                                     
 0052      END CASE                                                              
 0053      RETURN                                                                
-0054 END                                                                                                 
+0054 END
 

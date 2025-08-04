@@ -1,0 +1,51 @@
+Pseudocode for PLPROGS.PLAMOUNT
+
+This is always called with parameters: these parameters are given as e.g. 
+
+PLAMOUNT,N50
+PLAMOUNT,50
+PLAMOUNT,N43.A
+PLAMOUNT,43.A
+PLAMOUNT,Y43.A
+
+[PLAMOUNT,Y43.X]
+
+N == Next
+
+Y == Year
+
+50 == Field Number
+
+.A == Add sum of all multi-values
+.X == "ADD ONLY CNT MULTI-VALUE"
+
+
+
+So step through the thing with a value and find out what you think it says.
+
+NO is a variable given to the entry
+
+ENTRY is the parameters following the comma in the call to the routine
+
+VALUE is declared to an empty string to start with
+
+NO is actually field number (it's arrived at by starting at the second character of PARAM and taking Length(PARAM) - 1)
+
+if MULTI, 
+	TYPE = FIELD(NO,".",2)
+	NO = FIELD(NO,".",1)
+	
+	TYPE determines whether you're summing or counting the multi-values
+
+if RECORD<154> == '' && NEXT == 0 GOSUB 200
+
+This section will be skipped if GOSUB 200 is hit.
+(
+	Read PL PERIOD from company (or read GL PERIOD if PL PERIOD is empty)
+	If Period == No. of Periods then RETURN!
+)
+
+IF NXT=1 THEN GOSUB 200
+
+200: WORK OUT VALUE 
+	

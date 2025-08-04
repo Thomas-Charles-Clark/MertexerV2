@@ -44,5 +44,10 @@ namespace MertexerV2.Models.Company
         [UniVerseIndex(134)]
         [UniVerseFieldName("PLPER")]
         public byte? ThisPurchaseLedgerPeriod { get; set; }
+
+        [UniVerseIndex(205)]
+        [UniVerseFieldName("PREPAY.GLCODES.DES")]
+        [UniVerseMultiValue]
+        public IEnumerable<string> PrepaymentGeneralLedgerCodes { get; set; }
     }
 }

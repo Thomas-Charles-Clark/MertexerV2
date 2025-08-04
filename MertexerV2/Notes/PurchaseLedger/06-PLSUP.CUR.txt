@@ -27,7 +27,7 @@ from TPLEDG
 ³ PYTD                           -      B("PLAMOUNT,Y248.A")                ³   PurchasesYearToDate
 ³ INACT                          R      P("INACT")                          ³   PeriodsInactive
 ³                                                                           ³   
-³                                                                           ³   
+³                                                                           ³  
 ³                                                                           ³   
 ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ   
                                                                                 

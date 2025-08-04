@@ -306,7 +306,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
             VATTax = p.VATTax;
             VATableValues = p.VATableValues?.Any() == true ? JsonConvert.SerializeObject(p.VATableValues) : SqlString.Null;
             VATableValue = p.VATableValue;
-            DocumentTotal = p.DocumentTotal;
+            DocumentTotal = p.TotalDueInSterling;
             SterlingOriginalValue = p.SterlingOriginalValue;
             ExchangeRateDifference = p.ExchangeRateDifference;
             DocumentReference = p.DocumentReference;

@@ -123,24 +123,42 @@ namespace MertexerV2.Models.Supplier
         [UniVerseIndex(21, 1)]
         [UniVerseFieldName("PNEXT")]
         [UniVerseConversion("MR22")]
-        [UniVerseMultiValue]
         public decimal PurchasesNextPeriod { get; set; }
 
         [UniVerseIndex(21, 2)]
         [UniVerseFieldName("PCURR")]
         [UniVerseConversion("MR22")]
-        [UniVerseMultiValue]
         public decimal PurchasesThisPeriod { get; set; }
 
         [UniVerseIndex(21, 3)]
         [UniVerseFieldName("PYTD")]
         [UniVerseConversion("MR22")]
-        [UniVerseMultiValue]
         public decimal PurchasesYearToDate { get; set; }
 
         [UniVerseIndex(22)]
+        [UniVerseFieldName("PAY")]
+        [UniVerseConversion("MR22")]
+        [UniVerseMultiValue]
+        public IEnumerable<decimal> Payments { get; set; }
+
+        [UniVerseIndex(22, 1)]
+        [UniVerseFieldName("PAYNEXT")]
+        [UniVerseConversion("MR22")]
+        public decimal PaymentsNextPeriod { get; set; }
+
+        [UniVerseIndex(22, 2)]
+        [UniVerseFieldName("PAYCURR")]
+        [UniVerseConversion("MR22")]
+        public decimal PaymentsThisPeriod { get; set; }
+
+        [UniVerseIndex(22, 3)]
+        [UniVerseFieldName("PAYYTD")]
+        [UniVerseConversion("MR22")]
+        public decimal PaymentsYearToDate { get; set; }
+
+        [UniVerseIndex(23)]
         [UniVerseFieldName("INACT")]
-        public byte PeriodsInactive { get; set; }
+        public sbyte? PeriodsInactive { get; set; }
 
         /// <summary>
         /// CountryCode

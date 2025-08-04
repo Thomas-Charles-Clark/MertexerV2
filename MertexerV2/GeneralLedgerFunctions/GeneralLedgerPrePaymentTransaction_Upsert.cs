@@ -6,6 +6,7 @@ using MertexerV2.Utilities;
 using Microsoft.SqlServer.Server;
 using Newtonsoft.Json;
 
+using System.Collections.Generic;
 using System.Linq;
 
 namespace MertexerV2.GeneralLedgerFunctions
@@ -94,6 +95,19 @@ namespace MertexerV2.GeneralLedgerFunctions
             }
 
             return GeneralLedgerPrePaymentTransaction.Key;
+        }
+
+        internal static string BuildKey(string documentReference, IEnumerable<string> generalLedgerCodes, IEnumerable<string> prePaymentGeneralLedgerCodes)
+        {
+            var result = "";
+
+            // evidently this builds an eight-character long zero-left-padded string of numbers.
+
+            // LIST GLPPTRANS.DES SAMPLE 20 tells us that much.
+
+
+
+            return result;
         }
     }
 }

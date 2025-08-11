@@ -187,6 +187,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
             out SqlDecimal DiscountAmount,
             out SqlString Allocations,
             out SqlString OtherMemos,
+            out SqlString OtherPrePaymentMemos,
             out SqlString DisputeDocumentNumber,
             out SqlString DisputeCustomerReference,
             out SqlString DisputeIndicator,

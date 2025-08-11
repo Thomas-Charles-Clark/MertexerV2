@@ -15,7 +15,7 @@ namespace MertexerV2.Models.Pricing
         [JsonConstructor]
         public VATCode(string key) : base(key)
         {
-
+            Initialise();
         }
 
         public VATCode() : base()

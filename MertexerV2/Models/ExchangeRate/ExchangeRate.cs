@@ -15,9 +15,10 @@ namespace MertexerV2.Models.ExchangeRate
     [UniVerseFileName("XRATE")]
     public class ExchangeRate : UniVerseSerializationBase<string>
     {
+        [JsonConstructor]
         public ExchangeRate(string key) : base(key)
         {
-
+            Initialise();
         }
 
         public ExchangeRate() : base()

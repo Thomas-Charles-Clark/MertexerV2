@@ -18,7 +18,7 @@ namespace MertexerV2.Models.Pricing
         [JsonConstructor]
         public ContractDiscount(string key) : base(key)
         {
-
+            Initialise();
         }
 
         public ContractDiscount() : base()

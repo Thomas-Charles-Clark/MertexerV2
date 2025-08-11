@@ -50,8 +50,6 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
             UniUpsert<PurchaseLedgerTransaction>.Upsert(PurchaseLedgerTransactionJSON, uniVerseFile);
 
-            uniVerseFile.UnlockRecord(purchaseLedgerTransactionEntry.Key);
-
             return purchaseLedgerTransactionEntry.Key;
         }
 

@@ -17,7 +17,7 @@ namespace MertexerV2.CompanyFileFunctions
 {
     public static partial class CompanyStatsFunctions
     {
-        internal static string UpsertViaTranscation(ref UniSession session, string CompanyStatsJSON)
+        internal static string UpsertViaTransaction(ref UniSession session, string CompanyStatsJSON)
         {
             var cfStatsRecord = JsonConvert.DeserializeObject<CompanyStats>(CompanyStatsJSON);
 
@@ -50,9 +50,6 @@ namespace MertexerV2.CompanyFileFunctions
             uniVerseFile.LockRecord(cfStatsRecord.Key, 1);
 
             UniUpsert<CompanyStats>.Upsert(CompanyStatsJSON, uniVerseFile);
-
-            uniVerseFile.UnlockRecord(cfStatsRecord.Key);
-            
 
             return cfStatsRecord.Key;
         }

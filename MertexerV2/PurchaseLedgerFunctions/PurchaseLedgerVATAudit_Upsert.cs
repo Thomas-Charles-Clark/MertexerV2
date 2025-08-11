@@ -50,8 +50,6 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
             UniUpsert<PurchaseLedgerVATAudit>.Upsert(PurchaseLedgerVATAuditJSON, uniVerseFile);
 
-            uniVerseFile.UnlockRecord(purchaseLedgerVATAuditEntry.Key);
-
             return purchaseLedgerVATAuditEntry.Key;
         }
 

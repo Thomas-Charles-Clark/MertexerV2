@@ -21,6 +21,48 @@ namespace MertexerV2.PurchaseLedgerFunctions
 {
     public static partial class PurchaseLedgerInvoiceRegisterFunctions
     {
+        internal static string InsertViaTransaction(ref UniSession session, string purchaseLedgerInvoiceRegisterJSON)
+        {
+            var invoiceRegisterEntry = JsonConvert.DeserializeObject<PurchaseLedgerInvoiceRegister>(purchaseLedgerInvoiceRegisterJSON);
+
+            var fileName = typeof(PurchaseLedgerInvoiceRegister).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
+                    .Cast<UniVerseFileNameAttribute>()
+                    .Single()
+                    .FileName;
+
+            var uniVerseFile = session.CreateUniFile(fileName);
+
+            try
+            {
+                var extantRecord = uniVerseFile.ReadField(invoiceRegisterEntry.Key, 0).StringValue;
+
+                if (!String.IsNullOrEmpty(extantRecord))
+                {
+                    throw new Exception($"{invoiceRegisterEntry.Key} exists on {fileName}, INSERT fails");
+                }
+            }
+            catch (UniFileException)
+            {
+                // extant record was not found: this is a creation request
+                // create first (lock the entire file for as little time as possible)
+                // then lock the specific record
+                // then write all the fields
+                // then unlock the record
+                var dataSet = new UniDataSet(session);
+                dataSet.Insert(invoiceRegisterEntry.Key);
+
+                //slcustFile.LockFile();
+                uniVerseFile.WriteRecords(dataSet);
+                //slcustFile.UnlockFile();
+            }
+
+            uniVerseFile.LockRecord(invoiceRegisterEntry.Key, 1);
+
+            UniUpsert<PurchaseLedgerInvoiceRegister>.Upsert(purchaseLedgerInvoiceRegisterJSON, uniVerseFile);
+
+            return invoiceRegisterEntry.Key;
+        }
+
         [Microsoft.SqlServer.Server.SqlFunction(
             DataAccess = DataAccessKind.Read,
             FillRowMethodName = "InvoiceRegisterInsert_FillRow")]

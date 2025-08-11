@@ -33,13 +33,15 @@ namespace MertexerV2.SupplierFunctions
         public string SupplierName { get; set; }
         public string SupplierCurrency { get; set; }
         public string DocumentReference { get; set; }
+        public string MertexSourceFileName { get; set; }
 
-        public SupplierDocument(string supplierReference, string supplierName, string supplierCurrency, string documentReference)
+        public SupplierDocument(string supplierReference, string supplierName, string supplierCurrency, string documentReference, string mertexSourceFileName)
         {
             SupplierReference = supplierReference;
             SupplierName = supplierName;
             SupplierCurrency = supplierCurrency;
             DocumentReference = documentReference;
+            MertexSourceFileName = mertexSourceFileName;
         }
 
         public override string ToString()
@@ -82,7 +84,8 @@ namespace MertexerV2.SupplierFunctions
             string sel2d,
             string sel3,
             string sel3d,
-            PurchaseLedgerTransaction plt) : base(supRef, supName, supCur, plt.Key)
+            string sourceFileName,
+            PurchaseLedgerTransaction plt) : base(supRef, supName, supCur, plt.Key, sourceFileName)
         {
             Sel1 = sel1;
             Sel1D = sel1d;
@@ -113,8 +116,9 @@ namespace MertexerV2.SupplierFunctions
             string sel2d,
             string sel3,
             string sel3d,
+            string sourceFileName,
             PurchaseLedgerInvoiceRegister plt,
-            bool sterling) : base(supRef, supName, supCur, plt.Key)
+            bool sterling) : base(supRef, supName, supCur, plt.Key, sourceFileName)
         {
             Sel1 = sel1;
             Sel1D = sel1d;
@@ -145,8 +149,9 @@ namespace MertexerV2.SupplierFunctions
             string sel2d,
             string sel3,
             string sel3d,
+            string sourceFileName,
             PurchaseLedgerCreditRegister plt,
-            bool sterling) : base(supRef, supName, supCur, plt.Key)
+            bool sterling) : base(supRef, supName, supCur, plt.Key, sourceFileName)
         {
             Sel1 = sel1;
             Sel1D = sel1d;
@@ -348,20 +353,20 @@ namespace MertexerV2.SupplierFunctions
                     r.PurchaseLedgerRegisterEntries_Credit = crnReg.Where(p => p.SupplierReference == r.Key).ToList();
 
                     foreach (var dr in r.PurchaseLedgerTransferRecords?
-                        .Select(d => new SupplierAccountDetail(r.Key, r.Name, r.Currency, r.SEL1, r.DSEL1, r.SEL2, r.DSEL2, r.SEL3, r.DSEL3, d)))
+                        .Select(d => new SupplierAccountDetail(r.Key, r.Name, r.Currency, r.SEL1, r.DSEL1, r.SEL2, r.DSEL2, r.SEL3, r.DSEL3, "TPLTRANS", d)))
                     {
                         yield return dr;
                     }
 
                     foreach (var inv in r.PurchaseLedgerRegisterEntries_Invoice?.Select(d => new SupplierAccountDetail(r.Key, r.Name, r.Currency,
-                        r.SEL1, r.DSEL1, r.SEL2, r.DSEL2, r.SEL3, r.DSEL3, d, false
+                        r.SEL1, r.DSEL1, r.SEL2, r.DSEL2, r.SEL3, r.DSEL3, "PLINVREG", d, false
                         )))
                     {
                         yield return inv;
                     }
 
                     foreach (var crn in r.PurchaseLedgerRegisterEntries_Credit?.Select(d => new SupplierAccountDetail(r.Key, r.Name, r.Currency,
-                        r.SEL1, r.DSEL1, r.SEL2, r.DSEL2, r.SEL3, r.DSEL3, d, false
+                        r.SEL1, r.DSEL1, r.SEL2, r.DSEL2, r.SEL3, r.DSEL3, "PLCRNREG", d, false
                         )))
                     {
                         yield return crn;
@@ -381,20 +386,20 @@ namespace MertexerV2.SupplierFunctions
 
                 result.PurchaseLedgerRegisterEntries_Credit = crnReg.Where(p => p.SupplierReference == result.Key).ToList();
 
-                foreach (var dr in result.PurchaseLedgerTransferRecords?.Select(d => new SupplierAccountDetail(result.Key, result.Name, result.Currency, result.SEL1, result.DSEL1, result.SEL2, result.DSEL2, result.SEL3, result.DSEL3, d)))
+                foreach (var dr in result.PurchaseLedgerTransferRecords?.Select(d => new SupplierAccountDetail(result.Key, result.Name, result.Currency, result.SEL1, result.DSEL1, result.SEL2, result.DSEL2, result.SEL3, result.DSEL3, "TPLTRANS", d)))
                 {
                     yield return dr;
                 }
 
                 foreach (var inv in result.PurchaseLedgerRegisterEntries_Invoice?.Select(d => new SupplierAccountDetail(result.Key, result.Name, result.Currency,
-                    result.SEL1, result.DSEL1, result.SEL2, result.DSEL2, result.SEL3, result.DSEL3, d, false
+                    result.SEL1, result.DSEL1, result.SEL2, result.DSEL2, result.SEL3, result.DSEL3, "PLINVREG", d, false
                     )))
                 {
                     yield return inv;
                 }
 
                 foreach (var crn in result.PurchaseLedgerRegisterEntries_Credit?.Select(d => new SupplierAccountDetail(result.Key, result.Name, result.Currency,
-                    result.SEL1, result.DSEL1, result.SEL2, result.DSEL2, result.SEL3, result.DSEL3, d, false
+                    result.SEL1, result.DSEL1, result.SEL2, result.DSEL2, result.SEL3, result.DSEL3, "PLCRNREG", d, false
                     )))
                 {
                     yield return crn;
@@ -425,7 +430,8 @@ namespace MertexerV2.SupplierFunctions
             out SqlString Division,
             out SqlDecimal Unallocated,
             out SqlBoolean Approved,
-            out SqlString PassedTo)
+            out SqlString PassedTo,
+            out SqlString MertexSourceFileName)
         {
             var result = (SupplierAccountDetail)obj;
 
@@ -451,6 +457,7 @@ namespace MertexerV2.SupplierFunctions
             Unallocated = result.Unallocated;
             Approved = result.Approved;
             PassedTo = result.PassedTo?.TrimReduceTruncate(50);
+            MertexSourceFileName = result.MertexSourceFileName?.TrimReduceTruncate(50);
         }
 
 
@@ -524,20 +531,20 @@ namespace MertexerV2.SupplierFunctions
                     r.PurchaseLedgerRegisterEntries_Credit = crnReg.Where(p => p.SupplierReference == r.Key).ToList();
 
                     foreach (var dr in r.PurchaseLedgerTransferRecordsCurrency?
-                        .Select(d => new SupplierAccountDetail(r.Key, r.Name, r.Currency, r.SEL1, r.DSEL1, r.SEL2, r.DSEL2, r.SEL3, r.DSEL3, d)))
+                        .Select(d => new SupplierAccountDetail(r.Key, r.Name, r.Currency, r.SEL1, r.DSEL1, r.SEL2, r.DSEL2, r.SEL3, r.DSEL3, "TPLTRANS.CUR", d)))
                     {
                         yield return dr;
                     }
 
                     foreach (var inv in r.PurchaseLedgerRegisterEntries_Invoice?.Select(d => new SupplierAccountDetail(r.Key, r.Name, r.Currency,
-                        r.SEL1, r.DSEL1, r.SEL2, r.DSEL2, r.SEL3, r.DSEL3, d, false
+                        r.SEL1, r.DSEL1, r.SEL2, r.DSEL2, r.SEL3, r.DSEL3,"PLINVREG", d, false
                         )))
                     {
                         yield return inv;
                     }
 
                     foreach (var crn in r.PurchaseLedgerRegisterEntries_Credit?.Select(d => new SupplierAccountDetail(r.Key, r.Name, r.Currency,
-                        r.SEL1, r.DSEL1, r.SEL2, r.DSEL2, r.SEL3, r.DSEL3, d, false
+                        r.SEL1, r.DSEL1, r.SEL2, r.DSEL2, r.SEL3, r.DSEL3, "PLCRNREG", d, false
                         )))
                     {
                         yield return crn;
@@ -558,20 +565,20 @@ namespace MertexerV2.SupplierFunctions
                 result.PurchaseLedgerRegisterEntries_Credit = crnReg.Where(p => p.SupplierReference == result.Key).ToList();
 
                 foreach (var dr in result.PurchaseLedgerTransferRecordsCurrency?.Select(d => new SupplierAccountDetail(result.Key, result.Name, result.Currency,
-                    result.SEL1, result.DSEL1, result.SEL2, result.DSEL2, result.SEL3, result.DSEL3, d)))
+                    result.SEL1, result.DSEL1, result.SEL2, result.DSEL2, result.SEL3, result.DSEL3, "TPLTRANS.CUR", d)))
                 {
                     yield return dr;
                 }
 
                 foreach (var inv in result.PurchaseLedgerRegisterEntries_Invoice?.Select(d => new SupplierAccountDetail(result.Key, result.Name, result.Currency,
-                   result.SEL1, result.DSEL1, result.SEL2, result.DSEL2, result.SEL3, result.DSEL3, d, false
+                   result.SEL1, result.DSEL1, result.SEL2, result.DSEL2, result.SEL3, result.DSEL3, "PLINVREG", d, false
                     )))
                 {
                     yield return inv;
                 }
 
                 foreach (var crn in result.PurchaseLedgerRegisterEntries_Credit?.Select(d => new SupplierAccountDetail(result.Key, result.Name, result.Currency,
-                   result.SEL1, result.DSEL1, result.SEL2, result.DSEL2, result.SEL3, result.DSEL3, d, false
+                   result.SEL1, result.DSEL1, result.SEL2, result.DSEL2, result.SEL3, result.DSEL3, "PLCRNREG", d, false
                     )))
                 {
                     yield return crn;
@@ -602,7 +609,8 @@ namespace MertexerV2.SupplierFunctions
             out SqlString Division,
             out SqlDecimal Unallocated,
             out SqlBoolean Approved,
-            out SqlString PassedTo)
+            out SqlString PassedTo,
+            out SqlString MertexSourceFileName)
         {
             var result = (SupplierAccountDetail)obj;
 
@@ -628,6 +636,7 @@ namespace MertexerV2.SupplierFunctions
             Unallocated = result.Unallocated;
             Approved = result.Approved;
             PassedTo = result.PassedTo?.TrimReduceTruncate(50);
+            MertexSourceFileName = result.MertexSourceFileName?.TrimReduceTruncate(50);
         }
     }
 }

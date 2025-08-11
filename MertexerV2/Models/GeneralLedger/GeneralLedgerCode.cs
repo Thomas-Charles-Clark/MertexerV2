@@ -14,9 +14,10 @@ namespace MertexerV2.Models.GeneralLedger
     [UniVerseFileName("GLEDGER")]
     public class GeneralLedgerCode : UniVerseSerializationBase<string>
     {
+        [JsonConstructor]
         public GeneralLedgerCode(string key) : base(key)
         {
-
+            Initialise();
         }
 
         public GeneralLedgerCode() : base()

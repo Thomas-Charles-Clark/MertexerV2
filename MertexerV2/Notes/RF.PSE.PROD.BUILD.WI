@@ -1,0 +1,910 @@
+                                                                                
+     RF.PSE.PROD.BUILD.WI                                                       
+0001 SUBROUTINE RF.PSE.PROD.BUILD.WI                                            
+0002       INCLUDE RFPROGS COMMON                                               
+0003       L.ERR = 0                                                            
+0004       CALL SB.OPEN.FILE("WTASPPARMS",F.WTASPPARMS,L.ERR)                   
+0005       IF L.ERR THEN RETURN                                                 
+0006 ** DES1353+                                                                
+0007       CALL SB.OPEN.FILE("STRACKS",F.STRACKS,L.ERR)                         
+0008       IF L.ERR THEN RETURN                                                 
+0009       CALL SB.OPEN.FILE("STBATCHES",F.STBATCHES,L.ERR)                     
+0010       IF L.ERR THEN RETURN                                                 
+0011 ** DES1353-                                                                
+0012 *DES_115_5+                                                                
+0013       CALL SB.OPEN.FILE("STPARMS",F.STPARMS,L.ERR)                         
+0014       IF L.ERR THEN RETURN                                                 
+0015 *DES_115_5-                                                                
+0016 *DES_115_7+                                                                
+0017       CALL SB.OPEN.FILE("TOELINE",F.TOELINE,L.ERR)                         
+0018       IF L.ERR THEN RETURN                                                 
+0019       CALL SB.OPEN.FILE("WTASPORDERS",F.WTASPORDERS,L.ERR)                 
+0020       IF L.ERR THEN RETURN                                                 
+0021       CALL SB.OPEN.FILE("WTASPPREALLOCS",F.WTASPPREALLOCS,L.ERR)           
+Press any key to continue...                                                    
+0023 *DES_115_7-                                                                
+0024       READ L.WTASPPARMS.REC FROM F.WTASPPARMS,"1" ELSE L.WTASPPARMS.REC = ""                                                                          
+0025       L.ERR = 0                                                            
+0026 ** DES1353+                                                                
+0027 * Read minimum sales stock length, using 0 if not found                    
+0028       MINSTOCKLEN = L.WTASPPARMS.REC<100>                                  
+0029       *                                                                    
+0030       *DES_115_7+                                                          
+0031       LASTACCESSREC = OTHER.REC                                            
+0032       IF INDEX(LASTACCESSREC<10>,"MSL=",1) > 0 THEN                        
+0033          FILTERS = CHANGE(LASTACCESSREC<10>,";",@AM)                       
+0034          FILTER.CNT = 1                                                    
+0035          FILTER.MAX = DCOUNT(FILTERS,@AM)                                  
+0036          *                                                                 
+0037          LOOP WHILE FILTER.CNT <= FILTER.MAX                               
+0038             FILTER = FILTERS<FILTER.CNT>                                   
+0039             *                                                              
+0040             IF FILTER[1,4] = "MSL=" THEN                                   
+0041                MINSTOCKLEN = FILTER[5,9999]                                
+0042                MINSTOCKLEN = MINSTOCKLEN * 1000                            
+0043                FILTER.CNT = FILTER.MAX                                       
+0044             END                                                            
+0045             FILTER.CNT = FILTER.CNT + 1                                    
+0046          REPEAT                                                            
+0047          *                                                                 
+0048       END                                                                  
+0049       *DES_115_7-                                                          
+0050       *                                                                    
+0051       IF MINSTOCKLEN = '' THEN MINSTOCKLEN = 0                             
+0052 *CRT 'MINSTOCKLEN==':MINSTOCKLEN                                           
+0053 ** DES1353-                                                                
+0054       IF OCONV(KEY,"G1*1") = "" THEN                                       
+0055          CALL SB.OPEN.FILE("STPRODLOC",F.STPRODLOC,L.ERR)                  
+0056          IF L.ERR THEN RETURN                                              
+0057          *                                                                 
+0058 *CRT '1 19==':RECORD<19>                                                   
+0059          CALL RF.PRODUCT_DETAIL.WI                                         
+0060 *CRT '2 19==':RECORD<19>                                                   
+0061          *                                                                 
+0062          STPRODMASTER.KEY = KEY                                            
+0063          STPRODMASTER.REC = RECORD                                         
+0064          RECTYPE = "PROD"                                                  
+0065          IF L.WTASPPARMS.REC<78> = "S" THEN L.WTASPPARMS.REC<78> = "Y"     
+0066       END ELSE               
+0067		  CALL SB.OPEN.FILE("STPRODMASTER",F.STPRODMASTER,L.ERR)	            
+0068          IF L.ERR THEN RETURN                                              
+0069          *                                                                 
+0070          STPRODMASTER.KEY = OCONV(KEY,"G0*1")                              
+0071          READ STPRODMASTER.REC FROM F.STPRODMASTER,STPRODMASTER.KEY ELSE RETURN                                                                       
+0072          STPRODMASTER.REC<19> = KEY                                        
+0073          RECTYPE = "LOC"                                                   
+0074          IF L.WTASPPARMS.REC<78> = "A" THEN L.WTASPPARMS.REC<78> = "Y"     
+0075       END                                                                  
+0076 *                                                                          
+0077 * WORK<1> - CONTRACT PRICE FIELDS                                          
+0078 * WORK<11.M> - PO Due Date                                                 
+0079 * WORK<12.M> - PO Number                                                   
+0080 * WORK<13.M> - PO Qty Expected                                             
+0081 *                                                                          
+0082 * WORK<21.M> - Batch reference                                             
+0083 * WORK<22.M> - No of Pieces                                                
+0084 * WORK<23.M> - Length                                                      
+0085 *                                                                          
+0086 * set L.SUMMARISE.PIECES = 0 to show each length individually              
+0087 * setting to 1 will return a unique list of lengths with a count.          
+0088 *                                                                       
+0089 *  L.SUMMARISE.PIECES = 0   
+0090       IF L.WTASPPARMS.REC<78> = "Y" THEN                                   
+0091          L.SUMMARISE.PIECES = 1                                            
+0092       END ELSE                                                             
+0093          L.SUMMARISE.PIECES = 0                                            
+0094       END                                                                  
+0095 *                                                                          
+0096       USER.KEY = PARMS(1)                                                  
+0097       USER.RECORD = PARMS(2)                                               
+0098       LASTACCESSREC = OTHER.REC                                            
+0099       L.CUSREF = LASTACCESSREC<9>                                          
+0100       L.RECORD = STPRODMASTER.REC                                          
+0101 *                                                                          
+0102 *DES_115_3+ DON'T SUMMARISE PIECES FOR B2C_STOCK_ITEM_BREAKDOWN            
+0103 *           SET FLAG USED LATER TO RETURN ACTUAL PIECE NO NOT COUNT        
+0104       IF LASTACCESSREC<3> = "B2C_STOCK_ITEM_BREAKDOWN" THEN L.SUMMARISE.PIECES = 0                                                                    
+0105       L.B2C = 0                                                            
+0106       IF LASTACCESSREC<3>[1,3] = "B2C" THEN L.B2C = 1                      
+0107 *                                                                          
+0108 *DES_115_3-                                                                
+0109 *                                                                          
+0110       L.ERR = 0            
+0111		CALL SB.OPEN.FILE("STPRODBATCH",F.STPRODBATCH,L.ERR)	                                
+0112 *BW*CRT TIME():" OPEN STPRODBATCH ":L.ERR                                  
+0113       IF L.ERR THEN RETURN                                                 
+0114 *                                                                          
+0115       L.PIECE.LEVEL = 1                                                    
+0116       BEGIN CASE                                                           
+0117          CASE STPRODMASTER.REC<13> # "Y"                                   
+0118             L.PIECE.LEVEL = 0                                              
+0119          CASE STPRODMASTER.REC<118> = "C"                                  
+0120             CALL SB.OPEN.FILE("STPIECES",F.ITEMFILE,L.ERR)                 
+0121             IF L.ERR THEN RETURN                                           
+0122             CALL SB.OPEN.FILE("I_STPIECES_PRODLOC.WITH.LENGTH",F.ITEMINDEX,L.ERR)                                                                     
+0123             IF L.ERR THEN RETURN                                           
+0124          CASE STPRODMASTER.REC<118> = "Y"                                  
+0125             CALL SB.OPEN.FILE("STCARTONS",F.ITEMFILE,L.ERR)                
+0126             IF L.ERR THEN RETURN                                           
+0127          CASE STPRODMASTER.REC<118> = "B"                                  
+0128             CALL SB.OPEN.FILE("STBEAMS",F.ITEMFILE,L.ERR)                  
+0129             IF L.ERR THEN RETURN                                           
+0130          CASE 1                                                            
+0131             L.PIECE.LEVEL = 0                                              
+0132       END CASE                                 
+0133 *BW*CRT TIME():" PO DETAILS"                                               
+0134 *                                                                          
+0135 * PO Details                                                               
+0136 *                                                                          
+0137       WORK<11> = ""                                                        
+0138       WORK<12> = ""                                                        
+0139       WORK<13> = ""                                                        
+0140       WORK<14> = ""                                                        
+0141       WORK<15> = ""                                                        
+0142       WORK<16> = "" ;* DES_207                                             
+0143       SAVE.RECORD = RECORD                                                 
+0144       SAVE.KEY = KEY                                                       
+0145       SAVE.VALUE = VALUE                                                   
+0146       CALL SB.OPEN.FILE("POHEAD",F.POHEAD,L.ERR)                           
+0147       IF L.ERR THEN RETURN                                                 
+0148       CALL SB.OPEN.FILE("PODETAIL",F.PODETAIL,L.ERR)                       
+0149       IF L.ERR THEN RETURN                                                 
+0150       CALL SB.OPEN.FILE("DICT PODETAIL",F.D_PODETAIL,L.ERR)                
+0151       IF L.ERR THEN RETURN                                                 
+0152       CALL SB.OPEN.FILE("I_PODETAIL_PRODCODE.LIVE",F.PODETAIL.LIVE,L.ERR)  
+0153       IF L.ERR THEN RETURN                                                 
+0154 *                                                                          
+0155       L.ERR = ""          
+0156		L.PO.QTY.EXP = ""
+0157		CALL SB.STACK.EXP("OS.MINUS.SO",F.D_PODETAIL,L.PO.QTY.EXP,L.ERR)                                                         
+0158 *                                                                          
+0159       READ L.PODETAIL.KEYS FROM F.PODETAIL.LIVE,STPRODMASTER.KEY ELSE L.POD
+                                                                                
+     ETAIL.KEYS = ""                                                            
+0160 *BW*CRT TIME():" PO DETAIL KEYS ":L.PODETAIL.KEYS                          
+0161       L.LMAX = DCOUNT(L.PODETAIL.KEYS,@AM)                                 
+0162       FOR L.LCNT = 1 TO L.LMAX                                             
+0163          KEY = L.PODETAIL.KEYS<L.LCNT>                                     
+0164          L.PONO = OCONV(KEY,"G0*1")                                        
+0165          *                                                                 
+0166          * Check that the PO is for a web visible location                 
+0167          *                                                                 
+0168          READ L.POHEAD FROM F.POHEAD,L.PONO ELSE L.POHEAD = ""             
+0169          IF L.POHEAD<7> >= 3 THEN L.POHEAD = ""                            
+0170          LOCATE(STPRODMASTER.KEY:"*":L.POHEAD<1>,STPRODMASTER.REC,19;L.POS)
+                                                                                
+      ELSE L.POS = 0                                                            
+0171 *BW*CRT TIME():" PO HEAD ":L.PONO:" LOC==":L.POHEAD<1>:" POS==":L.POS      
+0172          *                                                                 
+0173          IF L.POS > 0 THEN                                                 
+0174             READ RECORD FROM F.PODETAIL,KEY THEN                           
+0175                L.DUEDATE = RECORD<257>                                     
+0176                IF RECORD<21> = "CO" THEN                                   
+Press any key to continue...                                                    
+0179                    CALL CALC.EXPCO.ARR.DES(STPRODMASTER.KEY,L.POHEAD<3>,1,L
+                                                                                
+     .DUEDATE)                                                                  
+0180                    *DES2469+                                               
+0181                    IF L.DUEDATE # "" THEN L.DUEDATE = "CO ":OCONV(L.DUEDATE
+                                                                                
+     ,"D2/")                                                                    
+0182                    *DES2469-                                               
+0183 *DES2166-                                                                  
+0184                END                                                         
+0185                IF L.DUEDATE = "" THEN L.DUEDATE = RECORD<21>               
+0186                IF L.DUEDATE = "CO" THEN L.DUEDATE = "Call Off"             
+0187                CALL SB.EVAL.EXP(L.PO.QTY.EXP)                              
+0188                L.OSQTY = VALUE                                             
+0189                *DES2297+                                                   
+0190                L.POCONF = ""                                               
+0191                L.POMSG  = "" ;* DES_207                                    
+0192                IF RECORD<30> # "Y" THEN                                    
+0193                  BEGIN CASE                                                
+0194                  CASE RECORD<283,1> = "Y"                                  
+0195                     L.POCONF = "PO Conf"                                   
+0196                  CASE RECORD<283,1> = "N"                                  
+0197                     L.POCONF = "PO Unconf"                                 
+Press any key to continue...                                                    
+0198                  CASE RECORD<283,1> = "C"                                  
+0199                     L.POCONF = "PO Check"                                  
+0200                  CASE 1                                                    
+0201                     L.POCONF = "*"                                         
+0202                  END CASE                                                  
+0203                  *                                                         
+0204                  L.POMSG = RECORD<179,1> ;* DES_207                        
+0205                END                                                         
+0206                *DES2297-                                                   
+0207                IF L.DUEDATE # "" AND L.OSQTY > 0 THEN                      
+0208                   LOCATE(L.DUEDATE,WORK,11;L.POS;"AR") THEN NULL           
+0209                   WORK = INSERT(WORK,11,L.POS;L.DUEDATE)                   
+0210                   WORK = INSERT(WORK,12,L.POS;L.PONO)                      
+0211                   WORK = INSERT(WORK,13,L.POS;L.OSQTY)                     
+0212                   WORK = INSERT(WORK,14,L.POS;L.POHEAD<1>)                 
+0213                   WORK = INSERT(WORK,15,L.POS;L.POCONF) ;* DES2297         
+0214                   WORK = INSERT(WORK,16,L.POS;L.POMSG)  ;* DES_207         
+0215                END                                                         
+0216             END                                                            
+0217          END                                                               
+0218       NEXT L.LCNT                                                          
+0219       RECORD = SAVE.RECORD                                                 
+0220       KEY = SAVE.KEY                                                       
+Press any key to continue...                                                    
+
+0221       VALUE = SAVE.VALUE                                                   
+0222 *BW*CRT TIME():" BATCH DETAILS"                                            
+0223 *                                                                          
+0224 * Batch/Piece details                                                      
+0225 *                                                                          
+0226       WORK<21> = ""                                                        
+0227       WORK<22> = ""                                                        
+0228       WORK<23> = ""                                                        
+0229       WORK<24> = ""                                                        
+0230       WORK<25> = ""                                                        
+0231       WORK<26> = ""                                                        
+0232       WORK<27> = ""                                                        
+0233       WORK<28> = ""                                                        
+0234       L.BAT.LIST = ""                                                      
+0235       L.WCNT = 0                                                           
+0236 *CRT '19==':STPRODMASTER.REC<19>                                           
+0237       L.LMAX = DCOUNT(STPRODMASTER.REC<19>,@VM)                            
+0238       FOR L.LCNT = 1 TO L.LMAX                                             
+0239          IF L.PIECE.LEVEL THEN                                             
+0240             ***************************************                        
+0241             * Product is stored at piece level                             
+0242             ***************************************                        
+0243 *BW*CRT TIME():" PIECE LEVEL"                                              
+Press any key to continue...                                                    
+
+     -1" THEN                                                                   
+0246 *BW*CRT TIME():" PIECE LEVEL INDEX"                                        
+0247                L.STPRODBATCH<15> = CHANGE(L.ITEMINDEX,@AM,@VM)             
+0248                L.PMAX = DCOUNT(L.STPRODBATCH<15>,@VM)                      
+0249                READ L.STPARMS.REC FROM F.STPARMS,"1" ELSE L.STPARMS.REC = "
+                                                                                
+     "                                                                          
+0250                FOR L.PCNT = 1 TO L.PMAX                                    
+0251                   PIECE.ID = L.STPRODBATCH<15,L.PCNT>                      
+0252                   READ L.ITEMFILE FROM F.ITEMFILE,PIECE.ID THEN            
+0253 ** DES1353+                                                                
+0254                      STRACKS.ID = L.ITEMFILE<8>                            
+0255                      READ L.STRACKS.REC FROM F.STRACKS,STRACKS.ID THEN     
+0256                         IF L.STRACKS.REC<40> # "Y" THEN                    
+0257 ** DES1353-                                                                
+0258                            L.QTY = L.ITEMFILE<7> - SUMMATION(L.ITEMFILE<123
+                                                                                
+     >)                                                                         
+0259                                                                            
+0260                            L.RESERVE.QTY = 0 ;* DES_115_7                  
+0261                            GOSUB 2000        ;* DES_115_7                  
+0262                                                                            
+0263 CALL SB.DISP(9,"L.RESERVE.QTY==":L.RESERVE.QTY)                            
+Press any key to continue...                                                    
+0267 ** IF L.QTY > 0 THEN                                                       
+0268 *DES_115_7                 IF L.QTY GE MINSTOCKLEN THEN                    
+0269                            IF L.QTY GE MINSTOCKLEN OR L.RESERVE.QTY > 0 THE
+                                                                                
+     N                                                                          
+0270 ** DES1353-                                                                
+0271                               L.LOC   = L.ITEMFILE<2>                      
+0272                               L.BATCH = L.ITEMFILE<3>                      
+0273 *DES_115_5+                                                                
+0274 *                              L.PICKABLE = (L.STRACKS.REC<5> = "Y")       
+0275                                                                            
+0276                               IF (L.STRACKS.REC<5> # "Y" AND L.STRACKS.REC<
+                                                                                
+     5> # "A") OR (L.ITEMFILE<45> > "0" AND L.STPARMS.REC<568,L.ITEMFILE<45>> = 
+     "Y") THEN                                                                  
+0277                                  L.PICKABLE = 0                            
+0278                               END ELSE                                     
+0279                                  L.PICKABLE = 1                            
+0280                               END                                          
+0281                               *                                            
+0282 *DES_115_9                    L.RACK  = STRACKS.ID                         
+0283                               L.RACK  = L.LOC:"*":L.BATCH:"*":PIECE.ID:"*":
+                                                                                
+Press any key to continue...                                                    
+
+0284                               L.RACK.TYPE = L.STRACKS.REC<16>              
+0285                               L.RACK.FREELEN = OCONV(L.QTY,"MR23")         
+0286 *DES_115_5-                                                                
+0287                               GOSUB 1000                                   
+0288                            END                                             
+0289 ** DES1353+                                                                
+0290                         END                                                
+0291                      END                                                   
+0292 ** DES1353-                                                                
+0293                   END                                                      
+0294                NEXT L.PCNT                                                 
+0295             END                                                            
+0296          END ELSE                                                          
+0297             ***************************************                        
+0298             * Product is stored at batch level                             
+0299             ***************************************                        
+0300 *BW*CRT TIME():" BATCH LEVEL"                                              
+0301             IF RECTYPE = "LOC" THEN                                        
+0302                L.STPRODLOC = SAVE.RECORD                                   
+0303             END ELSE                                                       
+0304                READ L.STPRODLOC FROM F.STPRODLOC,STPRODMASTER.REC<19,L.LCNT
+                                                                                
+     > ELSE L.STPRODLOC = ""                                                    
+Press any key to continue...                                                    
+0307             L.BMAX = DCOUNT(L.STPRODLOC<92>,@VM)                           
+0308 ** DES1353+                                                                
+0309             L.CNT = 1                                                      
+0310             LOOP                                                           
+0311             WHILE L.CNT <= L.BMAX DO                                       
+0312                L.QTY = 0                                                   
+0313                L.RACKS.LIST = ""; L.FREELEN.LIST = ""; L.PICKABLE.LIST = ""
+                                                                                
+0314                L.TYPE.LIST = ""                                            
+0315                L.STBATCHES.KEY = OCONV(L.STPRODLOC<92,L.CNT>,"G0*1"):"*":OC
+                                                                                
+     ONV(L.STPRODLOC<92,L.CNT>,"G2*1")                                          
+0316                L.BATCH = OCONV(L.STPRODLOC<92,L.CNT>,"G2*1")               
+0317                L.LOC   = OCONV(L.STPRODLOC<92,L.CNT>,"G1*1")               
+0318                *DES_115_9+                                                 
+0319                L.RES.LIST = ""                                             
+0320                L.RES.RACKLIST = ""                                         
+0321  *              L.RESERVE.QTY = 0                          ;* DES_115_7    
+0322                *DES_115_9-                                                 
+0323                *                                                           
+0324                READ L.STBATCHES.REC FROM F.STBATCHES,L.STBATCHES.KEY THEN  
+0325                   L.RMAX = DCOUNT(L.STBATCHES.REC<5>,@VM)                  
+0326                   L.RCNT = 1                                               
+Press any key to continue...                                                    
+
+0331 *DES2468+ ALLOW RACKS WITH <= FREESTOCK TO DISPLAY                         
+0332 *                     IF L.STBATCHES.REC<46,L.RCNT> > 0 AND L.STBATCHES.REC
+                                                                                
+     <47,L.RCNT> = L.STPRODLOC<2> THEN                                          
+0333                      IF L.STBATCHES.REC<47,L.RCNT> = L.STPRODLOC<2> THEN   
+0334 *DES2468-                                                                  
+0335                         READ L.STRACKS.REC FROM F.STRACKS,STRACKS.ID THEN  
+0336                            IF L.STRACKS.REC<40> # "Y" THEN                 
+0337                               L.RACKS.LIST = INSERT(L.RACKS.LIST,1,-1;L.RAC
+                                                                                
+     K.KEY)                                                                     
+0338                               PICKABLE = L.STBATCHES.REC<46,L.RCNT>        
+0339                               IF PICKABLE GE MINSTOCKLEN THEN              
+0340                                  L.QTY = L.QTY + PICKABLE                  
+0341                                  L.FREELEN.LIST  = INSERT(L.FREELEN.LIST,1,
+                                                                                
+     -1;OCONV(PICKABLE,"MR23"))                                                 
+0342                               END ELSE                                     
+0343                                  L.FREELEN.LIST  = INSERT(L.FREELEN.LIST,1,
+                                                                                
+     -1;"0")                                                                    
+0344                               END                                          
+0345 ** DES1353-                                                                
+Press any key to continue...                                                    
+0350                               END ELSE                                     
+0351                                  L.TYPE.LIST = INSERT(L.TYPE.LIST,1,-1;L.ST
+                                                                                
+     RACKS.REC<16>)                                                             
+0352                               END                                          
+0353 *DES2272-                                                                  
+0354                               *DES_115_9+                                  
+0355 *CRT 'RES.LIST BEF==':L.RES.LIST                                           
+0356 *                             GOSUB 2000                                   
+0357 *                             L.RES.LIST = INSERT(L.RES.LIST,1,-1;L.RES.RAC
+                                                                                
+     KQTY)                                                                      
+0358 *CRT 'RES.LIST AFT==':L.RES.LIST                                           
+0359 *CRT 'RACKID==':STRACKS.ID                                                 
+0360                               LOCATE(L.RACK.KEY,L.RES.RACKLIST,1;L.POS;"AL"
+                                                                                
+     ) ELSE                                                                     
+0361 *                                 L.RES.RACKLIST = INSERT(L.RES.RACKLIST,1,
+                                                                                
+     L.POS;STRACKS.ID)                                                          
+0362                                  L.RES.RACKLIST = INSERT(L.RES.RACKLIST,1,-
+                                                                                
+     1;L.RACK.KEY)                                                              
+Press any key to continue...                                                    
+
+                                                                                
+     )                                                                          
+0364                               END                                          
+0365                               *DES_115_9-                                  
+0366                            END                                             
+0367                         END                                                
+0368                      END                                                   
+0369                      L.RCNT = L.RCNT + 1                                   
+0370                   REPEAT                                                   
+0371                                                                            
+0372                END                                                         
+0373                *                                                           
+0374                L.RESERVE.QTY = 0                          ;* DES_115_7     
+0375 *CRT 'RES.LIST BEF==':L.RES.LIST:' RACKLIST==':L.RES.RACKLIST              
+0376                GOSUB 2000                                 ;* DES_115_7     
+0377 *CRT 'RES.LIST AFT==':L.RES.LIST;' RACKLIST==':L.RES.RACKLIST              
+0378                *                                                           
+0379 *               IF L.QTY > 0 THEN                                          
+0380 *DES2468+                                                                  
+0381 *               IF L.QTY > 0 OR L.RESERVE.QTY > 0 THEN     ;* DES_115_7    
+0382                IF L.RACKS.LIST # "" OR L.RESERVE.QTY > 0 THEN              
+0383 *DES2468-                                                                  
+0384 *                  L.PICKABLE = (L.STRACKS.REC<5> = "Y")  ;* DES_115_5     
+Press any key to continue...                                                    
+0386                   L.PICKABLE = CHANGE(L.PICKABLE.LIST,@VM,"|")             
+0387                   L.RACK  = CHANGE(L.RACKS.LIST,@VM,"|")                   
+     ;* DES_115_5                                                               
+0388                   L.RACK.FREELEN = CHANGE(L.FREELEN.LIST,@VM,"|")          
+0389                   L.RACK.TYPE = CHANGE(L.TYPE.LIST,@VM,"|")                
+0390 *DES_115_9+                                                                
+0391 *CRT 'RESLIST==':L.RES.LIST                                                
+0392                   L.RES.LIST = CHANGE(L.RES.LIST,@VM,"|")                  
+0393 *DES_115_9-                                                                
+0394                   GOSUB 1000                                               
+0395                END                                                         
+0396                L.CNT = L.CNT + 1                                           
+0397             REPEAT                                                         
+0398 ***         FOR L.BCNT = 1 TO L.BMAX                                       
+0399 ***            READ L.STPRODBATCH FROM F.STPRODBATCH,L.STPRODLOC<92,L.BCNT>
+                                                                                
+      THEN                                                                      
+0400 ***               L.QTY = L.STPRODBATCH<12>                                
+0401 ***               IF L.QTY > 0 THEN                                        
+0402 ***                  L.BATCH = L.STPRODBATCH<3>                            
+0403 ***                  GOSUB 1000                                            
+0404 ***               END                                                      
+0405 ***            END                                                         
+Press any key to continue...                                                    
+0406 ***         NEXT L.BCNT                                                    
+0407 *** DES1353-                                                               
+0408          END                                                               
+0409       NEXT L.LCNT                                                          
+0410 *                                                                          
+0411 *BW*CRT TIME():" FORMAT OUTPUT"                                            
+0412       L.BMAX = DCOUNT(L.BAT.LIST<1>,@VM)                                   
+0413       FOR L.BCNT = 1 TO L.BMAX                                             
+0414          L.LMAX = DCOUNT(L.BAT.LIST<2,L.BCNT>,CHAR(252))                   
+0415          FOR L.LCNT = 1 TO L.LMAX                                          
+0416             L.WCNT = L.WCNT + 1                                            
+0417             WORK<21,L.WCNT> = L.BAT.LIST<1,L.BCNT>                         
+0418             WORK<22,L.WCNT> = L.BAT.LIST<3,L.BCNT,L.LCNT>                  
+0419             WORK<23,L.WCNT> = L.BAT.LIST<2,L.BCNT,L.LCNT>                  
+0420 *            WORK<24,L.WCNT> = L.BAT.LIST<4,L.BCNT>                        
+0421             WORK<24,L.WCNT> = L.BAT.LIST<4,L.BCNT,L.LCNT> ;* DES_115_7     
+0422             WORK<25,L.WCNT> = L.BAT.LIST<5,L.BCNT,L.LCNT> ;* DES_115_4     
+0423             WORK<26,L.WCNT> = L.BAT.LIST<6,L.BCNT,L.LCNT> ;* DES_115_5     
+0424             WORK<27,L.WCNT> = L.BAT.LIST<7,L.BCNT,L.LCNT> ;* DES_115_7     
+0425             WORK<28,L.WCNT> = L.BAT.LIST<8,L.BCNT,L.LCNT> ;* DES_115_8     
+0426             WORK<29,L.WCNT> = L.BAT.LIST<9,L.BCNT,L.LCNT> ;* DES_115_8     
+0427          NEXT L.LCNT                                                       
+0428       NEXT L.BCNT                                                          
+Press any key to continue...                                                    
+
+0429 *                                                                          
+0430 *BW*CRT TIME():" RETURN"                                                   
+0431       RETURN                                                               
+0432 *                                                                          
+0433 *                                                                          
+0434 ***************************************************************            
+0435 1000:                                                                      
+0436 ***************************************************************            
+0437 *                                                                          
+0438       LOCATE(L.BATCH,L.BAT.LIST,1;L.POS;"AL") ELSE                         
+0439          L.BAT.LIST = INSERT(L.BAT.LIST,1,L.POS;L.BATCH)                   
+0440          L.BAT.LIST = INSERT(L.BAT.LIST,2,L.POS;"")                        
+0441          L.BAT.LIST = INSERT(L.BAT.LIST,3,L.POS;"")                        
+0442 *DES_115_7  L.BAT.LIST = INSERT(L.BAT.LIST,4,L.POS;L.LOC)                  
+0443          L.BAT.LIST = INSERT(L.BAT.LIST,4,L.POS;"") ;* DES_115_7           
+0444          L.BAT.LIST = INSERT(L.BAT.LIST,5,L.POS;"") ;* DES_115_4           
+0445          L.BAT.LIST = INSERT(L.BAT.LIST,6,L.POS;"") ;* DES_115_5           
+0446          L.BAT.LIST = INSERT(L.BAT.LIST,7,L.POS;"") ;* DES_115_5           
+0447          L.BAT.LIST = INSERT(L.BAT.LIST,8,L.POS;"") ;* DES_115_8           
+0448          L.BAT.LIST = INSERT(L.BAT.LIST,9,L.POS;"") ;* DES_115_8           
+0449       END                                                                  
+0450 *                                                                          
+0451       IF L.PIECE.LEVEL AND L.SUMMARISE.PIECES THEN                         
+Press any key to continue...                                                    
+
+0457 *CRT 'BATCH==':L.BATCH:' QPOS==':L.QPOS:' QTY==':L.BAT.LIST<3,L.POS>       
+0458 *         L.BAT.LIST<4,L.POS,L.QPOS> = L.LOC                               
+0459       END ELSE                                                             
+0460          LOCATE(L.QTY,L.BAT.LIST,2,L.POS;L.QPOS;"DR") THEN NULL            
+0461          L.BAT.LIST = INSERT(L.BAT.LIST,2,L.POS,L.QPOS;L.QTY)              
+0462          IF L.PIECE.LEVEL THEN                                             
+0463 *DES_115_3+                                                                
+0464             IF L.B2C THEN                                                  
+0465                L.BAT.LIST = INSERT(L.BAT.LIST,3,L.POS,L.QPOS;L.STPRODBATCH<
+                                                                                
+     15,L.PCNT>)                                                                
+0466                L.BAT.LIST = INSERT(L.BAT.LIST,4,L.POS,L.QPOS;L.LOC)  ;* DES
+                                                                                
+     _115_7                                                                     
+0467                L.BAT.LIST = INSERT(L.BAT.LIST,5,L.POS,L.QPOS;L.PICKABLE)   
+0468                L.BAT.LIST = INSERT(L.BAT.LIST,6,L.POS,L.QPOS;L.RACK) ;* DES
+                                                                                
+     _115_5                                                                     
+0469                L.BAT.LIST = INSERT(L.BAT.LIST,7,L.POS,L.QPOS;L.RESERVE.QTY)
+                                                                                
+      ;* DES_115_7                                                              
+0470                L.BAT.LIST = INSERT(L.BAT.LIST,8,L.POS,L.QPOS;L.RACK.FREELEN
+                                                                                
+Press any key to continue...                                                    
+
+0474                L.BAT.LIST = INSERT(L.BAT.LIST,4,L.POS,L.QPOS;L.LOC) ;* DES_
+                                                                                
+     115_7                                                                      
+0475             END                                                            
+0476 *DES_115_3-                                                                
+0477          END ELSE                                                          
+0478 *DES_115_8+                                                                
+0479             IF L.B2C THEN                                                  
+0480                L.BAT.LIST = INSERT(L.BAT.LIST,5,L.POS,L.QPOS;L.PICKABLE)   
+0481                L.BAT.LIST = INSERT(L.BAT.LIST,6,L.POS,L.QPOS;L.RACK) ;* DES
+                                                                                
+     _115_5                                                                     
+0482                L.BAT.LIST = INSERT(L.BAT.LIST,8,L.POS,L.QPOS;L.RACK.FREELEN
+                                                                                
+     )                                                                          
+0483                L.BAT.LIST = INSERT(L.BAT.LIST,9,L.POS,L.QPOS;L.RACK.TYPE)  
+0484             END                                                            
+0485 *DES_115_8-                                                                
+0486             L.BAT.LIST = INSERT(L.BAT.LIST,3,L.POS,L.QPOS;"")              
+0487             L.BAT.LIST = INSERT(L.BAT.LIST,4,L.POS,L.QPOS;L.LOC)         ;*
+                                                                                
+      DES_115_7                                                                 
+0488 *DES_115_9+                                                                
+Press any key to continue...                                                    
+     * DES_115_7                                                                
+0490             L.BAT.LIST = INSERT(L.BAT.LIST,7,L.POS,L.QPOS;L.RES.LIST) ;* DE
+                                                                                
+     S_115_7                                                                    
+0491 *DES_115_9+                                                                
+0492          END                                                               
+0493 *         L.BAT.LIST<4,L.POS,L.QPOS> = L.LOC                               
+0494       END                                                                  
+0495       RETURN                                                               
+0496 *DES_115_7+                                                                
+0497 ***************************************************************            
+0498 2000: ;* CALCULATE QTY ON RESERVE                                          
+0499 ***************************************************************            
+0500       L.RES.QTY = 0                                                        
+0501       L.RES.RACKQTY = 0                                                    
+0502       *                                                                    
+0503       * CALCULATE SALES ORDER QUANTITY ON RESERVE                          
+0504       *                                                                    
+0505       IF L.PIECE.LEVEL THEN                                                
+0506          L.RES.MAX = DCOUNT(L.ITEMFILE<122>,@VM)                           
+0507          L.RES.CNT = 1                                                     
+0508          *                                                                 
+0509          LOOP WHILE L.RES.CNT <= L.RES.MAX DO                              
+Press any key to continue...                                                    
+0511             *                                                              
+0512             READ L.TOELINE.REC FROM F.TOELINE, L.ALLOC.KEY THEN            
+0513                IF L.TOELINE.REC<311> # "" AND L.TOELINE.REC<79> < 5 THEN   
+0514                   *DES_115_10+                                             
+0515 *                  L.RES.QTY = L.RES.QTY + L.TOELINE.REC<2>                
+0516                   LOCATE(PIECE.ID,L.TOELINE.REC,91;L.PIECE.POS) THEN       
+0517                      L.RES.QTY = L.RES.QTY + L.TOELINE.REC<89,L.PIECE.POS> 
+0518                   END                                                      
+0519                   *DES_115_10-                                             
+0520 *CALL SB.DISP(9,"FOUND ALLOC '":L.ALLOC.KEY:"' ON TOELINE RES.QTY==":L.RES.
+                                                                                
+     QTY)                                                                       
+0521 *CRT "FOUND ALLOC '":L.ALLOC.KEY:"' ON TOELINE RES.QTY==":L.RES.QTY        
+0522 *CRT ' '                                                                   
+0523                END                                                         
+0524             END ELSE                                                       
+0525                * NOT FOUND ON TOELINE, LOOK ON WTASPORDERS                 
+0526                L.KEY.MAX     = DCOUNT(L.ALLOC.KEY,"*") - 1                 
+0527                L.BASKET.KEY  = OCONV(L.ALLOC.KEY,"G0*":L.KEY.MAX)          
+0528                L.BASKET.LINE = OCONV(L.ALLOC.KEY,"G":L.KEY.MAX:"*1")       
+0529                L.LINE.POS    = 0                                           
+0530 *CRT 'KEY==':L.BASKET.KEY                                                  
+0531 *CRT 'LINE==':L.BASKET.LINE                                                
+Press any key to continue...                                                    
+0535                      IF L.BASKET.REC<10,L.LINE.POS> = "Y" THEN L.RES.QTY = 
+     L.RES.QTY + L.BASKET.REC<8,L.LINE.POS>                                     
+0536 *CALL SB.DISP(9,"FOUND ALLOC '":L.ALLOC.KEY:"' ON WTASPORDERS RES.QTY==":L.
+                                                                                
+     RES.QTY)                                                                   
+0537 *CRT "FOUND ALLOC '":L.ALLOC.KEY:"' ON WTASPORDERS RES.QTY==":L.RES.QTY    
+0538 *CRT ' '                                                                   
+0539                   END                                                      
+0540                END ELSE                                                    
+0541                   * NOT FOUND ON WTASPORDERS, LOOK ON WTASPREALLOCS        
+0542                   READ L.PREALLOC.REC FROM F.WTASPPREALLOCS, L.ALLOC.KEY TH
+                                                                                
+     EN                                                                         
+0543                      IF L.PREALLOC.REC<18> # "" THEN L.RES.QTY = L.RES.QTY 
+     + SUMMATION(L.PREALLOC.REC<9>)                                             
+0544 *CALL SB.DISP(9,"FOUND ALLOC '":L.ALLOC.KEY:"' ON WTASPPREALLOCS RES.QTY=="
+                                                                                
+     :L.RES.QTY)                                                                
+0545 *CRT "FOUND ALLOC '":L.ALLOC.KEY:"' ON WTASPPREALLOCS RES.QTY==":L.RES.QTY 
+0546 *CRT ' '                                                                   
+0547                   END                                                      
+0548                END                                                         
+0549             END                                                            
+Press any key to continue...                                                    
+0551          REPEAT                                                            
+0552          *                                                                 
+0553       END ELSE                                                             
+0554          * LOOK FOR ANY ACTIVE ORDER LINES USING THIS BATCH                
+0555          CMD = 'SELECT TOELINE WITH PRODCODE.LIVE = "':STPRODMASTER.KEY:'" 
+     AND MBATCH.NO = "':L.BATCH:'"'                                             
+0556 *RT 'CMD==':CMD                                                            
+0557 *DES2469+                                                                  
+0558 *         EXECUTE CMD RETURNING TOELINE.KEYS CAPTURING WASTE               
+0559          EXECUTE CMD RETURNING TOELINE.KEYS CAPTURING WASTE RTNLIST SEL.KEY
+                                                                                
+     S                                                                          
+0560 *DES2469-                                                                  
+0561          *                                                                 
+0562 *RT 'WASTE==':WASTE                                                        
+0563          EOF = 0                                                           
+0564          LOOP                                                              
+0565 *DES2469+                                                                  
+0566 *          READNEXT TOELINE.KEY ELSE EOF = 1                               
+0567          READNEXT TOELINE.KEY FROM SEL.KEYS ELSE EOF = 1                   
+0568 *DES2469-                                                                  
+0569          WHILE NOT(EOF) DO                                                 
+0570             READ L.TOELINE.REC FROM F.TOELINE,TOELINE.KEY THEN             
+Press any key to continue...                                                    
+
+0575 *DES_115_9+                                                                
+0576                      L.RACK.CNT = 1                                        
+0577                      L.RACK.MAX = DCOUNT(L.TOELINE.REC<366>,@VM)           
+0578                                                                            
+0579                      LOOP WHILE L.RACK.CNT <= L.RACK.MAX                   
+0580                         L.RES.RACK = L.TOELINE.REC<366,L.RACK.CNT>         
+0581 *DES_115_10              L.RES.RACKQTY = L.RES.RACKQTY + L.TOELINE.REC<89,L
+                                                                                
+     .RACK.CNT>                                                                 
+0582                         L.RES.RACKQTY = L.TOELINE.REC<89,L.RACK.CNT>       
+0583                         *                                                  
+0584                         * LOOKUP THE RACK IN THE LIST OF RESERVATION RACKS 
+0585                         * IF THE RACK HAD NO FREE STOCK IT WON'T BE THERE  
+0586                         * SO ADD IT                                        
+0587                         LOCATE(L.LOC:"*":L.BATCH:"**":L.RES.RACK,L.RES.RACK
+                                                                                
+     LIST,1;L.POS) ELSE                                                         
+0588                            L.RES.RACKLIST = INSERT(L.RES.RACKLIST,1,-1;L.LO
+                                                                                
+     C:"*":L.BATCH:"**":L.RES.RACK)                                             
+0589                            L.RACKS.LIST = INSERT(L.RACKS.LIST,1,-1;L.LOC:"*
+                                                                                
+     ":L.BATCH:"**":L.RES.RACK)                                                 
+Press any key to continue...                                                    
+
+     0")                                                                        
+0592                            L.TYPE.LIST = INSERT(L.TYPE.LIST,1,-1;XLATE("STR
+                                                                                
+     ACKS",L.RES.RACK,16,"X"))                                                  
+0593                         END                                                
+0594 *CRT 'RACK ':L.RES.RACK:' POS==':L.POS                                     
+0595                         *                                                  
+0596 *DES_115_10                 L.RES.LIST<1,L.POS> = OCONV(L.RES.LIST<1,L.POS>
+                                                                                
+      + L.RES.RACKQTY,"MR23")                                                   
+0597                         L.RES.LIST<1,L.POS> = OCONV(ICONV(L.RES.LIST<1,L.PO
+                                                                                
+     S>,"MR23") + L.RES.RACKQTY,"MR23")                                         
+0598                         *                                                  
+0599                         L.RACK.CNT = L.RACK.CNT + 1                        
+0600                      REPEAT                                                
+0601 *CRT 'L.RES.RACKLIST==':L.RES.RACKLIST                                     
+0602 *CRT 'L.RESLIST==':L.RES.LIST                                              
+0603 *DES_115_9-                                                                
+0604                   END                                                      
+0605                END                                                         
+0606             END                                                            
+0607          REPEAT                                                            
+Press any key to continue...                                                    
+
+0610          *                                                                 
+0611          CMD = 'SELECT WTASPORDERS WITH PRODCODE = "':STPRODMASTER.KEY:'" A
+                                                                                
+     ND ALL.BATCH = "':L.BATCH:'"'                                              
+0612 *CRT 'CMD==':CMD                                                           
+0613 *DES2469+                                                                  
+0614 *         EXECUTE CMD RETURNING WTASPORDERS.KEYS CAPTURING WASTE           
+0615          EXECUTE CMD RETURNING WTASPORDERS.KEYS CAPTURING WASTE RTNLIST SEL
+                                                                                
+     .KEYS                                                                      
+0616 *DES2469-                                                                  
+0617          *                                                                 
+0618 *CRT 'WASTE==':WASTE                                                       
+0619          EOF = 0                                                           
+0620          LOOP                                                              
+0621 *DES2469+                                                                  
+0622 *         READNEXT BASKET.KEY ELSE EOF = 1                                 
+0623          READNEXT BASKET.KEY FROM SEL.KEYS ELSE EOF = 1                    
+0624 *DES2469-                                                                  
+0625          WHILE NOT(EOF) DO                                                 
+0626             READ L.BASKET.REC FROM F.WTASPORDERS,BASKET.KEY THEN           
+0627                LOCATE(L.BATCH,L.BASKET.REC,13;L.BATCH.POS) THEN            
+0628 *RT 'WTASPORDERS ':BASKET.KEY:' BATCH ':L.BATCH:' FOUND AT ':L.BATCH.POS   
+Press any key to continue...                                                    
+0633                      L.RACK.MAX = DCOUNT(L.BASKET.REC<16>,@VM)             
+0634                                                                            
+0635                      LOOP WHILE L.RACK.CNT <= L.RACK.MAX                   
+0636                         L.RES.RACK = L.BASKET.REC<16,L.RACK.CNT>           
+0637                         L.RES.RACKQTY = L.BASKET.REC<17,L.RACK.CNT>        
+0638                         * LOOKUP THE RACK IN THE LIST OF RESERVATION RACKS 
+0639                         * IF THE RACK HAD NO FREE STOCK IT WON'T BE THERE  
+0640                         * SO ADD IT                                        
+0641                         LOCATE(L.LOC:"*":L.BATCH:"**":L.RES.RACK,L.RES.RACK
+                                                                                
+     LIST,1;L.POS) ELSE                                                         
+0642                            L.RES.RACKLIST = INSERT(L.RES.RACKLIST,1,-1;L.LO
+                                                                                
+     C:"*":L.BATCH:"**":L.RES.RACK)                                             
+0643                            L.RACKS.LIST = INSERT(L.RACKS.LIST,1,-1;L.LOC:"*
+                                                                                
+     ":L.BATCH:"**":L.RES.RACK)                                                 
+0644                            L.PICKABLE.LIST = INSERT(L.PICKABLE.LIST,1,-1;(X
+                                                                                
+     LATE("STRACKS",L.RES.RACK,5,"X") = "Y"))                                   
+0645                            L.FREELEN.LIST = INSERT(L.FREELEN.LIST,1,-1;"0.0
+                                                                                
+     0")                                                                        
+Press any key to continue...                                                    
+
+0648 *DES_115_10                 L.RES.LIST<1,L.POS> = OCONV(L.RES.LIST<1,L.POS>
+                                                                                
+      + L.RES.RACKQTY,"MR23")                                                   
+0649                         L.RES.LIST<1,L.POS> = OCONV(ICONV(L.RES.LIST<1,L.PO
+                                                                                
+     S>,"MR23") + L.RES.RACKQTY,"MR23")                                         
+0650                         *                                                  
+0651                         L.RACK.CNT = L.RACK.CNT + 1                        
+0652                      REPEAT                                                
+0653 *CRT 'L.RES.RACKLIST==':L.RES.RACKLIST                                     
+0654 *CRT 'L.RESLIST==':L.RES.LIST                                              
+0655 *DES_115_9-                                                                
+0656                                                                            
+0657                   END                                                      
+0658                END                                                         
+0659             END                                                            
+0660          REPEAT                                                            
+0661          *                                                                 
+0662          * LOOK FOR ANY ACTIVE PRE ALLOCATIONS USING THIS BATCH            
+0663          *                                                                 
+0664          CMD = 'SELECT WTASPPREALLOCS WITH PRODCODE = "':STPRODMASTER.KEY:'
+                                                                                
+     " AND BATCH.NO = "':L.BATCH:'"'                                            
+Press any key to continue...                                                    
+
+0648 *DES_115_10                 L.RES.LIST<1,L.POS> = OCONV(L.RES.LIST<1,L.POS>
+                                                                                
+      + L.RES.RACKQTY,"MR23")                                                   
+0649                         L.RES.LIST<1,L.POS> = OCONV(ICONV(L.RES.LIST<1,L.PO
+                                                                                
+     S>,"MR23") + L.RES.RACKQTY,"MR23")                                         
+0650                         *                                                  
+0651                         L.RACK.CNT = L.RACK.CNT + 1                        
+0652                      REPEAT                                                
+0653 *CRT 'L.RES.RACKLIST==':L.RES.RACKLIST                                     
+0654 *CRT 'L.RESLIST==':L.RES.LIST                                              
+0655 *DES_115_9-                                                                
+0656                                                                            
+0657                   END                                                      
+0658                END                                                         
+0659             END                                                            
+0660          REPEAT                                                            
+0661          *                                                                 
+0662          * LOOK FOR ANY ACTIVE PRE ALLOCATIONS USING THIS BATCH            
+0663          *                                                                 
+0664          CMD = 'SELECT WTASPPREALLOCS WITH PRODCODE = "':STPRODMASTER.KEY:'
+                                                                                
+     " AND BATCH.NO = "':L.BATCH:'"'                                            
+Press any key to continue...                                                    
+
+0665 *RT 'CMD==':CMD                                                            
+0666 *DES2469+                                                                  
+0667 *         EXECUTE CMD RETURNING WTASPPREALLOCS.KEYS CAPTURING WASTE        
+0668          EXECUTE CMD RETURNING WTASPPREALLOCS.KEYS CAPTURING WASTE RTNLIST 
+     SEL.KEYS                                                                   
+0669 *DES2469-                                                                  
+0670 *                                                                          
+0671 *RT 'WASTE==':WASTE                                                        
+0672          EOF = 0                                                           
+0673          LOOP                                                              
+0674 *DES2469+                                                                  
+0675 *         READNEXT PREALLOC.KEY ELSE EOF = 1                               
+0676          READNEXT PREALLOC.KEY FROM SEL.KEYS ELSE EOF = 1                  
+0677 *DES2469-                                                                  
+0678          WHILE NOT(EOF) DO                                                 
+0679             READ L.PREALLOC.REC FROM F.WTASPPREALLOCS,PREALLOC.KEY THEN    
+0680                IF L.PREALLOC.REC<18,L.BATCH.POS> # "" THEN                 
+0681 *DES2467+                                                                  
+0682                   L.RES.RACKS = CHANGE(L.PREALLOC.REC<10>,"%",@VM)         
+0683                   L.RES.RACKQTYS = CHANGE(L.PREALLOC.REC<11>,"%",@VM)      
+0684                   L.RES.CNT = 1; L.RES.MAX = DCOUNT(L.RES.RACKS,@VM)       
+0685                   *                                                        
+0686                   LOOP WHILE L.RES.CNT <= L.RES.MAX DO                     
+Press any key to continue...                                                    
+0693 *DES_115_10         L.RES.RACKQTY = L.RES.RACKQTY + L.PREALLOC.REC<11>     
+0694 *                   L.RES.RACKQTY = L.PREALLOC.REC<11>                     
+0695                      L.RES.RACKQTY = L.RES.RACKQTYS<1,L.RES.CNT>           
+0696                      *                                                     
+0697                      * LOOKUP THE RACK IN THE LIST OF RESERVATION RACKS    
+0698                      * IF THE RACK HAD NO FREE STOCK IT WON'T BE THERE     
+0699                      * SO ADD IT                                           
+0700                      LOCATE(L.LOC:"*":L.BATCH:"**":L.RES.RACK,L.RES.RACKLIS
+                                                                                
+     T,1;L.POS) ELSE                                                            
+0701                         L.RES.RACKLIST = INSERT(L.RES.RACKLIST,1,-1;L.LOC:"
+                                                                                
+     *":L.BATCH:"**":L.RES.RACK)                                                
+0702                         L.RACKS.LIST = INSERT(L.RACKS.LIST,1,-1;L.LOC:"*":L
+                                                                                
+     .BATCH:"**":L.RES.RACK)                                                    
+0703                         L.PICKABLE.LIST = INSERT(L.PICKABLE.LIST,1,-1;(XLAT
+                                                                                
+     E("STRACKS",L.RES.RACK,5,"X") = "Y"))                                      
+0704                         L.FREELEN.LIST = INSERT(L.FREELEN.LIST,1,-1;"0.00")
+                                                                                
+0705                         L.TYPE.LIST = INSERT(L.TYPE.LIST,1,-1;XLATE("STRACK
+                                                                                
+Press any key to continue...                                                    
+
+                                                                                
+     .RES.RACKQTY,"MR23")                                                       
+0708                      L.RES.LIST<1,L.POS> = OCONV(ICONV(L.RES.LIST<1,L.POS>,
+                                                                                
+     "MR23") + L.RES.RACKQTY,"MR23")                                            
+0709                      *                                                     
+0710 *CRT 'L.RES.RACKLIST==':L.RES.RACKLIST                                     
+0711 *CRT 'L.RESLIST==':L.RES.LIST                                              
+0712 *DES_115_9-                                                                
+0713                      L.RES.CNT += 1                                        
+0714                   REPEAT                                                   
+0715                   L.RES.QTY = L.RES.QTY + L.PREALLOC.REC<9>                
+0716                END                                                         
+0717             END                                                            
+0718          REPEAT                                                            
+0719          *                                                                 
+0720       END                                                                  
+0721       L.RESERVE.QTY = L.RESERVE.QTY + L.RES.QTY                            
+0722       L.RESERVE.QTY = OCONV(L.RESERVE.QTY,"MR23")                          
+0723 *CRT 'L.RESERVE.QTY==':L.RESERVE.QTY:" !!! MEANINGLESS IF CALC AT RACK LEVE
+                                                                                
+     L"                                                                         
+0724 *DES_115_9+                                                                
+Press any key to continue...                                                    
+0712 *DES_115_9-                                                                
+0713                      L.RES.CNT += 1                                        
+0714                   REPEAT                                                   
+0715                   L.RES.QTY = L.RES.QTY + L.PREALLOC.REC<9>                
+0716                END                                                         
+0717             END                                                            
+0718          REPEAT                                                            
+0719          *                                                                 
+0720       END                                                                  
+0721       L.RESERVE.QTY = L.RESERVE.QTY + L.RES.QTY                            
+0722       L.RESERVE.QTY = OCONV(L.RESERVE.QTY,"MR23")                          
+0723 *CRT 'L.RESERVE.QTY==':L.RESERVE.QTY:" !!! MEANINGLESS IF CALC AT RACK LEVE
+                                                                                
+     L"                                                                         
+0724 *DES_115_9+                                                                
+Press any key to continue...                                                    
+0725 *      L.RES.RACKQTY = OCONV(L.RES.RACKQTY,"MR23")                         
+0726 *CRT 'L.RES.RACKQTY==':L.RES.RACKQTY                                       
+0727 *DES_115_9-                                                                
+0728 CRT 'REC==':LEN(RECORD):" RF==":RTN.FLAG:" CNT==":CNT                      
+0729       RETURN                                                               
+0730 *DES_115_7-                                                                
+MERTEX>                                                                         
+F2-Save F4-Del F5-List F6-Menu F7-Edit                                          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

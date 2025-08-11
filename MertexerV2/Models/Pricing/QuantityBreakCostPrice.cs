@@ -18,9 +18,10 @@ namespace MertexerV2.GeneralFunctions.Pricing
     [UniVerseFileName("STPRODMASTER")]
     public class ProductStub : UniVerseSerializationBase<string>
     {
+        [JsonConstructor]
         public ProductStub(string key) : base(key)
         {
-
+            Initialise();
         }
 
         public ProductStub() : base()

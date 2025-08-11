@@ -46,8 +46,7 @@ namespace MertexerV2.GeneralLedgerFunctions
                     true,
                     false,
                     50,
-                    UniVerseAccount)
-                    .ToList();
+                    UniVerseAccount);
 
                 foreach (var r in results)
                 {
@@ -58,11 +57,60 @@ namespace MertexerV2.GeneralLedgerFunctions
 
         public static void GeneralLedgerBatchDataSelect_FillRow(
             object obj,
-            out SqlString Code)
+            out SqlString GeneralLedgerBatchDataID,
+            out SqlString Type,
+            out SqlString DocumentNumber,
+            out SqlDateTime DocumentDT,
+            out SqlDateTime PostDT,
+            out SqlString ItemReference,
+            out SqlString SupplierCode,
+            out SqlString Amounts,
+            out SqlString GeneralLedgerCodes,
+            out SqlDecimal VATTax,
+            out SqlDecimal DocumentTotal,
+            out SqlString SupplierName,
+            out SqlString Memo,
+            out SqlString GeneralLedgerSubCodes,
+            out SqlString Prefix,
+            out SqlString TransactionType,
+            out SqlString OtherMemos
+            )
         {
             var result = (GeneralLedgerBatchData)obj;
 
-            Code = result.Key.TrimReduceTruncate(20);
+            GeneralLedgerBatchDataID = result.Key;
+
+            Type = result.Type ?? SqlString.Null;
+
+            DocumentNumber = result.DocumentNumber ?? SqlString.Null;
+
+            DocumentDT = result.DocumentDT ?? SqlDateTime.Null;
+
+            PostDT = result.PostDT ?? SqlDateTime.Null;
+
+            ItemReference = result.ItemReference ?? SqlString.Null;
+
+            SupplierCode = result.SupplierCode ?? SqlString.Null;
+
+            Amounts = result.Amounts?.Any() == true ? JsonConvert.SerializeObject(result.Amounts) : SqlString.Null;
+
+            GeneralLedgerCodes = result.GeneralLedgerCodes?.Any() == true ? JsonConvert.SerializeObject(result.GeneralLedgerCodes) : SqlString.Null;
+
+            VATTax = result.VATTax;
+
+            DocumentTotal = result.DocumentTotal;
+
+            SupplierName = result.SupplierName ?? SqlString.Null;
+
+            Memo = result.Memo ?? SqlString.Null;
+
+            GeneralLedgerSubCodes = result.GeneralLedgerSubCodes?.Any() == true ? JsonConvert.SerializeObject(result.GeneralLedgerSubCodes) : SqlString.Null;
+
+            Prefix = result.Prefix ?? SqlString.Null;
+
+            TransactionType = result.TransactionType ?? SqlString.Null;
+
+            OtherMemos = result.OtherMemos?.Any() == true ? JsonConvert.SerializeObject(result.OtherMemos) : SqlString.Null;
         }
     }
 }

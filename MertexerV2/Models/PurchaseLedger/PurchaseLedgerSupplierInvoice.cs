@@ -76,7 +76,7 @@ namespace MertexerV2.Models.PurchaseLedger
 
         [UniVerseIndex(5)]
         [UniVerseFieldName("DOCNO")]
-        public string DocumentReference { get; set; }
+        public string DocumentNumber { get; set; }
 
         [JsonAlsoUpdates("PostDate")]
         public DateTime? PostDT { get; set; }

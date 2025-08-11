@@ -6,14 +6,17 @@ using System.Threading.Tasks;
 
 using MertexerV2.Utilities;
 
+using Newtonsoft.Json;
+
 namespace MertexerV2.Models.GeneralLedger
 {
     [UniVerseFileName("GLBATCHDATA")]
     public class GeneralLedgerBatchData : UniVerseSerializationBase<string>
     {
+        [JsonConstructor]
         public GeneralLedgerBatchData(string key) : base(key)
         {
-
+            Initialise();
         }
 
         public GeneralLedgerBatchData() : base()
@@ -32,7 +35,7 @@ namespace MertexerV2.Models.GeneralLedger
 
         [UniVerseIndex(3)]
         [UniVerseFieldName("DOCREF")]
-        public string DocumentReference { get; set; }
+        public string DocumentNumber { get; set; }
 
         [JsonAlsoUpdates("DocumentDate")]
         public DateTime? DocumentDT { get; set; }
@@ -109,7 +112,7 @@ namespace MertexerV2.Models.GeneralLedger
 
         [UniVerseIndex(7)]
         [UniVerseFieldName("SUPREF")]
-        public string SupplierReference { get; set; }
+        public string SupplierCode { get; set; }
 
         [UniVerseIndex(9)]
         [UniVerseFieldName("SS.AMOUNT")]

@@ -120,14 +120,45 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
         public static void PurchaseLedgerRegisterHistorySelect_FillRow(
             object obj,
-            out SqlString Key
+            out SqlString PurchaseLedgerRegisterHistoryID,
+            out SqlString RegisterNumber,
+            out SqlDateTime OnFileDT,
+            out SqlString SupplierCode,
+            out SqlDateTime ConvertedDT,
+            out SqlString CreditNumber,
+            out SqlString InvoiceNumber,
+            out SqlString TransactionNumber,
+            out SqlDateTime DeletedDT,
+            out SqlString UserID,
+            out SqlString TransactionType,
+            out SqlDecimal DocumentTotal
             )
         {
-            var result = (PurchaseLedgerTransaction)obj;
+            var result = (PurchaseLedgerRegisterHistory)obj;
 
-            Key = result.Key?.TrimReduceTruncate(50);
+            PurchaseLedgerRegisterHistoryID = result.Key;
 
-            throw new NotImplementedException();
+            RegisterNumber = result.RegisterNumber ?? SqlString.Null;
+
+            OnFileDT = result.OnFileDT ?? SqlDateTime.Null;
+
+            SupplierCode = result.SupplierCode ?? SqlString.Null;
+
+            ConvertedDT = result.ConvertedDT ?? SqlDateTime.Null;
+
+            CreditNumber = result.CreditNumber ?? SqlString.Null;
+
+            InvoiceNumber = result.InvoiceNumber ?? SqlString.Null;
+
+            TransactionNumber = result.TransactionNumber ?? SqlString.Null;
+
+            DeletedDT = result.DeletedDT ?? SqlDateTime.Null;
+
+            UserID = result.UserID ?? SqlString.Null;
+
+            TransactionType = result.TransactionType ?? SqlString.Null;
+
+            DocumentTotal = result.DocumentTotal;
         }
     }
 }

@@ -6,14 +6,17 @@ using System.Threading.Tasks;
 
 using MertexerV2.Utilities;
 
+using Newtonsoft.Json;
+
 namespace MertexerV2.Models.GeneralLedger
 {
     [UniVerseFileName("GLBATCH")]
     public class GeneralLedgerBatch : UniVerseSerializationBase<string>
     {
+        [JsonConstructor]
         public GeneralLedgerBatch(string key) : base(key)
         {
-
+            Initialise();
         }
 
         public GeneralLedgerBatch() : base()

@@ -46,8 +46,7 @@ namespace MertexerV2.GeneralLedgerFunctions
                     true,
                     false,
                     50,
-                    UniVerseAccount)
-                    .ToList();
+                    UniVerseAccount);
 
                 foreach (var r in results)
                 {
@@ -58,11 +57,36 @@ namespace MertexerV2.GeneralLedgerFunctions
 
         public static void GeneralLedgerBatchSelect_FillRow(
             object obj,
-            out SqlString Code)
+            out SqlString GeneralLedgerBatchID,
+            out SqlString TransactionType,
+            out SqlString Status,
+            out SqlString BatchTotals,
+            out SqlString AccumulatedTotals,
+            out SqlString DataKeys,
+            out SqlInt32 NumberOfRecords,
+            out SqlDateTime BatchDT,
+            out SqlString Operator
+            )
         {
             var result = (GeneralLedgerBatch)obj;
 
-            Code = result.Key.TrimReduceTruncate(20);
+            GeneralLedgerBatchID = result.Key;
+
+            TransactionType = result.TransactionType ?? SqlString.Null;
+
+            Status = result.Status ?? SqlString.Null;
+
+            BatchTotals = result.BatchTotals?.Any() == true ? JsonConvert.SerializeObject(result.BatchTotals) : SqlString.Null;
+
+            AccumulatedTotals = result.AccumulatedTotals?.Any() == true ? JsonConvert.SerializeObject(result.AccumulatedTotals) : SqlString.Null;
+
+            DataKeys = result.DataKeys?.Any() == true ? JsonConvert.SerializeObject(result.DataKeys) : SqlString.Null;
+
+            NumberOfRecords = result.NumberOfRecords;
+
+            BatchDT = result.BatchDT ?? SqlDateTime.Null;
+
+            Operator = result.Operator ?? SqlString.Null;
         }
     }
 }

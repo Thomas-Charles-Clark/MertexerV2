@@ -51,9 +51,6 @@ namespace MertexerV2.CompanyFileFunctions
 
             UniUpsert<CompanyVAT>.Upsert(CompanyVATJSON, uniVerseFile);
 
-            uniVerseFile.UnlockRecord(CFVATRecord.Key);
-            
-
             return CFVATRecord.Key;
         }
 

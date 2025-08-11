@@ -124,12 +124,13 @@ namespace MertexerV2.PurchaseLedgerFunctions
             out SqlString ItemReference,
             out SqlDecimal OriginalValue,
             out SqlString DocumentReference,
-            out SqlDecimal VATDiscount,
+            out SqlDecimal VATTaxesTotal,
             out SqlDecimal Debit,
             out SqlDecimal Credit,
             out SqlDecimal Balance,
             out SqlByte Period,
             out SqlString Status,
+            out SqlString Statuses,
             out SqlString SupplierReference,
             out SqlInt32 Age,
             out SqlDecimal OriginalValueABS,
@@ -171,30 +172,31 @@ namespace MertexerV2.PurchaseLedgerFunctions
             ItemReference = result.ItemReference?.TrimReduceTruncate(50) ?? SqlString.Null;
             OriginalValue = result.OriginalValue;
             DocumentReference = result.DocumentNumber?.TrimReduceTruncate(50) ?? SqlString.Null;
-            VATDiscount = result.VATDiscount;
+            VATTaxesTotal = result.VATTaxesTotal;
             Debit = result.Debit;
             Credit = result.Credit;
             Balance = result.Balance;
             Period = result.Period;
             Status = result.Status.TrimReduceTruncate(1);
+            Statuses = result.Statuses?.Any() == true ? JsonConvert.SerializeObject(result.Statuses) : SqlString.Null;
             SupplierReference = result.SupplierReference?.TrimReduceTruncate(50) ?? SqlString.Null;
             Age = result.Age;
             OriginalValueABS = result.OriginalValueABS;
             DisputeMemo = result.DisputeMemo?.TrimReduceTruncate(50);
             Dispute = result.Dispute?.TrimReduceTruncate(1) ?? SqlString.Null;
             Adjust = result.Adjust?.TrimReduceTruncate(1) ?? SqlString.Null;
-            DiscountPercentage = result.DiscountPercentage;
+            DiscountPercentage = result.DiscountPercentage ?? SqlDecimal.Null;
             SelectedForCheque = result.SelectedForCheque?.TrimReduceTruncate(1) ?? SqlString.Null;
-            DiscountAmount = result.DiscountAmount;
+            DiscountAmount = result.DiscountAmount ?? SqlDecimal.Null;
             Payment = result.Payment;
             Unallocated = result.Unallocated;
-            SDTaken = result.SDTaken;
-            DiscountTaken = result.DiscountTaken;
+            SDTaken = result.SDTaken ?? SqlDecimal.Null;
+            DiscountTaken = result.DiscountTaken ?? SqlDecimal.Null;
             PostDT = result.PostDT ?? SqlDateTime.Null;
             DiscountCutOffDT = result.DiscountCutOffDT ?? SqlDateTime.Null;
             CurrencyCode = result.CurrencyCode?.TrimReduceTruncate(4) ?? SqlString.Null;
             ExchangeRates = result.ExchangeRates.Any() ? JsonConvert.SerializeObject(result.ExchangeRates) : SqlString.Null;
-            MostRecentExchangeRate = result.MostRecentExchangeRate;
+            MostRecentExchangeRate = result.ExchangeRates.Any() ? result.ExchangeRates.First() : SqlDecimal.Null;
             ExchangeRateDifferences = result.ExchangeRateDifferences;
             BankCharges = result.BankCharges;
             PaidDT = result.PaidDT ?? SqlDateTime.Null;

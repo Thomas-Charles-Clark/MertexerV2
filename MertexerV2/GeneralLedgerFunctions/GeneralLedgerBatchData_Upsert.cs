@@ -46,9 +46,6 @@ namespace MertexerV2.GeneralLedgerFunctions
 
             UniUpsert<GeneralLedgerBatchData>.Upsert(GeneralLedgerBatchDataJSON, uniVerseFile);
 
-            uniVerseFile.UnlockRecord(GeneralLedgerBatchData.Key);
-
-
             return GeneralLedgerBatchData.Key;
         }
 

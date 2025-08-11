@@ -6,14 +6,17 @@ using System.Threading.Tasks;
 
 using MertexerV2.Utilities;
 
+using Newtonsoft.Json;
+
 namespace MertexerV2.Models.GeneralLedger
 {
     [UniVerseFileName("GLTYPE")]
     public class GeneralLedgerAccountType : UniVerseSerializationBase<string>
     {
+        [JsonConstructor]
         public GeneralLedgerAccountType(string key) : base(key)
         {
-
+            Initialise();
         }
 
         public GeneralLedgerAccountType() : base()

@@ -31,7 +31,7 @@ namespace MertexerV2.Models.PurchaseLedger
 
         [UniVerseIndex(1)]
         [UniVerseFieldName("REGNO")]
-        public string RegistryNumber { get; set; }
+        public string RegisterNumber { get; set; }
 
         public DateTime? OnFileDT { get; set; }
 
@@ -71,7 +71,7 @@ namespace MertexerV2.Models.PurchaseLedger
 
         [UniVerseIndex(3)]
         [UniVerseFieldName("SUPREF")]
-        public string SupplierReference { get; set; }
+        public string SupplierCode { get; set; }
 
         public DateTime? ConvertedDT { get; set; }
 

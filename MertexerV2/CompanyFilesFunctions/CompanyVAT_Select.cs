@@ -66,34 +66,136 @@ namespace MertexerV2.CompanyFileFunctions
 
         public static void CompanyVATSelect_FillRow(
             object obj,
-            out SqlString Code,
+            out SqlString VATCode,
             out SqlByte SortCode,
             out SqlString ReportIndicator,
             out SqlDecimal VATRate,
             out SqlString ECVAT,
             out SqlString Description,
-            out SqlDecimal PurchaseInvoiceTax,
-            out SqlDecimal PurchaseInvoiceVAT,
-            out SqlDecimal PurchaseQuarterTaxTotal,
-            out SqlDecimal PurchaseQuarterVATTotal,
-            out SqlDecimal PurchaseNextPeriodInvoiceTax,
-            out SqlDecimal PurchaseNextPeriodInvoiceVAT
+            out SqlDecimal SalesInvoicesValue,
+            out SqlDecimal SalesInvoicesTax,
+            out SqlDecimal SalesCreditSalesValue,
+            out SqlDecimal SalesCreditSalesTax,
+            out SqlDecimal SalesCreditNotesValue,
+            out SqlDecimal SalesCreditNotesTax,
+            out SqlDecimal SalesCashSalesValue,
+            out SqlDecimal SalesCashSalesTax,
+            out SqlDecimal SalesQuarterValueTotal,
+            out SqlDecimal SalesQuarterTaxTotal,
+            out SqlDecimal SalesNextPeriodInvoicesValue,
+            out SqlDecimal SalesNextPeriodInvoicesTax,
+            out SqlDecimal SalesNextPeriodCreditSalesValue,
+            out SqlDecimal SalesNextPeriodCreditSalesTax,
+            out SqlDecimal SalesNextPeriodCreditNotesValue,
+            out SqlDecimal SalesNextPeriodCreditNotesTax,
+            out SqlDecimal SalesNextPeriodCashSalesValue,
+            out SqlDecimal SalesNextPeriodCashSalesTax,
+            out SqlDecimal PurchasesInvoicesValue,
+            out SqlDecimal PurchasesInvoicesTax,
+            out SqlDecimal PurchasesCreditNotesValue,
+            out SqlDecimal PurchasesCreditNotesTax,
+            out SqlDecimal PurchasesPettyCashValue,
+            out SqlDecimal PurchasesPettyCashTax,
+            out SqlDecimal PurchasesOtherPaymentsValue,
+            out SqlDecimal PurchasesOtherPaymentsTax,
+            out SqlDecimal PurchasesQuarterValueTotal,
+            out SqlDecimal PurchasesQuarterTaxTotal,
+            out SqlDecimal PurchasesNextPeriodInvoicesValue,
+            out SqlDecimal PurchasesNextPeriodInvoicesTax,
+            out SqlDecimal PurchasesNextPeriodCreditNotesValue,
+            out SqlDecimal PurchasesNextPeriodCreditNotesTax,
+            out SqlDecimal PurchasesNextPeriodPettyCashValue,
+            out SqlDecimal PurchasesNextPeriodPettyCashTax,
+            out SqlDecimal PurchasesNextPeriodOtherPaymentsValue,
+            out SqlDecimal PurchasesNextPeriodOtherPaymentsTax
+
             )
         {
             var p = (CompanyVAT)obj;
 
-            Code = p.Key?.TrimReduceTruncate(2);
+            VATCode = p.Key;
+
             SortCode = p.SortCode;
-            ReportIndicator = p.ReportIndicator?.TrimReduceTruncate(1);
+
+            ReportIndicator = p.ReportIndicator ?? SqlString.Null;
+
             VATRate = p.VATRate;
-            ECVAT = p.ECVAT;
-            Description = p.Description?.TrimReduceTruncate(100);
-            PurchaseInvoiceTax = p.PurchasesInvoicesTax;
-            PurchaseInvoiceVAT = p.PurchasesInvoicesValue;
-            PurchaseQuarterTaxTotal = p.PurchasesQuarterTaxTotal;
-            PurchaseQuarterVATTotal = p.PurchasesQuarterValueTotal;
-            PurchaseNextPeriodInvoiceTax = p.PurchasesNextPeriodInvoicesTax;
-            PurchaseNextPeriodInvoiceVAT = p.PurchasesNextPeriodInvoicesValue;
+
+            ECVAT = p.ECVAT ?? SqlString.Null;
+
+            Description = p.Description ?? SqlString.Null;
+
+            SalesInvoicesValue = p.SalesInvoicesValue;
+
+            SalesInvoicesTax = p.SalesInvoicesTax;
+
+            SalesCreditSalesValue = p.SalesCreditSalesValue;
+
+            SalesCreditSalesTax = p.SalesCreditSalesTax;
+
+            SalesCreditNotesValue = p.SalesCreditNotesValue;
+
+            SalesCreditNotesTax = p.SalesCreditNotesTax;
+
+            SalesCashSalesValue = p.SalesCashSalesValue;
+
+            SalesCashSalesTax = p.SalesCashSalesTax;
+
+            SalesQuarterValueTotal = p.SalesQuarterValueTotal;
+
+            SalesQuarterTaxTotal = p.SalesQuarterTaxTotal;
+
+            SalesNextPeriodInvoicesValue = p.SalesNextPeriodInvoicesValue;
+
+            SalesNextPeriodInvoicesTax = p.SalesNextPeriodInvoicesTax;
+
+            SalesNextPeriodCreditSalesValue = p.SalesNextPeriodCreditSalesValue;
+
+            SalesNextPeriodCreditSalesTax = p.SalesNextPeriodCreditSalesTax;
+
+            SalesNextPeriodCreditNotesValue = p.SalesNextPeriodCreditNotesValue;
+
+            SalesNextPeriodCreditNotesTax = p.SalesNextPeriodCreditNotesTax;
+
+            SalesNextPeriodCashSalesValue = p.SalesNextPeriodCashSalesValue;
+
+            SalesNextPeriodCashSalesTax = p.SalesNextPeriodCashSalesTax;
+
+            PurchasesInvoicesValue = p.PurchasesInvoicesValue;
+
+            PurchasesInvoicesTax = p.PurchasesInvoicesTax;
+
+            PurchasesCreditNotesValue = p.PurchasesCreditNotesValue;
+
+            PurchasesCreditNotesTax = p.PurchasesCreditNotesTax;
+
+            PurchasesPettyCashValue = p.PurchasesPettyCashValue;
+
+            PurchasesPettyCashTax = p.PurchasesPettyCashTax;
+
+            PurchasesOtherPaymentsValue = p.PurchasesOtherPaymentsValue;
+
+            PurchasesOtherPaymentsTax = p.PurchasesOtherPaymentsTax;
+
+            PurchasesQuarterValueTotal = p.PurchasesQuarterValueTotal;
+
+            PurchasesQuarterTaxTotal = p.PurchasesQuarterTaxTotal;
+
+            PurchasesNextPeriodInvoicesValue = p.PurchasesNextPeriodInvoicesValue;
+
+            PurchasesNextPeriodInvoicesTax = p.PurchasesNextPeriodInvoicesTax;
+
+            PurchasesNextPeriodCreditNotesValue = p.PurchasesNextPeriodCreditNotesValue;
+
+            PurchasesNextPeriodCreditNotesTax = p.PurchasesNextPeriodCreditNotesTax;
+
+            PurchasesNextPeriodPettyCashValue = p.PurchasesNextPeriodPettyCashValue;
+
+            PurchasesNextPeriodPettyCashTax = p.PurchasesNextPeriodPettyCashTax;
+
+            PurchasesNextPeriodOtherPaymentsValue = p.PurchasesNextPeriodOtherPaymentsValue;
+
+            PurchasesNextPeriodOtherPaymentsTax = p.PurchasesNextPeriodOtherPaymentsTax;
         }
     }
 }

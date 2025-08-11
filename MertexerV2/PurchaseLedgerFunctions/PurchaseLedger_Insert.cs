@@ -30,37 +30,35 @@ namespace MertexerV2.PurchaseLedgerFunctions
                     .Single()
                     .FileName;
 
-                var uniVerseFile = session.CreateUniFile(fileName);
+            var uniVerseFile = session.CreateUniFile(fileName);
 
-                try
+            try
+            {
+                var extantRecord = uniVerseFile.ReadField(PurchaseLedgerEntry.Key, 0).StringValue;
+
+                if (!String.IsNullOrEmpty(extantRecord))
                 {
-                    var extantRecord = uniVerseFile.ReadField(PurchaseLedgerEntry.Key, 0).StringValue;
-
-                    if (!String.IsNullOrEmpty(extantRecord))
-                    {
-                        throw new Exception($"{PurchaseLedgerEntry.Key} exists on {fileName}, INSERT fails");
-                    }
+                    throw new Exception($"{PurchaseLedgerEntry.Key} exists on {fileName}, INSERT fails");
                 }
-                catch (IBMU2.UODOTNET.UniFileException)
-                {
-                    // extant record was not found: this is a creation request
-                    // create first (lock the entire file for as little time as possible)
-                    // then lock the specific record
-                    // then write all the fields
-                    // then unlock the record
-                    var dataSet = new IBMU2.UODOTNET.UniDataSet(session);
-                    dataSet.Insert(PurchaseLedgerEntry.Key);
+            }
+            catch (IBMU2.UODOTNET.UniFileException)
+            {
+                // extant record was not found: this is a creation request
+                // create first (lock the entire file for as little time as possible)
+                // then lock the specific record
+                // then write all the fields
+                // then unlock the record
+                var dataSet = new IBMU2.UODOTNET.UniDataSet(session);
+                dataSet.Insert(PurchaseLedgerEntry.Key);
 
-                    //slcustFile.LockFile();
-                    uniVerseFile.WriteRecords(dataSet);
-                    //slcustFile.UnlockFile();
-                }
+                //slcustFile.LockFile();
+                uniVerseFile.WriteRecords(dataSet);
+                //slcustFile.UnlockFile();
+            }
 
-                uniVerseFile.LockRecord(PurchaseLedgerEntry.Key, 1);
+            uniVerseFile.LockRecord(PurchaseLedgerEntry.Key, 1);
 
-                UniUpsert<PurchaseLedger>.Upsert(PurchaseLedgerJSON, uniVerseFile);
-
-                uniVerseFile.UnlockRecord(PurchaseLedgerEntry.Key);
+            UniUpsert<PurchaseLedger>.Upsert(PurchaseLedgerJSON, uniVerseFile);
 
             return PurchaseLedgerEntry;
         }
@@ -73,7 +71,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
         {
             var purchaseLedgerEntry = JsonConvert.DeserializeObject<PurchaseLedger>(PurchaseLedgerJSON);
 
-            var fileName = typeof(PurchaseLedger).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
+            var fileName = typeof(PurchaseLedgerFunctions).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
                     .Cast<UniVerseFileNameAttribute>()
                     .Single()
                     .FileName;

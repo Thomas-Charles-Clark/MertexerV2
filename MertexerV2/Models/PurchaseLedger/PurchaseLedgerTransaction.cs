@@ -140,7 +140,7 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseIndex(6)]
         [UniVerseFieldName("VATDIS")]
         [UniVerseConversion("MR22")] 
-        public decimal VATDiscount { get; set; }
+        public decimal VATTaxesTotal { get; set; }
 
         [UniVerseIndex(7)]
         [UniVerseFieldName("DEBIT")]
@@ -198,7 +198,7 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseIndex(18)]
         [UniVerseFieldName("DISC")]
         [UniVerseConversion("MR33")]
-        public decimal DiscountPercentage { get; set; }
+        public decimal? DiscountPercentage { get; set; }
 
         [UniVerseIndex(19)]
         [UniVerseFieldName("SELCHQ")]
@@ -312,22 +312,17 @@ namespace MertexerV2.Models.PurchaseLedger
 
         public IEnumerable<decimal> ExchangeRates { get; set; }
 
-        [UniVerseIndex(30,1)]
-        [UniVerseFieldName("XRATE.1")]
-        [UniVerseConversion("MR66")]
-        public decimal MostRecentExchangeRate { get; set; }
-
         [UniVerseIndex(32)]
         [UniVerseFieldName("EXDIFFS")]
         [UniVerseConversion("MR22")]
 
-        public decimal ExchangeRateDifferences { get; set; }
+        public decimal? ExchangeRateDifferences { get; set; }
 
         [UniVerseIndex(33)]
         [UniVerseFieldName("BANKCHG")]
         [UniVerseConversion("MR22")]
 
-        public decimal BankCharges { get; set; }
+        public decimal? BankCharges { get; set; }
 
         [JsonAlsoUpdates("DatePaid")]
         public DateTime? PaidDT { get; set; }
@@ -367,7 +362,7 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseFieldName("RND.ERR.BCR")]
         [UniVerseConversion("MR22")]
 
-        public decimal RoundingErrors { get; set; }
+        public decimal? RoundingErrors { get; set; }
 
         // Fields 40 through 41 are MV and are PRINT related - they're used in generating Mertex Reports.
         // Not mapping them.
@@ -401,7 +396,7 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseIndex(123)]
         [UniVerseFieldName("REFENQ.W9")]
         [UniVerseConversion("MR22")]
-        public decimal OutstandingAmount { get; set; }
+        public decimal? OutstandingAmount { get; set; }
     }
 
     [UniVerseFileName("TPLTRANS.CUR")]

@@ -188,9 +188,11 @@
     <Compile Include="Models\PurchaseLedger\PurchaseLedger.cs" />
     <Compile Include="Models\PurchaseLedger\PurchaseLedgerSupplierInvoice.cs" />
     <Compile Include="Models\PurchaseLedger\PurchaseLedgerAdjustmentAudit.cs" />
+    <Compile Include="Models\PurchaseLedger\PurchaseLedgerTransactionRollbackResult.cs" />
     <Compile Include="Models\PurchaseLedger\PurchaseLedgerVATAudit.cs" />
     <Compile Include="Models\PurchaseLedger\PurchaseLedgerInsertionResult.cs" />
     <Compile Include="Models\PurchaseLedger\PurchaseLedgerRegisterHistory.cs" />
+    <Compile Include="Models\Stock\StockValuation.cs" />
     <Compile Include="PurchaseLedgerFunctions\PurchaseLedger_InternalFunctions.cs" />
     <Compile Include="Models\SalesAgent\SalesAgent.cs" />
     <Compile Include="Models\SalesArea\SalesArea.cs" />
@@ -272,6 +274,7 @@
     <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerAdjustmentAudit_Select.cs" />
     <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerAdjustmentAudit_Upsert.cs" />
     <Compile Include="PurchaseLedgerFunctions\PurchaseLedger_Insert.cs" />
+    <Compile Include="PurchaseLedgerFunctions\PurchaseLedger_RollbackTransaction.cs" />
     <Compile Include="PurchaseLedgerFunctions\PurchaseLedger_Select.cs" />
     <Compile Include="PurchaseLedgerFunctions\PurchaseLedger_Upsert.cs" />
     <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerVATAudit_Insert.cs" />
@@ -304,7 +307,9 @@
     <Compile Include="SalesLedgerFunctions\SalesLedgerTransaction_Upsert.cs" />
     <Compile Include="SalesMarketFunctions\SalesMarket_Select.cs" />
     <Compile Include="PurchaseLedgerFunctions\PurchaseLedger_InsertFromRegistry.cs" />
+    <Compile Include="StockFunctions\StockValuation_Select.cs" />
     <Compile Include="StockFunctions\StockLocation_Select.cs" />
+    <Compile Include="StockFunctions\StockValuation_Upsert.cs" />
     <Compile Include="StockFunctions\StockLocation_Upsert.cs" />
     <Compile Include="SupplierFunctions\SupplierPaymentTerms_Select.cs" />
     <Compile Include="SupplierFunctions\SupplierType_Select.cs" />

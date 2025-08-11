@@ -16,7 +16,7 @@ namespace MertexerV2.Models.SalesAnalysis
         [JsonConstructor]
         public SalesAnalysisHistory(string key) : base(key)
         {
-
+            Initialise();
         }
 
         public SalesAnalysisHistory() : base()

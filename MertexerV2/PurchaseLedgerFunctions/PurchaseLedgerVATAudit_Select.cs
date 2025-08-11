@@ -30,12 +30,12 @@ namespace MertexerV2.PurchaseLedgerFunctions
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
         public static IEnumerable Select(
             string UniVerseAccount,
-            string PurchaseLedgerCodes,
+            string PurchaseLedgerVATAuditCodes,
             string SupplierCode,
             DateTime? DocumentDT_From,
             DateTime? DocumentDT_To)
         {
-            if (String.IsNullOrEmpty(PurchaseLedgerCodes))
+            if (String.IsNullOrEmpty(PurchaseLedgerVATAuditCodes))
             {
                 int p = 0;
 
@@ -62,7 +62,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
                         filters,
                         true,
                         false,
-                        100,
+                        500,
                         UniVerseAccount))
                     {
                         yield return invoice;
@@ -73,9 +73,8 @@ namespace MertexerV2.PurchaseLedgerFunctions
                     foreach (var invoice in Selector<PurchaseLedgerVATAudit>.SelectAllNonParallel(
                         true,
                         false,
-                        100,
-                        UniVerseAccount)
-                        .ToList())
+                        500,
+                        UniVerseAccount))
                     {
                         yield return invoice;
                     }
@@ -84,12 +83,11 @@ namespace MertexerV2.PurchaseLedgerFunctions
             else
             {
                 foreach (var invoice in Selector<PurchaseLedgerVATAudit>.Select(
-                    JsonConvert.DeserializeObject<IEnumerable<PurchaseLedgerVATAuditCode>>(PurchaseLedgerCodes).Select(p => p.Code),
+                    JsonConvert.DeserializeObject<IEnumerable<PurchaseLedgerVATAuditCode>>(PurchaseLedgerVATAuditCodes).Select(p => p.Code),
                     true,
                     false,
-                    100,
-                    UniVerseAccount)
-                    .ToList())
+                    500,
+                    UniVerseAccount))
                 {
                     yield return invoice;
                 }
@@ -98,15 +96,54 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
         public static void PurchaseLedgerVATAuditSelect_FillRow(
             object obj,
-            out SqlString Key,
-            out SqlDateTime DocumentDT
+            out SqlString PurchaseLedgerVATAuditID,
+            out SqlDateTime DocumentDT,
+            out SqlString TransactionType,
+            out SqlString SupplierCode,
+            out SqlDecimal PurchaseLedgerTotalDueInSterling,
+            out SqlString VATCodes,
+            out SqlString VATableValuesInSterling,
+            out SqlString VATTaxesInSterling,
+            out SqlBoolean NextPeriod,
+            out SqlString MertexCurrencyCode,
+            out SqlString VATableValuesInCurrency,
+            out SqlString VATTaxesInCurrency,
+            out SqlDecimal PurchaseLedgerTotalDueInCurrency,
+            out SqlDateTime CopiedDT,
+            out SqlByte FinancialPeriod
             )
         {
             var result = (PurchaseLedgerVATAudit)obj;
 
-            Key = result.Key?.TrimReduceTruncate(50);
+            PurchaseLedgerVATAuditID = result.Key;
 
             DocumentDT = result.DocumentDT ?? SqlDateTime.Null;
+
+            TransactionType = result.TransactionType ?? SqlString.Null;
+
+            SupplierCode = result.SupplierCode ?? SqlString.Null;
+
+            PurchaseLedgerTotalDueInSterling = result.PurchaseLedgerTotalDueInSterling;
+
+            VATCodes = result.VATCodes?.Any() == true ? JsonConvert.SerializeObject(result.VATCodes) : SqlString.Null;
+
+            VATableValuesInSterling = result.VATableValuesInSterling?.Any() == true ? JsonConvert.SerializeObject(result.VATableValuesInSterling) : SqlString.Null;
+
+            VATTaxesInSterling = result.VATTaxesInSterling?.Any() == true ? JsonConvert.SerializeObject(result.VATTaxesInSterling) : SqlString.Null;
+
+            NextPeriod = result.NextPeriod;
+
+            MertexCurrencyCode = result.CurrencyCode ?? SqlString.Null;
+
+            VATableValuesInCurrency = result.VATableValuesInCurrency?.Any() == true ? JsonConvert.SerializeObject(result.VATableValuesInCurrency) : SqlString.Null;
+
+            VATTaxesInCurrency = result.VATTaxesInCurrency?.Any() == true ? JsonConvert.SerializeObject(result.VATTaxesInCurrency) : SqlString.Null;
+
+            PurchaseLedgerTotalDueInCurrency = result.PurchaseLedgerTotalDueInCurrency;
+
+            CopiedDT = result.CopiedDT ?? SqlDateTime.Null;
+
+            FinancialPeriod = result.FinancialPeriod ?? SqlByte.Null;
         }
     }
 }

@@ -6,14 +6,17 @@ using System.Threading.Tasks;
 
 using MertexerV2.Utilities;
 
+using Newtonsoft.Json;
+
 namespace MertexerV2.Models.GeneralLedger
 {
     [UniVerseFileName("GLPPTRANS.DES")]
     public class GeneralLedgerPrePaymentTransaction : UniVerseSerializationBase<string>
     {
+        [JsonConstructor]
         public GeneralLedgerPrePaymentTransaction(string key) : base(key)
         {
-
+            Initialise();
         }
 
         public GeneralLedgerPrePaymentTransaction() : base()
@@ -32,12 +35,13 @@ namespace MertexerV2.Models.GeneralLedger
 
         [UniVerseIndex(2)]
         [UniVerseFieldName("PREPAY.GLCODE")]
-        public string GeneralLedgerCode { get; set; }
+        [UniVerseMultiValue]
+        public IEnumerable<string> GeneralLedgerCodes { get; set; }
 
         [UniVerseIndex(3)]
         [UniVerseFieldName("PREPAY.AMOUNT")]
         [UniVerseConversion("MR22")]
-        public decimal Amount { get; set; }
+        public decimal AmountTotal { get; set; }
 
         [UniVerseIndex(4)]
         [UniVerseFieldName("PREPAY.MEMO")]
@@ -45,7 +49,7 @@ namespace MertexerV2.Models.GeneralLedger
 
         [UniVerseIndex(5)]
         [UniVerseFieldName("PREPAY.TRANSNO")]
-        public string TransactionNumber { get; set; }
+        public string DocumentNumber { get; set; }
 
         [JsonAlsoUpdates("DocumentDate")]
         public DateTime? DocumentDT { get; set; }

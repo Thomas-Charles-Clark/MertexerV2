@@ -50,9 +50,6 @@ namespace MertexerV2.SupplierFunctions
 
             UniUpsert<Supplier>.Upsert(SupplierJSON, uniVerseFile);
 
-            uniVerseFile.UnlockRecord(supplier.Key);
-            
-
             return supplier.Key;
         }
 

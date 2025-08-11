@@ -58,11 +58,63 @@ namespace MertexerV2.GeneralLedgerFunctions
 
         public static void GeneralLedgerPrePaymentTransactionSelect_FillRow(
             object obj,
-            out SqlString Code)
+            out SqlString GeneralLedgerPrepaymentTransactionID,
+            out SqlString SupplierCode,
+            out SqlString GeneralLedgerCodes,
+            out SqlDecimal AmountTotal,
+            out SqlString Memo,
+            out SqlString DocumentNumber,
+            out SqlDateTime DocumentDT,
+            out SqlDateTime DueDT,
+            out SqlString TransactionType,
+            out SqlBoolean Apportioned,
+            out SqlByte StartPeriod,
+            out SqlByte NumberOfPeriods,
+            out SqlBoolean SplitEqually,
+            out SqlString SplitAmounts,
+            out SqlString SplitMemos,
+            out SqlString SplitDocumentDTs,
+            out SqlString ExpenseGeneralLedgerCode,
+            out SqlDecimal SplitTotal
+            )
         {
             var result = (GeneralLedgerPrePaymentTransaction)obj;
 
-            Code = result.Key.TrimReduceTruncate(20);
+            GeneralLedgerPrepaymentTransactionID = result.Key;
+
+            SupplierCode = result.SupplierCode ?? SqlString.Null;
+
+            GeneralLedgerCodes = result.GeneralLedgerCodes?.Any() == true ? JsonConvert.SerializeObject(result.GeneralLedgerCodes) : SqlString.Null;
+
+            AmountTotal = result.AmountTotal;
+
+            Memo = result.Memo ?? SqlString.Null;
+
+            DocumentNumber = result.DocumentNumber ?? SqlString.Null;
+
+            DocumentDT = result.DocumentDT ?? SqlDateTime.Null;
+
+            DueDT = result.DueDT ?? SqlDateTime.Null;
+
+            TransactionType = result.TransactionType ?? SqlString.Null;
+
+            Apportioned = result.Apportioned;
+
+            StartPeriod = result.StartPeriod;
+
+            NumberOfPeriods = result.NumberOfPeriods;
+
+            SplitEqually = result.SplitEqually;
+
+            SplitAmounts = result.SplitAmounts?.Any() == true ? JsonConvert.SerializeObject(result.SplitAmounts) : SqlString.Null;
+
+            SplitMemos = result.SplitMemos?.Any() == true ? JsonConvert.SerializeObject(result.SplitMemos) : SqlString.Null;
+
+            SplitDocumentDTs = result.SplitDocumentDTs?.Any() == true ? JsonConvert.SerializeObject(result.SplitDocumentDTs) : SqlString.Null;
+
+            ExpenseGeneralLedgerCode = result.ExpenseGeneralLedgerCode ?? SqlString.Null;
+
+            SplitTotal = result.SplitTotal;
         }
     }
 }

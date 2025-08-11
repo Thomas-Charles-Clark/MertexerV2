@@ -60,9 +60,6 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
             UniUpsert<PurchaseLedgerRegisterHistory>.Upsert(PurchaseLedgerRegisterHistoryJSON, uniVerseFile);
 
-            uniVerseFile.UnlockRecord(purchaseLedgerRegisterHistoryEntry.Key);
-
-
             return purchaseLedgerRegisterHistoryEntry.Key;
         }
 

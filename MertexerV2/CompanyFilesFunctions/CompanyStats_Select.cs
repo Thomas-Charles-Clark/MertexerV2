@@ -66,15 +66,80 @@ namespace MertexerV2.CompanyFileFunctions
 
         public static void CompanyStatsSelect_FillRow(
             object obj,
-            out SqlString Code
+            out SqlString CompanyID,
+            out SqlDecimal SalesLedgerBroughtForward,
+	        out SqlDecimal SalesLedgerCreditSales,
+	        out SqlDecimal SalesLedgerCreditNotes,
+	        out SqlDecimal SalesLedgerCashReceipts,
+	        out SqlDecimal SalesLedgerAdjustments,
+	        out SqlDecimal SalesLedgerTotalCashPayments,
+	        out SqlDecimal PurchaseLedgerBroughtForward,
+	        out SqlDecimal PurchaseLedgerInvoices,
+	        out SqlDecimal PurchaseLedgerCreditNotes,
+	        out SqlDecimal PurchaseLedgerPayments,
+	        out SqlDecimal PurchaseLedgerAdjustments,
+	        out SqlDecimal PurchaseLedgerPettyCash,
+	        out SqlDecimal PurchaseLedgerOtherPayments,
+	        out SqlDecimal NextPurchaseLedgerInvoices,
+	        out SqlDecimal NextPurchaseLedgerCreditNotes,
+	        out SqlDecimal NextPurchaseLedgerPayments,
+	        out SqlDecimal NextPurchaseLedgerAdjustments,
+	        out SqlDecimal NextPurchaseLedgerPettyCash,
+	        out SqlDecimal NextPurchaseLedgerOtherPayments,
+	        out SqlDecimal SalesLedgerCarriedForward,
+	        out SqlDecimal PurchaseLedgerCarriedForward,
+	        out SqlDecimal PurchaseLedgerNextPeriod
             )
         {
             var p = (CompanyStats)obj;
 
             // ADD ADDRESS DETAILS AND REMOVE EXTANT EDAREPLACEMENT VERSION
 
-            Code = p.Key?.TrimReduceTruncate(2);
+            CompanyID = p.Key;
 
+            SalesLedgerBroughtForward = p.SalesLedgerBroughtForward;
+
+	        SalesLedgerCreditSales = p.SalesLedgerCreditSales;
+
+	        SalesLedgerCreditNotes = p.SalesLedgerCreditNotes;
+
+	        SalesLedgerCashReceipts = p.SalesLedgerCashReceipts;
+
+	        SalesLedgerAdjustments = p.SalesLedgerAdjustments;
+
+	        SalesLedgerTotalCashPayments = p.SalesLedgerTotalCashPayments;
+
+	        PurchaseLedgerBroughtForward = p.PurchaseLedgerBroughtForward;
+
+	        PurchaseLedgerInvoices = p.PurchaseLedgerInvoices;
+
+	        PurchaseLedgerCreditNotes = p.PurchaseLedgerCreditNotes;
+
+	        PurchaseLedgerPayments = p.PurchaseLedgerPayments;
+
+	        PurchaseLedgerAdjustments = p.PurchaseLedgerAdjustments;
+
+	        PurchaseLedgerPettyCash = p.PurchaseLedgerPettyCash;
+
+	        PurchaseLedgerOtherPayments = p.PurchaseLedgerOtherPayments;
+
+	        NextPurchaseLedgerInvoices = p.NextPurchaseLedgerInvoices;
+
+	        NextPurchaseLedgerCreditNotes = p.NextPurchaseLedgerCreditNotes;
+
+	        NextPurchaseLedgerPayments = p.NextPurchaseLedgerPayments;
+
+	        NextPurchaseLedgerAdjustments = p.NextPurchaseLedgerAdjustments;
+
+	        NextPurchaseLedgerPettyCash = p.NextPurchaseLedgerPettyCash;
+
+	        NextPurchaseLedgerOtherPayments = p.NextPurchaseLedgerOtherPayments;
+
+	        SalesLedgerCarriedForward = p.SalesLedgerCarriedForward;
+
+	        PurchaseLedgerCarriedForward = p.PurchaseLedgerCarriedForward;
+
+	        PurchaseLedgerNextPeriod = p.PurchaseLedgerNextPeriod;
         }
     }
 }

@@ -56,25 +56,21 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseIndex(4)]
         [UniVerseFieldName("DISC")]
         [UniVerseConversion("MR33")]
-        public decimal DiscountPercentage { get; set; }
+        public decimal? DiscountPercentage { get; set; }
 
         [UniVerseIndex(5)]
         [UniVerseFieldName("DAYS")]
-        public byte Days { get; set; }
+        public byte? Days { get; set; }
 
         // Deprecated / unused
         [UniVerseIndex(7)]
         [UniVerseFieldName("NUMDIS")]
-        public byte DiscountNumber { get; set; }
+        public byte? DiscountNumber { get; set; }
 
         // Deprecated / unused
         [UniVerseIndex(8)]
         [UniVerseFieldName("DECDIS")]
-        public byte DiscountDecimals { get; set; }
-
-        [UniVerseIndex(14)]
-        [UniVerseFieldName("SUPREF")]
-        public string SupplierCode { get; set; }
+        public byte? DiscountDecimals { get; set; }
 
         /// <summary>
         /// "This Pd Zero ?    Y/N"
@@ -87,7 +83,7 @@ namespace MertexerV2.Models.PurchaseLedger
         /// </summary>
         [UniVerseIndex(16)]
         [UniVerseFieldName("CURR")]
-        public bool ThisPeriodZero { get; set; }
+        public bool? ThisPeriodZero { get; set; }
 
         /// <summary>
         /// Period 1 Zero?
@@ -100,7 +96,7 @@ namespace MertexerV2.Models.PurchaseLedger
         /// </summary>
         [UniVerseIndex(17)]
         [UniVerseFieldName("PD1")]
-        public bool Period1Zero { get; set; }
+        public bool? Period1Zero { get; set; }
 
         /// <summary>
         /// Period 1 Zero?
@@ -113,7 +109,7 @@ namespace MertexerV2.Models.PurchaseLedger
         /// </summary>
         [UniVerseIndex(18)]
         [UniVerseFieldName("PD2")]
-        public bool Period2Zero { get; set; }
+        public bool? Period2Zero { get; set; }
 
         /// <summary>
         /// Period 3 Zero?
@@ -126,7 +122,7 @@ namespace MertexerV2.Models.PurchaseLedger
         /// </summary>
         [UniVerseIndex(19)]
         [UniVerseFieldName("PD3")]
-        public bool Period3Zero { get; set; }
+        public bool? Period3Zero { get; set; }
 
         /// <summary>
         /// Period 4 Zero?
@@ -139,7 +135,7 @@ namespace MertexerV2.Models.PurchaseLedger
         /// </summary>
         [UniVerseIndex(20)]
         [UniVerseFieldName("PD4")]
-        public bool Period4Zero { get; set; }
+        public bool? Period4Zero { get; set; }
 
         /// <summary>
         /// No activity?
@@ -152,7 +148,7 @@ namespace MertexerV2.Models.PurchaseLedger
         /// </summary>
         [UniVerseIndex(21)]
         [UniVerseFieldName("NOACT")]
-        public bool NoActivity { get; set; }
+        public bool? NoActivity { get; set; }
 
 
         /// <summary>
@@ -166,7 +162,7 @@ namespace MertexerV2.Models.PurchaseLedger
         /// </summary>
         [UniVerseIndex(22)]
         [UniVerseFieldName("BALANCE")]
-        public bool BalanceZero { get; set; }
+        public bool? BalanceZero { get; set; }
 
 
         /// <summary>
@@ -190,7 +186,7 @@ namespace MertexerV2.Models.PurchaseLedger
         /// </summary>
         [UniVerseIndex(23)]
         [UniVerseFieldName("VALID")]
-        public bool DeletionValid { get; set; }
+        public bool? DeletionValid { get; set; }
 
         /// <summary>
         /// Confirm Delete?
@@ -203,7 +199,7 @@ namespace MertexerV2.Models.PurchaseLedger
         /// </summary>
         [UniVerseIndex(24)]
         [UniVerseFieldName("CONFIRM")]
-        public bool ConfirmOnDelete { get; set; }
+        public bool? ConfirmOnDelete { get; set; }
 
         /// <summary>
         /// No order activitiy?
@@ -216,7 +212,7 @@ namespace MertexerV2.Models.PurchaseLedger
         /// </summary>
         [UniVerseIndex(25)]
         [UniVerseFieldName("ORDACT")]
-        public bool NoOrderActivity { get; set; }
+        public bool? NoOrderActivity { get; set; }
 
         /// <summary>
         /// No Current transactions this year?
@@ -226,7 +222,7 @@ namespace MertexerV2.Models.PurchaseLedger
         /// </summary>
         [UniVerseIndex(27)]
         [UniVerseFieldName("CURRYR.TRANS")]
-        public bool NoCurrentTransactionsThisYear { get; set; }
+        public bool? NoCurrentTransactionsThisYear { get; set; }
 
         [JsonAlsoUpdates("DocumentDate")]
         public DateTime? DocumentDT { get; set; }
@@ -374,15 +370,15 @@ namespace MertexerV2.Models.PurchaseLedger
 
         [UniVerseIndex(39)]
         [UniVerseFieldName("PSUPREF")]
-        public string SupplierReference { get; set; }
+        public string SupplierCode { get; set; }
 
         [UniVerseIndex(40)]
         [UniVerseFieldName("BANKNO")]
-        public int BankNumber { get; set; }
+        public int? BankNumber { get; set; }
 
         [UniVerseIndex(41)]
         [UniVerseFieldName("BANKAC")]
-        public int BankAccountNumber { get; set; }
+        public int? BankAccountNumber { get; set; }
 
         [UniVerseIndex(43)]
         [UniVerseFieldName("PAMOUNT")]
@@ -390,28 +386,15 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseMultiValue]
         public IEnumerable<decimal> Amounts { get; set; }
 
-        [UniVerseIndex(43,1)]
-        [UniVerseFieldName("PAMOUNT")]
-        [UniVerseConversion("MR22")]
-        public decimal Amount { get; set; }
-
         [UniVerseIndex(44)]
         [UniVerseFieldName("GLCODE")]
         [UniVerseMultiValue]
         public IEnumerable<string> GeneralLedgerCodes { get; set; }
 
-        [UniVerseIndex(44,1)]
-        [UniVerseFieldName("GLCODE")]
-        public string GeneralLedgerCode { get; set; }
-
         [UniVerseIndex(47)]
         [UniVerseFieldName("VATCODE")]
         [UniVerseMultiValue]
         public IEnumerable<string> VATCodes { get; set; }
-
-        [UniVerseIndex(47,1)]
-        [UniVerseFieldName("VATCD1")]
-        public string VATCode { get; set; }
         
         /// <summary>
         /// Default value:
@@ -423,11 +406,6 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseMultiValue]
         public IEnumerable<decimal> VATTaxes { get; set; }
 
-        [UniVerseIndex(48, 1)]
-        [UniVerseFieldName("VATTAX")]
-        [UniVerseConversion("MR22")]
-        public decimal VATTax { get; set; }
-
         /// <summary>
         /// Default Value: SUM<43.n> (PAMOUNT)
         /// </summary>
@@ -436,11 +414,6 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseConversion("MR22")]
         [UniVerseMultiValue]
         public IEnumerable<decimal> VATableValues { get; set; }
-
-        [UniVerseIndex(49, 1)]
-        [UniVerseFieldName("VATVALUE")]
-        [UniVerseConversion("MR22")]
-        public decimal VATableValue { get; set; }
 
         [UniVerseIndex(50)]
         [UniVerseFieldName("TOTDUE")] // "CHQTOTAL/DTOTAL/RDTOTAL/STGAMT/STGCHQTOTAL/TOTDUE"
@@ -605,7 +578,7 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseIndex(62)]
         [UniVerseFieldName("CASHPD")]
         [UniVerseConversion("MR22")]
-        public decimal AmountPaid { get; set; }
+        public decimal? AmountPaid { get; set; }
 
         /// <summary>
         /// Erm... These fields are a bit confused, so I'm mapping both names in the hopes
@@ -614,12 +587,12 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseIndex(63)]
         [UniVerseFieldName("CUNALLOC")]
         [UniVerseConversion("MR22")]
-        public decimal CurrentlyUnallocated { get; set; }
+        public decimal? CurrentlyUnallocated { get; set; }
 
         [UniVerseIndex(63)] // Note: this is the exact same data as the field directly above. Obviously.
         [UniVerseFieldName("DISCREC")]
         [UniVerseConversion("MR22")]
-        public decimal DiscountReceived { get; set; } // But with a completely different name.
+        public decimal? DiscountReceived { get; set; } // But with a completely different name.
 
         /// <summary>
         /// Cash on Account
@@ -627,7 +600,7 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseIndex(64)]
         [UniVerseFieldName("AONACC")]
         [UniVerseConversion("MR22")]
-        public decimal CashOnAccount { get; set; }
+        public decimal? CashOnAccount { get; set; }
 
         /// <summary>
         /// Not Allocated
@@ -635,7 +608,7 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseIndex(64)] // Note: this is the exact same data as the field directly above. Obviously.
         [UniVerseFieldName("ONACC")]
         [UniVerseConversion("MR22")]
-        public decimal NotAllocated { get; set; } // But with a completely different name.
+        public decimal? NotAllocated { get; set; } // But with a completely different name.
 
         /// <summary>
         /// Unallocated Value
@@ -643,7 +616,7 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseIndex(65)]
         [UniVerseFieldName("AUNALLOC")] // How in the heck this might be different from Not Allocated I don't know.
         [UniVerseConversion("MR22")] 
-        public decimal UnallocatedValue { get; set; } // Honestly.
+        public decimal? UnallocatedValue { get; set; } // Honestly.
 
         /// <summary>
         /// Default: <66,-1> (All of field 66)... Which is... THIS FIELD. FFS.
@@ -683,7 +656,7 @@ namespace MertexerV2.Models.PurchaseLedger
         /// </summary>
         [UniVerseIndex(75)]
         [UniVerseFieldName("OPENITEM")]
-        public bool OpenItem { get; set; }
+        public bool? OpenItem { get; set; }
 
         [UniVerseIndex(77)]
         [UniVerseFieldName("KEY4")]
@@ -707,6 +680,11 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseFieldName("MEMO1")]
         [UniVerseMultiValue]
         public IEnumerable<string> OtherMemos { get; set; }
+
+        [UniVerseIndex(83)]
+        [UniVerseFieldName("UNNAMED")]
+        [UniVerseMultiValue]
+        public IEnumerable<string> OtherPrepaymentMemos { get; set; }
 
         /// <summary>
         /// Must exist on TPLTRANS
@@ -741,7 +719,7 @@ namespace MertexerV2.Models.PurchaseLedger
         /// </summary>
         [UniVerseIndex(89)]
         [UniVerseFieldName("CLEAROK")]
-        public bool OkayToClear { get; set; }
+        public bool? OkayToClear { get; set; }
 
         [UniVerseIndex(90)]
         [UniVerseFieldName("RELBY")]
@@ -754,17 +732,17 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseIndex(93)]
         [UniVerseFieldName("TINVAMT")]
         [UniVerseConversion("MR22")]
-        public decimal TransferAmount { get; set; }
+        public decimal? TransferAmount { get; set; }
 
         [UniVerseIndex(94)]
         [UniVerseFieldName("GOODS")]
         [UniVerseConversion("MR22")]
-        public decimal GoodsValue { get; set; }
+        public decimal? GoodsValue { get; set; }
 
         [UniVerseIndex(95)]
         [UniVerseFieldName("VATAMT")]
         [UniVerseConversion("MR22")]
-        public decimal VATAmount { get; set; }
+        public decimal? VATAmount { get; set; }
 
         /// <summary>
         /// Default Value: <94>+<95>[S][M]
@@ -772,7 +750,7 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseIndex(96)]
         [UniVerseFieldName("TOTAMT")]
         [UniVerseConversion("MR22")]
-        public decimal TotalValue { get; set; }
+        public decimal? TotalValue { get; set; }
 
         /// <summary>
         /// Opening Balance
@@ -780,7 +758,7 @@ namespace MertexerV2.Models.PurchaseLedger
         /// </summary>
         [UniVerseIndex(98)]
         [UniVerseFieldName("SETOPEN")]
-        public bool SetOpen { get; set; }
+        public bool? SetOpen { get; set; }
 
         [JsonAlsoUpdates("OpeningDates")]
         public IEnumerable<DateTime?> OpeningDTs { get; set; }
@@ -876,44 +854,44 @@ namespace MertexerV2.Models.PurchaseLedger
         /// </summary>
         [UniVerseIndex(106)]
         [UniVerseFieldName("TUNALLOC")]
-        public bool IsUnallocatedValueZero { get; set; }
+        public bool? IsUnallocatedValueZero { get; set; }
 
         /// <summary>
         /// Default Value: P("DONACC")[S][M]
         /// </summary>
         [UniVerseIndex(107)]
         [UniVerseFieldName("TONACC")]
-        public bool IsOnAccountZero { get; set; }
+        public bool? IsOnAccountZero { get; set; }
 
         /// <summary>
         /// Default Value: P("DCHCURR")[S][M]
         /// </summary>
         [UniVerseIndex(108)]
         [UniVerseFieldName("TCURR")]
-        public bool IsThisPeriodZero { get; set; }
+        public bool? IsThisPeriodZero { get; set; }
 
         /// <summary>
         /// Default Value: P("DCHVAL")[S][M]
         /// </summary>
         [UniVerseIndex(109)]
         [UniVerseFieldName("CHVALID")]
-        public bool TransferValid { get; set; }
+        public bool? TransferValid { get; set; }
 
         /// <summary>
         /// Default Value: P("DCHCONF")
         /// </summary>
         [UniVerseIndex(110)]
         [UniVerseFieldName("CHCONF")]
-        public bool ConfirmChange { get; set; }
+        public bool? ConfirmChange { get; set; }
 
         [UniVerseIndex(112)]
         [UniVerseFieldName("ALLOCCASH")]
-        public bool AllocateCash { get; set; }
+        public bool? AllocateCash { get; set; }
 
         [UniVerseIndex(113)]
         [UniVerseFieldName("TOTALLOC")]
         [UniVerseConversion("MR22")]
-        public decimal TotalAllocated { get; set; }
+        public decimal? TotalAllocated { get; set; }
 
         [JsonAlsoUpdates("ReceivedDate")]
         public DateTime? ReceivedDT { get; set; }
@@ -956,7 +934,7 @@ namespace MertexerV2.Models.PurchaseLedger
         [JsonAlsoUpdates("PassedToDate")]
         public DateTime? PassedToDT { get; set; }
 
-        [UniVerseIndex(114)]
+        [UniVerseIndex(116)]
         [UniVerseFieldName("SS.PDATE.INT")]
         public string PassedToDate
         {
@@ -1051,12 +1029,12 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseIndex(148)]
         [UniVerseFieldName("TOTCSHALL")]
         [UniVerseConversion("MR22")]
-        public decimal TotalCashAllocated { get; set; }
+        public decimal? TotalCashAllocated { get; set; }
 
         [UniVerseIndex(152)]
         [UniVerseFieldName("ALLOCCHEQUE")]
         [UniVerseConversion("MR22")]
-        public decimal ChequeValue { get; set; }
+        public decimal? ChequeValue { get; set; }
 
         [UniVerseIndex(153)]
         [UniVerseFieldName("CHQCALLOC")]
@@ -1069,7 +1047,7 @@ namespace MertexerV2.Models.PurchaseLedger
         /// </summary>
         [UniVerseIndex(154)]
         [UniVerseFieldName("GLPOST")]
-        public bool Future { get; set; }
+        public bool? Future { get; set; }
 
         /// <summary>
         /// Default Value: (<152> * "1000" / <162>)[S][M]
@@ -1077,12 +1055,12 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseIndex(155)]
         [UniVerseFieldName("ALLOCCHQ.STG")]
         [UniVerseConversion("MR22")]
-        public decimal SterlingChequeValue { get; set; }
+        public decimal? SterlingChequeValue { get; set; }
 
         [UniVerseIndex(157)]
         [UniVerseFieldName("DISCAMD.CUR")]
         [UniVerseConversion("MR33")]
-        public decimal SettlementDiscountAmountInCurrency { get; set; }
+        public decimal? SettlementDiscountAmountInCurrency { get; set; }
 
         /// <summary>
         /// Don't ask me.
@@ -1090,7 +1068,7 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseIndex(160)]
         [UniVerseFieldName("DISCPERC")]
         [UniVerseConversion("MR33")]
-        public decimal DiscountPercentage_Again { get; set; }
+        public decimal? DiscountPercentage_Again { get; set; }
 
         [UniVerseIndex(161)]
         [UniVerseFieldName("CURRENCY")]
@@ -1105,7 +1083,7 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseIndex(164)]
         [UniVerseFieldName("EXDIFFS")]
         [UniVerseConversion("MR22")]
-        public decimal ExchangeRateDifferences { get; set; }
+        public decimal? ExchangeRateDifferences { get; set; }
 
         [UniVerseIndex(165)]
         [UniVerseFieldName("FOREIGN")]
@@ -1114,7 +1092,7 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseIndex(180)]
         [UniVerseFieldName("DISCADIS.CUR")]
         [UniVerseConversion("MR22")]
-        public decimal DiscountAmountInCurrency { get; set; }
+        public decimal? DiscountAmountInCurrency { get; set; }
 
         [UniVerseIndex(181)]
         [UniVerseFieldName("AUTHORIZER")]
@@ -1162,7 +1140,7 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseIndex(188)]
         [UniVerseFieldName("DNVATVAL")]
         [UniVerseConversion("MR22")]
-        public decimal DNVATValue { get; set; }
+        public decimal? DNVATValue { get; set; }
 
         [UniVerseIndex(199)]
         [UniVerseFieldName("PLINVREG")]
@@ -1192,12 +1170,12 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseIndex(234)]
         [UniVerseFieldName("EXDIFFS.CUR")]
         [UniVerseConversion("MR22")]
-        public decimal ExchangeRateDifferencesInCurrency { get; set; }
+        public decimal? ExchangeRateDifferencesInCurrency { get; set; }
 
         [UniVerseIndex(241)]
         [UniVerseFieldName("DISCREC.CUR")]
         [UniVerseConversion("MR22")]
-        public decimal DiscountAllowedInCurrency { get; set; }
+        public decimal? DiscountAllowedInCurrency { get; set; }
 
         [UniVerseIndex(243)]
         [UniVerseFieldName("PAMOUNT.CUR")]
@@ -1223,7 +1201,7 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseIndex(265)]
         [UniVerseFieldName("UNALLOC.CUR")]
         [UniVerseConversion("MR22")]
-        public decimal UnallocatedAmountInCurrency { get; set; }
+        public decimal? UnallocatedAmountInCurrency { get; set; }
 
         [UniVerseIndex(267)]
         [UniVerseFieldName("TRANTYPE")]
@@ -1344,7 +1322,7 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseFieldName("PP.SPLIT.AMOUNT.DES")]
         [UniVerseConversion("MR22")]
         [UniVerseMultiValue]
-        public IEnumerable<decimal> PrepaymentSplitAmounts { get; set; }
+        public IEnumerable<string> PrepaymentSplitAmounts { get; set; }
 
         [UniVerseIndex(374)]
         [UniVerseFieldName("PP.SPLIT.MEMO.DES")]

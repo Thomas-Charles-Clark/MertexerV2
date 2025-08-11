@@ -92,7 +92,8 @@ namespace MertexerV2.POFunctions
             out SqlString PurchaseOrderStatusDescription,
             out SqlString PurchaseOrderStatusInterpreted,
             out SqlBoolean Deleted,
-            out SqlDecimal OrderPrice
+            out SqlDecimal OrderPrice,
+            out SqlBoolean CallOffIndicator
             )
         {
             var result = (PurchaseOrderDetail)obj;
@@ -140,6 +141,8 @@ namespace MertexerV2.POFunctions
             Deleted = result.Deleted;
 
             OrderPrice = result.OrderPrice ?? SqlDecimal.Null;
+
+            CallOffIndicator = result.CallOffIndicator;
         }
     }
 }

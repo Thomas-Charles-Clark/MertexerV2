@@ -30,37 +30,35 @@ namespace MertexerV2.PurchaseLedgerFunctions
                     .Single()
                     .FileName;
 
-                var uniVerseFile = session.CreateUniFile(fileName);
+            var uniVerseFile = session.CreateUniFile(fileName);
 
-                try
+            try
+            {
+                var extantRecord = uniVerseFile.ReadField(purchaseLedgerVATAuditEntry.Key, 0).StringValue;
+
+                if (!String.IsNullOrEmpty(extantRecord))
                 {
-                    var extantRecord = uniVerseFile.ReadField(purchaseLedgerVATAuditEntry.Key, 0).StringValue;
-
-                    if (!String.IsNullOrEmpty(extantRecord))
-                    {
-                        throw new Exception($"{purchaseLedgerVATAuditEntry.Key} exists on {fileName}, INSERT fails");
-                    }
+                    throw new Exception($"{purchaseLedgerVATAuditEntry.Key} exists on {fileName}, INSERT fails");
                 }
-                catch (IBMU2.UODOTNET.UniFileException)
-                {
-                    // extant record was not found: this is a creation request
-                    // create first (lock the entire file for as little time as possible)
-                    // then lock the specific record
-                    // then write all the fields
-                    // then unlock the record
-                    var dataSet = new IBMU2.UODOTNET.UniDataSet(session);
-                    dataSet.Insert(purchaseLedgerVATAuditEntry.Key);
+            }
+            catch (IBMU2.UODOTNET.UniFileException)
+            {
+                // extant record was not found: this is a creation request
+                // create first (lock the entire file for as little time as possible)
+                // then lock the specific record
+                // then write all the fields
+                // then unlock the record
+                var dataSet = new IBMU2.UODOTNET.UniDataSet(session);
+                dataSet.Insert(purchaseLedgerVATAuditEntry.Key);
 
-                    //slcustFile.LockFile();
-                    uniVerseFile.WriteRecords(dataSet);
-                    //slcustFile.UnlockFile();
-                }
+                //slcustFile.LockFile();
+                uniVerseFile.WriteRecords(dataSet);
+                //slcustFile.UnlockFile();
+            }
 
-                uniVerseFile.LockRecord(purchaseLedgerVATAuditEntry.Key, 1);
+            uniVerseFile.LockRecord(purchaseLedgerVATAuditEntry.Key, 1);
 
-                UniUpsert<PurchaseLedgerVATAudit>.Upsert(PurchaseLedgerVATAuditJSON, uniVerseFile);
-
-                uniVerseFile.UnlockRecord(purchaseLedgerVATAuditEntry.Key);
+            UniUpsert<PurchaseLedgerVATAudit>.Upsert(PurchaseLedgerVATAuditJSON, uniVerseFile);
 
             return purchaseLedgerVATAuditEntry;
         }

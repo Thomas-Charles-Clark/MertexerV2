@@ -50,8 +50,6 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
             UniUpsert<PurchaseLedgerSupplierInvoice>.Upsert(PurchaseLedgerSupplierInvoiceJSON, uniVerseFile);
 
-            uniVerseFile.UnlockRecord(purchaseLedgerSupplierInvoiceEntry.Key);
-
             return purchaseLedgerSupplierInvoiceEntry.Key;
         }
 

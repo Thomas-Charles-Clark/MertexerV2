@@ -15,7 +15,7 @@ namespace MertexerV2.Models.Pricing
         [JsonConstructor]
         public GeneralLedgerAccountCode(string key) : base(key)
         {
-
+            Initialise();
         }
 
         public GeneralLedgerAccountCode() : base()

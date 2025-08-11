@@ -321,9 +321,9 @@ FOR JSON PATH, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER"));
 
         }
 
-        public static string FetchInvoiceRegistrationJSON(string invoiceRegisterKey)
+        public static string FetchInvoiceRegistrationJSON(string invoiceRegisterKey, string databaseName = "Flock")
         {
-            using (var conn = new SqlConnection("Data Source=vm-sql1;Initial Catalog=Flock;Integrated Security=True"))
+            using (var conn = new SqlConnection($"Data Source=vm-sql1;Initial Catalog={databaseName};Integrated Security=True"))
             {
                 try
                 {
@@ -339,7 +339,26 @@ FOR JSON PATH, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER"));
                     conn.Close();
                 }
             }
+        }
 
+        public static string FetchInvoiceRegistrationRollbackJSON(string invoiceRegisterKey, string databaseName = "Flock")
+        {
+            using (var conn = new SqlConnection($"Data Source=vm-sql1;Initial Catalog={databaseName};Integrated Security=True"))
+            {
+                try
+                {
+                    var result = String.Join("", conn.QueryAsync<string>("IncomingEmail.InvoiceRegisterEntry_RemoveFromPurchaseLedger_Select", new
+                    {
+                        InvoiceRegisterKey = invoiceRegisterKey
+                    }, null, 30, CommandType.StoredProcedure).Result);
+
+                    return result;
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
         }
 
         public static string ModifyReserveLine(string tradeDataSourceJson, PassReserveLine objLine)

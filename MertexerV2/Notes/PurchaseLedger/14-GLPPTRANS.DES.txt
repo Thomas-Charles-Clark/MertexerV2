@@ -1,4 +1,5 @@
 Updates GLPPTRANS.DES
+from 	TPLEDG
 
 95 MERTEX PL                     Purchase Ledger                    28 JUL 2025 
 ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ 
@@ -10,9 +11,9 @@ Updates GLPPTRANS.DES
 ³                                                                           ³   
 ³ Update/Delete (U/D)  U                                                    ³   
 ³ Update Condition                                                          ³   
-³ Data File (if diff)                                                       ³   
-³ Key Source           P("PG.BLD.GLPPTRANS.KEY,PIR")                        ³   
-³                                                                           ³   
+³ Data File (if diff)                                                       ³   https://docs.rocketsoftware.com/bundle/sbxa_dg_663/page/gry1644327657910.html
+³ Key Source           P("PG.BLD.GLPPTRANS.KEY,PIR")                        ³   <<<<  "A multivalue as a key updates as many records as there are values in the result of the expression." 
+³                                                                           ³   vvvv
 ³ Fld To Update  MV To Update    Oper   Value To Use                        ³   
 ³ PREPAY.SUPRE                   R      <39>                                ³   
 ³ PREPAY.GLCOD                   R      <44,-1>                             ³   
@@ -36,8 +37,8 @@ F2-Save
 
 /PD P PG.BLD.GLPPTRANS.KEY(PIR)
 
-ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄProcess Defn - ParagraphÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ 
-³ Process Name    PG.BLD.GLPPTRANS.KEY                                        ³ 
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄProcess Defn - ParagraphÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ Can absolutely return MVs	
+³ Process Name    PG.BLD.GLPPTRANS.KEY                                        ³ vvvvv 
 ³ Description     _________________________________                           ³ 
 ³ Dict File Name                                                              ³ 
 ³ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ ³ 
@@ -86,5 +87,336 @@ F2-Save
 ³                                                                             ³ 
 ³ Source Code Id                                                              ³ 
 ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ 
-                                                                                
+
 F2-Save F4-Del F6-Reformat F8-Goto Line F9-Process F10-Action                   
+
+CT RFPROGS RFGENKEY
+
+0001       SUBROUTINE RFGENKEY                                                  
+0002       * WRITTEN BY:      PBP       DATE:   30/11/88                        
+0003       * LAST AMENDED BY: PBP       DATE:   03/03/89                        
+0004       *                  PBP       DATE:   23/04/91                        
+0005       *                  PBP       DATE:   05/10/93                        
+0006       * -------------------------------------------------------------------                                                                   
+0007       * AMENDED BY    : PBP                                                
+0008       * DATE AMENDED  : 17/04/97                                       
+0009       * REASON        : ALLOW "SE" (SUPPRESS ERRORS) OPTION                
+0010       * VERSION       : 1.4                                                
+0011       * -------------------------------------------------------------------                                                      
+0012       * AMENDED BY    : PBP                                                
+0013       * DATE AMENDED  : 21/09/97                                           
+0014       * REASON        : ALLOW "MULTI-FILE" UNIQUENESS CONTROL              
+0015       *                 IF NEW FILE "RFGK.MF.CTRL" IS PRESENT AND          
+0016       *                 "FILE NAME" PARAMETER IS FOUND AS A CONTROL        
+0017       *                 RECORD IN THIS FILE, THEN A MULTIPLE FILE LIST     
+0018       *                 WILL BE RETURNED FROM THE CONTROL RECORD AND       
+0019       *                 EACH OF THESE FILES WILL BE CHECKED FOR            
+0020       *                 "UNIQUENESS" INSTEAD OF THE SINGLE FILE NAME.      
+0021       * VERSION       : 1.5                                                
+0023       * AMENDED BY    : PBP                                                
+0024       * DATE AMENDED  : 25/09/97                                           
+0025       * REASON        : ALLOW "FLDNO" PARAMETER TO BE SPECIFIED AS         
+0026       *                 "Opos" TO INDICATE THAT THE DATA "SOURCE" TO       
+0027       *                 BE COUNTED IS IN THE COMMON VARIABLE : ORIG.REC    
+0028       *                 RATHER THAN COMMON VARIABLE : RECORD AS USUAL.     
+0029       *                                                                    
+0030       *                 FOR EXAMPLE:                                       
+0031       *                 X = B("RFGENKEY,STREPAUDIT.1...O2")                
+0032       *                                                                    
+0033       * VERSION       : 1.6                                                
+0034       *********************************************************************                                                                    
+0035       * Generates File Keys with UNIQUE checks and other options.          
+0036       *                                                                    
+0037       * Routine Should be called with:                                     
+0038       * UFO:"RFGENKEY,file.acc-no.length.concat-chars.fldno.null-test"     
+0039       *                                                                    
+0040       * (May Use "&" instead of "." to separate parameters, If "&" exists, 
+0041       *  it will be used as delimiter, if not, "." will be used)...        
+0042       *                                                                    
+0043       * Parameters Used:                                                   
+0044       * 1: File - (OPTIONAL) File on which generated key should be unique.         
+0045       *            
+0046       * 2: acc-no - (MANDATORY) Accumulator number to use.                       
+0047       *                                                                    
+0048       * 3: length  - (OPTIONAL) Required length of Key                     
+0049       *              will use Leading Zeroes to Pad to Length).            
+0050       *                                                                    
+0051       * 4: concat-chars - (OPTIONAL) Characters to Concatenate as a Prefix.                                                              
+0052       *                                                                    
+0053       * 5: fldno   - (OPTIONAL) Field Position (in RECORD) to DCOUNT for   
+0054       *           Multivalues and return a MULTIVALUED number of keys      
+0055       *           (i.e. 1 key for each 'controlling' multivalue).          
+0056       *                                                                    
+0057       *           N.B. V1.6 Allows Field Positon in ORIG.REC               
+0058       *                                                                    
+0059       * 6: null-test  - (OPTIONAL) "Y" will return a corresponding NULL Key if                                                                        
+0060       *              the multivalue in fldno (as described above) is NULL. 
+0061       *                                                                    
+0062       *              e.g. If fldno contains:                               
+0063       *              e.g. If fldno contains:                    (normally) 
+0064       *                                                                    
+0065       *                   If null-test = "Y":  Keys 1]2]3]]]4              
+0066       * 
+0067       *             "Z" may also be specified for this parameter, to return       
+0068       *             NULL key if Controlling Field is NULL or ZERO                                                             
+0069       *                                                                    
+0070       * 7: Suppress Errors - 'SE' to Suppress (will not be logged anywhere)                                                                    
+0071       *                                                                    
+0072       * N O T E S:                                                         
+0073       *                                                                    
+0074       * If an error is encountered by RFGENKEY, a DATE-STAMP key is returned                                                                          
+0075       * (to ensure records are still written away) and Warning Code(s) given.                                                                         
+0076       *                                                                    
+0077       * Warning Codes are as follows:                                      
+0078       *                                                                    
+0079       *  1 - Control File Not Present                                      
+0080       *  2 - Illegal Pad Length Parameter                                  
+0081       *  3 - Concat Chars Longer/ As long as Pad Length (MUST be shorter)  
+0082       *  4 - File Parameter is not Name of existing file                   
+0083       *  5 - Accumulator Descriptions Not Found                            
+0084       *  6 - Illegal Data Obtained from Accumulator                        
+0085       *  7 - Null Data Obtained from Accumulator                           
+0086       * 10 - All Possible Keys Exist on File                                           
+0087       * 11 - Length Not Generated as Specified                             
+0088       *                                                                    
+0089       ******************************************************************   
+0090       * AMENDMENT HISTORY                                                  
+0091       * xxJAN89 - to give Date Stamped key if unable to generate key       
+0092       *           due to an error condition.                               
+0093       *                                                                    
+0094       * 17FEB89 - to allow multiple key return as determined by            
+0095       *           number of values passed in parameter 'fldno'. 'fldno'    
+0096       *           is optional and if not passed, 1 key value will be       
+0097       *           returned.                                                
+0098       *           Period allowed as delimeter ASWELL as ampersand.         
+0099       *           Date Time Stamp changed to incorperate unique i.d.       
+0100       *           number for multiple use at same time. This               
+0101       *           replaces the Sleep 1 for EVERY key, which was            
+0102       *           a waste of time for several keys.                        
+0103       *                                                                    
+0104       * xxMAY91 - (SB+ Version Only) Testing Of "Controlling" Multivalues  
+0105       *           & Corresponding NULL Key Returns as appropriate.         
+0106       *                                                                    
+0107       * 14JUN91 - (SB+ Version Only) Stores Returned Key In PARMS(1)       
+0108       *           so that it may be referenced if required.                
+0109       *                                                                     
+0110       * 03MAR92 - Specification of SYSID for Accumulator allowed           
+0111       *           in Accumulator Parameter (as in System Builder Vers.)    
+0112       *           Format 'xx:n' - where xx = SYSID...                      
+0113       *                                                                    
+0114       * 04OCT93 - If NULL returned from ACCUMULATOR, use ZERO (hence       
+0115       *           initialising the ACCUMULATOR automatically), instead     
+0116       *           of treating this as an error.                            
+0117       *                                                                    
+0118       ******************************************************************   
+0119       * INITIALISE VARIABLES                                               
+0120       ******************************************************************   
+0121 $INCLUDE RFPROGS COMMON                                                    
+0122       EQUATE AM TO CHAR(254), VM TO CHAR(253)                              
+0123       SOURCE.SYSID = SYSID                                                 
+0124       DSCODE = 0                                                           
+0125       SL.FLAG = 0                                                          
+0126       DSTMP = OCONV(DATE(),'D2/')                                          
+0127       TSTMP = OCONV(TIME(),'MTS')                                          
+0128       SUPPRESS.ZEROS = 0                                                   
+0129       P1CPY = PARAM                                                        
+0130       VALUE = "" ; WARN.CODE = ""                                          
+0131       FIRSTKEYIND = "Y" ; FIRSTKEY = ""                                    
+0132       M = "RFGENKEY: - " ; RTA = "        <Return to Acknowledge>"                                                      
+0133       ******************************************************************   
+0134       * Process Parameters                                                 
+0135       ******************************************************************   
+0136       ACNT = COUNT(P1CPY,'&')                                              
+0137       IF ACNT = 0 THEN DLIM = "." ELSE DLIM = "&"                          
+0138       FLE = FIELD(P1CPY,DLIM,1)                                            
+0139     * V1.5+                                                                
+0140       MULTI.CHK.FILES = 0                                                  
+0141       OPEN "","RFGK.MF.CTRL" TO F.RFGK.MFCTRL THEN                         
+0142            READ FLE FROM F.RFGK.MFCTRL,FLE THEN                            
+0143                 IF DCOUNT(FLE<1>,VM) > 1 THEN MULTI.CHK.FILES = 1          
+0144            END                                                             
+0145       END                                                                  
+0146     * V1.5-                                                                
+0147       ACCNO = FIELD(P1CPY,DLIM,2)                                          
+0148       *                                                                    
+0149       IF COUNT(ACCNO,':') > 0 THEN                                         
+0150          SOURCE.SYSID = FIELD(ACCNO,":",1)                                 
+0151          ACCNO = FIELD(ACCNO,":",2)                                        
+0152       END                                                                  
+0153       *                                                                    
+0154       PADL = FIELD(P1CPY,DLIM,3)                                           
+0155       CONCAT = FIELD(P1CPY,DLIM,4)                                            
+0156       FLDNUM = FIELD(P1CPY,DLIM,5)                                         
+0157       NULLTEST=FIELD(P1CPY,DLIM,6)                                         
+0158       SUPPRESS.ERR=FIELD(P1CPY,DLIM,7)                                     
+0159       PARTNER=FIELD(P1CPY,DLIM,8)                                          
+0160       IF PADL = '$Z' THEN SUPPRESS.ZEROS = 1                               
+0161       IF PADL = '' THEN SUPPRESS.ZEROS = 1                                 
+0162       *                                                                    
+0163       XXCONTROL = SOURCE.SYSID:'CONTROL'                                   
+0164       IF PARTNER # "" THEN                                                 
+0165         XXCONTROL = PARTNER:XXCONTROL                                      
+0166       END                                                                  
+0167       OPEN XXCONTROL TO CONTROL.FILE ELSE                                  
+0168          WARN.CODE = WARN.CODE:" 1"                                        
+0169       END                                                                  
+0170       *                                                                    
+0171       IF NOT(SUPPRESS.ZEROS) THEN                                          
+0172          IF PADL < 1 OR NUM(PADL) = 0 THEN WARN.CODE = WARN.CODE:" 2"      
+0173       END                                                                  
+0174       IF NOT(SUPPRESS.ZEROS) AND LEN(CONCAT) >= PADL THEN                  
+0175          WARN.CODE = WARN.CODE:" 3"                                        
+0176       END                                                                  
+0177       IF FLE <> "" THEN                                                    
+0178        * V1.5+                                                              
+0179        * OPEN FLE TO KFILE ELSE WARN.CODE = WARN.CODE:" 4"                 
+0180          FLE1 = FLE<1,1>                                                   
+0181          OPEN FLE1 TO KFILE ELSE WARN.CODE = WARN.CODE:" 4"                
+0182        * V1.5-                                                             
+0183       END                                                                  
+0184       ******************************************************************   
+0185       * Start of Main Loop                                                 
+0186       ******************************************************************   
+0187       IF FLDNUM = "" THEN                                                  
+0188          KEYS.CTRL = "X"                                                   
+0189          NO.KEYS = 1                                                       
+0190       END ELSE                                                             
+0191          IF FLDNUM[1,1] = "W" THEN                                         
+0192             FLDNUM = FLDNUM[2,999]                                         
+0193             KEYS.CTRL = WORK<FLDNUM>                                       
+0194          END ELSE                                                          
+0195           * V1.6+                                                          
+0196             IF FLDNUM[1,1] = "O" THEN                                      
+0197                FLDNUM = FLDNUM[2,999]                                      
+0198                KEYS.CTRL = ORIG.REC<FLDNUM>                                
+0199             END ELSE                                                       
+0200           * V1.6-                                                          
+0201                KEYS.CTRL = RECORD<FLDNUM>                                                           
+0202             END                                                            
+0203          END                                                               
+0204          NO.KEYS = DCOUNT(KEYS.CTRL,VM)                                    
+0205       END                                                                  
+0206       *                                                                    
+0207       FOR KEYNUMBER = 1 TO NO.KEYS                                         
+0208 10:      *                                                                 
+0209          IF WARN.CODE NE "" THEN GOTO 90                                   
+0210          IF FLDNUM NE "" THEN                                              
+0211             IF NULLTEST = "Y" OR NULLTEST = "Z" THEN                       
+0212                IF KEYS.CTRL<1,KEYNUMBER> = "" THEN KEY.DESC = '' ; GOTO 99 
+0213             END                                                            
+0214             IF NULLTEST = "Z" THEN                                         
+0215                IF KEYS.CTRL<1,KEYNUMBER> = 0 THEN KEY.DESC = '' ; GOTO 99  
+0216             END                                                            
+0217          END                                                               
+0218          READU ACCUMREC FROM CONTROL.FILE,"GENNO" ELSE                     
+0219             WARN.CODE = WARN.CODE:" 5"                                     
+0220             GOTO 90                                                        
+0221          END                                                               
+0222          IF NUM(ACCUMREC<ACCNO>) = 0 THEN                                  
+0223             RELEASE CONTROL.FILE,"GENNO"                                   
+0224             WARN.CODE = WARN.CODE:" 6"    
+0225             GOTO 90        
+0226          END                                            
+0227          *                                                                 
+0228          IF ACCUMREC<ACCNO> = '' THEN                                      
+0229             ACCUMREC<ACCNO> = '0'                                          
+0230             CALL SB.DISP(9,M:"ACCUMULATOR No. ":ACCNO:" INITIALISED ")     
+0231          END                                                               
+0232          *                                                                 
+0233          TEMP.VAL = ACCUMREC<ACCNO>                                        
+0234          *                                                                 
+0235          IF (TEMP.VAL = '') OR (NUM(TEMP.VAL) = 0) THEN                    
+0236             RELEASE CONTROL.FILE,"GENNO"                                   
+0237             WARN.CODE = WARN.CODE:" 7"                                     
+0238             GOTO 90                                                        
+0239          END                                                               
+0240          ACCUMREC<ACCNO> = ACCUMREC<ACCNO> + 1                             
+0241          WRITE ACCUMREC ON CONTROL.FILE,"GENNO"                            
+0242          KEY.DESC = ACCUMREC<ACCNO>                                        
+0243          ******************************************************************                                                    
+0244          * Manipulate raw number from accumulator, to give KEY as          
+0245          * specified by parameters.                                        
+0246          ******************************************************************                                                      
+0247          IF NOT(SUPPRESS.ZEROS) THEN        
+0248             PADZEROS = STR("0",PADL)                         
+0249             PADCHARS = PADL - LEN(KEY.DESC)                                
+0250             PADCHARS = PADCHARS - LEN(CONCAT)                              
+0251             PADZEROS = PADZEROS[1,PADCHARS]                                
+0252             IF PADCHARS < 0 THEN                                           
+0253                CHARS.TO.REMOVE = ABS(PADCHARS)                             
+0254                L = LEN(KEY.DESC)                                           
+0255                CHARS.TO.REMAIN = L - CHARS.TO.REMOVE                       
+0256                P = (L - CHARS.TO.REMAIN) + 1                               
+0257                KEY.DESC = KEY.DESC[P,CHARS.TO.REMAIN]                      
+0258             END                                                            
+0259          END ELSE                                                          
+0260             PADZEROS = ""                                                  
+0261          END                                                               
+0262          KEY.DESC = CONCAT:PADZEROS:KEY.DESC                               
+0263          IF NOT(SUPPRESS.ZEROS) THEN                                       
+0264             IF PADL <> LEN(KEY.DESC) THEN WARN.CODE = WARN.CODE:" 11" ; GOTO 90                                                                       
+0265          END                                                               
+0266          IF FIRSTKEYIND = "Y" THEN                                         
+0267             FIRSTKEYIND = "N"                                              
+0268             FIRSTKEY = KEY.DESC                                            
+0269          END ELSE           
+0270			                
+0272                GOTO 90                                                     
+0273             END                                                            
+0274          END                                                               
+0275          ******************************************************************                                                                   
+0276          * Check if KEY.DESC exists already on the file. If it does then   
+0277          * go back and try again.                                          
+0278          ******************************************************************
+0279        * V1.5+                                                             
+0280          IF FLE <> "" THEN                                                 
+0281             READ TEMP FROM KFILE,KEY.DESC THEN GOTO 10                     
+0282             IF MULTI.CHK.FILES THEN                                        
+0283                MAX.CHK.FILES = DCOUNT(FLE<1>,VM)                           
+0284                CHK.ERR = 0                                                 
+0285                FOR CHK.FNO = 2 TO MAX.CHK.FILES UNTIL CHK.ERR              
+0286                    CHK.FNAME = FLE<1,CHK.FNO>                              
+0287                    OPEN "",CHK.FNAME TO F.CHK.FNAME THEN                   
+0288                         READ TEMP FROM F.CHK.FNAME,KEY.DESC THEN           
+0289                              CHK.ERR = 1                                   
+0290                         END                                                
+0291                    END                                                     
+0292                NEXT CHK.FNO       
+0293			IF CHK.ERR THEN GOTO 10
+0294			END	                                                 
+0295          END                                                               
+0296        * V1.5-                                                             
+0297          * End of main loop                                                
+0298          ******************************************************************
+0299          * VARIABLE 'KEY.DESC'.                                            
+0300          * If RFGENKEY has not been able to generate a key, then           
+0301          * a Date & Time stamped will be returned and a warning given.     
+0302          ******************************************************************
+0303 90:      *                                                                 
+0304          IF WARN.CODE NE "" THEN                                           
+0305             KEY.DESC = 'RFGK':PORT:'-':DSTMP:"-":TSTMP:"-":DSCODE          
+0306             DSCODE = DSCODE + 1                                            
+0307             SL.FLAG = 1                                                    
+0308          END                                                               
+0309 99:      *                                                                 
+0310          VALUE<1,KEYNUMBER> = KEY.DESC                                     
+0311          *                                                                 
+0312       NEXT KEYNUMBER                                                       
+0313       *                                                                    
+0314       IF WARN.CODE NE "" THEN                                              
+0315        * V1.4+                                                              
+0316          IF SUPPRESS.ERR NE "SE" THEN                                      
+0317             CALL SB.DISP(3,M:' Warning Code(s) = ':WARN.CODE)              
+0318             CALL SB.DISP(3,M:' Parameters = ':P1CPY)                       
+0319          END                                                               
+0320        * V1.4-                                                             
+0321       END                                                                  
+0322       IF SL.FLAG THEN SLEEP 1                                              
+0323       **************************************************************************                                                                      
+0324 999:  *                                                                    
+0325       PARMS(1) = VALUE                   ; * 14/06/91                      
+0326       RETURN                                   
+
+
+
+

@@ -386,3 +386,19 @@ IAR uP right justify
 IDL dOwn left justify
 IDR doWn right justify
 
+
+
+
+what am I to do about this Supplier "INACT" property? It records the period(s) for which a supplier has been inactive, but the transaction sub-file action on PLSUP does the following: REPLACE value with the result of the Default definition "INACT" which is:
+
+IF (<154> = "","",-1)
+
+// if Future == "", replace with "", otherwise replace with "-1"!
+
+Ah, shut up. Follow the programming.
+
+So what the heck should I do when UNDOING the transaction...?
+
+Not worry about it?
+
+ 

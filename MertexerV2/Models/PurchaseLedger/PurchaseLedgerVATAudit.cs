@@ -68,12 +68,12 @@ namespace MertexerV2.Models.PurchaseLedger
 
         [UniVerseIndex(3)]
         [UniVerseFieldName("SUPREF")]
-        public string SupplierReference { get; set; }
+        public string SupplierCode { get; set; }
 
         [UniVerseIndex(4)]
         [UniVerseFieldName("TOTDUE")]
         [UniVerseConversion("MR22")]
-        public decimal PurchaseLedgerTotalDue { get; set; }
+        public decimal PurchaseLedgerTotalDueInSterling { get; set; }
 
         [UniVerseIndex(5)]
         [UniVerseFieldName("CODE")]
@@ -89,13 +89,13 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseFieldName("VALUE")]
         [UniVerseConversion("MR22")]
         [UniVerseMultiValue]
-        public IEnumerable<decimal> VATableValues { get; set; }
+        public IEnumerable<decimal> VATableValuesInSterling { get; set; }
 
         [UniVerseIndex(7)]
         [UniVerseFieldName("VATAMT")]
         [UniVerseConversion("MR22")]
         [UniVerseMultiValue]
-        public IEnumerable<decimal> VATTaxes { get; set; }
+        public IEnumerable<decimal> VATTaxesInSterling { get; set; }
 
         [UniVerseIndex(8)]
         [UniVerseFieldName("NEXT")]
@@ -109,17 +109,17 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseFieldName("VALUE.CUR.DES")]
         [UniVerseConversion("MR22")]
         [UniVerseMultiValue]
-        public IEnumerable<decimal> VATValueCurrency { get; set; }
+        public IEnumerable<decimal> VATableValuesInCurrency { get; set; }
 
         [UniVerseIndex(11)]
         [UniVerseFieldName("VATAMT.CUR.DES")]
         [UniVerseConversion("MR22")]
         [UniVerseMultiValue]
-        public IEnumerable<decimal> VATAmountCurrency { get; set; }
+        public IEnumerable<decimal> VATTaxesInCurrency { get; set; }
 
         [UniVerseIndex(12)]
         [UniVerseFieldName("TOTDUE.CUR.DES")]
-        public decimal PurchaseLedgerTotalDueCurrency { get; set; }
+        public decimal PurchaseLedgerTotalDueInCurrency { get; set; }
 
         [JsonAlsoUpdates("CopiedDate")]
         public DateTime? CopiedDT { get; set; }
@@ -157,6 +157,6 @@ namespace MertexerV2.Models.PurchaseLedger
 
         [UniVerseIndex(14)]
         [UniVerseFieldName("PERIOD")]
-        public byte Period { get; set; }
+        public byte? FinancialPeriod { get; set; }
     }
 }

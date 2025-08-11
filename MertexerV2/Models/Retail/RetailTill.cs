@@ -1,5 +1,7 @@
 ﻿using MertexerV2.Utilities;
 
+using Newtonsoft.Json;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +13,10 @@ namespace MertexerV2.Models
     [UniVerseFileName("OETILLNO")]
     public class RetailTill : UniVerseSerializationBase<string>
     {
+        [JsonConstructor]
         public RetailTill(string key) : base(key)
         {
-
+            Initialise();
         }
 
         public RetailTill() : base()

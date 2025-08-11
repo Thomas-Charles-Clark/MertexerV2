@@ -1,5 +1,7 @@
 ﻿using MertexerV2.Utilities;
 
+using Newtonsoft.Json;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +13,10 @@ namespace MertexerV2.Models.Company
     [UniVerseFileName("CFVAT")]
     public class CompanyVAT : UniVerseSerializationBase<string>
     {
+        [JsonConstructor]
         public CompanyVAT(string key) : base(key)
         {
-
+            Initialise();
         }
 
         public CompanyVAT() :base()

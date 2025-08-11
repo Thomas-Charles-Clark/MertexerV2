@@ -112,11 +112,11 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseIndex(6)]
         [UniVerseFieldName("VATDIS")]
         [UniVerseConversion("MR22")]
-        public decimal VATDiscount { get; set; }
+        public decimal VATTaxesTotalInSterling { get; set; }
 
         [UniVerseIndex(7)]
         [UniVerseFieldName("SUPREF")]
-        public string SupplierReference { get; set; }
+        public string SupplierCode { get; set; }
 
         [UniVerseIndex(8)]
         [UniVerseFieldName("UNALLOCATED")]
@@ -194,23 +194,23 @@ namespace MertexerV2.Models.PurchaseLedger
         /// </summary>
         [UniVerseIndex(30)]
         [UniVerseFieldName("CURR")]
-        public string Currency { get; set; }
+        public string CurrencyCode { get; set; }
 
         [UniVerseIndex(31)]
         [UniVerseFieldName("DOCTOT.CUR")]
         [UniVerseConversion("MR22")]
-        public decimal DocumentTotalCurrency { get; set; }
+        public decimal DocumentTotalInCurrency { get; set; }
 
         [UniVerseIndex(32)]
         [UniVerseFieldName("VATDIS.CUR")]
         [UniVerseConversion("MR22")]
-        public decimal VATDiscountCurrency { get; set; }
+        public decimal VATTaxesTotalInCurrency { get; set; }
 
         [UniVerseIndex(34)]
         [UniVerseFieldName("XRATE")]
         [UniVerseConversion("MR66")]
         [UniVerseMultiValue]
-        public IEnumerable<decimal> ExchangeRates { get; set; } = new List<decimal>();
+        public IEnumerable<decimal> ExchangeRates { get; set; }
 
         public decimal ExchangeRate
         {

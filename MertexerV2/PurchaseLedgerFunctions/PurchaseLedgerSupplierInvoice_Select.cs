@@ -30,12 +30,12 @@ namespace MertexerV2.PurchaseLedgerFunctions
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
         public static IEnumerable Select(
             string UniVerseAccount,
-            string PurchaseLedgerCodes,
+            string PurchaseLedgerSupplierInvoiceCodes,
             string SupplierCode,
             DateTime? DocumentDT_From,
             DateTime? DocumentDT_To)
         {
-            if (String.IsNullOrEmpty(PurchaseLedgerCodes))
+            if (String.IsNullOrEmpty(PurchaseLedgerSupplierInvoiceCodes))
             {
                 int p = 0;
 
@@ -62,7 +62,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
                         filters,
                         true,
                         false,
-                        100,
+                        500,
                         UniVerseAccount))
                     {
                         yield return invoice;
@@ -73,9 +73,8 @@ namespace MertexerV2.PurchaseLedgerFunctions
                     foreach (var invoice in Selector<PurchaseLedgerSupplierInvoice>.SelectAllNonParallel(
                         true,
                         false,
-                        100,
-                        UniVerseAccount)
-                        .ToList())
+                        500,
+                        UniVerseAccount))
                     {
                         yield return invoice;
                     }
@@ -84,12 +83,11 @@ namespace MertexerV2.PurchaseLedgerFunctions
             else
             {
                 foreach (var invoice in Selector<PurchaseLedgerSupplierInvoice>.Select(
-                    JsonConvert.DeserializeObject<IEnumerable<PurchaseLedgerSupplierInvoiceCode>>(PurchaseLedgerCodes).Select(p => p.Code),
+                    JsonConvert.DeserializeObject<IEnumerable<PurchaseLedgerSupplierInvoiceCode>>(PurchaseLedgerSupplierInvoiceCodes).Select(p => p.Code),
                     true,
                     false,
-                    100,
-                    UniVerseAccount)
-                    .ToList())
+                    500,
+                    UniVerseAccount))
                 {
                     yield return invoice;
                 }
@@ -98,15 +96,30 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
         public static void PurchaseLedgerSupplierInvoiceSelect_FillRow(
             object obj,
-            out SqlString Key,
-            out SqlDateTime DocumentDT
+            out SqlString PurchaseLedgerSupplierInvoiceID,
+            out SqlString SupplierCode,
+            out SqlString SupplierInvoiceReference,
+            out SqlString TransactionType,
+            out SqlDateTime DocumentDT,
+            out SqlString DocumentNumber,
+            out SqlDateTime PostDT
             )
         {
             var result = (PurchaseLedgerSupplierInvoice)obj;
 
-            Key = result.Key?.TrimReduceTruncate(50);
+            PurchaseLedgerSupplierInvoiceID = result.Key;
+
+            SupplierCode = result.SupplierCode ?? SqlString.Null;
+
+            SupplierInvoiceReference = result.SupplierInvoiceReference ?? SqlString.Null;
+
+            TransactionType = result.TransactionType ?? SqlString.Null;
 
             DocumentDT = result.DocumentDT ?? SqlDateTime.Null;
+
+            DocumentNumber = result.DocumentNumber ?? SqlString.Null;
+
+            PostDT = result.PostDT ?? SqlDateTime.Null;
         }
     }
 }

@@ -17,7 +17,7 @@ namespace MertexerV2.Models.Pricing
         [JsonConstructor]
         public POPriceList(string key) : base(key)
         {
-
+            Initialise();
         }
 
         public POPriceList() : base()

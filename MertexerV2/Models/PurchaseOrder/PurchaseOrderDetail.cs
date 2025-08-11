@@ -146,17 +146,26 @@ namespace MertexerV2.Models.PurchaseOrder
             {
                 if (!String.IsNullOrEmpty(value))
                 {
-                    if (Int32.TryParse(value, out int valInt))
+                    if (value == "CO")
                     {
-                        PromisedDT = Framework.DateTimeFromUniVerseOffset(valInt);
+                        CallOffIndicator = true;
                     }
                     else
                     {
-                        PromisedDT = null;
+                        if (Int32.TryParse(value, out int valInt))
+                        {
+                            PromisedDT = Framework.DateTimeFromUniVerseOffset(valInt);
+                        }
+                        else
+                        {
+                            PromisedDT = null;
+                        }
                     }
                 }
             }
         }
+
+        public bool CallOffIndicator { get; set; }
 
         public DateTime? ExpectedArrivalDT { get; set; }
 

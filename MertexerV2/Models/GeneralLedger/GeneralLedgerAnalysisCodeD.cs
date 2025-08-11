@@ -6,14 +6,17 @@ using System.Threading.Tasks;
 
 using MertexerV2.Utilities;
 
+using Newtonsoft.Json;
+
 namespace MertexerV2.Models.GeneralLedger
 {
     [UniVerseFileName("GLALYS")]
     public class GeneralLedgerAnalysisCodeD : UniVerseSerializationBase<string>
     {
+        [JsonConstructor]
         public GeneralLedgerAnalysisCodeD(string key) : base(key)
         {
-
+            Initialise();
         }
 
         public GeneralLedgerAnalysisCodeD() : base()

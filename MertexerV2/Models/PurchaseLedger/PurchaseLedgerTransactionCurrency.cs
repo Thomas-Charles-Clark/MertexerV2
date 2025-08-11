@@ -140,7 +140,7 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseIndex(6)]
         [UniVerseFieldName("VATDIS")]
         [UniVerseConversion("MR22")] 
-        public decimal VATDiscount { get; set; }
+        public decimal VATTaxesTotal { get; set; }
 
         [UniVerseIndex(7)]
         [UniVerseFieldName("DEBIT")]
@@ -162,6 +162,11 @@ namespace MertexerV2.Models.PurchaseLedger
         public byte Period { get; set; }
 
         [UniVerseIndex(11)]
+        [UniVerseFieldName("STATUS")]
+        [UniVerseMultiValue]
+        public IEnumerable<string> Statuses { get; set; }
+
+        [UniVerseIndex(11, 1)]
         [UniVerseFieldName("STATUS")]
         public string Status { get; set; }
 
@@ -193,7 +198,7 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseIndex(18)]
         [UniVerseFieldName("DISC")]
         [UniVerseConversion("MR33")]
-        public decimal DiscountPercentage { get; set; }
+        public decimal? DiscountPercentage { get; set; }
 
         [UniVerseIndex(19)]
         [UniVerseFieldName("SELCHQ")]
@@ -202,7 +207,7 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseIndex(20)]
         [UniVerseFieldName("DISCAMT")]
         [UniVerseConversion("MR22")]
-        public decimal DiscountAmount { get; set; }
+        public decimal? DiscountAmount { get; set; }
 
         [UniVerseIndex(21)]
         [UniVerseFieldName("NEXTAUTO")]
@@ -217,12 +222,12 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseIndex(23)]
         [UniVerseFieldName("DISCTAKEN")]
         [UniVerseConversion("MR22")]
-        public decimal SDTaken { get; set; }
+        public decimal? SDTaken { get; set; }
 
         [UniVerseIndex(24)]
         [UniVerseFieldName("DISCT")]
         [UniVerseConversion("MR22")]
-        public decimal DiscountTaken { get; set; }
+        public decimal? DiscountTaken { get; set; }
 
         [JsonAlsoUpdates("PostDate")]
         public DateTime? PostDT { get; set; }
@@ -306,11 +311,6 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseConversion("MR66")]
 
         public IEnumerable<decimal> ExchangeRates { get; set; }
-
-        [UniVerseIndex(30,1)]
-        [UniVerseFieldName("XRATE.1")]
-        [UniVerseConversion("MR66")]
-        public decimal MostRecentExchangeRate { get; set; }
 
         [UniVerseIndex(32)]
         [UniVerseFieldName("EXDIFFS")]

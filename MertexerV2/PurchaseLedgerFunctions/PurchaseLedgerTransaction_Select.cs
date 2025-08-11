@@ -128,7 +128,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
             out SqlString ItemReference,
             out SqlDecimal OriginalValue,
             out SqlString DocumentNumber,
-            out SqlDecimal VATDiscount,
+            out SqlDecimal VATTaxesTotal,
             out SqlDecimal Debit,
             out SqlDecimal Credit,
             out SqlDecimal Balance,
@@ -176,7 +176,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
             ItemReference = result.ItemReference?.TrimReduceTruncate(50) ?? SqlString.Null;
             OriginalValue = result.OriginalValue;
             DocumentNumber = result.DocumentNumber?.TrimReduceTruncate(50) ?? SqlString.Null;
-            VATDiscount = result.VATDiscount;
+            VATTaxesTotal = result.VATTaxesTotal;
             Debit = result.Debit;
             Credit = result.Credit;
             Balance = result.Balance;
@@ -189,7 +189,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
             DisputeMemo = result.DisputeMemo?.TrimReduceTruncate(50);
             Dispute = result.Dispute?.TrimReduceTruncate(1) ?? SqlString.Null;
             Adjust = result.Adjust?.TrimReduceTruncate(1) ?? SqlString.Null;
-            DiscountPercentage = result.DiscountPercentage;
+            DiscountPercentage = result.DiscountPercentage ?? SqlDecimal.Null;
             SelectedForCheque = result.SelectedForCheque?.TrimReduceTruncate(1) ?? SqlString.Null;
             DiscountAmount = result.DiscountAmount;
             Payment = result.Payment;
@@ -200,18 +200,18 @@ namespace MertexerV2.PurchaseLedgerFunctions
             DiscountCutOffDT = result.DiscountCutOffDT ?? SqlDateTime.Null;
             CurrencyCode = result.CurrencyCode?.TrimReduceTruncate(4) ?? SqlString.Null;
             ExchangeRates = result.ExchangeRates.Any() ? JsonConvert.SerializeObject(result.ExchangeRates) : SqlString.Null;
-            MostRecentExchangeRate = result.MostRecentExchangeRate;
-            ExchangeRateDifferences = result.ExchangeRateDifferences;
-            BankCharges = result.BankCharges;
+            MostRecentExchangeRate = result.ExchangeRates.Any() ? result.ExchangeRates.First() : SqlDecimal.Null;
+            ExchangeRateDifferences = result.ExchangeRateDifferences ?? SqlDecimal.Null;
+            BankCharges = result.BankCharges ?? SqlDecimal.Null;
             PaidDT = result.PaidDT ?? SqlDateTime.Null;
-            RoundingErrors = result.RoundingErrors;
+            RoundingErrors = result.RoundingErrors ?? SqlDecimal.Null;
             Version = result.Version;
             NextKeepFlag = result.NextKeepFlag?.TrimReduceTruncate(1) ?? SqlString.Null;
             PurchaseOrderNumbers = result.PurchaseOrderNumbers.Any() ? JsonConvert.SerializeObject(result.PurchaseOrderNumbers) : SqlString.Null;
             Division = result.Division?.TrimReduceTruncate(2) ?? SqlString.Null;
             SupplierCallNoteReferences = result.SupplierCallNoteReferences.Any() ? JsonConvert.SerializeObject(result.SupplierCallNoteReferences) : SqlString.Null;
             PurchaseLedgerRegisterNumber = result.PurchaseLedgerRegisterNumber?.TrimReduceTruncate(50) ?? SqlString.Null;
-            OutstandingAmount = result.OutstandingAmount; // OutstandingAmount is named REFENQ.W9 which infers that it is a computed, working field - devised by some paragraph for some screen.
+            OutstandingAmount = result.OutstandingAmount ?? SqlDecimal.Null; // OutstandingAmount is named REFENQ.W9 which infers that it is a computed, working field - devised by some paragraph for some screen.
         }
     }
 }

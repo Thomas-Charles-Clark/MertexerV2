@@ -30,12 +30,12 @@ namespace MertexerV2.PurchaseLedgerFunctions
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
         public static IEnumerable Select(
             string UniVerseAccount,
-            string PurchaseLedgerCodes,
+            string PurchaseLedgerAdjustmentAuditCodes,
             string SupplierCode,
             DateTime? DocumentDT_From,
             DateTime? DocumentDT_To)
         {
-            if (String.IsNullOrEmpty(PurchaseLedgerCodes))
+            if (String.IsNullOrEmpty(PurchaseLedgerAdjustmentAuditCodes))
             {
                 int p = 0;
 
@@ -74,8 +74,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
                         true,
                         false,
                         100,
-                        UniVerseAccount)
-                        .ToList())
+                        UniVerseAccount))
                     {
                         yield return invoice;
                     }
@@ -84,7 +83,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
             else
             {
                 foreach (var invoice in Selector<PurchaseLedgerAdjustmentAudit>.Select(
-                    JsonConvert.DeserializeObject<IEnumerable<PurchaseLedgerAdjustmentAuditCode>>(PurchaseLedgerCodes).Select(p => p.Code),
+                    JsonConvert.DeserializeObject<IEnumerable<PurchaseLedgerAdjustmentAuditCode>>(PurchaseLedgerAdjustmentAuditCodes).Select(p => p.Code),
                     true,
                     false,
                     100,
@@ -98,15 +97,63 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
         public static void PurchaseLedgerAdjustmentAuditSelect_FillRow(
             object obj,
-            out SqlString Key,
-            out SqlDateTime DocumentDT
+            out SqlString PurchaseLedgerAdjustmentAuditID,
+            out SqlDecimal DocumentTotal,
+            out SqlString TransactionType,
+            out SqlString Ports,
+            out SqlDateTime DocumentDT,
+            out SqlDateTime PostDT,
+            out SqlDecimal VATTaxesInSterling,
+            out SqlString SupplierCode,
+            out SqlString UnallocatedAmounts,
+            out SqlString Balances,
+            out SqlString GeneralLedgerCodes,
+            out SqlString Time,
+            out SqlDateTime DueDT,
+            out SqlString MertexCurrencyCode,
+            out SqlDecimal DocumentTotalInCurrency,
+            out SqlDecimal VATTaxesTotalInCurrency,
+            out SqlString ExchangeRates,
+            out SqlDecimal ExchangeRate
             )
         {
             var result = (PurchaseLedgerAdjustmentAudit)obj;
 
-            Key = result.Key?.TrimReduceTruncate(50);
+            PurchaseLedgerAdjustmentAuditID = result.Key;
+
+            DocumentTotal = result.DocumentTotal;
+
+            TransactionType = result.TransactionType ?? SqlString.Null;
+
+            Ports = result.Ports?.Any() == true ? JsonConvert.SerializeObject(result.Ports) : SqlString.Null;
 
             DocumentDT = result.DocumentDT ?? SqlDateTime.Null;
+
+            PostDT = result.PostDT ?? SqlDateTime.Null;
+
+            VATTaxesInSterling = result.VATTaxesTotalInSterling;
+
+            SupplierCode = result.SupplierCode ?? SqlString.Null;
+
+            UnallocatedAmounts = result.UnallocatedAmounts?.Any() == true ? JsonConvert.SerializeObject(result.UnallocatedAmounts) : SqlString.Null;
+
+            Balances = result.Balances?.Any() == true ? JsonConvert.SerializeObject(result.Balances) : SqlString.Null;
+
+            GeneralLedgerCodes = result.GeneralLedgerCodes?.Any() == true ? JsonConvert.SerializeObject(result.GeneralLedgerCodes) : SqlString.Null;
+
+            Time = result.Time ?? SqlString.Null;
+
+            DueDT = result.DueDT ?? SqlDateTime.Null;
+
+            MertexCurrencyCode = result.CurrencyCode ?? SqlString.Null;
+
+            DocumentTotalInCurrency = result.DocumentTotalInCurrency;
+
+            VATTaxesTotalInCurrency = result.VATTaxesTotalInCurrency;
+
+            ExchangeRates = result.ExchangeRates?.Any() == true ? JsonConvert.SerializeObject(result.ExchangeRates) : SqlString.Null;
+
+            ExchangeRate = result.ExchangeRate;
         }
     }
 }

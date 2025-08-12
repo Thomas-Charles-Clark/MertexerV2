@@ -32,6 +32,8 @@ namespace MertexerV2.PurchaseLedgerFunctions
             string UniVerseAccount,
             string PurchaseLedgerCodes,
             string SupplierCode,
+            DateTime? OnFileDT_From,
+            DateTime? OnFileDT_To,
             DateTime? DocumentDT_From,
             DateTime? DocumentDT_To,
             DateTime? DueDT_From,
@@ -48,6 +50,16 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 if (!String.IsNullOrEmpty(SupplierCode))
                 {
                     filters.Add(new Tuple<string, string, string>("SUPREF", "eq", SupplierCode));
+                }
+
+                if (OnFileDT_From.HasValue)
+                {
+                    filters.Add(new Tuple<string, string, string>("SS.DATEONFILE.INT", ">=", Framework.UniVerseDateString(OnFileDT_From.Value)));
+                }
+
+                if (OnFileDT_To.HasValue)
+                {
+                    filters.Add(new Tuple<string, string, string>("SS.DATEONFILE.INT", "<=", Framework.UniVerseDateString(OnFileDT_To.Value)));
                 }
 
                 if (DocumentDT_From.HasValue)

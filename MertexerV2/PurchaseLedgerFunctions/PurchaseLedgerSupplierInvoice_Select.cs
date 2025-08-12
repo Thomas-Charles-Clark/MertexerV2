@@ -32,6 +32,8 @@ namespace MertexerV2.PurchaseLedgerFunctions
             string UniVerseAccount,
             string PurchaseLedgerSupplierInvoiceCodes,
             string SupplierCode,
+            DateTime? PostDT_From,
+            DateTime? PostDT_To,
             DateTime? DocumentDT_From,
             DateTime? DocumentDT_To)
         {
@@ -44,6 +46,16 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 if (!String.IsNullOrEmpty(SupplierCode))
                 {
                     filters.Add(new Tuple<string, string, string>("SUPREF", "eq", SupplierCode));
+                }
+
+                if (PostDT_From.HasValue)
+                {
+                    filters.Add(new Tuple<string, string, string>("SS.POSTDATE.INT", ">=", Framework.UniVerseDateString(PostDT_From.Value)));
+                }
+
+                if (PostDT_To.HasValue)
+                {
+                    filters.Add(new Tuple<string, string, string>("SS.POSTDATE.INT", "<=", Framework.UniVerseDateString(PostDT_To.Value)));
                 }
 
                 if (DocumentDT_From.HasValue)

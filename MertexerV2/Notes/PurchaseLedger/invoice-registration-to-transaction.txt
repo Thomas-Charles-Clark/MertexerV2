@@ -402,3 +402,27 @@ So what the heck should I do when UNDOING the transaction...?
 Not worry about it?
 
  
+ 
+ 
+
+
+#################################################################################################
+#
+#	12/08/2025			
+#	Testing Time!
+#	A *lot* of cool stuff has been achieved in this direction. Time to take it to Dev & PLAY and TEST it thoroughly.
+#
+#################################################################################################
+
+We want... a SHRUBBERY!
+
+Failing that, we want two simple SQL procedures: one to submit from Register to Ledger, and one to undo that submission with exacting precision.
+
+In order to achieve that, we must record the effects of the transaction to a table in SQL, and to effect the undo we must SELECT the necessaries from those results.
+
+Mmmm-hmmm.
+
+
+
+
+

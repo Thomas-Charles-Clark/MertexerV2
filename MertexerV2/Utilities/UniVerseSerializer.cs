@@ -166,7 +166,7 @@ namespace MertexerV2.Utilities
                 }
                 else if (pi.PropertyType == typeof(bool) || pi.PropertyType == typeof(bool?))
                 {
-                    result = (bool)pi.GetValue(source) ? "Y" : "N";
+                    result = (bool?)pi.GetValue(source) == true ? "Y" : "";
                 }
 
                 if (conversion != null)

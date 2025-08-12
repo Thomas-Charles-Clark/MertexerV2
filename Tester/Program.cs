@@ -108,17 +108,17 @@ namespace Tester
 
             var now = DateTime.Now;
 
-            var invoiceRegisterKey = "316450"; // Supplier B0036
+            var invoiceRegisterKey = "316464"; // Supplier B0036
 
             var registerEntryJson = TesterFramework.FetchInvoiceRegistrationJSON(invoiceRegisterKey, "FlockDev");// Selector<PurchaseLedgerInvoiceRegister>.Select("305127", true, false, 10, uniVerseAccount);
 
-            var rollbackJson = TesterFramework.FetchInvoiceRegistrationRollbackJSON(invoiceRegisterKey, "FlockDev");
+            //var rollbackJson = TesterFramework.FetchInvoiceRegistrationRollbackJSON(invoiceRegisterKey, "FlockDev");
 
             Console.WriteLine($"Calling PurchaseLedgerFunctions.InsertFromInvoiceRegister for PLINVREG key {invoiceRegisterKey} in {uniVerseAccount}");
 
-            //var transactionResults = PurchaseLedgerFunctions.InsertFromInvoiceRegistry(uniVerseAccount, registerEntryJson).OfType<PurchaseLedgerInsertionResult>().ToList();
+            var transactionResults = PurchaseLedgerFunctions.InsertFromInvoiceRegistry(uniVerseAccount, registerEntryJson).OfType<PurchaseLedgerInsertionResult>().ToList();
 
-            var transactionUndoResults = PurchaseLedgerFunctions.RollbackInvoiceRegistryInsertionTransaction(uniVerseAccount, rollbackJson);
+            //var transactionUndoResults = PurchaseLedgerFunctions.RollbackInvoiceRegistryInsertionTransaction(uniVerseAccount, rollbackJson);
 
             CFramework.SetConsoleColourSuccess();
 

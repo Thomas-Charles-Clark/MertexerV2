@@ -88,7 +88,7 @@ namespace MertexerV2.SupplierFunctions
             out SqlBoolean AccountClosed
             )
         {
-            var p = (Supplier)obj;
+            var p = (SupplierCurrency)obj;
 
             Code = p.Key?.TrimReduceTruncate(50);
             Name = p.Name?.TrimReduceTruncate(100);

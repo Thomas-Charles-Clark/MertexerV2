@@ -18,9 +18,9 @@ namespace MertexerV2.PurchaseLedgerFunctions
     {
         internal static string UpsertViaTransaction(ref UniSession session, string PurchaseLedgerTransactionJSON)
         {
-            var purchaseLedgerEntry = JsonConvert.DeserializeObject<PurchaseLedgerTransaction>(PurchaseLedgerTransactionJSON);
+            var purchaseLedgerEntry = JsonConvert.DeserializeObject<PurchaseLedgerTransactionCurrency>(PurchaseLedgerTransactionJSON);
 
-            var fileName = typeof(PurchaseLedgerTransaction).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
+            var fileName = typeof(PurchaseLedgerTransactionCurrency).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
                     .Cast<UniVerseFileNameAttribute>()
                     .Single()
                     .FileName;
@@ -48,7 +48,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
             uniVerseFile.LockRecord(purchaseLedgerEntry.Key, 1);
 
-            UniUpsert<PurchaseLedgerTransaction>.Upsert(PurchaseLedgerTransactionJSON, uniVerseFile);
+            UniUpsert<PurchaseLedgerTransactionCurrency>.Upsert(PurchaseLedgerTransactionJSON, uniVerseFile);
 
             return purchaseLedgerEntry.Key;
         }
@@ -57,9 +57,9 @@ namespace MertexerV2.PurchaseLedgerFunctions
         [SqlFunction]
         public static string Upsert(string UniVerseAccount, string PurchaseLedgerTransactionJSON)
         {
-            var purchaseLedgerEntry = JsonConvert.DeserializeObject<PurchaseLedgerTransaction>(PurchaseLedgerTransactionJSON);
+            var purchaseLedgerEntry = JsonConvert.DeserializeObject<PurchaseLedgerTransactionCurrency>(PurchaseLedgerTransactionJSON);
 
-            var fileName = typeof(PurchaseLedgerTransaction).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
+            var fileName = typeof(PurchaseLedgerTransactionCurrency).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
                     .Cast<UniVerseFileNameAttribute>()
                     .Single()
                     .FileName;
@@ -89,7 +89,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                 uniVerseFile.LockRecord(purchaseLedgerEntry.Key, 1);
 
-                UniUpsert<PurchaseLedgerTransaction>.Upsert(PurchaseLedgerTransactionJSON, uniVerseFile, UniVerseAccount);
+                UniUpsert<PurchaseLedgerTransactionCurrency>.Upsert(PurchaseLedgerTransactionJSON, uniVerseFile, UniVerseAccount);
 
                 uniVerseFile.UnlockRecord(purchaseLedgerEntry.Key);
 

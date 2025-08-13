@@ -108,17 +108,23 @@ namespace Tester
 
             var now = DateTime.Now;
 
-            var invoiceRegisterKey = "316464"; // Supplier B0036
+            var invoiceRegisterKey = "314332";
 
-            var registerEntryJson = TesterFramework.FetchInvoiceRegistrationJSON(invoiceRegisterKey, "FlockDev");// Selector<PurchaseLedgerInvoiceRegister>.Select("305127", true, false, 10, uniVerseAccount);
+            //var registerEntryJson = TesterFramework.FetchInvoiceRegistrationJSON(invoiceRegisterKey, "FlockDev");// Selector<PurchaseLedgerInvoiceRegister>.Select("305127", true, false, 10, uniVerseAccount);
 
-            //var rollbackJson = TesterFramework.FetchInvoiceRegistrationRollbackJSON(invoiceRegisterKey, "FlockDev");
+            //Console.WriteLine($"Calling PurchaseLedgerFunctions.InsertFromInvoiceRegister for PLINVREG key {invoiceRegisterKey} in {uniVerseAccount}");
 
-            Console.WriteLine($"Calling PurchaseLedgerFunctions.InsertFromInvoiceRegister for PLINVREG key {invoiceRegisterKey} in {uniVerseAccount}");
+            //var transactionResults = PurchaseLedgerFunctions.InsertFromInvoiceRegistry(uniVerseAccount, registerEntryJson).OfType<PurchaseLedgerInsertionResult>().ToList();
 
-            var transactionResults = PurchaseLedgerFunctions.InsertFromInvoiceRegistry(uniVerseAccount, registerEntryJson).OfType<PurchaseLedgerInsertionResult>().ToList();
+            Console.WriteLine($"Calling IncomingEmail.InvoiceRegisterEntry_RemoveFromPurchaseLedger_Select for @InvoiceRegisterKey {invoiceRegisterKey} in FlockDev");
 
-            //var transactionUndoResults = PurchaseLedgerFunctions.RollbackInvoiceRegistryInsertionTransaction(uniVerseAccount, rollbackJson);
+            var rollbackJson = TesterFramework.FetchInvoiceRegistrationRollbackJSON(invoiceRegisterKey, "FlockDev");
+
+            Console.WriteLine($"Calling PurchaseLedgerFunctions.RollbackInvoiceRegistryInsertionTransaction for PLINVREG key {invoiceRegisterKey} in {uniVerseAccount}");
+
+            var transactionUndoResults = PurchaseLedgerFunctions.RollbackInvoiceRegistryInsertionTransaction(uniVerseAccount, rollbackJson).OfType<PurchaseLedgerTransactionRollbackResult>().ToList();
+
+            Console.WriteLine(JsonConvert.SerializeObject(transactionUndoResults));
 
             CFramework.SetConsoleColourSuccess();
 

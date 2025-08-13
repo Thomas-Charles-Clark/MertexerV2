@@ -28,7 +28,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
         public static IEnumerable Select(
             string UniVerseAccount,
-            string PurchaseLedgerTransactionCodes,
+            string PurchaseLedgerTransactionCurrencyCodes,
             string SupplierCode,
             DateTime? DocumentDT_From,
             DateTime? DocumentDT_To,
@@ -37,7 +37,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
             DateTime? PostDT_From,
             DateTime? PostDT_To)
         {
-            if (String.IsNullOrEmpty(PurchaseLedgerTransactionCodes))
+            if (String.IsNullOrEmpty(PurchaseLedgerTransactionCurrencyCodes))
             {
                 int p = 0;
 
@@ -105,7 +105,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
             else
             {
                 foreach (var invoice in Selector<PurchaseLedgerTransactionCurrency>.Select(
-                    JsonConvert.DeserializeObject<IEnumerable<PurchaseLedgerTransactionCode>>(PurchaseLedgerTransactionCodes).Select(p => p.Code),
+                    JsonConvert.DeserializeObject<IEnumerable<PurchaseLedgerTransactionCode>>(PurchaseLedgerTransactionCurrencyCodes).Select(p => p.Code),
                     true,
                     false,
                     100,

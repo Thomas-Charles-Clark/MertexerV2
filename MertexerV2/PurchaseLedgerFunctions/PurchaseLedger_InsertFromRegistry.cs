@@ -180,7 +180,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                 results.Add(new PurchaseLedgerInsertionResult(
                     purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
-                    fileKey: purchaseLedgerEntry.Key,
+                    fileKey: purchaseLedgerInvoiceKey,
                     fileName: "PLREGISTER.HIST",
                     operationsPerformed: new[] { "INSERT" },
                     jsonBefore:null,
@@ -611,7 +611,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                 #endregion
 
-                #region Step 09. Create a Purchase Ledger VAT Audit entry (INSERT to PLVATAUDIT)
+                #region Step 09. Create a Purchase Ledger VAT Audit entry (INSERT to PLVATAUD)
 
                 /* Insert the PurchaseLedgerVATAudit record */
 
@@ -634,7 +634,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 results.Add(new PurchaseLedgerInsertionResult(
                     purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
                     fileKey: purchaseLedgerVATAuditEntry.Key,
-                    fileName: "PLVATAUDIT",
+                    fileName: "PLVATAUD",
                     operationsPerformed: new[] { "INSERT" },
                     jsonBefore: null,
                     jsonAfterwards: purchaseLedgerVATAuditEntryJson

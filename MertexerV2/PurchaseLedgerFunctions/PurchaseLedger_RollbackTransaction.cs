@@ -54,11 +54,11 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
             var purchaseLedgerSupplierInvoiceEntryKey = jObj["purchaseLedgerSupplierInvoiceKey"].Value<string>();
 
-            var generalLedgerPrePaymentTransactionKeys = jObj["generalLedgerPrePaymentTransactionKeys"].Values<string>();
+            var generalLedgerPrePaymentTransactionKeys = jObj["generalLedgerPrePaymentTransactionKeys"].Values<string>().ToArray<string>();
 
             var supplierCode = jObj["supplierCode"].Value<string>();
 
-            var registerEntry = jObj["purhcaseLedgerInvoiceRegisterEntry"].ToObject<PurchaseLedgerInvoiceRegister>();
+            var registerEntry = jObj["purchaseLedgerInvoiceRegisterEntry"].ToObject<PurchaseLedgerInvoiceRegister>();
 
             var purchaseLedgerEntry = jObj["purchaseLedgerEntry"].ToObject<PurchaseLedger>();
 
@@ -77,8 +77,6 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 var session = qe.Session;
 
                 var transaction = session.CreateUniTransaction();
-
-                transaction.Begin();
 
                 #region Step 01. Delete the Purchase Ledger entry (DELETE from TPLEDG)
 
@@ -328,7 +326,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                 #endregion
 
-                #region Step 07. Update the relevant Supplier Curency record, reversing the transaction's effect (UPDATE to PLSUP.CUR)
+                #region Step 07. Update the relevant Supplier Currency record, reversing the transaction's effect (UPDATE to PLSUP.CUR)
 
                 // It is imperative that we are NOT replacing data with the prior recorded state; changes might have been made subsequently.
                 // We must UNDO what was done by the transaction above.
@@ -562,7 +560,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                 #endregion
 
-                #region Step 09. Delete the Purchase Ledger VAT Audit Entry (DELETE from PLVATAUDIT)
+                #region Step 09. Delete the Purchase Ledger VAT Audit Entry (DELETE from PLVATAUD)
 
                 if (String.IsNullOrEmpty(purchaseLedgerVATAuditEntryKey))
                 {
@@ -572,7 +570,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 {
                     var purchaseLedgerVATAuditDeletionCommand = session.CreateUniCommand();
 
-                    purchaseLedgerVATAuditDeletionCommand.Command = $"DELETE PLVATAUDIT {purchaseLedgerVATAuditEntryKey}";
+                    purchaseLedgerVATAuditDeletionCommand.Command = $"DELETE PLVATAUD {purchaseLedgerVATAuditEntryKey}";
 
                     purchaseLedgerVATAuditDeletionCommand.Execute();
 
@@ -581,13 +579,13 @@ namespace MertexerV2.PurchaseLedgerFunctions
                         results.Add(new PurchaseLedgerTransactionRollbackResult(
                         purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
                             fileKey: purchaseLedgerVATAuditEntryKey,
-                            fileName: "PLVATAUDIT",
+                            fileName: "PLVATAUD",
                             operationsPerformed: new[] { "DELETE" }
                         ));
                     }
                     else
                     {
-                        throw new Exception($"Failed to DELETE {purchaseLedgerVATAuditEntryKey} from PLVATAUDIT; response from UniVerse was: {purchaseLedgerVATAuditDeletionCommand.Response}");
+                        throw new Exception($"Failed to DELETE {purchaseLedgerVATAuditEntryKey} from PLVATAUD; response from UniVerse was: {purchaseLedgerVATAuditDeletionCommand.Response}");
                     }
                 }
 
@@ -789,9 +787,6 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 }
 
                 #endregion
-
-                transaction.Commit();
-
             }
 
             return results;

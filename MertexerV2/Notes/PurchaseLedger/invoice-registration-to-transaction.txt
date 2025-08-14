@@ -423,6 +423,20 @@ In order to achieve that, we must record the effects of the transaction to a tab
 Mmmm-hmmm.
 
 
+So. I can't issue UniCommand DELETE instructions from within a transaction.
 
+The best we can hope for, that being the case, is to execute outside of the scope of a transaction and, rather
+than throw exceptions on failure, return results which reflect whether or not a particular stage of execution 
+was successful.
+
+We have:
+
+PurchaseLedger_Transaction_Testing_FlockDev.sql
+
+Mertex.[PurchaseLedgerInvoiceRegister_SubmitToLedger]
+Mertex.[PurchaseLedgerInvoiceRegister_LedgerSubmissionResult]
+
+Mertex.[PurchaseLedgerInvoiceRegister_RollbackLedgerSubmission]
+Mertex.[PurchaseLedgerInvoiceRegister_LedgerRollbackResult]
 
 

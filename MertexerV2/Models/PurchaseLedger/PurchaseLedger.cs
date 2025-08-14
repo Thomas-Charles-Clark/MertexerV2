@@ -708,7 +708,7 @@ namespace MertexerV2.Models.PurchaseLedger
         public string DisputeIndicator { get; set; }
 
         /// <summary>
-        /// Default Value: F("TPLTRANS",<85>)<15>
+        /// Default Value: P("DMEMO") == If and only if 87 == D, read 88. If 87 != D, read "".
         /// </summary>
         [UniVerseIndex(88)]
         [UniVerseFieldName("DISPMEM")]

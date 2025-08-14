@@ -36,23 +36,23 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
             var purchaseLedgerInvoiceRegisterKey = jObj["purchaseLedgerInvoiceRegisterKey"].Value<string>();
 
-            var purchaseLedgerEntryKey = jObj["purchaseLedgerKey"].Value<string>();
+            var purchaseLedgerKey = jObj["purchaseLedgerKey"].Value<string>();
 
-            var purchaseLedgerRegisterHistoryEntryKey = jObj["purchaseLedgerRegisterHistoryKey"].Value<string>();
+            var purchaseLedgerRegisterHistoryKey = jObj["purchaseLedgerRegisterHistoryKey"].Value<string>();
 
-            var purchaseLedgerTransactionEntryKey = jObj["purchaseLedgerTransactionKey"].Value<string>();
+            var purchaseLedgerTransactionKey = jObj["purchaseLedgerTransactionKey"].Value<string>();
 
-            var purchaseLedgerTransactionCurrencyEntryKey = jObj["purchaseLedgerTransactionCurrencyKey"].Value<string>();
+            var purchaseLedgerTransactionCurrencyKey = jObj["purchaseLedgerTransactionCurrencyKey"].Value<string>();
 
-            var purchaseLedgerVATAuditEntryKey = jObj["purchaseLedgerVATAuditKey"].Value<string>();
+            var purchaseLedgerVATAuditKey = jObj["purchaseLedgerVATAuditKey"].Value<string>();
 
-            var generalLedgerBatchEntryKey = jObj["generalLedgerBatchKey"].Value<string>();
+            var generalLedgerBatchKey = jObj["generalLedgerBatchKey"].Value<string>();
 
-            var generalLedgerBatchDataEntryKey = jObj["generalLedgerBatchDataKey"].Value<string>();
+            var generalLedgerBatchDataKey = jObj["generalLedgerBatchDataKey"].Value<string>();
 
-            var purchaseLedgerAdjustmentAuditEntryKey = jObj["purchaseLedgerAdjustmentAuditKey"].Value<string>();
+            var purchaseLedgerAdjustmentAuditKey = jObj["purchaseLedgerAdjustmentAuditKey"].Value<string>();
 
-            var purchaseLedgerSupplierInvoiceEntryKey = jObj["purchaseLedgerSupplierInvoiceKey"].Value<string>();
+            var purchaseLedgerSupplierInvoiceKey = jObj["purchaseLedgerSupplierInvoiceKey"].Value<string>();
 
             var generalLedgerPrePaymentTransactionKeys = jObj["generalLedgerPrePaymentTransactionKeys"].Values<string>().ToArray<string>();
 
@@ -72,153 +72,162 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
             #endregion
 
+            #region Die Early if Necessary
+
+            if (String.IsNullOrEmpty(purchaseLedgerKey))
+            {
+                throw new Exception($"PurchaseLedgerKey was NULL or empty: aborting rollback");
+            }
+
+            if (String.IsNullOrEmpty(purchaseLedgerRegisterHistoryKey))
+            {
+                throw new Exception($"PurchaseLedgerRegisterHistoryKey was NULL or empty: aborting rollback");
+            }
+
+            if (String.IsNullOrEmpty(purchaseLedgerInvoiceRegisterKey))
+            {
+                throw new Exception($"PurchaseLedgerInvoiceRegisterKey was NULL or empty: aborting rollback");
+            }
+
+            if (String.IsNullOrEmpty(purchaseLedgerTransactionKey))
+            {
+                throw new Exception($"PurchaseLedgerTransactionKey was NULL or empty: aborting rollback");
+            }
+
+            if (String.IsNullOrEmpty(purchaseLedgerTransactionCurrencyKey))
+            {
+                throw new Exception($"PurchaseLedgerTransactionCurrencyKey was NULL or empty: aborting rollback");
+            }
+
+            if (String.IsNullOrEmpty(supplierCode))
+            {
+                throw new Exception("SupplierCode was NULL or empty; aborting rollback");
+            }
+
+            if (String.IsNullOrEmpty(purchaseLedgerVATAuditKey))
+            {
+                throw new Exception($"PurchaseLedgerVATAuditKey was NULL or empty: aborting rollback");
+            }
+
+            if (String.IsNullOrEmpty(generalLedgerBatchKey))
+            {
+                throw new Exception($"GeneralLedgerBatchKey was NULL or empty: aborting rollback");
+            }
+
+            if (String.IsNullOrEmpty(generalLedgerBatchDataKey))
+            {
+                throw new Exception($"GeneralLedgerBatchDataKey was NULL or empty: aborting rollback");
+            }
+
+            if (String.IsNullOrEmpty(purchaseLedgerAdjustmentAuditKey))
+            {
+                throw new Exception($"PurchaseLedgerAdjustmentAuditKey was NULL or empty: aborting rollback");
+            }
+
+            if (String.IsNullOrEmpty(purchaseLedgerSupplierInvoiceKey))
+            {
+                throw new Exception($"PurchaseLedgerSupplierInvoiceKey was NULL or empty: aborting rollback");
+            }
+
+            #endregion
+
             using (var qe = new QueryExecutor(UniVerseAccount))
             {
                 var session = qe.Session;
 
-                var transaction = session.CreateUniTransaction();
-
                 #region Step 01. Delete the Purchase Ledger entry (DELETE from TPLEDG)
 
-                if (String.IsNullOrEmpty(purchaseLedgerEntryKey))
-                {
-                    throw new Exception($"PurchaseLedgerEntryKey was NULL or empty: aborting rollback");
-                }
-                else
-                {
-                    var purchaseLedgerEntryDeletionCommand = session.CreateUniCommand();
+                var purchaseLedgerEntryDeletionCommand = session.CreateUniCommand();
 
-                    purchaseLedgerEntryDeletionCommand.Command = $"DELETE TPLEDG {purchaseLedgerEntryKey}";
+                purchaseLedgerEntryDeletionCommand.Command = $"DELETE TPLEDG {purchaseLedgerKey}";
 
-                    purchaseLedgerEntryDeletionCommand.Execute();
+                purchaseLedgerEntryDeletionCommand.Execute();
 
-                    if (purchaseLedgerEntryDeletionCommand.Response.Contains("1 records DELETEd"))
-                    {
-                        results.Add(new PurchaseLedgerTransactionRollbackResult(
-                            purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
-                            fileKey: purchaseLedgerEntryKey,
-                            fileName: "TPLEDG",
-                            operationsPerformed: new[] { "DELETE" }
-                        ));
-                    }
-                    else
-                    {
-                        throw new Exception($"Failed to DELETE {purchaseLedgerEntryKey} from TPLEDG; response from UniVerse was: {purchaseLedgerEntryDeletionCommand.Response}");
-                    }
-                }
+                results.Add(new PurchaseLedgerTransactionRollbackResult(
+                    purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
+                    fileKey: purchaseLedgerKey,
+                    fileName: "TPLEDG",
+                    operationsPerformed: new[] { "DELETE" },
+                    success: purchaseLedgerEntryDeletionCommand.Response.Contains("1 records DELETEd"),
+                    uniVerseResponse: purchaseLedgerEntryDeletionCommand.Response,
+                    uniVerseCommandStatus: purchaseLedgerEntryDeletionCommand.CommandStatus
+                ));
 
                 #endregion
 
                 #region Step 02. Delete the Purchase Ledger Register History entry (DELETE from PLREGISTER.HIST)
 
-                if (String.IsNullOrEmpty(purchaseLedgerRegisterHistoryEntryKey))
-                {
-                    throw new Exception($"PurchaseLedgerRegisterHistoryEntryKey was NULL or empty: aborting rollback");
-                }
-                else
-                {
-                    var purchaseLedgerRegisterHistoryEntryDeletionCommand = session.CreateUniCommand();
+                var purchaseLedgerRegisterHistoryEntryDeletionCommand = session.CreateUniCommand();
 
-                    purchaseLedgerRegisterHistoryEntryDeletionCommand.Command = $"DELETE PLREGISTER.HIST {purchaseLedgerRegisterHistoryEntryKey}";
+                purchaseLedgerRegisterHistoryEntryDeletionCommand.Command = $"DELETE PLREGISTER.HIST {purchaseLedgerRegisterHistoryKey}";
 
-                    purchaseLedgerRegisterHistoryEntryDeletionCommand.Execute();
+                purchaseLedgerRegisterHistoryEntryDeletionCommand.Execute();
 
-                    if (purchaseLedgerRegisterHistoryEntryDeletionCommand.Response.Contains("1 records DELETEd"))
-                    {
-                        results.Add(new PurchaseLedgerTransactionRollbackResult(
-                            purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
-                            fileKey: purchaseLedgerRegisterHistoryEntryKey,
-                            fileName: "PLREGISTER.HIST",
-                            operationsPerformed: new[] { "DELETE" }
-                        ));
-                    }
-                    else
-                    {
-                        throw new Exception($"Failed to DELETE {purchaseLedgerRegisterHistoryEntryKey} from PLREGISTER.HIST; response from UniVerse was: {purchaseLedgerRegisterHistoryEntryDeletionCommand.Response}");
-                    }
-                }
+                results.Add(new PurchaseLedgerTransactionRollbackResult(
+                    purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
+                    fileKey: purchaseLedgerRegisterHistoryKey,
+                    fileName: "PLREGISTER.HIST",
+                    operationsPerformed: new[] { "DELETE" },
+                    success: purchaseLedgerRegisterHistoryEntryDeletionCommand.Response.Contains("1 records DELETEd"),
+                    uniVerseResponse: purchaseLedgerRegisterHistoryEntryDeletionCommand.Response,
+                    uniVerseCommandStatus: purchaseLedgerRegisterHistoryEntryDeletionCommand.CommandStatus
+                ));
 
                 #endregion
 
                 #region Step 03. Create the given Purchase Ledger Invoice Register entry (INSERT to PLINVREG)
 
-                if (String.IsNullOrEmpty(purchaseLedgerInvoiceRegisterKey))
-                {
-                    throw new Exception($"PurchaseLedgerInvoiceRegisterKey was NULL or empty: aborting rollback");
-                }
-                else
-                {
-                    _ = PurchaseLedgerInvoiceRegisterFunctions.InsertViaTransaction(ref session, JsonConvert.SerializeObject(registerEntry));
+                var purchaseLedgerInvoiceRegisterInsertionResultKey = PurchaseLedgerInvoiceRegisterFunctions.InsertViaTransaction(ref session, JsonConvert.SerializeObject(registerEntry));
 
-                    results.Add(new PurchaseLedgerTransactionRollbackResult(
-                        purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
-                        fileKey: purchaseLedgerInvoiceRegisterKey,
-                        fileName: "PLINVREG",
-                        operationsPerformed: new[] { "INSERT" }
-                    ));
-                }
+                results.Add(new PurchaseLedgerTransactionRollbackResult(
+                    purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
+                    fileKey: purchaseLedgerInvoiceRegisterKey,
+                    fileName: "PLINVREG",
+                    operationsPerformed: new[] { "INSERT" },
+                    success: !String.IsNullOrEmpty(purchaseLedgerInvoiceRegisterInsertionResultKey),
+                    uniVerseResponse: null,
+                    uniVerseCommandStatus: null
+                ));
 
                 #endregion
 
                 #region Step 04. Delete the Purchase Ledger Transaction entry (DELETE from TPLTRANS) 
 
-                if (String.IsNullOrEmpty(purchaseLedgerTransactionEntryKey))
-                {
-                    throw new Exception($"PurchaseLedgerTransactionEntryKey was NULL or empty: aborting rollback");
-                }
-                else
-                {
-                    var purchaseLedgerTransactionDeletionCommand = session.CreateUniCommand();
+                var purchaseLedgerTransactionDeletionCommand = session.CreateUniCommand();
 
-                    purchaseLedgerTransactionDeletionCommand.Command = $"DELETE TPLTRANS {purchaseLedgerTransactionEntryKey}";
+                purchaseLedgerTransactionDeletionCommand.Command = $"DELETE TPLTRANS {purchaseLedgerTransactionKey}";
 
-                    purchaseLedgerTransactionDeletionCommand.Execute();
+                purchaseLedgerTransactionDeletionCommand.Execute();
 
-                    if (purchaseLedgerTransactionDeletionCommand.Response.Contains("1 records DELETEd"))
-                    {
-                        results.Add(new PurchaseLedgerTransactionRollbackResult(
-                            purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
-                            fileKey: purchaseLedgerTransactionEntryKey,
-                            fileName: "TPLTRANS",
-                            operationsPerformed: new[] { "DELETE" }
-                        ));
-                    }
-                    else
-                    {
-                        throw new Exception($"Failed to DELETE {purchaseLedgerTransactionEntryKey} from TPLTRANS; response from UniVerse was: {purchaseLedgerTransactionDeletionCommand.Response}");
-                    }
-                }
+                results.Add(new PurchaseLedgerTransactionRollbackResult(
+                    purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
+                    fileKey: purchaseLedgerTransactionKey,
+                    fileName: "TPLTRANS",
+                    operationsPerformed: new[] { "DELETE" },
+                    success: purchaseLedgerTransactionDeletionCommand.Response.Contains("1 records DELETEd"),
+                    uniVerseResponse: purchaseLedgerTransactionDeletionCommand.Response,
+                    uniVerseCommandStatus: purchaseLedgerTransactionDeletionCommand.CommandStatus
+                ));
 
                 #endregion
 
                 #region Step 05. Delete the Purchase Ledger Transaction Currency entry (DELETE from TPLTRANS.CUR)
 
-                if (String.IsNullOrEmpty(purchaseLedgerTransactionCurrencyEntryKey))
-                {
-                    throw new Exception($"PurchaseLedgerTransactionCurrencyEntryKey was NULL or empty: aborting rollback");
-                }
-                else
-                {
-                    var purchaseLedgerTransactionCurrencyDeletionCommand = session.CreateUniCommand();
+                var purchaseLedgerTransactionCurrencyDeletionCommand = session.CreateUniCommand();
 
-                    purchaseLedgerTransactionCurrencyDeletionCommand.Command = $"DELETE TPLTRANS.CUR {purchaseLedgerTransactionCurrencyEntryKey}";
+                purchaseLedgerTransactionCurrencyDeletionCommand.Command = $"DELETE TPLTRANS.CUR {purchaseLedgerTransactionCurrencyKey}";
 
-                    purchaseLedgerTransactionCurrencyDeletionCommand.Execute();
+                purchaseLedgerTransactionCurrencyDeletionCommand.Execute();
 
-                    if (purchaseLedgerTransactionCurrencyDeletionCommand.Response.Contains("1 records DELETEd"))
-                    {
-                        results.Add(new PurchaseLedgerTransactionRollbackResult(
-                            purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
-                            fileKey: purchaseLedgerTransactionCurrencyEntryKey,
-                            fileName: "TPLTRANS.CUR",
-                            operationsPerformed: new[] { "DELETE" }
-                        ));
-                    }
-                    else
-                    {
-                        throw new Exception($"Failed to DELETE {purchaseLedgerTransactionCurrencyEntryKey} from TPLTRANS.CUR; response from UniVerse was: {purchaseLedgerTransactionCurrencyDeletionCommand.Response}");
-                    }
-                }
+                results.Add(new PurchaseLedgerTransactionRollbackResult(
+                    purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
+                    fileKey: purchaseLedgerTransactionCurrencyKey,
+                    fileName: "TPLTRANS.CUR",
+                    operationsPerformed: new[] { "DELETE" },
+                    success: purchaseLedgerTransactionCurrencyDeletionCommand.Response.Contains("1 records DELETEd"),
+                    uniVerseResponse: purchaseLedgerTransactionCurrencyDeletionCommand.Response,
+                    uniVerseCommandStatus: purchaseLedgerTransactionCurrencyDeletionCommand.CommandStatus
+                ));
 
                 #endregion
 
@@ -227,102 +236,97 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 // It is imperative that we are NOT replacing data with the prior recorded state; changes might have been made subsequently.
                 // We must UNDO what was done by the transaction above.
 
-                if (String.IsNullOrEmpty(supplierCode))
-                {
-                    throw new Exception("SupplierCode was NULL or empty; aborting rollback");
-                }
-                else
-                {
-                    var supplierEntry = Selector<Models.Supplier.Supplier>.Select(supplierCode, true, false, 1, UniVerseAccount);
+                var supplierEntry = Selector<Models.Supplier.Supplier>.Select(supplierCode, true, false, 1, UniVerseAccount);
 
-                    var supplierEntryBalanceReduction = purchaseLedgerEntry.DocumentBalance;
+                var supplierEntryBalanceReduction = purchaseLedgerEntry.DocumentBalance;
 
-                    supplierEntry.Balance -= supplierEntryBalanceReduction;
+                supplierEntry.Balance -= supplierEntryBalanceReduction;
 
-                    var supplierEntryNextPeriodBalanceReduction = CalculatePurchaseLedgerAmount(
-                        amounts: new[] { purchaseLedgerEntry.TotalDueInSterling }, // <50> "CHQTOTAL/DTOTAL/RDTOTAL/STGAMT/STGCHQTOTAL/TOTDUE"
-                                                                                   // the subroutine itself explicitly returns early on line 40 if you're in the final period: IF PER=NOPER THEN RETURN        
-                        currentPeriod: currentPeriod,
-                        numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
-                        operationPeriod: "N",
-                        future: purchaseLedgerEntry.Future == true,
-                        mvOperationType: null
-                    ); // PLAMOUNT,N50
+                var supplierEntryNextPeriodBalanceReduction = CalculatePurchaseLedgerAmount(
+                    amounts: new[] { purchaseLedgerEntry.TotalDueInSterling }, // <50> "CHQTOTAL/DTOTAL/RDTOTAL/STGAMT/STGCHQTOTAL/TOTDUE"
+                                                                                // the subroutine itself explicitly returns early on line 40 if you're in the final period: IF PER=NOPER THEN RETURN        
+                    currentPeriod: currentPeriod,
+                    numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
+                    operationPeriod: "N",
+                    future: purchaseLedgerEntry.Future == true,
+                    mvOperationType: null
+                ); // PLAMOUNT,N50
 
-                    supplierEntry.NextPeriodBalance -= supplierEntryNextPeriodBalanceReduction;
+                supplierEntry.NextPeriodBalance -= supplierEntryNextPeriodBalanceReduction;
 
-                    var supplierEntryThisPeriodBalanceReduction = CalculatePurchaseLedgerAmount(
-                        amounts: new[] { purchaseLedgerEntry.TotalDueInSterling },
-                        currentPeriod: currentPeriod,
-                        numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
-                        operationPeriod: null,
-                        future: purchaseLedgerEntry.Future == true,
-                        mvOperationType: null
-                    ); // PLAMOUNT,50
+                var supplierEntryThisPeriodBalanceReduction = CalculatePurchaseLedgerAmount(
+                    amounts: new[] { purchaseLedgerEntry.TotalDueInSterling },
+                    currentPeriod: currentPeriod,
+                    numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
+                    operationPeriod: null,
+                    future: purchaseLedgerEntry.Future == true,
+                    mvOperationType: null
+                ); // PLAMOUNT,50
 
-                    supplierEntry.ThisPeriodBalance -= supplierEntryThisPeriodBalanceReduction;
+                supplierEntry.ThisPeriodBalance -= supplierEntryThisPeriodBalanceReduction;
 
-                    var supplierDocumentReferences = supplierEntry.DocumentReferences.ToList();
+                var supplierDocumentReferences = supplierEntry.DocumentReferences.ToList();
 
-                    supplierDocumentReferences.Remove(purchaseLedgerEntry.Key);
+                supplierDocumentReferences.Remove(purchaseLedgerEntry.Key);
 
-                    supplierEntry.DocumentReferences = supplierDocumentReferences;
+                supplierEntry.DocumentReferences = supplierDocumentReferences;
 
-                    var supplierEntryPurchasesNextPeriodReduction = CalculatePurchaseLedgerAmount(
-                        amounts: purchaseLedgerEntry.Amounts, // <43> "PAMOUNT"
-                        currentPeriod: currentPeriod,
-                        numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
-                        operationPeriod: "N",
-                        future: purchaseLedgerEntry.Future == true,
-                        mvOperationType: "A"
-                    ); // PLAMOUNT,N43.A
+                var supplierEntryPurchasesNextPeriodReduction = CalculatePurchaseLedgerAmount(
+                    amounts: purchaseLedgerEntry.Amounts, // <43> "PAMOUNT"
+                    currentPeriod: currentPeriod,
+                    numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
+                    operationPeriod: "N",
+                    future: purchaseLedgerEntry.Future == true,
+                    mvOperationType: "A"
+                ); // PLAMOUNT,N43.A
 
-                    supplierEntry.PurchasesNextPeriod -= supplierEntryPurchasesNextPeriodReduction;
+                supplierEntry.PurchasesNextPeriod -= supplierEntryPurchasesNextPeriodReduction;
 
-                    var supplierEntryPurchasesThisPeriodReduction = CalculatePurchaseLedgerAmount(
-                        amounts: purchaseLedgerEntry.Amounts,
-                        currentPeriod: currentPeriod,
-                        numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
-                        operationPeriod: null,
-                        future: purchaseLedgerEntry.Future == true,
-                        mvOperationType: "A"
-                    ); // PLAMOUNT,43.A
+                var supplierEntryPurchasesThisPeriodReduction = CalculatePurchaseLedgerAmount(
+                    amounts: purchaseLedgerEntry.Amounts,
+                    currentPeriod: currentPeriod,
+                    numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
+                    operationPeriod: null,
+                    future: purchaseLedgerEntry.Future == true,
+                    mvOperationType: "A"
+                ); // PLAMOUNT,43.A
 
-                    supplierEntry.PurchasesThisPeriod -= supplierEntryPurchasesThisPeriodReduction;
+                supplierEntry.PurchasesThisPeriod -= supplierEntryPurchasesThisPeriodReduction;
 
-                    var supplierEntryPurchasesYearToDateReduction = CalculatePurchaseLedgerAmount(
-                        amounts: purchaseLedgerEntry.Amounts,
-                        currentPeriod: currentPeriod,
-                        numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
-                        operationPeriod: "Y",
-                        future: purchaseLedgerEntry.Future == true,
-                        mvOperationType: "A"
-                    ); // PLAMOUNT,Y43.A
+                var supplierEntryPurchasesYearToDateReduction = CalculatePurchaseLedgerAmount(
+                    amounts: purchaseLedgerEntry.Amounts,
+                    currentPeriod: currentPeriod,
+                    numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
+                    operationPeriod: "Y",
+                    future: purchaseLedgerEntry.Future == true,
+                    mvOperationType: "A"
+                ); // PLAMOUNT,Y43.A
 
-                    supplierEntry.PurchasesYearToDate -= supplierEntryPurchasesYearToDateReduction;
+                supplierEntry.PurchasesYearToDate -= supplierEntryPurchasesYearToDateReduction;
 
-                    supplierEntry.PeriodsInactive = purchaseLedgerEntry.Future == true ? null : (sbyte?)-1;
+                supplierEntry.PeriodsInactive = purchaseLedgerEntry.Future == true ? null : (sbyte?)-1;
 
-                    SupplierFunctions.SupplierFunctions.UpsertViaTransaction(ref session, JsonConvert.SerializeObject(supplierEntry));
+                var supplierUpsertResponseKey = SupplierFunctions.SupplierFunctions.UpsertViaTransaction(ref session, JsonConvert.SerializeObject(supplierEntry));
 
-                    results.Add(new PurchaseLedgerTransactionRollbackResult(
-                        purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
-                        fileKey: supplierCode,
-                        fileName: "PLSUP",
-                        operationsPerformed: new[]
-                        {
-                            $"<15> \"BALANCE\" (Balance) -= {supplierEntryBalanceReduction}",
-                            $"<18,1> \"NEXT\" (NextPeriodBalance) -= {supplierEntryNextPeriodBalanceReduction}",
-                            $"<18,2> \"CURR\" (ThisPeriodBalance) -= {supplierEntryThisPeriodBalanceReduction}",
-                            $"<19> \"TLINK\" -= \"{purchaseLedgerEntry.Key}\"",
-                            $"<21,1> \"PNEXT\" (PurchasesNextPeriod) -= {supplierEntryPurchasesNextPeriodReduction}",
-                            $"<21,2> \"PCURR\" (PurchasesThisPeriod) -= {supplierEntryPurchasesThisPeriodReduction}",
-                            $"<21,3> \"PYTD\" (PurchasesYearToDate) -= {supplierEntryPurchasesYearToDateReduction}",
-                            $"<23> \"INACT\" (PeriodsInactive) = \"{supplierEntry.PeriodsInactive}\""
-                        }
-                    ));
-                }
-
+                results.Add(new PurchaseLedgerTransactionRollbackResult(
+                    purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
+                    fileKey: supplierCode,
+                    fileName: "PLSUP",
+                    operationsPerformed: new[]
+                    {
+                        $"<15> \"BALANCE\" (Balance) -= {supplierEntryBalanceReduction}",
+                        $"<18,1> \"NEXT\" (NextPeriodBalance) -= {supplierEntryNextPeriodBalanceReduction}",
+                        $"<18,2> \"CURR\" (ThisPeriodBalance) -= {supplierEntryThisPeriodBalanceReduction}",
+                        $"<19> \"TLINK\" -= \"{purchaseLedgerEntry.Key}\"",
+                        $"<21,1> \"PNEXT\" (PurchasesNextPeriod) -= {supplierEntryPurchasesNextPeriodReduction}",
+                        $"<21,2> \"PCURR\" (PurchasesThisPeriod) -= {supplierEntryPurchasesThisPeriodReduction}",
+                        $"<21,3> \"PYTD\" (PurchasesYearToDate) -= {supplierEntryPurchasesYearToDateReduction}",
+                        $"<23> \"INACT\" (PeriodsInactive) = \"{supplierEntry.PeriodsInactive}\""
+                    },
+                    success: !String.IsNullOrEmpty(supplierUpsertResponseKey),
+                    uniVerseResponse: null,
+                    uniVerseCommandStatus: null
+                ));
 
                 #endregion
 
@@ -436,7 +440,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                 supplierCurrencyEntry.PeriodsInactive = purchaseLedgerEntry.Future == true ? null : (sbyte?)-1;
 
-                SupplierFunctions.SupplierCurrencyFunctions.UpsertViaTransaction(ref session, JsonConvert.SerializeObject(supplierCurrencyEntry));
+                var supplierCurrencyUpsertResponseKey = SupplierFunctions.SupplierCurrencyFunctions.UpsertViaTransaction(ref session, JsonConvert.SerializeObject(supplierCurrencyEntry));
 
                 results.Add(new PurchaseLedgerTransactionRollbackResult(
                     purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
@@ -455,7 +459,10 @@ namespace MertexerV2.PurchaseLedgerFunctions
                             $"<21,3> \"PYTD\" (PurchasesYearToDate) -= {supplierCurrencyEntryPurchasesYearToDateReduction}",
                             $"<21,3> \"PYTD\" (PurchasesYearToDate) += {supplierCurrencyEntryPurchasesYearToDateAddition}",
                             $"<23> \"INACT\" (PeriodsInactive) = \"{supplierCurrencyEntry.PeriodsInactive}\""
-                    }
+                    },
+                    success: !String.IsNullOrEmpty(supplierCurrencyUpsertResponseKey),
+                    uniVerseResponse: null,
+                    uniVerseCommandStatus: null
                 ));
 
                 #endregion
@@ -514,7 +521,6 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                     vatEntry.PurchasesQuarterValueTotal -= purchasesQuarterValueTotalReduction;
 
-
                     var purchasesNextPeriodInvoicesTaxReduction = CalculatePurchaseLedgerAmount(
                         amounts: purchaseLedgerEntry.VATTaxes, // <48> "VATTAX"
                         currentPeriod: currentPeriod,
@@ -525,7 +531,6 @@ namespace MertexerV2.PurchaseLedgerFunctions
                     ); // PLAMOUNT,N48X
 
                     vatEntry.PurchasesNextPeriodInvoicesTax -= purchasesNextPeriodInvoicesTaxReduction;
-
 
                     var purchasesNextPeriodInvoicesValueReduction = CalculatePurchaseLedgerAmount(
                         amounts: purchaseLedgerEntry.VATableValues, // <49> "VATVALUE"
@@ -540,21 +545,24 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                     var vatEntryJson = JsonConvert.SerializeObject(vatEntry);
 
-                    CompanyVATFunctions.UpsertViaTransaction(ref session, vatEntryJson);
+                    var vatEntryUpsertResponse = CompanyVATFunctions.UpsertViaTransaction(ref session, vatEntryJson);
 
                     results.Add(new PurchaseLedgerTransactionRollbackResult(
                         purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
                         fileKey: vatEntry.Key,
                         fileName: "CFVAT",
                         operationsPerformed: new[] {
-                                $"<30> \"PINVT\" (PurchasesInvoicesTax) -= {purchasesInvoicesTaxReduction}",
-                                $"<34> \"PINVV\" (PurchasesInvoicesValue) -= {purchasesInvoicesValueReduction}",
-                                $"<38> \"PQTTOT\" (PurchasesQuarterTaxTotal) -= {purchasesQuarterTaxTotalReduction}",
-                                $"<39> \"PQVTOT\" (PurchasesQuarterValueTotal) -= {purchasesQuarterValueTotalReduction}",
-                                $"<40> \"PNINVT\" (PurchasesNextPeriodInvoicesTax) -= {purchasesNextPeriodInvoicesTaxReduction}",
-                                $"<44> \"PNINVV\" (PurchasesNextPeriodInvoicesValue) -= {purchasesNextPeriodInvoicesValueReduction}",
-                            }
-                        ));
+                            $"<30> \"PINVT\" (PurchasesInvoicesTax) -= {purchasesInvoicesTaxReduction}",
+                            $"<34> \"PINVV\" (PurchasesInvoicesValue) -= {purchasesInvoicesValueReduction}",
+                            $"<38> \"PQTTOT\" (PurchasesQuarterTaxTotal) -= {purchasesQuarterTaxTotalReduction}",
+                            $"<39> \"PQVTOT\" (PurchasesQuarterValueTotal) -= {purchasesQuarterValueTotalReduction}",
+                            $"<40> \"PNINVT\" (PurchasesNextPeriodInvoicesTax) -= {purchasesNextPeriodInvoicesTaxReduction}",
+                            $"<44> \"PNINVV\" (PurchasesNextPeriodInvoicesValue) -= {purchasesNextPeriodInvoicesValueReduction}",
+                        },
+                        success: !String.IsNullOrEmpty(vatEntryUpsertResponse),
+                        uniVerseResponse: null,
+                        uniVerseCommandStatus: null
+                    ));
                 }
 
 
@@ -562,32 +570,21 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                 #region Step 09. Delete the Purchase Ledger VAT Audit Entry (DELETE from PLVATAUD)
 
-                if (String.IsNullOrEmpty(purchaseLedgerVATAuditEntryKey))
-                {
-                    throw new Exception($"PurchaseLedgerVATAuditEntryKey was NULL or empty: aborting rollback");
-                }
-                else
-                {
-                    var purchaseLedgerVATAuditDeletionCommand = session.CreateUniCommand();
+                var purchaseLedgerVATAuditDeletionCommand = session.CreateUniCommand();
 
-                    purchaseLedgerVATAuditDeletionCommand.Command = $"DELETE PLVATAUD {purchaseLedgerVATAuditEntryKey}";
+                purchaseLedgerVATAuditDeletionCommand.Command = $"DELETE PLVATAUD {purchaseLedgerVATAuditKey}";
 
-                    purchaseLedgerVATAuditDeletionCommand.Execute();
+                purchaseLedgerVATAuditDeletionCommand.Execute();
 
-                    if (purchaseLedgerVATAuditDeletionCommand.Response.Contains("1 records DELETEd"))
-                    {
-                        results.Add(new PurchaseLedgerTransactionRollbackResult(
-                        purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
-                            fileKey: purchaseLedgerVATAuditEntryKey,
-                            fileName: "PLVATAUD",
-                            operationsPerformed: new[] { "DELETE" }
-                        ));
-                    }
-                    else
-                    {
-                        throw new Exception($"Failed to DELETE {purchaseLedgerVATAuditEntryKey} from PLVATAUD; response from UniVerse was: {purchaseLedgerVATAuditDeletionCommand.Response}");
-                    }
-                }
+                results.Add(new PurchaseLedgerTransactionRollbackResult(
+                    purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
+                    fileKey: purchaseLedgerVATAuditKey,
+                    fileName: "PLVATAUD",
+                    operationsPerformed: new[] { "DELETE" },
+                    success: purchaseLedgerVATAuditDeletionCommand.Response.Contains("1 records DELETEd"),
+                    uniVerseResponse: purchaseLedgerVATAuditDeletionCommand.Response,
+                    uniVerseCommandStatus: purchaseLedgerVATAuditDeletionCommand.CommandStatus
+                ));
 
                 #endregion
 
@@ -620,7 +617,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                 var companyStatsEntryJson = JsonConvert.SerializeObject(companyStatsEntry);
 
-                CompanyStatsFunctions.UpsertViaTransaction(ref session, companyStatsEntryJson);
+                var companyStatusUpsertResultKey = CompanyStatsFunctions.UpsertViaTransaction(ref session, companyStatsEntryJson);
 
                 results.Add(new PurchaseLedgerTransactionRollbackResult(
                     purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
@@ -630,132 +627,91 @@ namespace MertexerV2.PurchaseLedgerFunctions
                     {
                         $"<11> \"PLINV\" (PurchaseLedgerInvoices) -= {companyStatsEntryPurchaseLedgerInvoicesReduction}",
                         $"<21> \"NPLINV\" (NextPurchaseLedgerInvoices) -= {companyStatsEntryNextPurchaseLedgerInvoicesReduction}"
-                    }
+                    },
+                    success: !String.IsNullOrEmpty(companyStatusUpsertResultKey),
+                    uniVerseResponse: null,
+                    uniVerseCommandStatus: null
                 ));
 
                 #endregion
 
                 #region Step 11. Delete the General Ledger Batch entry (DELETE from GLBATCH)
 
-                if (String.IsNullOrEmpty(generalLedgerBatchEntryKey))
-                {
-                    throw new Exception($"GeneralLedgerBatchEntryKey was NULL or empty: aborting rollback");
-                }
-                else
-                {
-                    var generalLedgerBatchDeletionCommand = session.CreateUniCommand();
+                var generalLedgerBatchDeletionCommand = session.CreateUniCommand();
 
-                    generalLedgerBatchDeletionCommand.Command = $"DELETE GLBATCH {generalLedgerBatchEntryKey}";
+                generalLedgerBatchDeletionCommand.Command = $"DELETE GLBATCH {generalLedgerBatchKey}";
 
-                    generalLedgerBatchDeletionCommand.Execute();
+                generalLedgerBatchDeletionCommand.Execute();
 
-                    if (generalLedgerBatchDeletionCommand.Response.Contains("1 records DELETEd"))
-                    {
-                        results.Add(new PurchaseLedgerTransactionRollbackResult(
-                            purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
-                            fileKey: generalLedgerBatchEntryKey,
-                            fileName: "GLBATCH",
-                            operationsPerformed: new[] { "DELETE" }
-                        ));
-                    }
-                    else
-                    {
-                        throw new Exception($"Failed to DELETE {generalLedgerBatchEntryKey} from GLBATCH; response from UniVerse was: {generalLedgerBatchDeletionCommand.Response}");
-                    }
-                }
-
+                results.Add(new PurchaseLedgerTransactionRollbackResult(
+                    purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
+                    fileKey: generalLedgerBatchKey,
+                    fileName: "GLBATCH",
+                    operationsPerformed: new[] { "DELETE" },
+                    success: generalLedgerBatchDeletionCommand.Response.Contains("1 records DELETEd"),
+                    uniVerseResponse: generalLedgerBatchDeletionCommand.Response,
+                    uniVerseCommandStatus: generalLedgerBatchDeletionCommand.CommandStatus
+                ));
+                
                 #endregion
 
                 #region Step 12. Delete the General Ledger Batch Data entry (DELETE from GLBATCHDATA)
 
-                if (String.IsNullOrEmpty(generalLedgerBatchDataEntryKey))
-                {
-                    throw new Exception($"GeneralLedgerBatchDataEntryKey was NULL or empty: aborting rollback");
-                }
-                else
-                {
-                    var generalLedgerBatchDataDeletionCommand = session.CreateUniCommand();
+                var generalLedgerBatchDataDeletionCommand = session.CreateUniCommand();
 
-                    generalLedgerBatchDataDeletionCommand.Command = $"DELETE GLBATCHDATA {generalLedgerBatchDataEntryKey}";
+                generalLedgerBatchDataDeletionCommand.Command = $"DELETE GLBATCHDATA {generalLedgerBatchDataKey}";
 
-                    generalLedgerBatchDataDeletionCommand.Execute();
+                generalLedgerBatchDataDeletionCommand.Execute();
 
-                    if (generalLedgerBatchDataDeletionCommand.Response.Contains("1 records DELETEd"))
-                    {
-                        results.Add(new PurchaseLedgerTransactionRollbackResult(
-                            purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
-                            fileKey: generalLedgerBatchDataEntryKey,
-                            fileName: "GLBATCHDATA",
-                            operationsPerformed: new[] { "DELETE" }
-                        ));
-                    }
-                    else
-                    {
-                        throw new Exception($"Failed to DELETE {generalLedgerBatchDataEntryKey} from GLBATCHDATA; response from UniVerse was: {generalLedgerBatchDataDeletionCommand.Response}");
-                    }
-                }
+                results.Add(new PurchaseLedgerTransactionRollbackResult(
+                    purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
+                    fileKey: generalLedgerBatchDataKey,
+                    fileName: "GLBATCHDATA",
+                    operationsPerformed: new[] { "DELETE" },
+                    success: generalLedgerBatchDataDeletionCommand.Response.Contains("1 records DELETEd"),
+                    uniVerseResponse: generalLedgerBatchDataDeletionCommand.Response,
+                    uniVerseCommandStatus: generalLedgerBatchDataDeletionCommand.CommandStatus
+                ));
 
                 #endregion
 
                 #region Step 13. Delete the Purchase Ledger Adjustment Audit entry (DELETE from PLADJAUDIT)
 
-                if (String.IsNullOrEmpty(purchaseLedgerAdjustmentAuditEntryKey))
-                {
-                    throw new Exception($"PurchaseLedgerAdjustmentAuditEntryKey was NULL or empty: aborting rollback");
-                }
-                else
-                {
-                    var purchaseLedgerAdjustmentAuditDeletionCommand = session.CreateUniCommand();
+                var purchaseLedgerAdjustmentAuditDeletionCommand = session.CreateUniCommand();
 
-                    purchaseLedgerAdjustmentAuditDeletionCommand.Command = $"DELETE PLADJAUDIT {purchaseLedgerAdjustmentAuditEntryKey}";
+                purchaseLedgerAdjustmentAuditDeletionCommand.Command = $"DELETE PLADJAUDIT {purchaseLedgerAdjustmentAuditKey}";
 
-                    purchaseLedgerAdjustmentAuditDeletionCommand.Execute();
+                purchaseLedgerAdjustmentAuditDeletionCommand.Execute();
 
-                    if (purchaseLedgerAdjustmentAuditDeletionCommand.Response.Contains("1 records DELETEd"))
-                    {
-                        results.Add(new PurchaseLedgerTransactionRollbackResult(
-                            purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
-                            fileKey: purchaseLedgerAdjustmentAuditEntryKey,
-                            fileName: "PLADJAUDIT",
-                            operationsPerformed: new[] { "DELETE" }
-                        ));
-                    }
-                    else
-                    {
-                        throw new Exception($"Failed to DELETE {purchaseLedgerAdjustmentAuditEntryKey} from PLADJAUDIT; response from UniVerse was: {purchaseLedgerAdjustmentAuditDeletionCommand.Response}");
-                    }
-                }
+                results.Add(new PurchaseLedgerTransactionRollbackResult(
+                    purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
+                    fileKey: purchaseLedgerAdjustmentAuditKey,
+                    fileName: "PLADJAUDIT",
+                    operationsPerformed: new[] { "DELETE" },
+                    success: purchaseLedgerAdjustmentAuditDeletionCommand.Response.Contains("1 records DELETEd"),
+                    uniVerseResponse: purchaseLedgerAdjustmentAuditDeletionCommand.Response,
+                    uniVerseCommandStatus: purchaseLedgerAdjustmentAuditDeletionCommand.CommandStatus
+                ));
 
                 #endregion
 
                 #region Step 14. Delete the Purchase Ledger Supplier Invoice entry (DELETE from PLSUPINV)
 
-                if (String.IsNullOrEmpty(purchaseLedgerSupplierInvoiceEntryKey))
-                {
-                    throw new Exception($"PurchaseLedgerSupplierInvoiceEntryKey was NULL or empty: aborting rollback");
-                }
-                else
-                {
-                    var purchaseLedgerSupplierInvoiceDeletionCommand = session.CreateUniCommand();
+                var purchaseLedgerSupplierInvoiceDeletionCommand = session.CreateUniCommand();
 
-                    purchaseLedgerSupplierInvoiceDeletionCommand.Command = $"DELETE PLSUPINV {purchaseLedgerSupplierInvoiceEntryKey}";
+                purchaseLedgerSupplierInvoiceDeletionCommand.Command = $"DELETE PLSUPINV {purchaseLedgerSupplierInvoiceKey}";
 
-                    purchaseLedgerSupplierInvoiceDeletionCommand.Execute();
+                purchaseLedgerSupplierInvoiceDeletionCommand.Execute();
 
-                    if (purchaseLedgerSupplierInvoiceDeletionCommand.Response.Contains("1 records DELETEd"))
-                    {
-                        results.Add(new PurchaseLedgerTransactionRollbackResult(
-                            purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
-                            fileKey: purchaseLedgerSupplierInvoiceEntryKey,
-                            fileName: "PLSUPINV",
-                            operationsPerformed: new[] { "DELETE" }
-                        ));
-                    }
-                    else
-                    {
-                        throw new Exception($"Failed to DELETE {purchaseLedgerSupplierInvoiceEntryKey} from PLSUPINV; response from UniVerse was: {purchaseLedgerSupplierInvoiceDeletionCommand.Response}");
-                    }
-                }
+                results.Add(new PurchaseLedgerTransactionRollbackResult(
+                    purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
+                    fileKey: purchaseLedgerSupplierInvoiceKey,
+                    fileName: "PLSUPINV",
+                    operationsPerformed: new[] { "DELETE" },
+                    success: purchaseLedgerSupplierInvoiceDeletionCommand.Response.Contains("1 records DELETEd"),
+                    uniVerseResponse: purchaseLedgerSupplierInvoiceDeletionCommand.Response,
+                    uniVerseCommandStatus: purchaseLedgerSupplierInvoiceDeletionCommand.CommandStatus
+                ));
 
                 #endregion
 
@@ -771,19 +727,15 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                     generalLedgerPrePaymentTransactionDeletionCommand.Execute();
 
-                    if (generalLedgerPrePaymentTransactionDeletionCommand.Response.Contains($"{generalLedgerPrePaymentTransactionKeys.Count()} records DELETEd"))
-                    {
-                        results.Add(new PurchaseLedgerTransactionRollbackResult(
-                            purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
-                            fileKey: keys,
-                            fileName: "GLPPTRANS.DES",
-                            operationsPerformed: new[] { "DELETE" }
-                        ));
-                    }
-                    else
-                    {
-                        throw new Exception($"Failed to DELETE {keys} from GLPPTRANS.DES; response from UniVerse was: {generalLedgerPrePaymentTransactionDeletionCommand.Response}");
-                    }
+                    results.Add(new PurchaseLedgerTransactionRollbackResult(
+                        purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
+                        fileKey: keys,
+                        fileName: "GLPPTRANS.DES",
+                        operationsPerformed: new[] { "DELETE" },
+                        success: generalLedgerPrePaymentTransactionDeletionCommand.Response.Contains("1 records DELETEd"),
+                        uniVerseResponse: generalLedgerPrePaymentTransactionDeletionCommand.Response,
+                        uniVerseCommandStatus: generalLedgerPrePaymentTransactionDeletionCommand.CommandStatus
+                    ));
                 }
 
                 #endregion
@@ -797,7 +749,10 @@ namespace MertexerV2.PurchaseLedgerFunctions
             out SqlString PurchaseLedgerInvoiceRegistryKey,
             out SqlString FileKey,
             out SqlString FileName,
-            out SqlString OperationsPerformed
+            out SqlString OperationsPerformed,
+            out SqlBoolean Success,
+            out SqlString UniCommandResponse,
+            out SqlInt32 UniCommandStatus
             )
         {
             var p = (PurchaseLedgerTransactionRollbackResult)obj;
@@ -809,6 +764,12 @@ namespace MertexerV2.PurchaseLedgerFunctions
             FileName = p.FileName;
 
             OperationsPerformed = p.OperationsPerformed?.Any() == true ? JsonConvert.SerializeObject(p.OperationsPerformed) : SqlString.Null;
+
+            Success = p.Success;
+
+            UniCommandResponse = String.IsNullOrEmpty(p.UniCommandResponse) ? SqlString.Null : p.UniCommandResponse;
+
+            UniCommandStatus = p.UniCommandStatus ?? SqlInt32.Null;
         }
     }
 }

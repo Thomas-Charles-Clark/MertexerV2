@@ -10,34 +10,34 @@ from TPLEDG
 ³ File Update (Dict) : TPLTRANS.CUR                                         ³   
 ³                                                                           ³   
 ³ Update/Delete (U/D)  U                                                    ³   
-³ Update Condition                                                          ³   
+³ Update Condition                                                          ³      	Our Field Name				    Double Checked
 ³ Data File (if diff)                                                       ³   
-³ Key Source           <53>                                                 ³   
+³ Key Source           <53>                                                 ³   	DocumentReference							✔	
 ³                                                                           ³   
-³ Fld To Update  MV To Update    Oper   Value To Use                        ³   
-³ DOCDATE                        R      <33>                                ³   
-³ DUEDATE                        R      <38>                                ³   
-³ DISC                           R      <160>                               ³   
-³ TYPE                           R      "INV"                               ³   
-³ ITEMREF                        R      <37>                                ³   
-³ DOCNO                          R      <34>                                ³   
-³ VATDIS                         R      S(<248>)                            ³  
-³ CREDIT                         R      <250>-S(<248>)                      ³   
-³ BALANCE                        R      <250>                               ³   
-³ ORIGVAL                        R      <250>                               ³   
-³ PERIOD                         R      B("PL.B.PERIOD")                    ³   
-³ SUPREF                         R      <39>                                ³   
-³ AGE                            R      P("AGE")                            ³   
-³ UNALLOCATED                    R      0                                   ³
-³ DISCAMT                        R      <180>                               ³   
-³ POSTDATE                       R      <35>                                ³   
-³ MEMO                           R      <56>                                ³   
-³ DISCDATE                       R      <55>                                ³   
-³ DISPUTE                        R      <87>                                ³   
-³ DISPMEMO                       R      P("DMEMO")                          ³   
-³ CURRENCY                       R      <161>                               ³   
-³ XRATE                          R      <162>                               ³   
-³ REGNO                          R      "INV*":<199>                        ³   
+³ Fld To Update  MV To Update    Oper   Value To Use                        ³   				
+³ DOCDATE                        R      <33>                                ³   	DocumentDT  								✔
+³ DUEDATE                        R      <38>                                ³   	InvoiceDueDT								✔			
+³ DISC                           R      <160>                               ³   	DiscountPercentage_Again					✔
+³ TYPE                           R      "INV"                               ³   	"INV"										✔	
+³ ITEMREF                        R      <37>                                ³   	SupplierInvoiceReference					✔
+³ DOCNO                          R      <34>                                ³   	DocumentNumber								✔
+³ VATDIS                         R      S(<248>)                            ³  		VATTaxesTotal = S(VATTaxesInCurrency)		✔
+³ CREDIT                         R      <250>-S(<248>)                      ³   	AmountInCurrency - S(VATTaxesInCurrency)	✔
+³ BALANCE                        R      <250>                               ³   	AmountInCurrency							✔
+³ ORIGVAL                        R      <250>                               ³   	OriginalValueABS							✔ (why ~ABS... ?)
+³ PERIOD                         R      B("PL.B.PERIOD")                    ³   	Period = purchaseLedgerTransactionPeriod	✔ 
+³ SUPREF                         R      <39>                                ³   	SupplierCode								✔
+³ AGE                            R      P("AGE")                            ³   	purchaseLedgerEntry.Future == true ? 0 : 1	✔
+³ UNALLOCATED                    R      0                                   ³		0.0m										✔	
+³ DISCAMT                        R      <180>                               ³   	DiscountAmountInCurrency					✔
+³ POSTDATE                       R      <35>                                ³   	PostDT										✔
+³ MEMO                           R      <56>                                ³   	Memo										✔
+³ DISCDATE                       R      <55>                                ³   	DueDT										✔
+³ DISPUTE                        R      <87>                                ³   	DisputeIndicator							✔
+³ DISPMEMO                       R      P("DMEMO")                          ³   	DisputeMemo									✔
+³ CURRENCY                       R      <161>                               ³   	CurrencyCode								✔
+³ XRATE                          R      <162>                               ³   	ExchangeRates								✔ (this is MV...?)
+³ REGNO                          R      "INV*":<199>                        ³   	PurchaseLedgerRegisterNumber				✔
 ³                                                                           ³   
 ³                                                                           ³   
 ³                                                                           ³   

@@ -6,36 +6,36 @@ from TPLEDG
 ³ TooÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄTransaction DefinitionsÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿   ³ 
 ÀÄÄÄÄ³ Tran Id               PINVIR.CUR.D                                 ³ÄÄÄÙ 
      ³ Description           PL INVOICES                                  ³     
-ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄSecondary File UpdateÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿   	Our Field Name
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄSecondary File UpdateÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿   	
 ³ File Update (Dict) : TPLTRANS                                             ³   
 ³                                                                           ³   
 ³ Update/Delete (U/D)  U                                                    ³   
-³ Update Condition                                                          ³   
-³ Data File (if diff)                                                       ³   
-³ Key Source           <53>                                                 ³   	
-³                                                                           ³   
-³ Fld To Update  MV To Update    Oper   Value To Use                        ³   
-³ DOCDATE                        R      <33>                                ³   	DocumentDT
-³ DUEDATE                        R      <38>                                ³   	DueDT
-³ DISC                           R      <160>                               ³   	DiscountPercentage
-³ TYPE                           R      "INV"                               ³   	TransactionType
-³ ITEMREF                        R      <37>                                ³   	ItemReference
-³ DOCNO                          R      <34>                                ³   	DocumentReference
-³ VATDIS                         R      S(<48>)                             ³   	VATDiscount
-³ CREDIT                         R      S(<43>)                             ³   	Credit
-³ BALANCE                        R      <50>                                ³   	Balance
-³ ORIGVAL                        R      <50>                                ³   	OriginalValueABS
-³ PERIOD                         R      B("PL.B.PERIOD")                    ³   	Period
-³ SUPREF                         R      <39>                                ³   	SupplierReference
-³ AGE                            R      P("AGE")                            ³   	Age
-³ UNALLOCATED                    R      0                                   ³   	UNALLOCATED
-³ DISCAMT                        R      <80>                                ³   	DiscountAmount
-³ POSTDATE                       R      <35>                                ³   	PostDT
-³ MEMO                           R      <56>                                ³  		Memo
-³ DISCDATE                       R      <55>                                ³   	DiscountCutOffDT
-³ DISPUTE                        R      <87>                                ³   	Dispute
-³ DISPMEMO                       R      P("DMEMO")                          ³   	DisputeMemo
-³ REGNO                          R      "INV*":<199>                        ³   	PurchaseLedgerRegisterNumber
+³ Update Condition                                                          ³   	Our Field Name				    Double Checked
+³ Data File (if diff)                                                       ³   	
+³ Key Source           <53>                                                 ³   	DocumentReference							✔	
+³                                                                           ³   	
+³ Fld To Update  MV To Update    Oper   Value To Use                        ³   					
+³ DOCDATE                        R      <33>                                ³   	DocumentDT  								✔
+³ DUEDATE                        R      <38>                                ³   	InvoiceDueDT								✔			
+³ DISC                           R      <160>                               ³   	DiscountPercentage_Again					✔
+³ TYPE                           R      "INV"                               ³   	"INV"										✔			
+³ ITEMREF                        R      <37>                                ³   	SupplierInvoiceReference					✔
+³ DOCNO                          R      <34>                                ³   	DocumentNumber								✔
+³ VATDIS                         R      S(<48>)                             ³   	VATTaxesTotal = VATTaxes.Sum()	  			✔						
+³ CREDIT                         R      S(<43>)                             ³   	Credit = Amounts.Sum()						✔
+³ BALANCE                        R      <50>                                ³   	TotalDueInSterling							✔
+³ ORIGVAL                        R      <50>                                ³   	OriginalValueABS = TotalDueInSterling 		✔
+³ PERIOD                         R      B("PL.B.PERIOD")                    ³   	Period = purchaseLedgerTransactionPeriod 	✔
+³ SUPREF                         R      <39>                                ³   	SupplierCode								✔	
+³ AGE                            R      P("AGE")                            ³   	Age = purchaseLedgerEntry.Future ? 0 : 1	✔	
+³ UNALLOCATED                    R      0                                   ³   	0.0m										✔			
+³ DISCAMT                        R      <80>                                ³   	DiscountAmount								✔
+³ POSTDATE                       R      <35>                                ³   	PostDT										✔
+³ MEMO                           R      <56>                                ³  		Memo										✔
+³ DISCDATE                       R      <55>                                ³   	DueDT										✔
+³ DISPUTE                        R      <87>                                ³   	Dispute										✔
+³ DISPMEMO                       R      P("DMEMO")                          ³   	DisputeMemo									✔
+³ REGNO                          R      "INV*":<199>                        ³   	PurchaseLedgerRegisterNumber				✔
 ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ   
                                                                                 
 F2-Save                                     

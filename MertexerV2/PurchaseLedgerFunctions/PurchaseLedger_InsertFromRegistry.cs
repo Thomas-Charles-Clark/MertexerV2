@@ -167,7 +167,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
                     SupplierCode = registerEntry.SupplierCode,
                     ConvertedDT = now,
                     CreditNumber = null,
-                    InvoiceNumber = registerEntry.Key,
+                    InvoiceNumber = purchaseLedgerKey,
                     UserID = "TOM",
                     TransactionType = "INV",
                     DeletedDT = null,

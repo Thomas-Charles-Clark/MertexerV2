@@ -9,12 +9,12 @@ Deletes the PLINV(CRN)REG record, based on TPLEDG<199> "REGNO"
 ³ File Update (Dict) : PLINVREG                                             ³   
 ³                                                                           ³   
 ³ Update/Delete (U/D)  D                                                    ³   
-³ Update Condition                                                          ³   
-³ Data File (if diff)                                                       ³   
-³ Key Source           <199>                                                ³   
+³ Update Condition                                                          ³   Our Field Name					Double Checked
+³ Data File (if diff)                                                       ³   								
+³ Key Source           <199>                                                ³   PurchaseLedgerRegisterKey		✔
 ³                                                                           ³   
-³ Fld To Update  MV To Update    Oper   Value To Use                        ³   
-³                                                                           ³   
+³ Fld To Update  MV To Update    Oper   Value To Use                        ³   					
+³                                                                           ³   					
 ³                                                                           ³   
 ³                                                                           ³   
 ³                                                                           ³   

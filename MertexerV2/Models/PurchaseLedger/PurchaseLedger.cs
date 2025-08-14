@@ -150,7 +150,6 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseFieldName("NOACT")]
         public bool? NoActivity { get; set; }
 
-
         /// <summary>
         /// Balance Zero?
         /// Default Value P("DBALZ")[S][M]
@@ -163,7 +162,6 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseIndex(22)]
         [UniVerseFieldName("BALANCE")]
         public bool? BalanceZero { get; set; }
-
 
         /// <summary>
         /// Deletion Valid?

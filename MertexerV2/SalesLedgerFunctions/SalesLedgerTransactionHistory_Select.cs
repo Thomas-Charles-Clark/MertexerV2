@@ -81,7 +81,7 @@ namespace MertexerV2.SalesLedgerFunctions
                         filters,
                         true,
                         false,
-                        100,
+                        500,
                         UniVerseAccount))
                     {
                         yield return invoice;
@@ -92,7 +92,7 @@ namespace MertexerV2.SalesLedgerFunctions
                     foreach (var invoice in Selector<SalesLedgerTransactionHistory>.SelectAllNonParallel(
                         true,
                         false,
-                        100,
+                        500,
                         UniVerseAccount))
                     {
                         yield return invoice;
@@ -105,9 +105,8 @@ namespace MertexerV2.SalesLedgerFunctions
                     JsonConvert.DeserializeObject<IEnumerable<SalesLedgerTransactionCode>>(SalesLedgerCodes).Select(p => p.Code),
                     true,
                     false,
-                    100,
-                    UniVerseAccount)
-                    .ToList())
+                    500,
+                    UniVerseAccount))
                 {
                     yield return invoice;
                 }

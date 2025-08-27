@@ -74,7 +74,35 @@ namespace MertexerV2.InvoiceFunctions
             out SqlDecimal CarriageValue,
             out SqlDecimal CarriageValueCurrency,
             out SqlString CurrencyCode,
-            out SqlString Terms
+            out SqlString Terms,
+            out SqlDecimal TotalValue,
+            out SqlDecimal TotalVAT,
+            out SqlString VATCodes,
+            out SqlString VATCode,
+            out SqlString VATRates,
+            out SqlDecimal VATRate,
+            out SqlString VATableValues,
+            out SqlDecimal VATableValue,
+            out SqlString VATTaxes,
+            out SqlDecimal VATTax,
+            out SqlString VATableValuesCurrency,
+            out SqlDecimal VATableValueCurrency,
+            out SqlString VATTaxesCurrency,
+            out SqlDecimal VATTaxCurrency,
+            out SqlDecimal TotalValueCurrency,
+            out SqlDecimal TotalVATCurrency,
+            out SqlString MiscellaneousChargeCode,
+            out SqlDecimal MiscellaneousChargeValue,
+            out SqlDecimal MiscellaneousChargeValueCurrency,
+            out SqlDecimal MiscellaneousChargeVAT,
+            out SqlDecimal MiscellaneousChargeVATCurrency,
+            out SqlString CarriageVATCode,
+            out SqlDecimal CarriageVAT,
+            out SqlDecimal CarriageVATCurrency,
+            out SqlDecimal CalculatedTotalValue,
+            out SqlDecimal CalculatedTotalValueCurrency,
+            out SqlDecimal CalculatedTotalVAT,
+            out SqlDecimal CalculatedTotalVATCurrency
             )
         {
             var p = (InvoiceHead)obj;
@@ -88,6 +116,35 @@ namespace MertexerV2.InvoiceFunctions
             CarriageValueCurrency = p.CarriageValueCurrency ?? SqlDecimal.Null;
             CurrencyCode = p.CurrencyCode ?? SqlString.Null;
             Terms = p.Terms?.TrimReduceTruncate(10) ?? SqlString.Null;
+
+            TotalValue = p.TotalValue;
+            TotalVAT = p.TotalVAT;
+            VATCodes = p.VATCodes?.Any() == true ? JsonConvert.SerializeObject(p.VATCodes) : SqlString.Null;
+            VATCode = p.VATCode;
+            VATRates = p.VATRates?.Any() == true ? JsonConvert.SerializeObject(p.VATRates) : SqlString.Null;
+            VATRate = p.VATRate;
+            VATableValues = p.VATableValues?.Any() == true ? JsonConvert.SerializeObject(p.VATableValues) : SqlString.Null;
+            VATableValue = p.VATableValue;
+            VATTaxes = p.VATTaxes?.Any() == true ? JsonConvert.SerializeObject(p.VATTaxes) : SqlString.Null;
+            VATTax = p.VATTax;
+            VATableValuesCurrency = p.VATableValuesCurrency?.Any() == true ? JsonConvert.SerializeObject(p.VATableValuesCurrency) : SqlString.Null;
+            VATableValueCurrency = p.VATableValueCurrency;
+            VATTaxesCurrency = p.VATTaxesCurrency?.Any() == true ? JsonConvert.SerializeObject(p.VATTaxesCurrency) : SqlString.Null;
+            VATTaxCurrency = p.VATTaxCurrency;
+            TotalValueCurrency = p.TotalValueCurrency;
+            TotalVATCurrency = p.TotalVATCurrency;
+            MiscellaneousChargeCode = p.MiscellaneousChargeCode;
+            MiscellaneousChargeValue = p.MiscellaneousChargeValue;
+            MiscellaneousChargeValueCurrency = p.MiscellaneousChargeValueCurrency;
+            MiscellaneousChargeVAT = p.MiscellaneousChargeVAT;
+            MiscellaneousChargeVATCurrency = p.MiscellaneousChargeVATCurrency;
+            CarriageVATCode = p.CarriageVATCode;
+            CarriageVAT = p.CarriageVAT;
+            CarriageVATCurrency = p.CarriageVATCurrency;
+            CalculatedTotalValue = p.CalculatedTotalValue;
+            CalculatedTotalValueCurrency = p.CalculatedTotalValueCurrency;
+            CalculatedTotalVAT = p.CalculatedTotalVAT;
+            CalculatedTotalVATCurrency = p.CalculatedTotalValueCurrency;
         }
 
         [Microsoft.SqlServer.Server.SqlFunction(

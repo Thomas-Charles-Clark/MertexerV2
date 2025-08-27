@@ -192,6 +192,7 @@
     <Compile Include="Models\PurchaseLedger\PurchaseLedgerVATAudit.cs" />
     <Compile Include="Models\PurchaseLedger\PurchaseLedgerInsertionResult.cs" />
     <Compile Include="Models\PurchaseLedger\PurchaseLedgerRegisterHistory.cs" />
+    <Compile Include="Models\SalesLedger\SalesLedgerTransactionHistoryCurrency.cs" />
     <Compile Include="Models\Stock\StockValuation.cs" />
     <Compile Include="PurchaseLedgerFunctions\PurchaseLedger_InternalFunctions.cs" />
     <Compile Include="Models\SalesAgent\SalesAgent.cs" />
@@ -294,13 +295,14 @@
     <Compile Include="PurchaseOrderFunctions\PurchaseOrderHead_Select.cs" />
     <Compile Include="RetailFunctions\TillFunctions.cs" />
     <Compile Include="InvoiceFunctions\SalesAnalysis_Select.cs" />
+    <Compile Include="SalesLedgerFunctions\SalesLedgerTransactionHistoryCurrency_Select.cs" />
+    <Compile Include="SalesLedgerFunctions\SalesLedgerTransactionCurrency_Select.cs" />
     <Compile Include="SalesLedgerFunctions\SalesRepresentative_Select.cs" />
     <Compile Include="SalesLedgerFunctions\SalesArea_Select.cs" />
     <Compile Include="SalesLedgerFunctions\SalesLedgerTerms_Insert.cs" />
     <Compile Include="SalesLedgerFunctions\SalesAgent_Select.cs" />
     <Compile Include="SalesLedgerFunctions\SalesLedgerTransaction_Insert.cs" />
     <Compile Include="SalesLedgerFunctions\SalesLedgerTerms_Select.cs" />
-    <Compile Include="SalesLedgerFunctions\SalesLedgerTransactionCurrency_Select.cs" />
     <Compile Include="SalesLedgerFunctions\SalesLedgerTransactionHistory_Select.cs" />
     <Compile Include="SalesLedgerFunctions\SalesLedgerTransaction_Select.cs" />
     <Compile Include="SalesLedgerFunctions\SalesLedgerTerms_Upsert.cs" />

@@ -105,7 +105,7 @@ namespace MertexerV2.Models.Invoices
         [UniVerseIndex(19)]
         [UniVerseConversion("MR22")]
         [UniVerseFieldName("CARRIAGE")]
-        public decimal? CarriageValue  { get; set; }
+        public decimal? CarriageValue { get; set; }
 
         /// <summary>
         /// Carriage Value (Currency)
@@ -121,5 +121,311 @@ namespace MertexerV2.Models.Invoices
         [UniVerseIndex(45)]
         [UniVerseFieldName("CURRENCY")]
         public string CurrencyCode { get; set; }
+
+        /// <summary>
+        /// Total Value (Sterling)
+        /// </summary>
+        [UniVerseIndex(61)]
+        [UniVerseConversion("MR22")]
+        [UniVerseFieldName("TOTVAL")]
+        public decimal TotalValue { get; set; }
+
+        /// <summary>
+        /// Total Value (Sterling)
+        /// </summary>
+        [UniVerseIndex(64)]
+        [UniVerseConversion("MR22")]
+        [UniVerseFieldName("TOTVAT")]
+        public decimal TotalVAT { get; set; }
+
+        /// <summary>
+        /// VAT Codes
+        /// </summary>
+        [UniVerseIndex(70)]
+        [UniVerseFieldName("SVATCODE")]
+        [UniVerseMultiValue]
+        public IEnumerable<string> VATCodes { get; set; }
+
+        public string VATCode
+        {
+            get
+            {
+                return VATCodes?.Any() == true ? VATCodes.First() : null;
+            }
+        }
+
+        /// <summary>
+        /// VAT Codes
+        /// </summary>
+        [UniVerseIndex(71)]
+        [UniVerseFieldName("SVATRATE")]
+        [UniVerseConversion("MR22")]
+        [UniVerseMultiValue]
+        public IEnumerable<decimal> VATRates { get; set; }
+
+        public decimal VATRate
+        {
+            get
+            {
+                return VATRates?.Any() == true ? VATRates.First() : 0.0m;
+            }
+        }
+
+        /// <summary>
+        /// VAT Value
+        /// </summary>
+        [UniVerseIndex(72)]
+        [UniVerseFieldName("SVATVALUE")]
+        [UniVerseConversion("MR22")]
+        [UniVerseMultiValue]
+        public IEnumerable<decimal> VATableValues { get; set; }
+
+        public decimal VATableValue
+        {
+            get
+            {
+                return VATableValues?.Any() == true ? VATableValues.First() : 0.0m;
+            }
+        }
+
+        /// <summary>
+        /// VAT Codes
+        /// </summary>
+        [UniVerseIndex(73)]
+        [UniVerseFieldName("SVATTAX")]
+        [UniVerseConversion("MR22")]
+        [UniVerseMultiValue]
+        public IEnumerable<decimal> VATTaxes { get; set; }
+
+        public decimal VATTax
+        {
+            get
+            {
+                return VATTaxes?.Any() == true ? VATTaxes.First() : 0.0m;
+            }
+        }
+
+        /// <summary>
+        /// VAT Value
+        /// </summary>
+        [UniVerseIndex(72)]
+        [UniVerseFieldName("SVATVALUE.CUR")]
+        [UniVerseConversion("MR22")]
+        [UniVerseMultiValue]
+        public IEnumerable<decimal> VATableValuesCurrency { get; set; }
+
+        public decimal VATableValueCurrency
+        {
+            get
+            {
+                return VATableValuesCurrency?.Any() == true ? VATableValuesCurrency.First() : 0.0m;
+            }
+        }
+
+        /// <summary>
+        /// VAT Codes
+        /// </summary>
+        [UniVerseIndex(73)]
+        [UniVerseFieldName("SVATTAX.CUR")]
+        [UniVerseConversion("MR22")]
+        [UniVerseMultiValue]
+        public IEnumerable<decimal> VATTaxesCurrency { get; set; }
+
+        public decimal VATTaxCurrency
+        {
+            get
+            {
+                return VATTaxesCurrency?.Any() == true ? VATTaxesCurrency.First() : 0.0m;
+            }
+        }
+
+        /// <summary>
+        /// Total Value (Currency)
+        /// </summary>
+        [UniVerseIndex(87)]
+        [UniVerseConversion("MR22")]
+        [UniVerseFieldName("TOTVAL.CUR")]
+        public decimal TotalValueCurrency { get; set; }
+
+        /// <summary>
+        /// Total Value (Sterling)
+        /// </summary>
+        [UniVerseIndex(88)]
+        [UniVerseConversion("MR22")]
+        [UniVerseFieldName("TOTVAT.CUR")]
+        public decimal TotalVATCurrency { get; set; }
+
+        /// Miscellaneous Charge Code
+        /// </summary>
+        [UniVerseIndex(160)]
+        [UniVerseFieldName("MCHRG.CODE")]
+        public string MiscellaneousChargeCode { get; set; }
+
+        /// <summary>
+        /// Miscellaneous Charge Value
+        /// </summary>
+        [UniVerseIndex(161)]
+        [UniVerseFieldName("MCHRG.VAL")]
+        [UniVerseConversion("MR22")]
+        public decimal MiscellaneousChargeValue { get; set; }
+
+        /// <summary>
+        /// Miscellaneous Charge Value
+        /// </summary>
+        [UniVerseIndex(162)]
+        [UniVerseFieldName("MCHRG.VAL.CUR")]
+        [UniVerseConversion("MR22")]
+        public decimal MiscellaneousChargeValueCurrency { get; set; }
+
+        /// <summary>
+        /// Miscellaneous Charge Value
+        /// </summary>
+        [UniVerseIndex(161)]
+        [UniVerseFieldName("MCHRG.VAT")]
+        [UniVerseConversion("MR22")]
+        public decimal MiscellaneousChargeVAT { get; set; }
+
+        /// <summary>
+        /// Miscellaneous Charge Value
+        /// </summary>
+        [UniVerseIndex(162)]
+        [UniVerseFieldName("MCHRG.VAT.CUR")]
+        [UniVerseConversion("MR22")]
+        public decimal MiscellaneousChargeVATCurrency { get; set; }
+
+        /// <summary>
+        /// <summary>
+        /// Carriage VAT Code
+        /// </summary>
+        [UniVerseIndex(164)]
+        [UniVerseFieldName("CARR.VCODE")]
+        public string CarriageVATCode { get; set; }
+
+        /// <summary>
+        /// Carriage VAT
+        /// </summary>
+        [UniVerseIndex(314)]
+        [UniVerseConversion("MR22")]
+        [UniVerseFieldName("CARRVAT")]
+        public decimal CarriageVAT { get; set; }
+
+        /// <summary>
+        /// Carriage VAT
+        /// </summary>
+        [UniVerseIndex(315)]
+        [UniVerseConversion("MR22")]
+        [UniVerseFieldName("CARRVAT.CUR")]
+        public decimal CarriageVATCurrency { get; set; }
+
+        /// <summary>
+        /// TotalValueSterling
+        /// </summary>
+        [UniVerseIndex(0)]
+        [UniVerseFieldName("C.TOTVAL")]
+        [UniVerseConversion("MR22")]
+        public decimal CalculatedTotalValue
+        {
+            get
+            {
+                var firstMultiplier = 0;
+                var secondMultiplier = 0;
+
+                if (InvoiceOrCredit == 1)
+                {
+                    firstMultiplier = 1;
+                    secondMultiplier = 0;
+                }
+                else
+                {
+                    firstMultiplier = 0;
+                    secondMultiplier = 1;
+                }
+
+                return (firstMultiplier * TotalValue) - (secondMultiplier * TotalValue);
+            }
+        }
+
+        /// <summary>
+        /// TotalValueCurrency
+        /// </summary>
+        [UniVerseIndex(0)]
+        [UniVerseFieldName("C.TOTVAL.CUR")]
+        [UniVerseConversion("MR22")]
+        public decimal CalculatedTotalValueCurrency
+        {
+            get
+            {
+                var firstMultiplier = 0;
+                var secondMultiplier = 0;
+
+                if (InvoiceOrCredit == 1)
+                {
+                    firstMultiplier = 1;
+                    secondMultiplier = 0;
+                }
+                else
+                {
+                    firstMultiplier = 0;
+                    secondMultiplier = 1;
+                }
+
+                return (firstMultiplier * TotalValueCurrency) - (secondMultiplier * TotalValueCurrency);
+            }
+        }
+        /// <summary>
+        /// TotalValueSterling
+        /// </summary>
+        [UniVerseIndex(0)]
+        [UniVerseFieldName("C.TOTVAT")]
+        [UniVerseConversion("MR22")]
+        public decimal CalculatedTotalVAT
+        {
+            get
+            {
+                var firstMultiplier = 0;
+                var secondMultiplier = 0;
+
+                if (InvoiceOrCredit == 1)
+                {
+                    firstMultiplier = 1;
+                    secondMultiplier = 0;
+                }
+                else
+                {
+                    firstMultiplier = 0;
+                    secondMultiplier = 1;
+                }
+
+                return (firstMultiplier * TotalVAT) - (secondMultiplier * TotalVAT);
+            }
+        }
+
+        /// <summary>
+        /// TotalValueCurrency
+        /// </summary>
+        [UniVerseIndex(0)]
+        [UniVerseFieldName("C.TOTVAT.CUR")]
+        [UniVerseConversion("MR22")]
+        public decimal CalculatedTotalVATCurrency
+        {
+            get
+            {
+                var firstMultiplier = 0;
+                var secondMultiplier = 0;
+
+                if (InvoiceOrCredit == 1)
+                {
+                    firstMultiplier = 1;
+                    secondMultiplier = 0;
+                }
+                else
+                {
+                    firstMultiplier = 0;
+                    secondMultiplier = 1;
+                }
+
+                return (firstMultiplier * TotalVATCurrency) - (secondMultiplier * TotalVATCurrency);
+            }
+        }
     }
 }

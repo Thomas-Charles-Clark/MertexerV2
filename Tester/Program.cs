@@ -126,6 +126,106 @@ namespace Tester
 
             //Console.WriteLine(JsonConvert.SerializeObject(transactionUndoResults));
 
+
+
+            // Test between for SQL DateTime Overflow: 2024/11/30 and 2024/12/31
+
+            var postDt_From = DateTime.ParseExact("2024/10/31", "yyyy/MM/dd", DateTimeFormatInfo.InvariantInfo);
+            var postDt_To = DateTime.ParseExact("2024/11/30", "yyyy/MM/dd", DateTimeFormatInfo.InvariantInfo);
+
+            var results = SalesLedgerTransactionHistoryFunctions.Select("MERTEX", null, null, null, null, null, null, postDt_From, postDt_To).OfType<SalesLedgerTransactionHistory>().ToList();
+
+            Console.WriteLine($"Saw {results.Count} results between PostDT {postDt_From:dd/MM/yyyy} and {postDt_To:dd/MM/yyyy}");
+
+            SqlString Key;
+            SqlDateTime DocumentDT;
+            SqlDateTime DueDT;
+            SqlString TransactionType;
+            SqlString ItemReference;
+            SqlDecimal OriginalValue;
+            SqlString DocumentReference;
+            SqlDecimal VATDiscount;
+            SqlDecimal Debit;
+            SqlDecimal Credit;
+            SqlDecimal Balance;
+            SqlByte Period;
+            SqlString Status;
+            SqlString TradeAccountCode;
+            SqlInt32 Age;
+            SqlDecimal OriginalValueABS;
+            SqlString DisputeMemo;
+            SqlString Dispute;
+            SqlString Adjust;
+            SqlDecimal Unallocated;
+            SqlDecimal OutstandingAmount;
+            SqlDateTime PostDT;
+            SqlDateTime CSDT;
+            SqlDecimal CSAmount;
+            SqlString CSAction;
+            SqlString AllocatedFromDocuments;
+            SqlString AllocatedToDocuments;
+            SqlString InvoiceAccount;
+            SqlString CustomerOrderNumber;
+            SqlDecimal ExchangeRateDifferences;
+            SqlDateTime PaidDT;
+            SqlDecimal RoundingErrors;
+            SqlString SourceDocument;
+            SqlInt32 Version;
+            SqlDecimal SettlementDiscount;
+            SqlDateTime SettlementDT;
+            SqlDecimal SettlementDiscountTaken;
+            SqlString CreditClaimNumber;
+            SqlString SellingCompany;
+            SqlInt32 PostTime;
+
+            foreach(var r in results)
+            {
+                SalesLedgerTransactionHistoryFunctions.SalesLedgerTransactionHistorySelect_FillRow(r,
+                    out Key,
+                    out DocumentDT,
+                    out DueDT,
+                    out TransactionType,
+                    out ItemReference,
+                    out OriginalValue,
+                    out DocumentReference,
+                    out VATDiscount,
+                    out Debit,
+                    out Credit,
+                    out Balance,
+                    out Period,
+                    out Status,
+                    out TradeAccountCode,
+                    out Age,
+                    out OriginalValueABS,
+                    out DisputeMemo,
+                    out Dispute,
+                    out Adjust,
+                    out Unallocated,
+                    out OutstandingAmount,
+                    out PostDT,
+                    out CSDT,
+                    out CSAmount,
+                    out CSAction,
+                    out AllocatedFromDocuments,
+                    out AllocatedToDocuments,
+                    out InvoiceAccount,
+                    out CustomerOrderNumber,
+                    out ExchangeRateDifferences,
+                    out PaidDT,
+                    out RoundingErrors,
+                    out SourceDocument,
+                    out Version,
+                    out SettlementDiscount,
+                    out SettlementDT,
+                    out SettlementDiscountTaken,
+                    out CreditClaimNumber,
+                    out SellingCompany,
+                    out PostTime
+                );
+            }
+
+            //Console.WriteLine(JsonConvert.SerializeObject(results));
+
             CFramework.SetConsoleColourSuccess();
 
             sw.Stop();

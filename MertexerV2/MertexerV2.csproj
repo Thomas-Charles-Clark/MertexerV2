@@ -188,12 +188,16 @@
     <Compile Include="Models\PurchaseLedger\PurchaseLedger.cs" />
     <Compile Include="Models\PurchaseLedger\PurchaseLedgerSupplierInvoice.cs" />
     <Compile Include="Models\PurchaseLedger\PurchaseLedgerAdjustmentAudit.cs" />
+    <Compile Include="Models\PurchaseLedger\PurchaseLedgerTransactionCurrencyHistory.cs" />
+    <Compile Include="Models\PurchaseLedger\PurchaseLedgerTransactionHistory.cs" />
     <Compile Include="Models\PurchaseLedger\PurchaseLedgerTransactionRollbackResult.cs" />
     <Compile Include="Models\PurchaseLedger\PurchaseLedgerVATAudit.cs" />
     <Compile Include="Models\PurchaseLedger\PurchaseLedgerInsertionResult.cs" />
     <Compile Include="Models\PurchaseLedger\PurchaseLedgerRegisterHistory.cs" />
     <Compile Include="Models\SalesLedger\SalesLedgerTransactionHistoryCurrency.cs" />
     <Compile Include="Models\Stock\StockValuation.cs" />
+    <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerTransactionCurrencyHistory_Upsert.cs" />
+    <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerTransactionHistory_Upsert.cs" />
     <Compile Include="PurchaseLedgerFunctions\PurchaseLedger_InternalFunctions.cs" />
     <Compile Include="Models\SalesAgent\SalesAgent.cs" />
     <Compile Include="Models\SalesArea\SalesArea.cs" />

@@ -360,7 +360,7 @@ No; the screen which the transaction begets creates the PLEDG record from which 
 
 Anywhere we see an U action, are we safe to assume we can attempt an UPSERT? That'd be... useful, as I already have the ability to UPSERT?
 
-After empirical testing (which was successful, after a fashion, we find this helpful line:
+After empirical testing - which was successful, after a fashion, we find this helpful line:
 https://docs.rocketsoftware.com/bundle/sbxa_dg_663/page/gry1644327657910.html
 "If U (Update) is entered in the Update/Delete field above then, if a record exists on file with a key, it is updated. If not, a new record is created with a key.")
 
@@ -386,10 +386,7 @@ IAR uP right justify
 IDL dOwn left justify
 IDR doWn right justify
 
-
-
-
-what am I to do about this Supplier "INACT" property? It records the period(s) for which a supplier has been inactive, but the transaction sub-file action on PLSUP does the following: REPLACE value with the result of the Default definition "INACT" which is:
+What am I to do about this Supplier "INACT" property? It records the period(s) for which a supplier has been inactive, but the transaction sub-file action on PLSUP does the following: REPLACE value with the result of the Default definition "INACT" which is:
 
 IF (<154> = "","",-1)
 
@@ -401,16 +398,14 @@ So what the heck should I do when UNDOING the transaction...?
 
 Not worry about it?
 
- 
- 
- 
 
 
 #################################################################################################
 #
 #	12/08/2025			
 #	Testing Time!
-#	A *lot* of cool stuff has been achieved in this direction. Time to take it to Dev & PLAY and TEST it thoroughly.
+#	A *lot* of cool stuff has been achieved in this direction.
+#	Time to take it to Dev & PLAY and TEST it thoroughly.
 #
 #################################################################################################
 

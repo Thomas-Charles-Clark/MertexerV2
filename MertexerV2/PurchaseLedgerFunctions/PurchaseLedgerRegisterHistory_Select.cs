@@ -137,9 +137,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
             out SqlDateTime OnFileDT,
             out SqlString SupplierCode,
             out SqlDateTime ConvertedDT,
-            out SqlString CreditNumber,
-            out SqlString InvoiceNumber,
-            out SqlString TransactionNumber,
+            out SqlString DocumentReference,
             out SqlDateTime DeletedDT,
             out SqlString UserID,
             out SqlString TransactionType,
@@ -158,11 +156,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
             ConvertedDT = result.ConvertedDT ?? SqlDateTime.Null;
 
-            CreditNumber = result.CreditNumber ?? SqlString.Null;
-
-            InvoiceNumber = result.InvoiceNumber ?? SqlString.Null;
-
-            TransactionNumber = result.TransactionNumber ?? SqlString.Null;
+            DocumentReference = result.DocumentReference ?? SqlString.Null;
 
             DeletedDT = result.DeletedDT ?? SqlDateTime.Null;
 

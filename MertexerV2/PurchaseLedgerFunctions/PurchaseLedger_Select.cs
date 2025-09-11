@@ -49,7 +49,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                 if (!String.IsNullOrEmpty(SupplierCode))
                 {
-                    filters.Add(new Tuple<string, string, string>("SUPREF", "eq", SupplierCode));
+                    filters.Add(new Tuple<string, string, string>("PSUPREF", "eq", SupplierCode));
                 }
 
                 if (OnFileDT_From.HasValue)

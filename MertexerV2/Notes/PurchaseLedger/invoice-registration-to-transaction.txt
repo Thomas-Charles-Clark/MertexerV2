@@ -82,7 +82,7 @@ Which is.... A PARAGRAPH! Hallelujah!
 ³ @RECORD<2> = @OTHER(4)                                                      ³ 
 ³ @RECORD<3> = @OTHER(5)                                                      ³ 
 
-[This paragraph appears to call PINVREG,3 twice... which is... strange, but whatever.] 
+[This paragraph appears to call PINVREG,3 potentially twice... which is... strange, but whatever.] 
                                                                                 
     PINVREG                                                                     
 001 V                                                                           

@@ -197,7 +197,9 @@
     <Compile Include="Models\SalesLedger\SalesLedgerTransactionHistoryCurrency.cs" />
     <Compile Include="Models\Stock\StockValuation.cs" />
     <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerTransactionCurrencyHistory_Upsert.cs" />
+    <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerTransactionHistoryCurrency_Select.cs" />
     <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerTransactionHistory_Upsert.cs" />
+    <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerTransactionHistory_Select.cs" />
     <Compile Include="PurchaseLedgerFunctions\PurchaseLedger_InternalFunctions.cs" />
     <Compile Include="Models\SalesAgent\SalesAgent.cs" />
     <Compile Include="Models\SalesArea\SalesArea.cs" />

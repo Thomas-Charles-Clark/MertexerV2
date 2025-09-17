@@ -273,7 +273,7 @@ namespace MertexerV2.SupplierFunctions
             MiscellaneousCharge = p.MiscellaneousCharge ?? SqlDecimal.Null;
             PhoneNumber = p.PhoneNumber?.TrimReduceTruncate(20);
             EmailAddress = p.Email?.TrimReduceTruncate(254);
-            BudgetHolderCode = p.SEL3?.TrimReduceTruncate(50);
+            BudgetHolderCode = p.BudgetHolderCode?.TrimReduceTruncate(50);
             PaymentTermsCode = p.PaymentTermsCode?.TrimReduceTruncate(10);
             SupplierTypeCode = p.SEL1?.TrimReduceTruncate(10);
             VATCode = p.VATCode?.TrimReduceTruncate(10);
@@ -346,27 +346,27 @@ namespace MertexerV2.SupplierFunctions
 
                     r.PLSEL2 = sel2.FirstOrDefault(p => p.Key == r.SEL2);
 
-                    r.PLSEL3 = sel3.FirstOrDefault(p => p.Key == r.SEL3);
+                    r.PLSEL3 = sel3.FirstOrDefault(p => p.Key == r.BudgetHolderCode);
 
                     r.PurchaseLedgerRegisterEntries_Invoice = invReg.Where(p => p.SupplierCode == r.Key).ToList();
 
                     r.PurchaseLedgerRegisterEntries_Credit = crnReg.Where(p => p.SupplierReference == r.Key).ToList();
 
                     foreach (var dr in r.PurchaseLedgerTransferRecords?
-                        .Select(d => new SupplierAccountDetail(r.Key, r.Name, r.Currency, r.SEL1, r.DSEL1, r.SEL2, r.DSEL2, r.SEL3, r.DSEL3, "TPLTRANS", d)))
+                        .Select(d => new SupplierAccountDetail(r.Key, r.Name, r.Currency, r.SEL1, r.DSEL1, r.SEL2, r.DSEL2, r.BudgetHolderCode, r.DSEL3, "TPLTRANS", d)))
                     {
                         yield return dr;
                     }
 
                     foreach (var inv in r.PurchaseLedgerRegisterEntries_Invoice?.Select(d => new SupplierAccountDetail(r.Key, r.Name, r.Currency,
-                        r.SEL1, r.DSEL1, r.SEL2, r.DSEL2, r.SEL3, r.DSEL3, "PLINVREG", d, false
+                        r.SEL1, r.DSEL1, r.SEL2, r.DSEL2, r.BudgetHolderCode, r.DSEL3, "PLINVREG", d, false
                         )))
                     {
                         yield return inv;
                     }
 
                     foreach (var crn in r.PurchaseLedgerRegisterEntries_Credit?.Select(d => new SupplierAccountDetail(r.Key, r.Name, r.Currency,
-                        r.SEL1, r.DSEL1, r.SEL2, r.DSEL2, r.SEL3, r.DSEL3, "PLCRNREG", d, false
+                        r.SEL1, r.DSEL1, r.SEL2, r.DSEL2, r.BudgetHolderCode, r.DSEL3, "PLCRNREG", d, false
                         )))
                     {
                         yield return crn;
@@ -386,20 +386,20 @@ namespace MertexerV2.SupplierFunctions
 
                 result.PurchaseLedgerRegisterEntries_Credit = crnReg.Where(p => p.SupplierReference == result.Key).ToList();
 
-                foreach (var dr in result.PurchaseLedgerTransferRecords?.Select(d => new SupplierAccountDetail(result.Key, result.Name, result.Currency, result.SEL1, result.DSEL1, result.SEL2, result.DSEL2, result.SEL3, result.DSEL3, "TPLTRANS", d)))
+                foreach (var dr in result.PurchaseLedgerTransferRecords?.Select(d => new SupplierAccountDetail(result.Key, result.Name, result.Currency, result.SEL1, result.DSEL1, result.SEL2, result.DSEL2, result.BudgetHolderCode, result.DSEL3, "TPLTRANS", d)))
                 {
                     yield return dr;
                 }
 
                 foreach (var inv in result.PurchaseLedgerRegisterEntries_Invoice?.Select(d => new SupplierAccountDetail(result.Key, result.Name, result.Currency,
-                    result.SEL1, result.DSEL1, result.SEL2, result.DSEL2, result.SEL3, result.DSEL3, "PLINVREG", d, false
+                    result.SEL1, result.DSEL1, result.SEL2, result.DSEL2, result.BudgetHolderCode, result.DSEL3, "PLINVREG", d, false
                     )))
                 {
                     yield return inv;
                 }
 
                 foreach (var crn in result.PurchaseLedgerRegisterEntries_Credit?.Select(d => new SupplierAccountDetail(result.Key, result.Name, result.Currency,
-                    result.SEL1, result.DSEL1, result.SEL2, result.DSEL2, result.SEL3, result.DSEL3, "PLCRNREG", d, false
+                    result.SEL1, result.DSEL1, result.SEL2, result.DSEL2, result.BudgetHolderCode, result.DSEL3, "PLCRNREG", d, false
                     )))
                 {
                     yield return crn;
@@ -524,27 +524,27 @@ namespace MertexerV2.SupplierFunctions
 
                     r.PLSEL2 = sel2.FirstOrDefault(p => p.Key == r.SEL2);
 
-                    r.PLSEL3 = sel3.FirstOrDefault(p => p.Key == r.SEL3);
+                    r.PLSEL3 = sel3.FirstOrDefault(p => p.Key == r.BudgetHolderCode);
 
                     r.PurchaseLedgerRegisterEntries_Invoice = invReg.Where(p => p.SupplierCode == r.Key).ToList();
 
                     r.PurchaseLedgerRegisterEntries_Credit = crnReg.Where(p => p.SupplierReference == r.Key).ToList();
 
                     foreach (var dr in r.PurchaseLedgerTransferRecordsCurrency?
-                        .Select(d => new SupplierAccountDetail(r.Key, r.Name, r.Currency, r.SEL1, r.DSEL1, r.SEL2, r.DSEL2, r.SEL3, r.DSEL3, "TPLTRANS.CUR", d)))
+                        .Select(d => new SupplierAccountDetail(r.Key, r.Name, r.Currency, r.SEL1, r.DSEL1, r.SEL2, r.DSEL2, r.BudgetHolderCode, r.DSEL3, "TPLTRANS.CUR", d)))
                     {
                         yield return dr;
                     }
 
                     foreach (var inv in r.PurchaseLedgerRegisterEntries_Invoice?.Select(d => new SupplierAccountDetail(r.Key, r.Name, r.Currency,
-                        r.SEL1, r.DSEL1, r.SEL2, r.DSEL2, r.SEL3, r.DSEL3,"PLINVREG", d, false
+                        r.SEL1, r.DSEL1, r.SEL2, r.DSEL2, r.BudgetHolderCode, r.DSEL3,"PLINVREG", d, false
                         )))
                     {
                         yield return inv;
                     }
 
                     foreach (var crn in r.PurchaseLedgerRegisterEntries_Credit?.Select(d => new SupplierAccountDetail(r.Key, r.Name, r.Currency,
-                        r.SEL1, r.DSEL1, r.SEL2, r.DSEL2, r.SEL3, r.DSEL3, "PLCRNREG", d, false
+                        r.SEL1, r.DSEL1, r.SEL2, r.DSEL2, r.BudgetHolderCode, r.DSEL3, "PLCRNREG", d, false
                         )))
                     {
                         yield return crn;
@@ -565,20 +565,20 @@ namespace MertexerV2.SupplierFunctions
                 result.PurchaseLedgerRegisterEntries_Credit = crnReg.Where(p => p.SupplierReference == result.Key).ToList();
 
                 foreach (var dr in result.PurchaseLedgerTransferRecordsCurrency?.Select(d => new SupplierAccountDetail(result.Key, result.Name, result.Currency,
-                    result.SEL1, result.DSEL1, result.SEL2, result.DSEL2, result.SEL3, result.DSEL3, "TPLTRANS.CUR", d)))
+                    result.SEL1, result.DSEL1, result.SEL2, result.DSEL2, result.BudgetHolderCode, result.DSEL3, "TPLTRANS.CUR", d)))
                 {
                     yield return dr;
                 }
 
                 foreach (var inv in result.PurchaseLedgerRegisterEntries_Invoice?.Select(d => new SupplierAccountDetail(result.Key, result.Name, result.Currency,
-                   result.SEL1, result.DSEL1, result.SEL2, result.DSEL2, result.SEL3, result.DSEL3, "PLINVREG", d, false
+                   result.SEL1, result.DSEL1, result.SEL2, result.DSEL2, result.BudgetHolderCode, result.DSEL3, "PLINVREG", d, false
                     )))
                 {
                     yield return inv;
                 }
 
                 foreach (var crn in result.PurchaseLedgerRegisterEntries_Credit?.Select(d => new SupplierAccountDetail(result.Key, result.Name, result.Currency,
-                   result.SEL1, result.DSEL1, result.SEL2, result.DSEL2, result.SEL3, result.DSEL3, "PLCRNREG", d, false
+                   result.SEL1, result.DSEL1, result.SEL2, result.DSEL2, result.BudgetHolderCode, result.DSEL3, "PLCRNREG", d, false
                     )))
                 {
                     yield return crn;

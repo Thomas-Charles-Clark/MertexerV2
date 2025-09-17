@@ -1,0 +1,24 @@
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄProcess Defn - ParagraphÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ 
+³ Process Name    PG.GET.PL.REGNO                                             ³ 
+³ Description     get register number                                         ³ 
+³ Dict File Name  TPLEDG                                                      ³ 
+³ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ ³ 
+³ Paragraph Lines                                                             ³ 
+³ LOCAL L.REC                                                                 ³ 
+³ @VALUE = ""                                                                 ³ 
+³ READ L.REC FROM "TPLTRANS",@KEY                                             ³ 
+³ IF @RTN.FLAG THEN                                                           ³ 
+³     @RTN.FLAG = 0                                                           ³ 
+³     READ L.REC FROM "HISTTPLTRANS",@KEY                                     ³ 
+³     IF @RTN.FLAG THEN                                                       ³ 
+³        L.REC = ""                                                           ³ 
+³     END                                                                     ³ 
+³ END                                                                         ³ 
+³ @VALUE = L.REC<120>                                                         ³ 
+³ @RTN.FLAG = 0______________________________________________________________ ³ 
+³                                                                             ³ 
+³                                                                             ³ 
+³ Source Code Id                                                              ³ 
+ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ 
+                                                                                
+F2-Save F4-Del F6-Reformat F8-Goto Line F9-Process F10-Action                   

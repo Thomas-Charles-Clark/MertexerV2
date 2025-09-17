@@ -110,7 +110,7 @@ namespace MertexerV2.Models.PurchaseLedger
         }
 
         [UniVerseIndex(5)]
-        [UniVerseFieldName("CREDIT.NO")]
+        [UniVerseFieldName("TRANSACTION.NO")]
         public string DocumentReference { get; set; }
 
         public DateTime? DeletedDT { get; set; }

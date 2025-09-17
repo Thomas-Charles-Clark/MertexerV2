@@ -39,7 +39,8 @@ namespace MertexerV2.PurchaseLedgerFunctions
             DateTime? DueDT_From,
             DateTime? DueDT_To,
             DateTime? PostDT_From,
-            DateTime? PostDT_To)
+            DateTime? PostDT_To,
+            string PurchaseLedgerRegisterKey)
         {
             if (String.IsNullOrEmpty(PurchaseLedgerCodes))
             {
@@ -90,6 +91,11 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 if (PostDT_To.HasValue)
                 {
                     filters.Add(new Tuple<string, string, string>("SS.POSTDATE.INT", "<=", Framework.UniVerseDateString(PostDT_To.Value)));
+                }
+
+                if (!String.IsNullOrEmpty(PurchaseLedgerRegisterKey))
+                {
+                    filters.Add(new Tuple<string, string, string>("PLINVREG", "eq", PurchaseLedgerRegisterKey));
                 }
 
                 if (filters.Any())

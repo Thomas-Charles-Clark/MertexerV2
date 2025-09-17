@@ -254,7 +254,7 @@ namespace MertexerV2.Models.Supplier
 
         [UniVerseIndex(13)]
         [UniVerseFieldName("SEL3")]
-        public string SEL3 { get; set; }
+        public string BudgetHolderCode { get; set; }
 
         public string DSEL3
         {

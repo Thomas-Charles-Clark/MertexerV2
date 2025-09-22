@@ -1,0 +1,46 @@
+Updates TPLTRANS.CUR
+from TPLEDG
+
+95 MERTEX PL                     Purchase Ledger                    28 JUL 2025 
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ 
+³ TooÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄTransaction DefinitionsÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿   ³ 
+ÀÄÄÄÄ³ Tran Id               PINVIR.CUR.D                                 ³ÄÄÄÙ 
+     ³ Description           PL INVOICES                                  ³     
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄSecondary File UpdateÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿   
+³ File Update (Dict) : TPLTRANS.CUR                                         ³   
+³                                                                           ³   
+³ Update/Delete (U/D)  U                                                    ³   
+³ Update Condition                                                          ³      	Our Field Name				    Double Checked
+³ Data File (if diff)                                                       ³   
+³ Key Source           <53>                                                 ³   	DocumentReference							✔	
+³                                                                           ³   
+³ Fld To Update  MV To Update    Oper   Value To Use                        ³   				
+³ DOCDATE                        R      <33>                                ³   	DocumentDT  								✔
+³ DUEDATE                        R      <38>                                ³   	InvoiceDueDT								✔			
+³ DISC                           R      <160>                               ³   	DiscountPercentage_Again					✔
+³ TYPE                           R      "INV"                               ³   	"INV"										✔	
+³ ITEMREF                        R      <37>                                ³   	SupplierInvoiceReference					✔
+³ DOCNO                          R      <34>                                ³   	DocumentNumber								✔
+³ VATDIS                         R      S(<248>)                            ³  		VATTaxesTotal = S(VATTaxesInCurrency)		✔
+³ CREDIT                         R      <250>-S(<248>)                      ³   	AmountInCurrency - S(VATTaxesInCurrency)	✔
+³ BALANCE                        R      <250>                               ³   	AmountInCurrency							✔
+³ ORIGVAL                        R      <250>                               ³   	OriginalValueABS							✔ (why ~ABS... ?)
+³ PERIOD                         R      B("PL.B.PERIOD")                    ³   	Period = purchaseLedgerTransactionPeriod	✔ 
+³ SUPREF                         R      <39>                                ³   	SupplierCode								✔
+³ AGE                            R      P("AGE")                            ³   	purchaseLedgerEntry.Future == true ? 0 : 1	✔
+³ UNALLOCATED                    R      0                                   ³		0.0m										✔	
+³ DISCAMT                        R      <180>                               ³   	DiscountAmountInCurrency					✔
+³ POSTDATE                       R      <35>                                ³   	PostDT										✔
+³ MEMO                           R      <56>                                ³   	Memo										✔
+³ DISCDATE                       R      <55>                                ³   	DueDT										✔
+³ DISPUTE                        R      <87>                                ³   	DisputeIndicator							✔
+³ DISPMEMO                       R      P("DMEMO")                          ³   	DisputeMemo									✔
+³ CURRENCY                       R      <161>                               ³   	CurrencyCode								✔
+³ XRATE                          R      <162>                               ³   	ExchangeRates								✔ (this is MV...?)
+³ REGNO                          R      "INV*":<199>                        ³   	PurchaseLedgerRegisterNumber				✔
+³                                                                           ³   
+³                                                                           ³   
+³                                                                           ³   
+ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ   
+                                                                                
+F2-Save                                      

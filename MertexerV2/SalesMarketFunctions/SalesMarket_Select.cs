@@ -32,7 +32,7 @@ namespace MertexerV2.SalesMarketFunctions
         {
             if (String.IsNullOrEmpty(SalesMarketCodes))
             {
-                foreach (var q in Selector<SalesAgent>.SelectAllNonParallel(
+                foreach (var q in Selector<SalesMarket>.SelectAllNonParallel(
                    true,
                    false,
                    50,
@@ -43,7 +43,7 @@ namespace MertexerV2.SalesMarketFunctions
             }
             else
             {
-                var results = Selector<SalesAgent>.Select(
+                var results = Selector<SalesMarket>.Select(
                     JsonConvert.DeserializeObject<IEnumerable<SalesMarketCode>>(SalesMarketCodes).Select(p => p.Code),
                     true,
                     false,
@@ -64,7 +64,7 @@ namespace MertexerV2.SalesMarketFunctions
             out SqlString Name
             )
         {
-            var p = (SalesAgent)obj;
+            var p = (SalesMarket)obj;
 
             Code = p.Key?.TrimReduceTruncate(1);
             Name = p.Name?.TrimReduceTruncate(50);

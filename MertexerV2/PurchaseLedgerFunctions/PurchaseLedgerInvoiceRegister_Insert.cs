@@ -34,6 +34,32 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
             try
             {
+                // We must ignore / not be presented with [Key] (and [RegisterKey]).
+                // Instead we must determine which is the next key to use by reading a PLCONTROL <5> for record "GENNO". 
+                // We must increment that number, save the record, and use that as our key.
+                // This is because of PRUNIQUE calling REFGENKEY from within the PL subsystem.
+                // Don't believe me? Don't care. Doing it anyway.
+                
+                var controlFile = session.CreateUniFile("PLCONTROL");
+
+                var gennoRecords = controlFile.ReadRecords(new[] { "GENNO" });
+
+                var gennoRecord = gennoRecords.GetRecord(0);
+
+                var numberField = gennoRecord.Record.Extract(5);
+
+                var currentKey = Convert.ToInt32(numberField.StringValue);
+
+                var newKey = currentKey += 1;
+
+                gennoRecord.Record.Replace(5, $"{newKey}");
+
+                controlFile.WriteRecords(gennoRecords);
+
+                invoiceRegisterEntry.Key = $"{newKey}";
+
+                invoiceRegisterEntry.RegisterKey = invoiceRegisterEntry.Key;
+
                 var extantRecord = uniVerseFile.ReadField(invoiceRegisterEntry.Key, 0).StringValue;
 
                 if (!String.IsNullOrEmpty(extantRecord))
@@ -82,6 +108,26 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                 try
                 {
+                    var controlFile = ce.Session.CreateUniFile("PLCONTROL");
+
+                    var gennoRecords = controlFile.ReadRecords(new[] { "GENNO" });
+
+                    var gennoRecord = gennoRecords.GetRecord(0);
+
+                    var numberField = gennoRecord.Record.Extract(5);
+
+                    var currentKey = Convert.ToInt32(numberField.StringValue);
+
+                    var newKey = currentKey += 1;
+
+                    gennoRecord.Record.Replace(5, $"{newKey}");
+
+                    controlFile.WriteRecords(gennoRecords);
+
+                    invoiceRegisterEntry.Key = $"{newKey}";
+
+                    invoiceRegisterEntry.RegisterKey = invoiceRegisterEntry.Key;
+
                     var extantRecord = uniVerseFile.ReadField(invoiceRegisterEntry.Key, 0).StringValue;
 
                     if (!String.IsNullOrEmpty(extantRecord))

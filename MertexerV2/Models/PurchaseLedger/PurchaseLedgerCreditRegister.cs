@@ -195,6 +195,13 @@ namespace MertexerV2.Models.PurchaseLedger
         public decimal AmountSterling { get; set; }
 
         /// <summary>
+        /// ARRAAERAREAREHGKFDJHKGDFGKJKJL;SDFGJ;HSFGDKKLSFFGZDKJHBL,ZJHDFGVBSK,ZKFVBLJHSDKFVBJHLDSZKJNLFVBD.
+        /// </summary>
+        [UniVerseIndex(53)]
+        [UniVerseFieldName("SS.REGISTERKEY")]
+        public string RegisterKey { get; set; }
+
+        /// <summary>
         /// Default: F("PLSUP",<39>)<20>
         /// Validation: M: AND F:PLTERMS,4,,41{Must Exist on 'PLTERMS'}
         /// </summary>

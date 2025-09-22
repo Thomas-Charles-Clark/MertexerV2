@@ -1,0 +1,40 @@
+Updates GLBATCHDATA
+
+95 MERTEX PL                     Purchase Ledger                    28 JUL 2025 
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ 
+³ TooÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄTransaction DefinitionsÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿   ³ 
+ÀÄÄÄÄ³ Tran Id               PINVIR.CUR.D                                 ³ÄÄÄÙ 
+     ³ Description           PL INVOICES                                  ³     
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄSecondary File UpdateÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿   
+³ File Update (Dict) : GLBATCHDATA                                          ³   
+³                                                                           ³   
+³ Update/Delete (U/D)  U                                                    ³   
+³ Update Condition                                                          ³   
+³ Data File (if diff)                                                       ³   
+³ Key Source           <53>                                                 ³   
+³                                                                           ³   Our Field
+³ Fld To Update  MV To Update    Oper   Value To Use                        ³   
+³ TYPE                           R      "RFPOST"                            ³   Type
+³ DOCREF                         R      <53>                                ³   DocumentReference
+³ PREFIX                         R      "P"                                 ³   Prefix
+³ DOCDATE                        R      <33>                                ³   DocumentDT
+³ POSTDATE                       R      <35>                                ³   PostDT
+³ SUPREF                         R      <39>                                ³   SupplierReference
+³ AMOUNT                         R      <43>                                ³	Amount
+³ GLCODE                         R      <44>                                ³   
+³ VATTAX                         R      S(<48>)                             ³   
+³ DOCTOT                         R      <50>                                ³   
+³ CUSNAME                        R      F("PLSUP",<39>)<1,1>                ³   
+³ TRANSTYPE                      R      "PINV"                              ³   
+³ GLSUB                          R      <133>                               ³   
+³ MEMO                           R      <56>                                ³   
+³ MEMO1                          R      <82>                                ³   
+³ ITEMREF                        R      <37>                                ³   
+³                                                                           ³   
+³                                                                           ³   
+³                                                                           ³   
+³                                                                           ³   
+³                                                                           ³   
+ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ   
+                                                                                
+F2-Save                                                                         

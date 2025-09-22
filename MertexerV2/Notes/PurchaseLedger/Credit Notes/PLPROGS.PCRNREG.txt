@@ -1,0 +1,114 @@
+> CT PLPROGS PCRNREG
+
+                                                                           
+     PCRNREG                                                                    
+0001     SUBROUTINE PCRNREG                                                     
+0002              * V1.1 FIX FOR @ACTION NOT SET BACK TO 1 IF ESCAPE BACK       
+0003              *      LEADING TO INVOICE NUMBER NOT GENERATED...             
+0004              * 27/09/97                                                    
+0005              *                                                             
+0006              * DATE AMENDED : 11/10/97                                     
+0007              * AMENDED BY   : PBP                                          
+0008              * REASON       : ENSURE RFPLUFO01 IS CALLED TO SET REQUIRED   
+0009              *                DETAILS FOR ALLOCATING CREDIT NOTES FROM     
+0010              *                REGISTER IN ENTRY POINT 1                    
+0011              * VERSION      : 1.2                                          
+0012              *                                                             
+0013              * DATE AMENDED : 23/11/97                                     
+0014              * AMENDED BY   : PBP                                          
+0015              * REASON       : PREVENT ALREADY ALLOCATED MESSAGE IF IN      
+0016              *                AMEND MODE. THE ERROR WILL NOW ONLY BE       
+0017              *                GIVEN IN INSERT MODE.                        
+0018              *                ALSO HANDLES BATCH POSTING ON PLBATCHDATA    
+0019              *                DETAILS FOR ALLOCATING CREDIT NOTES FROM     
+0020              *                REGISTER IN ENTRY POINT 1                    
+0021              * VERSION      : 1.3                                   
+0022              *********************************************************     
+0023      $INCLUDE RFPROGS COMMON                                               
+0024      ENTRY=PARAM                                                           
+0025      BEGIN CASE                                                            
+0026      CASE ENTRY=1       ;*VERIFY AND READ IN                               
+0027           GOSUB 30    ;* OPEN PLCRNREG                                     
+0028           IF RTN.FLAG THEN GOTO 999                                        
+0029         * V1.3+                                                            
+0030           ITEM.READ = 0                                                    
+0031           OPEN "","PLBATCHDATA" TO F.PLBATCHDATA ELSE                      
+0032                CALL SB.DISP(3,'PLBATCHDATA [E1]')                          
+0033                RTN.FLAG = 1; GOTO 999                                      
+0034           END                                                              
+0035           IF KEY NE '' THEN                                                
+0036              READ RECORD FROM F.PLBATCHDATA,KEY THEN                       
+0037                   PARMS(2) = ACTION                                        
+0038                   ITEM.READ = 1                                            
+0039              END                                                           
+0040           END                                                              
+0041           IF NOT(ITEM.READ) THEN                                           
+0042              READ RECORD FROM PLCRN, VALUE ELSE                            
+0043                   CALL SB.DISP(3,VALUE:' Credit Note Register not found')  
+0044                   RTN.FLAG = 1                                             
+0045                   GOTO 999                                                 
+0046              END                                                           
+0047           END                                                              
+0048         * IF RECORD<1>="Y" THEN GOSUB 20 ;GOTO 999                         
+0049           IF RECORD<1>="Y" AND ACTION = '1' THEN GOSUB 20 ;GOTO 999        
+0050           IF ACTION = '1' THEN                                             
+0051              RECORD<34>='';RECORD<53>=''                                   
+0052           END                                                              
+0053         * V1.1+                                                            
+0054           ACTION = 1                                                       
+0055         * V1.1-                                                            
+0056           IF RECORD<199> = "" THEN PARMS(2) = ACTION                       
+0057           ACTION = 2                                                       
+0058         * RECORD<34>='';RECORD<53>=''                                      
+0059         * V1.3-                                                            
+0060         * V1.2+                                                            
+0061           SAVE.VALUE = VALUE                                               
+0062           VALUE = RECORD<39>                                               
+0063           SAVE.SUP = RECORD<39>                                            
+0064           RECORD<39> = ''                                                  
+0065           PARAM = '1'; CALL RFPLUFO01                                      
+0066           RECORD<39> = SAVE.SUP                                            
+0067           VALUE = SAVE.VALUE                                     
+0070           GOSUB 30                                                         
+0071           READU REC FROM PLCRN,RECORD<199> ELSE GOSUB 20;RELEASE PLCRN;RETURN                                                                         
+0072         * V1.3+                                                            
+0073         * IF REC<1> NE '' THEN GOSUB 20; RELEASE PLCRN;RETURN              
+0074           IF PARMS(2) = 1 THEN                                             
+0075              IF REC<1> NE '' THEN GOSUB 20; RELEASE PLCRN;RETURN           
+0076           END                                                              
+0077         * V1.2-                                                            
+0078           VALUE = RECORD<199>                                              
+0079           WRITEV "Y" ON PLCRN,RECORD<199>,1                                
+0080         * CHECK THAT CRN REGISTER STILL OK TO PROCEED OR IF DELETE BATCH TRANSACTION                                                                  
+0081      CASE ENTRY=3                                                          
+0082           IF ACTION = 1 OR ACTION = '' THEN                                
+0083              OK=OCONV(RECORD<199>,'TPLCRNREG;X;;0')                        
+0084              IF OK NE RECORD<199> THEN GOSUB 20;  RETURN                   
+0085              OK=OCONV(RECORD<199>,'TPLCRNREG;X;;1')                        
+0086              IF OK = 'Y' THEN GOSUB 20  ; RETURN                           
+0087              END                                                           
+0088      CASE ENTRY = 4                                                        
+0089           IF ACTION = 3 THEN     ;* DELETE FROM BATCH                      
+0090              GOSUB 30                                                      
+0091              WRITEV "" ON PLCRN,RECORD<199>,1                              
+0092              END                                                           
+0093           CALL PNUNIQUE                                                    
+0094      END CASE                                                              
+0095      RTN.FLAG=0                                                            
+0096 999 *                                                                      
+0097      RETURN                                                                
+0098 *------------------------------------------                                
+0099 20*                                                                        
+0100         CALL SB.DISP(3,'Credit Note Register Number already Allocated')    
+0101         RTN.FLAG = 1                                                       
+0102         RETURN                                                             
+0103 *-------------------------------------------                               
+0104 30*                                                                        
+0105      OPEN '',"PLCRNREG" TO PLCRN ELSE                                      
+0106        CALL SB.DISP(3,'PLCRNREG FILE NOT FOUND')                           
+0107        RTN.FLAG = 1                                                        
+0108        END                                                                 
+0109      RETURN                                                                
+0110     END                                                                    
+MERTEX>                                                                         
+F2-Save F4-Del F5-List F6-Menu F7-Edit                                          

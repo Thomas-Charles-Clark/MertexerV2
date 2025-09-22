@@ -144,7 +144,8 @@ namespace MertexerV2.PurchaseLedgerFunctions
             out SqlDecimal ExchangeRate,
             out SqlString Dispute,
             out SqlString DisputeMemo,
-            out SqlString MertexCurrencyCode
+            out SqlString MertexCurrencyCode,
+            out SqlString RegisterKey
             )
         {
             var result = (PurchaseLedgerCreditRegister)obj;
@@ -198,6 +199,8 @@ namespace MertexerV2.PurchaseLedgerFunctions
             Dispute = result.Disputed?.TrimReduceTruncate(1) ?? SqlString.Null;
 
             DisputeMemo = result.DisputeMemo?.TrimReduceTruncate(255) ?? SqlString.Null;
+
+            RegisterKey = result.RegisterKey ?? SqlString.Null;
         }
     }
 }

@@ -1,0 +1,23 @@
+                                                                                
+     PRUNIQUE.DES                                                               
+0001     SUBROUTINE PRUNIQUE.DES                                                
+0002     * CHECKS THAT A GIVEN KEY DOES NOT EXIST ON A SERIES OF FILES          
+0003      $INCLUDE RFPROGS COMMON                                               
+0004      IF RECORD<53> NE "" THEN GOTO 20                                      
+0005      PARAM="PLINVREG.5.6..."                                               
+0006      CALL RFGENKEY                                                         
+0007      RECORD<53>=VALUE                                                      
+0008      PARMS(11)=RECORD<33>                                                  
+0009 20   *IF GUI THEN                                                          
+0010      CALL SB.DISP(4,"Invoice Register No :":RECORD<53>:"\Press Return to Continue\0")                                                                 
+0011      *END ELSE                                                             
+0012      *  CALL SB.DISP(2,'Invoice Register No :':RECORD<53>)                 
+0013      *  PRINT @(26,15):"Press Return to Continue":                         
+0014      *  PROMPT ""                                                          
+0015      *  INPUT X                                                            
+0016      *END                                                                  
+0017      RETURN                                                                
+0018      END                                                                   
+MERTEX>                                                                         
+F2-Save F4-Del F5-List F6-Menu F7-Edit                                          
+

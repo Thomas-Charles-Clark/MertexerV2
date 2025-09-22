@@ -1,0 +1,41 @@
+Updates PLADJAUDIT
+from... TPLEDG
+
+95 MERTEX PL                     Purchase Ledger                    28 JUL 2025 
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ 
+³ TooÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄTransaction DefinitionsÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿   ³ 
+ÀÄÄÄÄ³ Tran Id               PINVIR.CUR.D                                 ³ÄÄÄÙ 
+     ³ Description           PL INVOICES                                  ³     
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄSecondary File UpdateÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿   
+³ File Update (Dict) : PLADJAUDIT                                           ³   
+³                                                                           ³   
+³ Update/Delete (U/D)  U                                                    ³   
+³ Update Condition                                                          ³   
+³ Data File (if diff)                                                       ³   
+³ Key Source           "*":<53>                                             ³   
+³                                                                           ³   
+³ Fld To Update  MV To Update    Oper   Value To Use                        ³   
+³ DOCTOT                         R      <50>                                ³   
+³ TYPE                           R      "INV"                               ³   
+³ DOCDATE                        R      <33>                                ³   
+³ POSTDATE                       R      @DATE                               ³   
+³ VATDIS                         R      F("TPLTRANS",<53>)<6>               ³   
+³ CUSREF                         R      <39>                                ³   
+³ BALANCE                        R      F("TPLTRANS",<53>)<9>               ³
+³ GLCODE                         R      <44>                                ³   
+³ DISCOUNTS                      R      F("TPLTRANS",<53>)<20>              ³   
+³ GLAMOUNT                       R      <43>                                ³   
+³ PORT                           R      @PORT                               ³   
+³ TIME                           R      @TIME                               ³   
+³ DISPUTE                        R      <87>                                ³   
+³ DUEDATE                        R      <38>                                ³   
+³ CURR                           R      <161>                               ³   
+³ VATDIS.CUR                     R      F("TPLTRANS.CUR",<53>)<6>           ³   
+³ DOCTOT.CUR                     R      <250>                               ³   
+³ XRATE                          R      <162>                               ³   
+³                                                                           ³   
+³                                                                           ³   
+³                                                                           ³   
+ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ   
+                                                                                
+F2-Save                                                                         

@@ -149,7 +149,8 @@ namespace MertexerV2.PurchaseLedgerFunctions
             out SqlDateTime SettlementDT,
             out SqlString MertexCurrencyCode,
             out SqlDecimal DiscountPercentage,
-            out SqlDecimal DiscountAmount
+            out SqlDecimal DiscountAmount,
+            out SqlString RegisterKey
             )
         {
             var result = (PurchaseLedgerInvoiceRegister)obj;
@@ -209,6 +210,8 @@ namespace MertexerV2.PurchaseLedgerFunctions
             DiscountPercentage = result.DiscountPercentage ?? SqlDecimal.Null;
 
             DiscountAmount = result.DiscountAmount ?? SqlDecimal.Null;
+
+            RegisterKey = result.RegisterKey ?? SqlString.Null;
         }
     }
 }

@@ -1,0 +1,413 @@
+>CT PLPROGS RFPLUFO01
+
+     RFPLUFO01                                                                  
+0001 SUBROUTINE RFPLUFO01                                                       
+0002 * VERSION HANDLING UNALLOCATED                                             
+0003 * CASH ALLOCATION UFO                                                      
+0004 * ENTRY POINT 1 - LOAD TRANSACTION DETAILS FROM PLSUP/TPLTRANS             
+0005 * ENTRY POINT 2 - HANDLE ALLOCATION PROCESS                                
+0006 *VERSION : 1                                                               
+0007 *LAST AMENDED BY : JES              DATE : 11/04/89                        
+0008 *WRITTEN BY      : RGW              DATE : 16/05/88                        
+0009 ************************************************************************   
+0010 *    Summary description of program    (3 to 10 lines)               *   
+0011 * 	  THIS SUBROUTINE IS SPECIFIC FOR PURCHASE LEDGER WITH GENERAL A/C PACKAGE*
+0012 *    IT IS USED AS A VALIDATION UFO ON THE SUPPLIER REFERENCE PROMPT   *   
+0013 *    IT USES THE SUPPLIER REFERENCE AS A KEY TO THE SUPPLIER FILE      *   
+0014 *    PLSUP AND READS FROM IT ATTRIBUTE 19 WHICH CONTAINS ALL A M/V    *    
+0015 *    OF ALL A/C TRANSACTION KEYS.                                      *   
+0016 *    THE PROGRAM THEN LOADS A TABLE OF TRANSACTION DETAILS, WHICH ARE  *   
+0017 *    UPDATED IN THE 2ND ENTRY POINT OF THIS UFO.                           
+0018 *                                                                      *   
+0019 *                                                                          
+0020 ************************************************************************   
+0021 *    PROGRAM AMENDMENT HISTORY:                    
+0022 * 		Summarise main areas of change, by version no           
+0023 *                                                                          
+0024 * AMENDED BY    : PBP                                                      
+0025 * DATE AMENDED  : 19/06/97                                                 
+0026 * REASON        : FIX PROBLEM WITH CURRENCY VERSION OF "STOP CHEQUES"      
+0027 *                 NOT BRINGING UP TRANSACTIONS.                            
+0028 * VERSION       : 1.1                                                      
+0029 *                                                                          
+0030 *****************************************************************************                                                                         
+0031 * AMENDED BY    : PBP                                                      
+0032 * DATE AMENDED  : 03/08/97                                                 
+0033 * REASON        : EXTRA LOGIC FOR MULTI-CURRENCY IMPLEMENTATIONS           
+0034 *                 TO SET UP CURRENCY BALANCES IN <239> AS THE              
+0035 *                 EQUIVALENT OF <139> FOR STERLING...                      
+0036 *                                                                          
+0037 *                 THESE CAN THEN BE USED WHEN CALCULATING CURRENCY         
+0038 *                 EQUIVALENTS. IN ADDITION TO THE NORMAL CALCULATION       
+0039 *                 SIMPLY APPLYING XRATE LOGIC CAN BE ADDED TO              
+0040 *                 PREVENT ROUNDING ERRORS BY CALCULATING FULL DOCUMENT     
+0041 *                 BALANCES/UNALLOCS WHERE FULL AMOUNTS IN STERLING ARE     
+0042 *                 PAID OR TAKEN...                                         
+0043 * VERSION       : 1.2            
+0044 *****************************************************************************                                                
+0045 * AMENDED BY    : PBP                                                      
+0046 * DATE AMENDED  : 23/11/97                                                 
+0047 * REASON        : FIX BUG WITH TREC.CUR UNASSIGNED MESSAGES WHEN RUNNING   
+0048 *                 NONE-CURRENCY IMPLEMENTATIONS.                           
+0049 * VERSION       : 1.3                                                      
+0050 ************************************************************************   
+0051 ************************************************************************   
+0052      $INCLUDE RFPROGS COMMON                                               
+0053     EQUATE VM TO CHAR(253)                                                 
+0054 *** BREAK OFF                                                              
+0055 CASENO =PARAM                                                              
+0056     BEGIN CASE                                                             
+0057          CASE CASENO = 1                                                   
+0058             IF RECORD<39> <> "" THEN                                       
+0059                IF VALUE <> RECORD<39> THEN                                 
+0060                   CALL SB.DISP(3 , "Field May Not Be Amended")             
+0061                   RTN.FLAG = 1 ; RETURN                                    
+0062                END                                                         
+0063                IF VALUE = RECORD<39> THEN RETURN ;    ! NO CHANGE TO FIELD 
+0064             END                                                            
+0065             GOSUB 100 ; ! BUILD TRANSACTIONS ...     
+0066		  CASE CASENO=2 ;GOSUB 200     ;!FROM CASH RECEIPTS                            
+0067          CASE CASENO=3 ;GOSUB 200     ;!FROM CASH ALLOCATION               
+0068          CASE CASENO=4 ;GOSUB 200     ;* FROM CREDIT JOURNALS              
+0069          CASE CASENO=5 ;GOSUB 200     ;!FROM CREDIT NOTES                  
+0070          CASE CASENO=6 ;GOSUB 200     ;*FROM DEBIT JOURNALS                
+0071          CASE CASENO=7 ;GOSUB 200     ;*FROM STOPPED CHEQUES               
+0072     END CASE                                                               
+0073     IF CASENO = 5 THEN RECORD<65>=RECORD<50>-RECORD<113>                   
+0074     RTN.FLAG = 0                                                           
+0075     RETURN                                                                 
+0076 100 * LOAD TRANSACTION DETAILS INTO RECORD<134> TO RECORD<140>,ALLOCATED INTO RECORD<74>                                                              
+0077 *                                                                          
+0078 RECORD<113>=0                                                              
+0079 OPEN "","PLSUP" TO PLSUP ELSE                                              
+0080   ERRMESS = "PLSUP FILE NOT AVAILABLE"                                     
+0081   CALL SB.DISP(NO,ERRMESS)                                                 
+0082   CHAIN "ZKERROR"                                                          
+0083 END                                                                        
+0084     OPEN "","TPLTRANS" TO TRANS ELSE                                       
+0085          CALL SB.DISP(3,'TPLTRANS FILE NOT AVAILABLE')                     
+0086          CHAIN 'ZKERROR'                                                   
+0087          END                                                                
+0088 *                                                                          
+0089 * V1.2+                                                                    
+0090 OPEN "","COMPANY" TO F.COMPANY ELSE                                        
+0091      CALL SB.DISP(3,'COMPANY [E1]')                                        
+0092      CHAIN "ZKERROR"                                                       
+0093 END                                                                        
+0094 READ COMPREC FROM F.COMPANY,"1" ELSE                                       
+0095      CALL SB.DISP(3,'COMPANY RECORD NOT FOUND')                            
+0096      CHAIN "ZKERROR"                                                       
+0097 END                                                                        
+0098 CURRENCY.FLAG = COMPREC<27,2>                                              
+0099 IF CURRENCY.FLAG = 'Y' THEN                                                
+0100    OPEN "","TPLTRANS.CUR" TO F.TPLTRANS.CUR ELSE                           
+0101         CALL SB.DISP(3,'TPLTRANS.CUR [E1]')                                
+0102         CHAIN "ZKERROR"                                                    
+0103    END                                                                     
+0104 END                                                                        
+0105 * V1.2-                                                                    
+0106 *                                                                          
+0107 READV WK FROM PLSUP,VALUE,19 ELSE                                          
+0108   WK = ""                                                                  
+0109 END                                                                        
+0110 RECORD<66> = WK                                                             
+0112     MAX.CNT = DCOUNT(RECORD<66>,VM)                                        
+0113      RECORD<134>='';RECORD<135>='';RECORD<136>='';RECORD<137>='';RECORD<138>=''                                                                       
+0114     RECORD<139>='';RECORD<140>='';RECORD<74>='';RECORD<141>=''             
+0115     RECORD<239>=''; *V1.2                                                  
+0116     IF MAX.CNT=0 THEN RETURN                                               
+0117     I=0                                                                    
+0118     FOR J = 1 TO MAX.CNT                                                   
+0119          TRANKEY=RECORD<66,J>                                              
+0120          GOSUB 120                                                         
+0121     NEXT J                                                                 
+0122 *                                                                          
+0123     RETURN                                                                 
+0124 *=================================                                         
+0125 120 * LOAD TPLTRANS DETAILS IN STORAGE                                     
+0126     READ TREC FROM TRANS,TRANKEY ELSE                                      
+0127          CALL SB.DISP(3,'Error Reading TPLTRANS,SUP=':VALUE:'/':TRANKEY)   
+0128          CHAIN "ZKERROR"                                                   
+0129          END                                                               
+0130 * V1.2+                                                                    
+0131     IF CURRENCY.FLAG = 'Y' THEN                                            
+0132        READ TREC.CUR FROM F.TPLTRANS.CUR,TRANKEY ELSE                                  
+0133           * No Currency Record - Must Be Sterling Transaction Record -     
+0134           * Use Record from TPLTRANS...                                    
+0135           * This Record is only used to Set Up <239> anyway...             
+0136             TREC.CUR = TREC                                                
+0137        END                                                                 
+0138     END ELSE                                                               
+0139        TREC.CUR = TREC ;* V1.3 None-Multi Currency Implementation...       
+0140     END                                                                    
+0141 * V1.2-                                                                    
+0142 *    IF TREC<9>-TREC<22> = 0 THEN RETURN                                   
+0143    * V1.1+                                                                 
+0144    * IF OTHER(4) NE "STOPO" THEN                                           
+0145    *    IF TREC<9>-TREC<22> = 0 THEN RETURN                                
+0146    * END                                                                   
+0147      IF OTHER(4)[1,5] NE "STOPO" THEN                                      
+0148         IF TREC<9>-TREC<22> = 0 THEN RETURN                                
+0149      END                                                                   
+0150    * V1.1-                                                                 
+0151     I=I+1                                                                  
+0152     RECORD<141,I>=TRANKEY                                                  
+0153     RECORD<134,I> = TREC<5>  ;*DOC REF                                     
+0154     RECORD<135,I> = TREC<3>  ;*TRANS TYPE                                  
+0155     RECORD<136,I> = TREC<1>  ;*DOC DATE       
+0156     RECORD<137,I> = TREC<4>  ;*ITEM REF
+0157     RECORD<138,I> = TREC<14> ;*ORIG VAL
+0158     RECORD<139,I> = TREC<9>-TREC<22>    ;* OUTSTANDING BALANCE             
+0159     RECORD<239,I> = TREC.CUR<9>-TREC.CUR<22>    ;* V1.2                    
+0160     RECORD<140,I> = TREC<16>  ;*DISPUTED                                   
+0161     RECORD<74,I> = 0        ;*ALLOCATED                                    
+0162     RETURN                                                                 
+0163 *=================================                                         
+0164 *                                                                          
+0165 200 * 2ND ENTRY POINT - ALLOCATE CASH                                      
+0166     IF VALUE = 'N' THEN RETURN                                             
+0167     OK=OCONV(RECORD<39>,"TPLCHQ;X;;0")                                     
+0168     IF OK NE '' THEN                                                       
+0169        CALL SB.DISP(3,"Supplier is in Auto Payment Run - No Allocations Allowed")                                                                     
+0170        RETURN                                                              
+0171        END                                                                 
+0172     REFRESH = 0                                                            
+0173     ENTRIES=DCOUNT(RECORD<141>,VM)                                         
+0174     BEGIN CASE                                                             
+0175         CASE CASENO = 2                                                    
+0176             TOBEALLOC=RECORD<62>+RECORD<63>-RECORD<64>-RECORD<65>+RECORD<164>                                      
+0177         CASE CASENO = 3                                                    
+0178             TOBEALLOC=RECORD<64> + RECORD<65>                              
+0179        CASE CASENO = 4   ;*CREDIT JOURNALS                                 
+0180            TOBEALLOC = -RECORD<50>                                         
+0181         CASE CASENO = 5                                                    
+0182             TOBEALLOC = RECORD<50> - RECORD<64>      ;! CREDIT NOTES       
+0183        CASE CASENO = 6      ;*DEBIT JOURNALS                               
+0184            TOBEALLOC= RECORD<50>                                           
+0185        CASE CASENO = 7   ;*STOPPED CHEQUES                                 
+0186            TOBEALLOC = -(RECORD<63>+RECORD<62>)                            
+0187     END CASE                                                               
+0188     ALLOCATED = 0                                                          
+0189     ORIGTOBE = TOBEALLOC                                                   
+0190     FOR I = 1 TO ENTRIES                                                   
+0191          ALLOCATED = ALLOCATED + RECORD<74,I>                              
+0192          TOBEALLOC = TOBEALLOC - RECORD<74,I>                              
+0193     NEXT I                                                                 
+0194     RECORD<113> = ALLOCATED                                                
+0195     MAX.PAGES = INT(ENTRIES/17)                                            
+0196     TEMP=REM(ENTRIES,17)                                                   
+0197     IF TEMP NE 0 THEN MAX.PAGES = MAX.PAGES + 1                            
+0198     PAGENO=1                                                               
+0199     GOSUB 220               
+0200 205 OPTION = ""                
+0201    HELP.MESS="Valid Options:- A=Automatic,=Reset,1.3 for range 1 to 3,7 for item 7,P2 to go to Page 2  "                                             
+0202     CALL SB.INPUT(13,1,5,0,"",HELP.MESS,OPTION,ESC)                        
+0203     IF ESC OR OPTION = "" THEN                                             
+0204         RECORD<113>=ALLOCATED                                              
+0205        IF CASENO = 7 OR CASENO = 4 THEN RECORD<113>=-RECORD<113>           
+0206         ESC=0                                                              
+0207         REFRESH=0                                                          
+0208         RECORD<66>=RECORD<141>                                             
+0209         REFRESH = 1                                                        
+0210         RETURN                                                             
+0211         END                                                                
+0212 *     IF OPTION[1,1]="?" THEN                                              
+0213 *          CALL HELP.SB.DISP('Valid Options:- A=Automatic,R=Reset,1.3 for range 1 to 3,7 for item 7,P2 to go to Page 2  {CASHALLOC}','PLHELP',REFRESH)                                                                              
+0214 *          GOSUB 220                                                       
+0215 *          GOTO 205                                                        
+0216 *          END                                                             
+0217     IF OPTION[1,1] = "P" THEN GOSUB 230 ;GOTO 205                          
+0218     IF OPTION      = "R" THEN GOSUB 240 ;GOTO 205                          
+0219     IF OPTION      = "A" THEN GOSUB 250 ;GOTO 205     
+0220     X=COUNT(OIPTION,".")                 
+0221     IF X=1               THEN GOSUB 260 ;GOTO 205                          
+0222     IF NUM(OPTION)       THEN GOSUB 270 ;GOTO 205                          
+0223     PRINT @(0,1):@(-4):                                                    
+0224     CALL SB.DISP(3,'Invalid Option Selected')                              
+0225     PRINT @(0,1):@(-4):@(0,1):'Enter Option':@(22,1):'Allocated':          
+0226     PRINT @(33,1):ALLOCATED"R26M#11":'   To Be Allocated':                 
+0227     PRINT @(64,1):TOBEALLOC"R26M#11":                                      
+0228     GOTO 205                                                               
+0229 *==============================================                            
+0230 220 * DISPLAY CURRENT PAGE                                                 
+0231     CALL SB.DISP(1,HEAD)                                                   
+0232     PRINT @(0,1):@(-3):@(0,1):'Enter Option':@(22,1):'Allocated':          
+0233     PRINT @(33,1):ALLOCATED"R26M#11":'   To Be Allocated':                 
+0234     PRINT @(64,1):TOBEALLOC"R26M#11":@(0,3):STR("-",80):                   
+0235     PRINT@(0,4):'    Doc No.   Type   Date     Item Ref   Amount       Balance     Allocated  Dp':                                                    
+0236     FIRST.ITEM=((PAGENO - 1) * 17) + 1                                     
+0237     LAST.ITEM= PAGENO *17                                                  
+0238     IF LAST.ITEM>ENTRIES THEN LAST.ITEM=ENTRIES                            
+0239     DROW=4 ;PRINT @(0,5):@(-3):                                            
+0240     FOR I = FIRST.ITEM TO LAST.ITEM                                        
+0241          DROW = DROW+1                       
+0242		  PRINT @(0,DROW):I"R#2":'.':SPACE(1):RECORD<134,I>"L#8":SPACE(3):                                
+0243          PRINT RECORD<135,I>"L#3":SPACE(2):                                
+0244          IF RECORD<136,I>="" THEN PRINT SPACE(8): ELSE PRINT RECORD<136,I>"D2/":                                                                      
+0245          PRINT SPACE(1):                                                   
+0246          PRINT RECORD<137,I>"L#10":SPACE(1):RECORD<138,I>"R26M#11":        
+0247          PRINT SPACE(1):RECORD<139,I>"R26M#11":                            
+0248          PRINT SPACE(3):RECORD<74,I>"R26M#11":"  ":RECORD<140,I>:          
+0249     NEXT I                                                                 
+0250     RETURN                                                                 
+0251 *=========================================                                 
+0252 230 * PROCESS PAGE REQUEST                                                 
+0253     X=LEN(OPTION)                                                          
+0254     IF X = 1 THEN GOTO 238                                                 
+0255     PAGEREQ = OPTION[2,X-1]                                                
+0256     IF NUM(PAGEREQ) THEN NULL ELSE GOTO 238                                
+0257     PAGEREQ = ICONV(PAGEREQ,'MR')                                          
+0258     IF PAGEREQ < 1 THEN GOTO 238                                           
+0259     IF PAGEREQ = PAGENO THEN RETURN                                        
+0260     IF PAGEREQ > MAX.PAGES THEN GOTO 238                                   
+0261     * CORRECT PAGE NUMBER FOUND - NOW DISPLAY                              
+0262     PAGENO = PAGEREQ                                                       
+0263     GOSUB 220     ;*DISPLAY PAGE OF DATA                                        
+0264     RETURN                                                                 
+0265 238 PRINT @(0,1):@(-4):                                                    
+0266     CALL SB.DISP(3,'Invalid Page Requested')                               
+0267     PRINT @(0,1):@(-4):@(0,1):'Enter Option':@(22,1):'Allocated':          
+0268     PRINT @(33,1):ALLOCATED"R26M#11":'   To Be Allocated':                 
+0269     PRINT @(64,1):TOBEALLOC"R26M#11":                                      
+0270     RETURN                                                                 
+0271 *=================================================                         
+0272 240 * RESET ALL ALLOCATIONS                                                
+0273     FOR I = 1 TO ENTRIES                                                   
+0274          RECORD<74,I>=0                                                    
+0275     NEXT I                                                                 
+0276     ALLOCATED = 0                                                          
+0277     TOBEALLOC = ORIGTOBE                                                   
+0278     PRINT @(0,1):@(-4):@(0,1):'Enter Option':@(22,1):'Allocated':          
+0279     PRINT @(33,1):ALLOCATED"R26M#11":'   To Be Allocated':                 
+0280     PRINT @(64,1):TOBEALLOC"R26M#11":                                      
+0281     DROW=4                                                                 
+0282     FOR I = FIRST.ITEM TO LAST.ITEM                                        
+0283          DROW = DROW + 1                                                   
+0284          PRINT @(65,DROW):RECORD<74,I>"R26M#11":                           
+0285     NEXT I                                                                 
+0286     RETURN
+0287 *===================================================                       
+0288 250 * AUTOMATIC ALLOCATIONS (OPTION A)                                     
+0289     IF PAGENO NE 1 THEN                                                    
+0290          PRINT @(0,1):@(-4):                                               
+0291          CALL SB.DISP(3,'Automatic Allocations Must Start On Page 1')      
+0292          PRINT @(0,1):@(-4):@(0,1):'Enter Option':@(22,1):'Allocated':     
+0293          PRINT @(33,1):ALLOCATED"R26M#11":'   To Be Allocated':            
+0294          PRINT @(64,1):TOBEALLOC"R26M#11":                                 
+0295          RETURN                                                            
+0296          END                                                               
+0297     FOR I = 1 TO ENTRIES                                                   
+0298          GOSUB 252                                                         
+0299     NEXT I                                                                 
+0300     DROW = 4                                                               
+0301     FOR I = FIRST.ITEM TO LAST.ITEM                                        
+0302          DROW = DROW + 1                                                   
+0303          PRINT @(65,DROW):RECORD<74,I>"R26M#11":                           
+0304     NEXT I                                                                 
+0305     PRINT @(0,1):@(-4):@(0,1):'Enter Option':@(22,1):'Allocated':          
+0306     PRINT @(33,1):ALLOCATED"R26M#11":'   To Be Allocated':                 
+0307     PRINT @(64,1):TOBEALLOC"R26M#11":                                      
+0308     RETURN                                                                 
+0309 252 * ALLOCATE CASH
+0310	 IF TOBEALLOC = 0 THEN RETURN
+0311     IF RECORD<139,I> ="" OR RECORD<139,I>=0 OR RECORD<140,I> NE '' THEN RETURN                                                                        
+0312 *    IF RECORD<74,I> NE "" AND RECORD<74,I> > 0 THEN RETURN                
+0313     IF RECORD<74,I> NE "" AND RECORD<74,I> NE 0 THEN RETURN                
+0314     THISALLOC=RECORD<139,I>                                                
+0315     IF THISALLOC > TOBEALLOC THEN THISALLOC = TOBEALLOC                    
+0316     IF THISALLOC > TOBEALLOC THEN THISALLOC = 0                            
+0317     RECORD<74,I> = THISALLOC                                               
+0318     TOBEALLOC = TOBEALLOC - THISALLOC                                      
+0319     ALLOCATED = ALLOCATED + THISALLOC                                      
+0320     RETURN                                                                 
+0321 *======================================================                    
+0322 260 * PROCESS A RANGE OF NUMBERS                                           
+0323     FROM.RANGE = FIELD(OPTION,".",1) ;TO.RANGE=FIELD(OPTION,".",2)         
+0324     IF OPTION NE FROM.RANGE:".":TO.RANGE THEN                              
+0325          PRINT @(0,1):@(-4):                                               
+0326          CALL SB.DISP(3,'Invalid Range Option Input')                      
+0327          PRINT @(0,1):@(-4):@(0,1):'Enter Option':@(22,1):'Allocated':     
+0328          PRINT @(33,1):ALLOCATED"R26M#11":'   To Be Allocated':            
+0329          PRINT @(64,1):TOBEALLOC"R26M#11":                                 
+0330          RETURN                                                            
+0331          END                                                              
+0332	 IF FROM.RANGE < FIRST.ITEM OR FROM.RANGE > LAST.ITEM OR TO.RANGE < FIRST.ITEM OR TO.RANGE > LAST.ITEM THEN                                        
+0333          PRINT @(0,1):(-3):                                                
+0334          CALL SB.DISP(3,'Range Items Must Appear On Current Page')         
+0335          PRINT @(0,1):@(-4):@(0,1):'Enter Option':@(22,1):'Allocated':     
+0336          PRINT @(33,1):ALLOCATED"R26M#11":'   To Be Allocated':            
+0337          PRINT @(64,1):TOBEALLOC"R26M#11":                                 
+0338          RETURN                                                            
+0339          END                                                               
+0340     FOR I = FROM.RANGE TO TO.RANGE                                         
+0341          GOSUB 262                                                         
+0342     NEXT I                                                                 
+0343     DROW = 4                                                               
+0344     FOR I = FIRST.ITEM TO LAST.ITEM                                        
+0345          DROW = DROW + 1                                                   
+0346          PRINT @(65,DROW):RECORD<74,I>"R26M#11":                           
+0347     NEXT I                                                                 
+0348     PRINT @(0,1):@(-4):@(0,1):'Enter Option':@(22,1):'Allocated':          
+0349     PRINT @(33,1):ALLOCATED"R26M#11":'   To Be Allocated':                 
+0350     PRINT @(64,1):TOBEALLOC"R26M#11":                                      
+0351     RETURN                                                                 
+0352 262 * ALLOCATE CASH                                                        
+0353     IF TOBEALLOC = 0 THEN RETURN          
+0354	 IF RECORD<139,I> ="" OR RECORD<139,I>=0 OR RECORD<140,I> NE '' THEN RETURN
+0355 *    IF RECORD<74,I> NE "" AND RECORD<74,I> > 0 THEN RETURN                
+0356     IF RECORD<74,I> NE "" AND RECORD<74,I> NE 0 THEN RETURN                
+0357     THISALLOC=RECORD<139,I>                                                
+0358     IF THISALLOC > TOBEALLOC THEN THISALLOC = TOBEALLOC                    
+0359     IF THISALLOC > TOBEALLOC THEN THISALLOC = 0                            
+0360     RECORD<74,I> = THISALLOC                                               
+0361     TOBEALLOC = TOBEALLOC - THISALLOC                                      
+0362     ALLOCATED = ALLOCATED + THISALLOC                                      
+0363     RETURN                                                                 
+0364 *========================================================                  
+0365 270 * ALLOCATE TO AN INDIVIDUAL ITEM                                       
+0366     IF OPTION < FIRST.ITEM OR OPTION > LAST.ITEM THEN                      
+0367          PRINT @(0,1):@(-4):                                               
+0368          CALL SB.DISP(3,'Allocation Item Must Appear On Current Page')     
+0369          PRINT @(0,1):@(-4):@(0,1):'Enter Option':@(22,1):'Allocated':     
+0370          PRINT @(33,1):ALLOCATED"R26M#11":'   To Be Allocated':            
+0371          PRINT @(64,1):TOBEALLOC"R26M#11":                                 
+0372          RETURN                                                            
+0373          END                                                               
+0374     IF RECORD<139,OPTION> = 0 OR RECORD<139,OPTION> = "" OR RECORD<140,OPTION> NE '' THEN           
+0375 	 IF OTHER(4)[1,5] NE 'STOPO' THEN                  
+0376          PRINT @(0,1):@(-4):                                               
+0377          CALL SB.DISP(3,'Cannot Allocate To Item Without a Balance or Disputed')                                                                      
+0378          PRINT @(0,1):@(-4):@(0,1):'Enter Option':@(22,1):'Allocated':     
+0379          PRINT @(33,1):ALLOCATED"R26M#11":'   To Be Allocated':            
+0380          PRINT @(64,1):TOBEALLOC"R26M#11":                                 
+0381          RETURN                                                            
+0382          END                                                               
+0383        END                                                                 
+0384     ALLOCATED = ALLOCATED - RECORD<74,OPTION>                              
+0385     TOBEALLOC = TOBEALLOC + RECORD<74,OPTION>                              
+0386     TEMP = RECORD<74,OPTION>                                               
+0387     IF TEMP = 0 THEN TEMP = RECORD<139,OPTION>                             
+0388     IF TEMP > TOBEALLOC THEN TEMP = TOBEALLOC                              
+0389     IF TEMP > TOBEALLOC THEN TEMP = 0                                      
+0390     TEMP=OCONV(TEMP,'MR22')                                                
+0391     DROW=5 + OPTION - FIRST.ITEM                                           
+0392     HELP.MESS = "Enter Allocation Amount"                                  
+0393     CALL SB.INPUT(67,DROW,11,1,"",HELP.MESS,TEMP,ESC)                      
+0394     IF TEMP = "" THEN TEMP=0                                               
+0395     TEMP=ICONV(TEMP,'MR22M')                                               
+0396     OUT.V=OCONV(TEMP,'MR22M#11')                             
+0397     PRINT @(65,DROW):OUT.V:                                                
+0398     THISALLOC = TEMP                                                       
+0399     RECORD<74,OPTION> = THISALLOC                                          
+0400     TOBEALLOC = TOBEALLOC - THISALLOC                                      
+0401     ALLOCATED = ALLOCATED + THISALLOC                                      
+0402     PRINT @(0,1):@(-4):@(0,1):'Enter Option':@(22,1):'Allocated':          
+0403     PRINT @(33,1):ALLOCATED"R26M#11":'   To Be Allocated':                 
+0404     PRINT @(64,1):TOBEALLOC"R26M#11":                                      
+0405     RETURN                                                                 
+0406 *                                                                          
+0407 END                                                                        
+0408 *                                                                          
+MERTEX>                                                                         
+F2-Save F4-Del F5-List F6-Menu F7-Edit                                          
+

@@ -1,0 +1,106 @@
+#############################################################################
+#
+#	From PLCRNREG to Purchase Ledger!
+#
+#############################################################################
+
+/L MERTEX.PLAY
+
+Purchase Ledger > Runtime > Post > Register > Invoice via Register > Invoices From Register
+
+
+PL*PCRNOIR.CUR.DES
+
+
+Definitely writes to TPLEDG
+<199> PLCRNREG
+Might be useful if we have this mapped as a generic name, rather than preferring to mention Invoice or Credit Note
+It's currently mapped and presented as "PurchaseLedgerRegisterKey", and this suffices nicely.
+
+Demands a key from... PLCRNREG!
+
+
+92 PLAY PL                       Purchase Ledger                    19 SEP 2025 
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ 
+³ TooÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄTransaction DefinitionsÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿   ³ 
+ÀÄÄÄÄ³ Tran Id               PCRNOIR.CUR.                                 ³ÄÄÄÙ 
+     ³ Description           PL CREDIT NOTES__________                    ³     
+     ³ Tran Dict File        TPLEDG                                       ³     
+     ³ Tran Data File                             ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ ³     
+     ³ Screen Name           TPLCRNOIR.CUR.DES1   ³ Files To Update     ³ ³     
+     ³ Tran Key Source       <53>                 ³ PLREGISTER.HIST     ³ ³     
+     ³                                            ³ PLCRNREG            ³ ³     
+     ³ Flds Reverse Sign                          ³ TPLTRANS            ³ ³     
+     ³                                            ³ TPLTRANS.CUR        ³ ³     
+     ³ Batch/Realtime (B/R)  R                    ³ TPLTRANS1           ³ ³     
+     ³ Batch Screen Name                          ³ TPLTRANS.CUR1       ³ ³     
+     ³ Fields To Total                            ³ PLSUP               ³ ³     
+     ³                                            ³ PLSUP.CUR           ³ ³     
+     ³                                            ³ CFVAT           	³ ³     
+     ³                                            ³ PLVATAUD            ³ ³     
+     ³                                            ³ CFSTATS           	³ ³     
+     ³                                            ³ GLBATCH           	³ ³     
+     ³                                            ³ GLBATCHDATA         ³ ³     
+     ³                                            ³ PLADJAUDIT          ³ ³     
+     ³                                            ³ PLADJAUDIT1         ³ ³     
+     ³                                            ³ PLSUPINV           	³ ³     
+     ³                                            ³ GLPPTRANS.DES       ³ ³     
+     ³                                            ³                     ³ ³     
+     ³                                            ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ ³     
+     ³                                            ³ Other Sysids        ³ ³     
+     ³ Process Before Post                        ³                     ³ ³     
+     ³ Process After Post                         ³                     ³ ³     
+     ³ Process Before Cancel                      ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ ³     
+     ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ     
+                                                                                
+F2-Save F4-Del F10-Action                                                       
+
+TPLCRNOIR.CUR.DES1 > after screen accept > TPLEDG*TPLCRNOIR1
+
+PCRNREG,3
+
+TPLTRANS1, TPLTRANS.CUR1 and PLADJAUDIT1 are just Q-Pointers to their underlying tables - this is done because
+the transaction above needs to first of all write to the files, then update them.
+
+
+³ File Update (Dict) : TPLTRANS                                             ³   
+³                                                                           ³   
+³ Update/Delete (U/D)  U                                                    ³   
+³ Update Condition                                                          ³   
+³ Data File (if diff)                                                       ³   
+³ Key Source           <53>                                                 ³   
+³                                                                           ³   
+³ Fld To Update  MV To Update    Oper   Value To Use                        ³   
+³ DOCDATE                        R      <33>                                ³   
+³ TYPE                           R      "CRN"                               ³   
+³ DOCNO                          R      <34>                                ³   
+³ ITEMREF                        R      <37>                                ³   
+³ VATDIS                         R      0-S(<48>)                           ³   
+³ DEBIT                          R      S(<43>)                             ³   
+³ PERIOD                         R      B("PL.B.PERIOD")                    ³
+³ SUPREF                         R      <39>                                ³   
+³ ORIGVAL                        R      <50>                                ³   
+³ UNALLOCATED                    R      <64>                                ³   
+³ BALANCE                        R      "0"                                 ³   
+³ POSTDATE                       R      <35>                                ³   
+³ CURRENCY                       R      <161>                               ³   
+³ XRATE                          R      <162>                               ³   
+³ EXDIFFS						 R 		<164>								³
+³ REGNO							 R      "CRN"*:<199>						³	
+             
+			 
+For example, TPLTRANS1 is operated on subsequent to TPLTRANS being INSERTed into and affects the following:
+
+
+³ File Update (Dict) : TPLTRANS1                                            ³   
+³                                                                           ³   
+³ Update/Delete (U/D)  U                                                    ³   
+³ Update Condition                                                          ³   
+³ Data File (if diff)                                                       ³   
+³ Key Source           <120,-1>                                             ³   
+³                                                                           ³   
+³ Fld To Update  MV To Update    Oper   Value To Use                        ³   
+³ BALANCE                        -      <123,-1>                            ³   
+³ STATUS                         R      P("DINVCRST")                       ³   
+³ UNALLOCATED                    +      <151,-1>                            ³   
+³                                                                           ³   

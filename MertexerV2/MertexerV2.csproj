@@ -186,6 +186,7 @@
     <Compile Include="Models\General\Reason.cs" />
     <Compile Include="Models\Invoices\InvoiceTerms.cs" />
     <Compile Include="Models\PurchaseLedger\PurchaseLedger.cs" />
+    <Compile Include="Models\PurchaseLedger\PurchaseLedgerCreditNoteRegister.cs" />
     <Compile Include="Models\PurchaseLedger\PurchaseLedgerSupplierInvoice.cs" />
     <Compile Include="Models\PurchaseLedger\PurchaseLedgerAdjustmentAudit.cs" />
     <Compile Include="Models\PurchaseLedger\PurchaseLedgerTransactionCurrencyHistory.cs" />
@@ -200,6 +201,7 @@
     <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerTransactionHistoryCurrency_Select.cs" />
     <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerTransactionHistory_Upsert.cs" />
     <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerTransactionHistory_Select.cs" />
+    <Compile Include="PurchaseLedgerFunctions\PurchaseLedger_InsertFromCreditNoteRegistry.cs" />
     <Compile Include="PurchaseLedgerFunctions\PurchaseLedger_InternalFunctions.cs" />
     <Compile Include="Models\SalesAgent\SalesAgent.cs" />
     <Compile Include="Models\SalesArea\SalesArea.cs" />
@@ -314,7 +316,7 @@
     <Compile Include="SalesLedgerFunctions\SalesLedgerTerms_Upsert.cs" />
     <Compile Include="SalesLedgerFunctions\SalesLedgerTransaction_Upsert.cs" />
     <Compile Include="SalesMarketFunctions\SalesMarket_Select.cs" />
-    <Compile Include="PurchaseLedgerFunctions\PurchaseLedger_InsertFromRegistry.cs" />
+    <Compile Include="PurchaseLedgerFunctions\PurchaseLedger_InsertFromInvoiceRegistry.cs" />
     <Compile Include="StockFunctions\StockValuation_Select.cs" />
     <Compile Include="StockFunctions\StockLocation_Select.cs" />
     <Compile Include="StockFunctions\StockValuation_Upsert.cs" />

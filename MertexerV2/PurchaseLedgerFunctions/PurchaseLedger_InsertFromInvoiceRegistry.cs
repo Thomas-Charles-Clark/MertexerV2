@@ -138,7 +138,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 PurchaseLedgerFunctions.InsertViaTransaction(ref session, purchaseLedgerEntryJson);
 
                 results.Add(new PurchaseLedgerInsertionResult(
-                    purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
+                    purchaseLedgerRegistryKey: registerEntry.Key,
                     fileKey: purchaseLedgerEntry.Key,
                     fileName: "TPLEDG",
                     operationsPerformed: new[] { "INSERT" },
@@ -178,7 +178,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 PurchaseLedgerRegisterHistoryFunctions.InsertViaTransaction(ref session, purchaseLedgerRegisterHistoryEntryJson);
 
                 results.Add(new PurchaseLedgerInsertionResult(
-                    purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
+                    purchaseLedgerRegistryKey: registerEntry.Key,
                     fileKey: purchaseLedgerInvoiceKey,
                     fileName: "PLREGISTER.HIST",
                     operationsPerformed: new[] { "INSERT" },
@@ -195,7 +195,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 PurchaseLedgerInvoiceRegisterFunctions.DeleteViaTransaction(ref session, JsonConvert.SerializeObject(registerEntry));
 
                 results.Add(new PurchaseLedgerInsertionResult(
-                    purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
+                    purchaseLedgerRegistryKey: registerEntry.Key,
                     fileKey: registerEntry.Key,
                     fileName: "PLINVREG",
                     operationsPerformed: new[] { "DELETE" },
@@ -237,7 +237,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 PurchaseLedgerTransactionFunctions.UpsertViaTransaction(ref session, purchaseLedgerTransactionEntryJson);
 
                 results.Add(new PurchaseLedgerInsertionResult(
-                    purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
+                    purchaseLedgerRegistryKey: registerEntry.Key,
                     fileKey: purchaseLedgerTransactionEntry.Key,
                     fileName:  "TPLTRANS",
                     operationsPerformed: new [] { "INSERT" },
@@ -281,7 +281,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 PurchaseLedgerTransactionCurrencyFunctions.UpsertViaTransaction(ref session, purchaseLedgerTransactionCurrencyEntryJson);
 
                 results.Add(new PurchaseLedgerInsertionResult(
-                    purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
+                    purchaseLedgerRegistryKey: registerEntry.Key,
                     fileKey: purchaseLedgerTransactionCurrencyEntry.Key,
                     fileName: "TPLTRANS.CUR",
                     operationsPerformed: new[] { "INSERT" },
@@ -363,7 +363,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 SupplierFunctions.SupplierFunctions.UpsertViaTransaction(ref session, supplierEntryJson);
 
                 results.Add(new PurchaseLedgerInsertionResult(
-                    purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
+                    purchaseLedgerRegistryKey: registerEntry.Key,
                     fileKey: supplierEntry.Key,
                     fileName: "PLSUP",
                     operationsPerformed: new[] {
@@ -494,7 +494,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 SupplierCurrencyFunctions.UpsertViaTransaction(ref session, supplierCurrencyEntryJson);
 
                 results.Add(new PurchaseLedgerInsertionResult(
-                    purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
+                    purchaseLedgerRegistryKey: registerEntry.Key,
                     fileKey: supplierEntry.Key,
                     fileName: "PLSUP.CUR",
                     operationsPerformed: new[] {
@@ -593,7 +593,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
                     CompanyVATFunctions.UpsertViaTransaction(ref session, vatEntryJson);
 
                     results.Add(new PurchaseLedgerInsertionResult(
-                        purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
+                        purchaseLedgerRegistryKey: registerEntry.Key,
                         fileKey: vatEntry.Key,
                         fileName: "CFVAT",
                         operationsPerformed: new[] {
@@ -631,7 +631,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 PurchaseLedgerVATAuditFunctions.UpsertViaTransaction(ref session, purchaseLedgerVATAuditEntryJson);
 
                 results.Add(new PurchaseLedgerInsertionResult(
-                    purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
+                    purchaseLedgerRegistryKey: registerEntry.Key,
                     fileKey: purchaseLedgerVATAuditEntry.Key,
                     fileName: "PLVATAUD",
                     operationsPerformed: new[] { "INSERT" },
@@ -672,7 +672,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 CompanyStatsFunctions.UpsertViaTransaction(ref session, companyStatsEntryJson);
 
                 results.Add(new PurchaseLedgerInsertionResult(
-                    purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
+                    purchaseLedgerRegistryKey: registerEntry.Key,
                     fileKey: companyStatsEntry.Key,
                     fileName: "CFSTATS",
                     operationsPerformed: new string[] {
@@ -699,7 +699,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 GeneralLedgerBatchFunctions.UpsertViaTransaction(ref session, generalLedgerBatchEntryJson);
 
                 results.Add(new PurchaseLedgerInsertionResult(
-                    purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
+                    purchaseLedgerRegistryKey: registerEntry.Key,
                     fileKey: generalLedgerBatchEntry.Key,
                     fileName: "GLBATCH",
                     operationsPerformed: new[] { "INSERT" },
@@ -737,7 +737,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 GeneralLedgerBatchDataFunctions.UpsertViaTransaction(ref session, generalLedgerBatchDataEntryJson);
 
                 results.Add(new PurchaseLedgerInsertionResult(
-                    purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
+                    purchaseLedgerRegistryKey: registerEntry.Key,
                     fileKey: generalLedgerBatchDataEntry.Key,
                     fileName: "GLBATCHDATA",
                     operationsPerformed: new[] { "INSERT" },
@@ -776,7 +776,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 PurchaseLedgerAdjustmentAuditFunctions.UpsertViaTransaction(ref session, purchaseLedgerAdjustmentAuditEntryJson);
 
                 results.Add(new PurchaseLedgerInsertionResult(
-                    purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
+                    purchaseLedgerRegistryKey: registerEntry.Key,
                     fileKey: purchaseLedgerAdjustmentAuditEntry.Key,
                     fileName: "PLADJAUDIT",
                     operationsPerformed: new[] { "INSERT" },
@@ -801,7 +801,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 var purchaseLedgerSupplierInvoiceEntryJson = JsonConvert.SerializeObject(purchaseLedgerSupplierInvoiceEntry);
 
                 results.Add(new PurchaseLedgerInsertionResult(
-                    purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
+                    purchaseLedgerRegistryKey: registerEntry.Key,
                     fileKey: purchaseLedgerSupplierInvoiceEntry.Key,
                     fileName: "PLSUPINV",
                     operationsPerformed: new[] { "INSERT" },
@@ -879,7 +879,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
                     // 15. INSERT into GLPPTRANS.DES
 
                     results.Add(new PurchaseLedgerInsertionResult(
-                        purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
+                        purchaseLedgerRegistryKey: registerEntry.Key,
                         fileKey: glppt.Key,
                         fileName: "GLPPTRANS.DES",
                         operationsPerformed: new[] { "INSERT" },
@@ -910,7 +910,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
         {
             var p = (PurchaseLedgerInsertionResult)obj;
 
-            PurchaseLedgerInvoiceRegistryKey = p.PurchaseLedgerInvoiceRegistryKey;
+            PurchaseLedgerInvoiceRegistryKey = p.PurchaseLedgerRegistryKey;
 
             FileKey = p.FileKey;
 

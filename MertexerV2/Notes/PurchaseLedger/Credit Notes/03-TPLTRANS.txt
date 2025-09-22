@@ -1,0 +1,85 @@
+Updates TPLTRANS
+from TPLEDG
+
+95 MERTEX PL                     Purchase Ledger                    28 JUL 2025 
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ 
+³ TooÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄTransaction DefinitionsÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿   ³ 
+ÀÄÄÄÄ³ Tran Id               PINVIR.CUR.D                                 ³ÄÄÄÙ 
+     ³ Description           PL INVOICES                                  ³     
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄSecondary File UpdateÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿   	
+³ File Update (Dict) : TPLTRANS                                             ³   
+³                                                                           ³   
+³ Update/Delete (U/D)  U                                                    ³   
+³ Update Condition                                                          ³   	Our Field Name				    Double Checked
+³ Data File (if diff)                                                       ³   	
+³ Key Source           <53>                                                 ³   	DocumentReference							✔	
+³                                                                           ³   	
+³ Fld To Update  MV To Update    Oper   Value To Use                        ³   					
+³ DOCDATE                        R      <33>                                ³   	DocumentDT  								✔
+³ DUEDATE                        R      <38>                                ³   	InvoiceDueDT								✔			
+³ DISC                           R      <160>                               ³   	DiscountPercentage_Again					✔
+³ TYPE                           R      "INV"                               ³   	"INV"										✔			
+³ ITEMREF                        R      <37>                                ³   	SupplierInvoiceReference					✔
+³ DOCNO                          R      <34>                                ³   	DocumentNumber								✔
+³ VATDIS                         R      S(<48>)                             ³   	VATTaxesTotal = VATTaxes.Sum()	  			✔						
+³ CREDIT                         R      S(<43>)                             ³   	Credit = Amounts.Sum()						✔
+³ BALANCE                        R      <50>                                ³   	TotalDueInSterling							✔
+³ ORIGVAL                        R      <50>                                ³   	OriginalValueABS = TotalDueInSterling 		✔
+³ PERIOD                         R      B("PL.B.PERIOD")                    ³   	Period = purchaseLedgerTransactionPeriod 	✔
+³ SUPREF                         R      <39>                                ³   	SupplierCode								✔	
+³ AGE                            R      P("AGE")                            ³   	Age = purchaseLedgerEntry.Future ? 0 : 1	✔	
+³ UNALLOCATED                    R      0                                   ³   	0.0m										✔			
+³ DISCAMT                        R      <80>                                ³   	DiscountAmount								✔
+³ POSTDATE                       R      <35>                                ³   	PostDT										✔
+³ MEMO                           R      <56>                                ³  		Memo										✔
+³ DISCDATE                       R      <55>                                ³   	DueDT										✔
+³ DISPUTE                        R      <87>                                ³   	Dispute										✔
+³ DISPMEMO                       R      P("DMEMO")                          ³   	DisputeMemo									✔
+³ REGNO                          R      "INV*":<199>                        ³   	PurchaseLedgerRegisterNumber				✔
+ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ   
+                                                                                
+F2-Save                                     
+
+     PL.B.PERIOD                                                                
+0001      SUBROUTINE PL.B.PERIOD                                                
+0002 **** BASIC CODE [GENERATED FROM DM13.SUBS]    (DM)                         
+0003      $INCLUDE RFPROGS COMMON                                               
+0004 EQUATE VAL TO VALUE                                                        
+0005      EQUATE AM TO CHAR(254), VM TO CHAR(253), SVM TO CHAR(252)             
+0006 *                                                                          
+0007      RTN.FLAG=0                                                            
+0008 *-                                                                         
+0009 * Use PL period if separate PL or GL period if GL/PL combined              
+0010 *-                                                                         
+0011      VALUE=OCONV("1",'TCOMPANY;X;;134')                                    
+0012      IF VALUE = "" THEN                                                    
+0013         VALUE=OCONV("1",'TCOMPANY;X;;10')                                  
+0014      END                                                                   
+0015 *-                                                                         
+0016      IF RECORD<154> = '' THEN RETURN                                       
+0017      TOT=OCONV('1','TCOMPANY;X;;11')                                       
+0018      VALUE=VALUE+1                                                         
+0019      IF VALUE > TOT THEN VALUE = 1                                         
+0020      IF RTN.FLAG THEN CALL SB.DISP(3,"PERIOD DEPENDS ON DOC DATE IE NEXT?")                                                                  
+0021 *                                        
+0022 	RETURN
+0023	END                                  
+Press any key to continue...   
+                                                 
+
+B("PL.B.PERIOD") == Read COMPANY<134> "PLPER" // "This Period P/L"
+					if that's empty, then read COMPANY<10> "GLPER" // "This Period G/L"
+
+That grabs you the CURRENT period
+
+If <154> "Future" is empty, then just return (returning VALUE)
+	otherwise, read "No. of Financial Periods" from COMPANY<11> "GLPRDS" // No. of Financial Pds
+	Value += 1
+	if Value > No. of Financial Periods
+		Value = 1 // and there's the wrap-around
+		
+	So if we were in say February, Value would be 11 - you'd add one, find yourself at 12, and not need to wrap-around because March is the 12th period in this financial year.
+	
+	If, however, you were in March, Value would equal 12 - you'd add one, compare that to GLPRDS (12), find that 13 > 12, and set Value to 1.
+	
+	

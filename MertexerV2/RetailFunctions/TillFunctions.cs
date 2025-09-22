@@ -35,7 +35,7 @@ namespace MertexerV2.RetailFunctions
                 }
             }
         }
-         
+        
         public static void FetchOpenTills_FillRow(
             object obj,
             out SqlString TillNumber,

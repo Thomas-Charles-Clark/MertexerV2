@@ -8,7 +8,7 @@ namespace MertexerV2.Models.PurchaseLedger
 {
     public class PurchaseLedgerInsertionResult
     {
-        public string PurchaseLedgerInvoiceRegistryKey { get; set; }
+        public string PurchaseLedgerRegistryKey { get; set; }
 
         public string FileKey { get; set; }
 
@@ -21,14 +21,14 @@ namespace MertexerV2.Models.PurchaseLedger
         public string JSONAfterwards { get; set; }
     
         public PurchaseLedgerInsertionResult(
-            string purchaseLedgerInvoiceRegistryKey,
+            string purchaseLedgerRegistryKey,
             string fileKey, 
             string fileName, 
             IEnumerable<string> operationsPerformed, 
             string jsonBefore, 
             string jsonAfterwards)
         {
-            PurchaseLedgerInvoiceRegistryKey = purchaseLedgerInvoiceRegistryKey;
+            PurchaseLedgerRegistryKey = purchaseLedgerRegistryKey;
             FileKey = fileKey;
             FileName = fileName;
             OperationsPerformed = operationsPerformed;

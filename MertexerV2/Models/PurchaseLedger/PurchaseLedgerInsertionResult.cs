@@ -21,19 +21,19 @@ namespace MertexerV2.Models.PurchaseLedger
         public string JSONAfterwards { get; set; }
     
         public PurchaseLedgerInsertionResult(
-            string purchaseLedgerRegistryKey,
             string fileKey, 
             string fileName, 
             IEnumerable<string> operationsPerformed, 
             string jsonBefore, 
-            string jsonAfterwards)
+            string jsonAfterwards,
+            string purchaseLedgerRegistryKey)
         {
-            PurchaseLedgerRegistryKey = purchaseLedgerRegistryKey;
             FileKey = fileKey;
             FileName = fileName;
             OperationsPerformed = operationsPerformed;
             JSONBefore = jsonBefore;
             JSONAfterwards = jsonAfterwards;
+            PurchaseLedgerRegistryKey = purchaseLedgerRegistryKey;
         }
     }
 }

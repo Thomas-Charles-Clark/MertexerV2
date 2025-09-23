@@ -433,6 +433,9 @@ namespace MertexerV2.Models.PurchaseLedger
 
         [UniVerseIndex(53)]
         [UniVerseFieldName("PINVDOC")] // PCRNDOC,PINVDOC,PLADJDOC,POPDOC,PPAYDOC,PPETDOC,PPOTHDOC
+        /// <summary>
+        /// PI{RegisterKey}
+        /// </summary>
         public string DocumentReference { get; set; }
 
         /// <summary>

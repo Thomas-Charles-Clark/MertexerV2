@@ -125,8 +125,7 @@ namespace Tester
             //var transactionUndoResults = PurchaseLedgerFunctions.RollbackInvoiceRegistryInsertionTransaction(uniVerseAccount, rollbackJson).OfType<PurchaseLedgerTransactionRollbackResult>().ToList();
 
             //Console.WriteLine(JsonConvert.SerializeObject(transactionUndoResults));
-
-
+            
             using (var qe = new QueryExecutor(uniVerseAccount))
             {
                 var controlFile = qe.Session.CreateUniFile("PLCONTROL");
@@ -135,7 +134,9 @@ namespace Tester
 
                 var gennoRecord = gennoRecords.GetRecord(0);
 
-                var numberField = gennoRecord.Record.Extract(5);
+                var fieldPosition = 5; // PLINVREG
+
+                var numberField = gennoRecord.Record.Extract(fieldPosition);
 
                 var currentKey = Convert.ToInt32(numberField.StringValue);
 
@@ -147,7 +148,6 @@ namespace Tester
 
                 Console.WriteLine($"Read PLCONTROL<5> @ID = \"GENNO\", saw: {numberField}. New key is: {newKey}; has been written back to same.");
             }
-
 
             // Test between for SQL DateTime Overflow: 2024/11/30 and 2024/12/31
 

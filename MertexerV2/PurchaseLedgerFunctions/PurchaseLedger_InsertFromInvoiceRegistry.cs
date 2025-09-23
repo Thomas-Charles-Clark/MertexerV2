@@ -53,9 +53,33 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                 #region Properties & Initialisation
 
-                var purchaseLedgerKey = $"PI{registerEntry.Key}";
+                #region Keys
 
-                var purchaseLedgerInvoiceKey = $"INV*{registerEntry.Key}";
+                // Read the most recently held TPLEDG key from PLCONTROL<9> WITH @ID = "GENNO"
+
+                var fieldPosition = 9;
+
+                var purchaseLedgerControlFile = qe.Session.CreateUniFile("PLCONTROL");
+
+                var numberGeneratorRecords = purchaseLedgerControlFile.ReadRecords(new[] { "GENNO" });
+
+                var numberGeneratorRecord = numberGeneratorRecords.GetRecord(0);
+
+                var numberField = numberGeneratorRecord.Record.Extract(fieldPosition); // Field 9 on the record "GENNO"
+
+                var currentKey = Convert.ToInt32(numberField.StringValue);
+
+                var newKey = currentKey += 1;
+
+                numberGeneratorRecord.Record.Replace(fieldPosition, $"{newKey}");
+
+                purchaseLedgerControlFile.WriteRecords(numberGeneratorRecords);
+
+                var purchaseLedgerKey = $"PI{newKey}";
+
+                #endregion
+
+                #region Other Files and Errata
 
                 var companyEntry = Selector<Company>.Select("1", true, false, 1, UniVerseAccount);
 
@@ -77,10 +101,15 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                 #endregion
 
+                #endregion
+
                 #region Step 01. Create a Purchase Ledger entry (INSERT to TPLEDG)
 
                 var purchaseLedgerEntry = new PurchaseLedger(purchaseLedgerKey)
                 {
+                    PurchaseLedgerRegisterKey = registerEntry.Key,
+                    DocumentReference = purchaseLedgerKey,
+                    DocumentNumber = registerEntry.Key,
                     SourceTransactionDefinition = "PINVIR.CUR.DES",
                     DocumentDT = registerEntry.DocumentDT,
                     OnFileDT = registerEntry.OnFileDT,
@@ -90,26 +119,18 @@ namespace MertexerV2.PurchaseLedgerFunctions
                     Amounts = registerEntry.AmountsExVAT,
                     GeneralLedgerCodes = registerEntry.GeneralLedgerCodes,
                     VATCodes = registerEntry.VATCodes,
-                    // if I don't write VATTAXES, will it just... somehow magically execute the process PG.PLVATTAX,D.47.49..160[M] ? No, not likely.
                     VATableValues = registerEntry.VATableValues,
                     TotalDueInSterling = registerEntry.AmountSterling,
                     SettlementTerms = registerEntry.PaymentTermsCode,
                     PostDT = now,
-                    // Would be good to settle this once and for all:
-                    // SettlementDTs is 55.0M
-                    // DueDT is field 55.1... so I imagine that if I only set 55 and then overwrite 55.1 with NULL,
-                    // The end result is that 55 will be empty. So, belt and braces it is.
                     SettlementDueDTs = new List<DateTime?>() { registerEntry.SettlementDT },
                     DueDT = registerEntry.SettlementDT,
-                    //
-                    //
-
                     Memo = registerEntry.Memo,
                     VATBalance = registerEntry.VATBalance,
                     VATTaxes = registerEntry.VATTaxes,
                     VATTaxesInCurrency = vatTaxesInCurrency,
                     DocumentBalance = registerEntry.DocumentBalance,
-                    DiscountAmount = 0.0m, // we don't do discounts: LIST PLTERMS DISC
+                    DiscountAmount = 0.0m, // we don't do discounts here: LIST PLTERMS DISC
                     DiscountAmountInCurrency = 0.0M, // ""
                     OtherMemos = registerEntry.OtherMemos,
                     DisputeIndicator = registerEntry.Disputed,
@@ -124,13 +145,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                     // Prognostication: is this for some future period to worry about, or is it in the current period?
                     // All I can do is compare the Invoice Date (DocumentDT) with the current Month.
-                    Future = registerEntry.DocumentDT?.Month > now.Month,
-
-                    // Here we have exhausted the fields on PLINVREG.
-                    // What further fields might TPLEDG need to provide to the subsequent... 14 operations in the transaction?
-                    PurchaseLedgerRegisterKey = registerEntry.Key,
-                    DocumentReference = purchaseLedgerKey,
-                    DocumentNumber = registerEntry.Key
+                    Future = registerEntry.DocumentDT?.Month > now.Month
                 };
 
                 var purchaseLedgerEntryJson = JsonConvert.SerializeObject(purchaseLedgerEntry);
@@ -138,12 +153,12 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 PurchaseLedgerFunctions.InsertViaTransaction(ref session, purchaseLedgerEntryJson);
 
                 results.Add(new PurchaseLedgerInsertionResult(
-                    purchaseLedgerRegistryKey: registerEntry.Key,
                     fileKey: purchaseLedgerEntry.Key,
                     fileName: "TPLEDG",
                     operationsPerformed: new[] { "INSERT" },
                     jsonBefore: null,
-                    jsonAfterwards: purchaseLedgerEntryJson
+                    jsonAfterwards: purchaseLedgerEntryJson,
+                    purchaseLedgerRegistryKey: registerEntry.Key
                 ));
 
                 if (purchaseLedgerEntry.Future == true)
@@ -160,7 +175,8 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                 #region Step 02. Create a Purchase Ledger Register History entry (INSERT to PLREGISTER.HIST)
 
-                var purchaseLedgerRegisterHistoryEntry = new PurchaseLedgerRegisterHistory(purchaseLedgerInvoiceKey)
+                // Key = INV*TPLEDG<199>
+                var purchaseLedgerRegisterHistoryEntry = new PurchaseLedgerRegisterHistory($"INV*{purchaseLedgerEntry.PurchaseLedgerRegisterKey}")
                 {
                     RegisterNumber = registerEntry.Key,
                     OnFileDT = registerEntry.OnFileDT,
@@ -179,7 +195,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                 results.Add(new PurchaseLedgerInsertionResult(
                     purchaseLedgerRegistryKey: registerEntry.Key,
-                    fileKey: purchaseLedgerInvoiceKey,
+                    fileKey: purchaseLedgerRegisterHistoryEntry.Key,
                     fileName: "PLREGISTER.HIST",
                     operationsPerformed: new[] { "INSERT" },
                     jsonBefore:null,
@@ -195,18 +211,19 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 PurchaseLedgerInvoiceRegisterFunctions.DeleteViaTransaction(ref session, JsonConvert.SerializeObject(registerEntry));
 
                 results.Add(new PurchaseLedgerInsertionResult(
-                    purchaseLedgerRegistryKey: registerEntry.Key,
                     fileKey: registerEntry.Key,
                     fileName: "PLINVREG",
                     operationsPerformed: new[] { "DELETE" },
                     jsonBefore: purchaseRegisterEntryJson,
-                    jsonAfterwards: null
+                    jsonAfterwards: null,
+                    purchaseLedgerRegistryKey: registerEntry.Key
                 ));
 
                 #endregion
 
                 #region Step 04. Create a Purchase Ledger Transaction entry (INSERT into TPLTRANS)
 
+                // Key == TPLEDG<53> "Document Reference"
                 var purchaseLedgerTransactionEntry = new PurchaseLedgerTransaction(purchaseLedgerEntry.DocumentReference)
                 {
                     DocumentDT = purchaseLedgerEntry.DocumentDT,
@@ -229,7 +246,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
                     DiscountCutOffDT = purchaseLedgerEntry.DueDT,
                     Dispute = purchaseLedgerEntry.DisputeIndicator,
                     DisputeMemo = purchaseLedgerEntry.DisputeMemo,
-                    PurchaseLedgerRegisterNumber = purchaseLedgerInvoiceKey
+                    PurchaseLedgerRegisterNumber = $"INV*{purchaseLedgerEntry.PurchaseLedgerRegisterKey}"
                 };
 
                 var purchaseLedgerTransactionEntryJson = JsonConvert.SerializeObject(purchaseLedgerTransactionEntry);
@@ -237,12 +254,12 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 PurchaseLedgerTransactionFunctions.UpsertViaTransaction(ref session, purchaseLedgerTransactionEntryJson);
 
                 results.Add(new PurchaseLedgerInsertionResult(
-                    purchaseLedgerRegistryKey: registerEntry.Key,
                     fileKey: purchaseLedgerTransactionEntry.Key,
                     fileName:  "TPLTRANS",
                     operationsPerformed: new [] { "INSERT" },
                     jsonBefore: null,
-                    jsonAfterwards: purchaseLedgerTransactionEntryJson
+                    jsonAfterwards: purchaseLedgerTransactionEntryJson,
+                    purchaseLedgerRegistryKey: registerEntry.Key
                 ));
 
                 #endregion
@@ -273,7 +290,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
                     DisputeMemo = purchaseLedgerEntry.DisputeMemo,
                     CurrencyCode = purchaseLedgerEntry.CurrencyCode,
                     ExchangeRates = purchaseLedgerEntry.ExchangeRates,
-                    PurchaseLedgerRegisterNumber = purchaseLedgerInvoiceKey
+                    PurchaseLedgerRegisterNumber = $"INV*{purchaseLedgerEntry.PurchaseLedgerRegisterKey}"
                 };
 
                 var purchaseLedgerTransactionCurrencyEntryJson = JsonConvert.SerializeObject(purchaseLedgerTransactionCurrencyEntry);
@@ -281,12 +298,12 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 PurchaseLedgerTransactionCurrencyFunctions.UpsertViaTransaction(ref session, purchaseLedgerTransactionCurrencyEntryJson);
 
                 results.Add(new PurchaseLedgerInsertionResult(
-                    purchaseLedgerRegistryKey: registerEntry.Key,
                     fileKey: purchaseLedgerTransactionCurrencyEntry.Key,
                     fileName: "TPLTRANS.CUR",
                     operationsPerformed: new[] { "INSERT" },
                     jsonBefore: null,
-                    jsonAfterwards: purchaseLedgerTransactionCurrencyEntryJson
+                    jsonAfterwards: purchaseLedgerTransactionCurrencyEntryJson,
+                    purchaseLedgerRegistryKey: registerEntry.Key
                 ));
 
                 #endregion
@@ -363,7 +380,6 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 SupplierFunctions.SupplierFunctions.UpsertViaTransaction(ref session, supplierEntryJson);
 
                 results.Add(new PurchaseLedgerInsertionResult(
-                    purchaseLedgerRegistryKey: registerEntry.Key,
                     fileKey: supplierEntry.Key,
                     fileName: "PLSUP",
                     operationsPerformed: new[] {
@@ -377,7 +393,8 @@ namespace MertexerV2.PurchaseLedgerFunctions
                         $"<23> \"INACT\" (PeriodsInactive) = \"{supplierEntry.PeriodsInactive}\""
                     },
                     jsonBefore: supplierEntryBeforeModificationJSON,
-                    jsonAfterwards: supplierEntryJson
+                    jsonAfterwards: supplierEntryJson,
+                    purchaseLedgerRegistryKey: registerEntry.Key
                 ));
 
                 #endregion
@@ -494,7 +511,6 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 SupplierCurrencyFunctions.UpsertViaTransaction(ref session, supplierCurrencyEntryJson);
 
                 results.Add(new PurchaseLedgerInsertionResult(
-                    purchaseLedgerRegistryKey: registerEntry.Key,
                     fileKey: supplierEntry.Key,
                     fileName: "PLSUP.CUR",
                     operationsPerformed: new[] {
@@ -511,7 +527,8 @@ namespace MertexerV2.PurchaseLedgerFunctions
                         $"<23> \"INACT\" (PeriodsInactive) = \"{supplierCurrencyEntry.PeriodsInactive}\""
                     },
                     jsonBefore: supplierCurrencyEntryBeforeModificationJSON,
-                    jsonAfterwards: supplierCurrencyEntryJson
+                    jsonAfterwards: supplierCurrencyEntryJson,
+                    purchaseLedgerRegistryKey: registerEntry.Key
                 ));
 
                 #endregion
@@ -593,7 +610,6 @@ namespace MertexerV2.PurchaseLedgerFunctions
                     CompanyVATFunctions.UpsertViaTransaction(ref session, vatEntryJson);
 
                     results.Add(new PurchaseLedgerInsertionResult(
-                        purchaseLedgerRegistryKey: registerEntry.Key,
                         fileKey: vatEntry.Key,
                         fileName: "CFVAT",
                         operationsPerformed: new[] {
@@ -604,7 +620,8 @@ namespace MertexerV2.PurchaseLedgerFunctions
                             $"<40> \"PNINVT\" (PurchasesNextPeriodInvoicesTax) += {purchasesNextPeriodInvoicesTaxAddition}",
                             $"<44> \"PNINVV\" (PurchasesNextPeriodInvoicesValue) += {purchasesNextPeriodInvoicesValueAddition}", },
                         jsonBefore: vatEntryBeforeModificationJSON,
-                        jsonAfterwards: vatEntryJson
+                        jsonAfterwards: vatEntryJson,
+                        purchaseLedgerRegistryKey: registerEntry.Key
                     ));
                 }
 
@@ -631,12 +648,12 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 PurchaseLedgerVATAuditFunctions.UpsertViaTransaction(ref session, purchaseLedgerVATAuditEntryJson);
 
                 results.Add(new PurchaseLedgerInsertionResult(
-                    purchaseLedgerRegistryKey: registerEntry.Key,
                     fileKey: purchaseLedgerVATAuditEntry.Key,
                     fileName: "PLVATAUD",
                     operationsPerformed: new[] { "INSERT" },
                     jsonBefore: null,
-                    jsonAfterwards: purchaseLedgerVATAuditEntryJson
+                    jsonAfterwards: purchaseLedgerVATAuditEntryJson,
+                        purchaseLedgerRegistryKey: registerEntry.Key
                 ));
 
                 #endregion
@@ -672,7 +689,6 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 CompanyStatsFunctions.UpsertViaTransaction(ref session, companyStatsEntryJson);
 
                 results.Add(new PurchaseLedgerInsertionResult(
-                    purchaseLedgerRegistryKey: registerEntry.Key,
                     fileKey: companyStatsEntry.Key,
                     fileName: "CFSTATS",
                     operationsPerformed: new string[] {
@@ -680,7 +696,8 @@ namespace MertexerV2.PurchaseLedgerFunctions
                         $"<21> \"NPLINV\" (NextPurchaseLedgerInvoices) += {companyStatsEntryNextPurchaseLedgerInvoicesAddition}"
                     },
                     jsonBefore: companyStatsEntryBeforeModificationJSON,
-                    jsonAfterwards: companyStatsEntryJson
+                    jsonAfterwards: companyStatsEntryJson,
+                    purchaseLedgerRegistryKey: registerEntry.Key
                 ));
 
                 #endregion
@@ -699,12 +716,12 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 GeneralLedgerBatchFunctions.UpsertViaTransaction(ref session, generalLedgerBatchEntryJson);
 
                 results.Add(new PurchaseLedgerInsertionResult(
-                    purchaseLedgerRegistryKey: registerEntry.Key,
                     fileKey: generalLedgerBatchEntry.Key,
                     fileName: "GLBATCH",
                     operationsPerformed: new[] { "INSERT" },
                     jsonBefore: null,
-                    jsonAfterwards: generalLedgerBatchEntryJson
+                    jsonAfterwards: generalLedgerBatchEntryJson,
+                        purchaseLedgerRegistryKey: registerEntry.Key
                 ));
 
                 #endregion
@@ -737,12 +754,12 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 GeneralLedgerBatchDataFunctions.UpsertViaTransaction(ref session, generalLedgerBatchDataEntryJson);
 
                 results.Add(new PurchaseLedgerInsertionResult(
-                    purchaseLedgerRegistryKey: registerEntry.Key,
                     fileKey: generalLedgerBatchDataEntry.Key,
                     fileName: "GLBATCHDATA",
                     operationsPerformed: new[] { "INSERT" },
                     jsonBefore: null,
-                    jsonAfterwards: generalLedgerBatchDataEntryJson
+                    jsonAfterwards: generalLedgerBatchDataEntryJson,
+                        purchaseLedgerRegistryKey: registerEntry.Key
                 ));
 
                 #endregion
@@ -776,12 +793,12 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 PurchaseLedgerAdjustmentAuditFunctions.UpsertViaTransaction(ref session, purchaseLedgerAdjustmentAuditEntryJson);
 
                 results.Add(new PurchaseLedgerInsertionResult(
-                    purchaseLedgerRegistryKey: registerEntry.Key,
                     fileKey: purchaseLedgerAdjustmentAuditEntry.Key,
                     fileName: "PLADJAUDIT",
                     operationsPerformed: new[] { "INSERT" },
                     jsonBefore: null,
-                    jsonAfterwards: purchaseLedgerAdjustmentAuditEntryJson
+                    jsonAfterwards: purchaseLedgerAdjustmentAuditEntryJson,
+                        purchaseLedgerRegistryKey: registerEntry.Key
                 ));
 
                 #endregion
@@ -801,12 +818,12 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 var purchaseLedgerSupplierInvoiceEntryJson = JsonConvert.SerializeObject(purchaseLedgerSupplierInvoiceEntry);
 
                 results.Add(new PurchaseLedgerInsertionResult(
-                    purchaseLedgerRegistryKey: registerEntry.Key,
                     fileKey: purchaseLedgerSupplierInvoiceEntry.Key,
                     fileName: "PLSUPINV",
                     operationsPerformed: new[] { "INSERT" },
                     jsonBefore: null,
-                    jsonAfterwards: purchaseLedgerSupplierInvoiceEntryJson
+                    jsonAfterwards: purchaseLedgerSupplierInvoiceEntryJson,
+                        purchaseLedgerRegistryKey: registerEntry.Key
                 ));
 
                 PurchaseLedgerSupplierInvoiceFunctions.UpsertViaTransaction(ref session, purchaseLedgerSupplierInvoiceEntryJson);
@@ -879,12 +896,12 @@ namespace MertexerV2.PurchaseLedgerFunctions
                     // 15. INSERT into GLPPTRANS.DES
 
                     results.Add(new PurchaseLedgerInsertionResult(
-                        purchaseLedgerRegistryKey: registerEntry.Key,
                         fileKey: glppt.Key,
                         fileName: "GLPPTRANS.DES",
                         operationsPerformed: new[] { "INSERT" },
                         jsonBefore: null,
-                        jsonAfterwards: glpptJson
+                        jsonAfterwards: glpptJson,
+                        purchaseLedgerRegistryKey: registerEntry.Key
                     ));
 
                     GeneralLedgerPrePaymentTransactionFunctions.UpsertViaTransaction(ref session, glpptJson);
@@ -910,8 +927,6 @@ namespace MertexerV2.PurchaseLedgerFunctions
         {
             var p = (PurchaseLedgerInsertionResult)obj;
 
-            PurchaseLedgerInvoiceRegistryKey = p.PurchaseLedgerRegistryKey;
-
             FileKey = p.FileKey;
 
             FileName = p.FileName;
@@ -921,6 +936,8 @@ namespace MertexerV2.PurchaseLedgerFunctions
             JSONBefore = p.JSONBefore ?? SqlString.Null;
 
             JSONAfterwards = p.JSONAfterwards ?? SqlString.Null;
+
+            PurchaseLedgerInvoiceRegistryKey = p.PurchaseLedgerRegistryKey;
         }
     }
 }

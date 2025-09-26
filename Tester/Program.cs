@@ -106,15 +106,67 @@ namespace Tester
 
             //CFramework.WriteSubHeading("End of Company VAT Records");
 
-            var now = DateTime.Now;
+            //var results = PurchaseLedgerInvoiceRegisterFunctions.Insert(uniVerseAccount, @"{
+            //    ""ReceivedDT"": ""2025-09-12"",
+            //    ""OnFileDT"": ""2025-09-23"",
+            //    ""DocumentDT"": ""2025-08-06"",
+            //    ""DueDT"": ""2025-09-30"",
+            //    ""SettlementDT"": ""2025-09-30"",
+            //    ""PassedToDT"": ""2025-09-23"",
+            //    ""PassedTo"": ""Sarah Waller"",
+            //    ""SupplierCode"": ""C0307"",
+            //    ""ItemReference"": ""123456"",
+            //    ""PaymentTermsCode"": ""MN"",
+            //    ""AmountCurrency"": 96.0,
+            //    ""ExchangeRate"": 1.0,
+            //    ""AmountSterling"": 96.0,
+            //    ""VATBalance"": 96.0,
+            //    ""DocumentBalance"": 96.0,
+            //    ""Disputed"": null,
+            //    ""DisputeMemo"": null,
+            //    ""GeneralLedgerCodes"": [
+            //    ""9999999999""
+            //    ],
+            //    ""AmountsExVAT"": [
+            //    80.0
+            //    ],
+            //    ""VATCodes"": [
+            //    ""S""
+            //    ],
+            //    ""VATableValues"": [
+            //    80.0
+            //    ],
+            //    ""VATTaxes"": [
+            //    16.0
+            //    ],
+            //    ""Memo"": null,
+            //    ""OtherMemos"": null,
+            //    ""MertexCurrencyCode"": ""STG"",
+            //    ""discountAmount"": 0.0,
+            //    ""discountPercentage"": 0.0
+            //}").OfType<PurchaseLedgerInvoiceRegister>().ToList();
 
-            var invoiceRegisterKey = "314337";
+            //Console.WriteLine(JsonConvert.SerializeObject(results));
 
-            //var registerEntryJson = TesterFramework.FetchInvoiceRegistrationJSON(invoiceRegisterKey, "FlockDev");// Selector<PurchaseLedgerInvoiceRegister>.Select("305127", true, false, 10, uniVerseAccount);
 
-            //Console.WriteLine($"Calling PurchaseLedgerFunctions.InsertFromInvoiceRegister for PLINVREG key {invoiceRegisterKey} in {uniVerseAccount}");
 
-            //var transactionResults = PurchaseLedgerFunctions.InsertFromInvoiceRegistry(uniVerseAccount, registerEntryJson).OfType<PurchaseLedgerInsertionResult>().ToList();
+            var periods = PeriodsFunctions.Select("MERTEX", null).OfType<PeriodExplosion>().ToList();
+
+            Console.WriteLine(JsonConvert.SerializeObject(periods));
+
+
+
+                    //var now = DateTime.Now;
+
+                    //var invoiceRegisterKey = "306685";
+
+                    //var registerEntryJson = TesterFramework.FetchInvoiceRegistrationJSON(invoiceRegisterKey, "FlockDev");// Selector<PurchaseLedgerInvoiceRegister>.Select("305127", true, false, 10, uniVerseAccount);
+
+                    //Console.WriteLine($"Calling PurchaseLedgerFunctions.InsertFromInvoiceRegister for PLINVREG key {invoiceRegisterKey} in {uniVerseAccount}");
+
+                    //var transactionResults = PurchaseLedgerFunctions.InsertFromInvoiceRegistry(uniVerseAccount, registerEntryJson).OfType<PurchaseLedgerInsertionResult>().ToList();
+
+                    //Console.WriteLine(JsonConvert.SerializeObject(transactionResults));
 
             //Console.WriteLine($"Calling IncomingEmail.InvoiceRegisterEntry_RemoveFromPurchaseLedger_Select for @InvoiceRegisterKey {invoiceRegisterKey} in FlockDev");
 
@@ -125,31 +177,32 @@ namespace Tester
             //var transactionUndoResults = PurchaseLedgerFunctions.RollbackInvoiceRegistryInsertionTransaction(uniVerseAccount, rollbackJson).OfType<PurchaseLedgerTransactionRollbackResult>().ToList();
 
             //Console.WriteLine(JsonConvert.SerializeObject(transactionUndoResults));
-            
-            using (var qe = new QueryExecutor(uniVerseAccount))
-            {
-                var controlFile = qe.Session.CreateUniFile("PLCONTROL");
 
-                var gennoRecords = controlFile.ReadRecords(new[] { "GENNO" });
+                            //using (var qe = new QueryExecutor(uniVerseAccount))
+                            //{
+                            //    var controlFile = qe.Session.CreateUniFile("PLCONTROL");
 
-                var gennoRecord = gennoRecords.GetRecord(0);
+                            //    var gennoRecords = controlFile.ReadRecords(new[] { "GENNO" });
 
-                var fieldPosition = 5; // PLINVREG
+                            //    var gennoRecord = gennoRecords.GetRecord(0);
 
-                var numberField = gennoRecord.Record.Extract(fieldPosition);
+                            //    var fieldPosition = 5; // PLINVREG
 
-                var currentKey = Convert.ToInt32(numberField.StringValue);
+                            //    var numberField = gennoRecord.Record.Extract(fieldPosition);
 
-                var newKey = currentKey += 1;
+                            //    var currentKey = Convert.ToInt32(numberField.StringValue);
 
-                gennoRecord.Record.Replace(5, $"{newKey}");
+                            //    var newKey = currentKey += 1;
 
-                controlFile.WriteRecords(gennoRecords);
+                            //    gennoRecord.Record.Replace(5, $"{newKey}");
 
-                Console.WriteLine($"Read PLCONTROL<5> @ID = \"GENNO\", saw: {numberField}. New key is: {newKey}; has been written back to same.");
-            }
+                            //    controlFile.WriteRecords(gennoRecords);
 
-            // Test between for SQL DateTime Overflow: 2024/11/30 and 2024/12/31
+                            //    Console.WriteLine($"Read PLCONTROL<5> @ID = \"GENNO\", saw: {numberField}. New key is: {newKey}; has been written back to same.");
+                            //}
+
+            //Test between for SQL DateTime Overflow: 2024 / 11 / 30 and 2024 / 12 / 31
+
 
             //var postDt_From = DateTime.ParseExact("2024/10/31", "yyyy/MM/dd", DateTimeFormatInfo.InvariantInfo);
             //var postDt_To = DateTime.ParseExact("2024/11/30", "yyyy/MM/dd", DateTimeFormatInfo.InvariantInfo);
@@ -199,7 +252,7 @@ namespace Tester
             //SqlString SellingCompany;
             //SqlInt32 PostTime;
 
-            //foreach(var r in results)
+            //foreach (var r in results)
             //{
             //    SalesLedgerTransactionHistoryFunctions.SalesLedgerTransactionHistorySelect_FillRow(r,
             //        out Key,

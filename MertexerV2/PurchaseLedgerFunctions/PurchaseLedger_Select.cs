@@ -268,6 +268,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
             out SqlString AmountsPaidInCurrency,
             out SqlString VATTaxesInCurrency,
             out SqlDecimal AmountInCurrency,
+            out SqlDecimal UnallocatedCreditNoteAmountInCurrency,
             out SqlDecimal UnallocatedAmountInCurrency,
             out SqlString TransactionTypes,
             out SqlString SupplierInvoiceKeys,
@@ -412,12 +413,13 @@ namespace MertexerV2.PurchaseLedgerFunctions
             OpeningGoodsValuesInCurrency = p.OpeningGoodsValuesInCurrency?.Any() == true ? JsonConvert.SerializeObject(p.OpeningGoodsValuesInCurrency) : SqlString.Null;
             OpeningVATAmountsInCurrency = p.OpeningVATAmountsInCurrency?.Any() == true ? JsonConvert.SerializeObject(p.OpeningVATAmountsInCurrency) : SqlString.Null;
             OpeningBalancesOutstandingInCurrency = p.OpeningBalancesOutstandingInCurrency?.Any() == true ? JsonConvert.SerializeObject(p.OpeningVATAmountsInCurrency) : SqlString.Null;
-            ExchangeRateDifferencesInCurrency = p.ExchangeRateDifferencesInCurrency ?? SqlDecimal.Null;
+            ExchangeRateDifferencesInCurrency = p.ExchangeRateDifferencesInCurrency;
             DiscountAllowedInCurrency = p.DiscountAllowedInCurrency ?? SqlDecimal.Null;
             AmountsPaidInCurrency = p.AmountsPaidInCurrency?.Any() == true ? JsonConvert.SerializeObject(p.AmountsPaidInCurrency) : SqlString.Null;
             VATTaxesInCurrency = p.VATTaxesInCurrency?.Any() == true ? JsonConvert.SerializeObject(p.VATTaxesInCurrency) : SqlString.Null;
             AmountInCurrency = p.AmountInCurrency;
-            UnallocatedAmountInCurrency = p.UnallocatedAmountInCurrency ?? SqlDecimal.Null;
+            UnallocatedCreditNoteAmountInCurrency = p.UnallocatedCreditNoteAmountInCurrency ?? SqlDecimal.Null;
+            UnallocatedAmountInCurrency = p.UnallocatedAmountInCurrency;
             TransactionTypes = p.TransactionTypes?.Any() == true ? JsonConvert.SerializeObject(p.TransactionTypes) : SqlString.Null;
             SupplierInvoiceKeys = p.SupplierInvoiceKeys?.Any() == true ? JsonConvert.SerializeObject(p.SupplierInvoiceKeys) : SqlString.Null;
             Disputations = p.Disputations?.Any() == true ? JsonConvert.SerializeObject(p.Disputations) : SqlString.Null;

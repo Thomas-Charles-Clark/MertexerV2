@@ -1,0 +1,123 @@
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄProcess Defn - ParagraphÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ 
+³ Process Name    PG.POST.PREPAY.DES                                          ³ 
+³ Description     Automatic Posting of Prepayments                            ³ 
+³ Dict File Name                                                              ³ 
+³ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ ³ 
+³ Paragraph Lines                                                             ³ 
+³ *************************************************************************** ³ 
+³ * Job No.  - DES1002                                                      * ³ 
+³ * Dev By   - MRG                                                          * ³ 
+³ * Dev Date - 06/01/10                                                     * ³ 
+³ * Purpose  - This routine will automatically post the Prepayments to the  * ³ 
+³ *            to the Ledgers for a given list of GLPPTRANS.DES records.    * ³ 
+³ *************************************************************************** ³ 
+³ LOCAL L.SV.RECORD, L.SV.WORK, L.SV.KEY, L.SV.CNT, L.SV.PARMS2, L.PPKEYS     ³ 
+³ LOCAL L.PPREC, L.POS, L.MAX, L.AUTO, L.MANKEYS, I, L.COREC, L.ENDDATE       ³ 
+³ LOCAL L.AUTOKEYS                                                            ³ 
+³ *                                                                           ³ 
+³ L.PPKEYS = @PARAM                                                           ³ 
+³ *                                                                           ³ 
+³ L.SV.RECORD = @RECORD   ;                                                   ³ 
+³ L.SV.PARMS2 = @PARMS(2) ; @PARMS(2) = ""                                    ³ 
+³ L.SV.WORK   = @WORK                                                         ³ 
+³ L.SV.KEY    = @KEY                                                          ³ 
+³ L.SV.CNT    = @CNT                                                          ³ 
+³ *                                                                           ³ 
+³ L.PPREC = "" ; L.MANKEYS = "" ; L.AUTOKEYS = "" ; L.COREC = ""              ³ 
+³ *                                                                           ³ 
+³ L.COREC = F("COMPANY","1")                                                  ³ 
+³ *                                                                           ³ 
+³ L.POS = 1                                                                   ³ 
+³ L.MAX = DCOUNT(L.PPKEYS,@VM)                                                ³ 
+³ WHILE L.POS <= L.MAX DO                                                     ³ 
+³    READ L.PPREC FROM "GLPPTRANS.DES",L.PPKEYS<1,L.POS>                      ³ 
+³    IF NOT(@RTN.FLAG) THEN                                                   ³ 
+³       ***                                                                   ³ 
+³       * Check that all required info is present.                            ³ 
+³       ***                                                                   ³ 
+³       IF L.COREC<11> = "" THEN GOTO 100 ;* No. Financial Periods Null       ³ 
+³       IF L.COREC<10> = "" THEN GOTO 100 ;* This Period Null                 ³ 
+³       IF L.PPREC<1>  = "" THEN GOTO 100 ;* Prepayment Supplier              ³ 
+³       IF L.PPREC<2>  = "" THEN GOTO 100 ;* Prepayment G/L Code              ³ 
+³       IF L.PPREC<3>  = "" THEN GOTO 100 ;* Prepayment Amount                ³ 
+³       IF L.PPREC<21> = "" THEN GOTO 100 ;* Start Period                     ³ 
+³       IF L.PPREC<22> = "" THEN GOTO 100 ;* No. Periods                      ³ 
+³       IF L.PPREC<23> = "" THEN GOTO 100 ;* Split Equally                    ³ 
+³       IF L.PPREC<24> = "" THEN GOTO 100 ;* Split Amounts                    ³ 
+³       IF L.PPREC<27> = "" THEN GOTO 100 ;* Expense G/L Code                 ³ 
+³       IF S(L.PPREC<24>) # L.PPREC<3> THEN GOTO 100 ;* Sum of Split Amounts  ³ 
+³       ***                                                                   ³ 
+³       * Automatic Posting Allowed                                           ³ 
+³       ***                                                                   ³ 
+³       *                                                                     ³ 
+³       @WORK<1>      = L.PPKEYS<1,L.POS> ;* Audit Key                        ³ 
+³       @WORK<2>      = L.PPREC<1>        ;* Supplier                         ³ 
+³       @RECORD<57>   = L.PPREC<5>:" ":F("PLSUP",@WORK<2>)<1.1> ;* Memo       ³ 
+³       @RECORD<54.1> = L.PPREC<27>       ;* Expense G/L Code                 ³ 
+³       @RECORD<54.2> = L.PPREC<2>        ;* Prepayment G/L Code              ³ 
+³       @RECORD<60>   = L.PPREC<3>        ;* Prepayment Amount                ³ 
+³       @RECORD<55>   = L.PPREC<21>       ;* Start Period                     ³ 
+³       @RECORD<62>   = L.PPREC<22>       ;* No. Periods                      ³ 
+³       @RECORD<56>   = L.PPREC<23>       ;* Split Equally                    ³ 
+³       @RECORD<58>   = L.PPREC<24>       ;* Split Amounts                    ³ 
+³       IF L.PPREC<25> # "" THEN          ;* Split Memos                      ³ 
+³          @RECORD<67> = L.PPREC<25>                                          ³ 
+³       ELSE                                                                  ³ 
+³          @RECORD<67> = DUP(@RECORD<57>,@RECORD<58>)                         ³ 
+³       END                                                                   ³ 
+³       @RECORD<61>   = S(L.PPREC<24>)    ;* Balance                          ³ 
+³       *                                                                     ³ 
+³       L.ENDDATE = F("PERIODS","1")<2,L.COREC<10>>                           ³ 
+³       IF @DATE > L.ENDDATE THEN GOTO 100                                    ³ 
+³       @RECORD<50>   = @DATE             ;* Document Date                    ³ 
+³       *                                                                     ³ 
+³       @VALUE = @RECORD<62>                                                  ³ 
+³       CALL GLPREPAY.DES,2                                                   ³   /// this performs the call to GLPREPAY.DES!
+³       IF @RTN.FLAG THEN GOTO 100                                            ³ 
+³       *                                                                     ³ 
+³       @RECORD<51>   = B("RFGENKEY,.1.9") ;* Document Reference              ³ 
+³       @RECORD<2>    = @OTHER(4)                                             ³ 
+³       @RECORD<3>    = @OTHER(5)                                             ³ 
+³       FOR I = 1 TO DCOUNT(@RECORD<58>,@VM)                                  ³ 
+³          @RECORD<104,I> = @RECORD<51>:".PRE":I                              ³  /// this stores the prepayment records generated to @RECORD<104>
+³       NEXT I                                                                ³  
+³       EXEC "PU.PREPAY.DES"                                                  ³  /// what and where is PU.PREPAY.DES
+³       L.AUTOKEYS = INS(L.AUTOKEYS,1,-1,L.PPKEYS<1,L.POS>)                   ³  /// can only imagine INS in INSERT into position
+³       GOTO 200                                                              ³ 
+³ 100                                                                         ³ 
+³ ****                                                                  	  ³ 
+³ 	 * Manual Posting Required                                            	  ³ 
+³ 	 *                                                                   	  ³ 
+³ 	 * L.MANKEYS = INS(L.MANKEYS,1,-1,L.PPKEYS<1,L.POS>)                      ³ 
+³ END                                                                      	  ³ 
+³ 200                                                                         ³ 
+³    @WORK = "" ; @KEY = "" ; @RECORD = "" ; @CNT = 0                         ³ 
+³    L.POS = L.POS + 1                                                        ³ 
+³ REPEAT                                                                      ³
+³ ***                                                                         ³ 
+³ * If Manual Posting Required then run routine.                              ³ 
+³ ***                                                                         ³ 
+³ *IF L.MANKEYS # "" THEN                                                     ³ 
+³ *   IF L.AUTOKEYS = "" THEN                                                 ³ 
+³ *      DISP 4,"All Prepayments need to be posted Manually."                 ³ 
+³ *   ELSE                                                                    ³ 
+³ *      DISP 4,"Some Prepayments need to be posted Manually."                ³ 
+³ *   END                                                                     ³ 
+³ *   @PARMS(2) = L.MANKEYS                                                   ³ 
+³ *   EXEC "GL*PREPAY.DES"                                                    ³ 
+³ *END																		  ³ 
+³ *                                                                           ³ 
+³ @RECORD   = L.SV.RECORD                                                     ³ 
+³ @WORK     = L.SV.WORK                                                       ³ 
+³ @KEY      = L.SV.KEY                                                        ³ 
+³ @CNT      = L.SV.CNT                                                        ³ 
+³ @PARMS(2) = L.SV.PARMS2                                                     ³ 
+³                                                                             ³ 
+³                                                                             ³ 
+³                                                                             ³ 
+³                                                                             ³ 
+³ Source Code Id                                                              ³ 
+ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ 
+                                                                                
+F2-Save F4-Del F6-Reformat F8-Goto Line F9-Process F10-Action                   
+

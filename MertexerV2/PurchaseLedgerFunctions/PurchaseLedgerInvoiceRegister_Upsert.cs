@@ -1,4 +1,6 @@
-﻿using MertexerV2.Models.Pricing;
+﻿using IBMU2.UODOTNET;
+
+using MertexerV2.Models.Pricing;
 using MertexerV2.Models.PurchaseLedger;
 using MertexerV2.Utilities;
 using Microsoft.SqlServer.Server;
@@ -14,6 +16,43 @@ namespace MertexerV2.PurchaseLedgerFunctions
 {
     public static partial class PurchaseLedgerInvoiceRegisterFunctions
     {
+        internal static string UpsertViaTransaction(ref UniSession session, string PurchaseLedgerInvoiceRegisterJSON)
+        {
+            var purchaseLedgerInvoiceRegisterEntry = JsonConvert.DeserializeObject<PurchaseLedgerInvoiceRegister>(PurchaseLedgerInvoiceRegisterJSON);
+
+            var fileName = typeof(PurchaseLedgerInvoiceRegister).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
+                    .Cast<UniVerseFileNameAttribute>()
+                    .Single()
+                    .FileName;
+
+            var uniVerseFile = session.CreateUniFile(fileName);
+
+            try
+            {
+                var extantRecord = uniVerseFile.ReadField(purchaseLedgerInvoiceRegisterEntry.Key, 0).StringValue;
+            }
+            catch (UniFileException)
+            {
+                // extant record was not found: this is a creation request
+                // create first (lock the entire file for as little time as possible)
+                // then lock the specific record
+                // then write all the fields
+                // then unlock the record
+                var dataSet = new UniDataSet(session);
+                dataSet.Insert(purchaseLedgerInvoiceRegisterEntry.Key);
+
+                //slcustFile.LockFile();
+                uniVerseFile.WriteRecords(dataSet);
+                //slcustFile.UnlockFile();
+            }
+
+            uniVerseFile.LockRecord(purchaseLedgerInvoiceRegisterEntry.Key, 1);
+
+            UniUpsert<PurchaseLedgerInvoiceRegister>.Upsert(PurchaseLedgerInvoiceRegisterJSON, uniVerseFile);
+
+            return purchaseLedgerInvoiceRegisterEntry.Key;
+        }
+
         [SqlFunction]
         public static string Upsert(string UniVerseAccount, string PurchaseLedgerInvoiceRegisterJSON)
         {

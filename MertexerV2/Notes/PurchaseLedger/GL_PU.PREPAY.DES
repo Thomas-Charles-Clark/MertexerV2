@@ -1,0 +1,80 @@
+    
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄProcess Defn - File UpdateÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿           
+³ Process Name    PU.PREPAY.DES                       ³           
+³ Description     Prepayment Apportionment            ³           
+³ Source Dict File          Files To Update           ³           
+³ TGLEDG                    GLBATCH                   ³           
+³³                          GLBATCHDATA1              ³           
+³                           GLPPTRANS.DES             ³           
+³                                                     ³           
+³                                                     ³    
+
+See below for secondary file update definitions.        
+				   
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄSecondary File UpdateÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿   
+³ File Update (Dict) : GLBATCH                                              ³   
+³                                                                           ³   
+³ Update/Delete (U/D)  U                                                    ³   
+³ Update Condition                                                          ³   
+³ Data File (if diff)                                                       ³   
+³ Key Source           <51>                                                 ³   
+³                                                                           ³   
+³ Fld To Update  MV To Update    Oper   Value To Use                        ³   
+³ TYPE                           R      "RFPOST"                            ³   
+³ DATAKEYS                       I      <104>                               ³   
+³ NORECS                         R      <62>                                ³   
+³                                                                           ³   
+³                                                                           ³   
+³                                                                           ³   
+³                                                                           ³   
+ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ   
+                                                                               
+                                                                                
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄSecondary File UpdateÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿   
+³ File Update (Dict) : GLBATCHDATA1                                         ³   
+³                                                                           ³   
+³ Update/Delete (U/D)  U                                                    ³   
+³ Update Condition                                                          ³   
+³ Data File (if diff)                                                       ³   
+³ Key Source           <104,-1>                                             ³   
+³                                                                           ³   
+³ Fld To Update  MV To Update    Oper   Value To Use                        ³   
+³ TYPE                           R      "RFPOST"                            ³   
+³ DOCREF                         R      <104,-1>                            ³   
+³ PREFIX                         R      "PRE"                               ³   
+³ DOCDATE                        R      <49,-1>                             ³   
+³ POSTDATE                       R      @DATE                               ³   
+³ SUPREF                         R      W.PREPAY.SUPREF.DES                 ³   
+³ CUSNAME                        R      W.PREPAY.SUPNAME.DES                ³   
+³ AMOUNT                         R      <58,-1>                             ³   
+³ AMOUNT                         I      0-<58,-1>                           ³   
+³ GLCODE                         R      <54>                                ³   
+³ TRANSTYPE                      R      "PREPAYMENT"                        ³   
+³ MEMO                           R      <57>                                ³   
+³ MEMO1                          R      <67,-1>                             ³   
+³ MEMO1                          I      <67,-1>                             ³   
+³ USERID                         R      @USER.ID                            ³   
+³ POSTTIME                       R      @TIME                               ³   
+³                                                                           ³   
+ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ   
+                               
+
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄSecondary File UpdateÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿   
+³ File Update (Dict) : GLPPTRANS.DES                                        ³   
+³                                                                           ³   
+³ Update/Delete (U/D)  U                                                    ³   
+³ Update Condition     F("GLPPTRANS.DES",W.PREPAY.AUDITKEY)<0> # ""         ³   
+³ Data File (if diff)                                                       ³   
+³ Key Source           W.PREPAY.AUDITKEY                                    ³   
+³                                                                           ³   
+³ Fld To Update  MV To Update    Oper   Value To Use                        ³   
+³ APPORTIONED                    R      "Y"                                 ³   
+³ START.PD                       R      <55>                                ³   
+³ NO.PDS                         R      <62>                                ³   
+³ SPLIT.EQUAL                    R      <56>                                ³   
+³ SPLIT.AMOUNT                   R      <58>                                ³   
+³ SPLIT.MEMO                     R      <67>                                ³   
+³ SPLIT.DOCDAT                   R      <49>                                ³   
+³                                                                           ³   
+ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ   
+

@@ -76,7 +76,7 @@ LIST.ITEM PLPROGS WITH @ID = "PINVREG" 12:21:53pm  31 Jul 2025  PAGE    1
 073              GOSUB 30                                                       
 074              WRITEV "" ON PLINV,RECORD<199>,1                               
 075           END                                                            
-076      CALL PIUNIQUE                                                     
+076      	  CALL PIUNIQUE                                                     
 077      END CASE                                                               
 078      RTN.FLAG=0                                                             
 079 999 *                                                                       

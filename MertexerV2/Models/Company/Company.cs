@@ -46,7 +46,47 @@ namespace MertexerV2.Models.Company
 
         [UniVerseIndex(134)]
         [UniVerseFieldName("PLPER")]
-        public byte? ThisPurchaseLedgerPeriod { get; set; }
+        public byte ThisPurchaseLedgerPeriod { get; set; }
+
+        public DateTime? ThisPurchaseLedgerPeriodEndDT { get; set; }
+
+        /// <summary>
+        /// Purchase Ledger Current Period Close
+        /// </summary>
+        [UniVerseIndex(135)]
+        [UniVerseFieldName("PLCLOSE")]
+        public string ThisPurchaseLedgerPeriodEndDate
+        {
+            get
+            {
+                if (ThisPurchaseLedgerPeriodEndDT.HasValue)
+                {
+                    return Framework.UniVerseDateString(ThisPurchaseLedgerPeriodEndDT.Value);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                if (!String.IsNullOrEmpty(value))
+                {
+                    if (Int32.TryParse(value, out int valInt))
+                    {
+                        ThisPurchaseLedgerPeriodEndDT = Framework.DateTimeFromUniVerseOffset(valInt);
+                    }
+                    else
+                    {
+                        ThisPurchaseLedgerPeriodEndDT = null;
+                    }
+                }
+            }
+        }
+
+        [UniVerseIndex(165)]
+        [UniVerseFieldName("PLSENSYRS")]
+        public byte? PostDateCheckYears { get; set; }
 
         [UniVerseIndex(205)]
         [UniVerseFieldName("PREPAY.GLCODES.DES")]

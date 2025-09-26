@@ -91,7 +91,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
             return invoiceRegisterEntry.Key;
         }
 
-        [Microsoft.SqlServer.Server.SqlFunction(
+        [SqlFunction(
             DataAccess = DataAccessKind.Read,
             FillRowMethodName = "InvoiceRegisterInsert_FillRow")]
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
@@ -116,13 +116,15 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                     var gennoRecord = gennoRecords.GetRecord(0);
 
-                    var numberField = gennoRecord.Record.Extract(5);
+                    var fieldPosition = 5;
+
+                    var numberField = gennoRecord.Record.Extract(fieldPosition);
 
                     var currentKey = Convert.ToInt32(numberField.StringValue);
 
                     var newKey = currentKey += 1;
 
-                    gennoRecord.Record.Replace(5, $"{newKey}");
+                    gennoRecord.Record.Replace(fieldPosition, $"{newKey}");
 
                     controlFile.WriteRecords(gennoRecords);
 
@@ -154,7 +156,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                 uniVerseFile.LockRecord(invoiceRegisterEntry.Key, 1);
 
-                UniUpsert<PurchaseLedgerInvoiceRegister>.Upsert(PurchaseLedgerInvoiceRegisterJSON, uniVerseFile, UniVerseAccount);
+                UniUpsert<PurchaseLedgerInvoiceRegister>.Upsert(JsonConvert.SerializeObject(invoiceRegisterEntry), uniVerseFile, UniVerseAccount);
 
                 uniVerseFile.UnlockRecord(invoiceRegisterEntry.Key);
 

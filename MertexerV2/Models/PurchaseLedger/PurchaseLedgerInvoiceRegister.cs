@@ -26,6 +26,10 @@ namespace MertexerV2.Models.PurchaseLedger
             typeof(PurchaseLedgerInvoiceRegister).GetProperties().ToList().ForEach(p => Framework.InitialiseUniProperty(this, p));
         }
 
+        [UniVerseIndex(1)]
+        [UniVerseFieldName("POSTED")]
+        public bool Posted { get; set; }
+
         [JsonAlsoUpdates("DocumentDate")]
         public DateTime? DocumentDT { get; set; }
 

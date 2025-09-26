@@ -1,0 +1,90 @@
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄProcess Defn - ParagraphÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ 
+³ Process Name    TPLEDG*TPINVIR.CUR2.                                        ³ 
+³ Description     SB+ conv built                                              ³ 
+³ Dict File Name  TPLEDG                                                      ³ 
+³ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ ³ 
+³ Paragraph Lines                                                             ³ 
+³     LOCAL L.CNT, L.TEMP, L.MESS____________________________________________ ³ 
+³     LOCAL L.REC, L.DOCREF, L.DOCDATE, L.PARAM                               ³ 
+³     LOCAL L.PPCODES, L.PPTOTAL, L.POS, L.MAX                                ³ 
+³ *                                                                           ³ 
+³ **  DES1002+                                                                ³ 
+³ *                                                                           ³ 
+³ *   Check that the Prepayment Totals match Prepayment figure                ³ 
+³ *                                                                           ³ 
+³     L.PPCODES = F("COMPANY","1")<205>                                       ³ 
+³     L.POS = 1                                                               ³ 
+³     L.MAX = DCOUNT(<44>,@VM)                                                ³ 
+³     WHILE L.POS <= L.MAX DO                                                 ³ 
+³        IF LOC(<44,L.POS>,L.PPCODES,@VM) THEN                                ³ 
+³           IF <373,L.POS> # "" THEN                                          ³ 
+³              L.PPTOTAL = S(REPL(@SVM,@VM,<373,L.POS>))                      ³ 
+³              IF L.PPTOTAL # "" AND L.PPTOTAL # <43,L.POS> THEN              ³ 
+³                 L.MESS = ""                                                 ³ 
+³                 L.MESS<1,1> = "Line `":L.POS:"~G/L Code`":<44,L.POS>:"~"    ³ 
+³                 L.MESS<1,2> = ""                                            ³ 
+³                 L.MESS<1,3> = "The Total Apportionment  `":OCONV(L.PPTOTAL, ³ 
+³                 L.MESS<1,4> = "the Prepayment Amount of `":OCONV(<43,L.POS> ³ 
+³                 L.MESS<1,5> = ""                                            ³ 
+³                 L.MESS<1,6> = "Please Amend the Figures Using F6-Prepayment ³ 
+³                 DISP 4,L.MESS:"\Continue\1\R"                               ³ 
+³                 EXIT {RFGLCODE}                                             ³ 
+³              END                                                            ³ 
+³           ELSE                                                              ³ 
+³ 100                                                                         ³ 
+³              L.MESS = ""                                                    ³ 
+³              L.MESS<1,1> = "Line `":L.POS:"~G/L Code`":<44,L.POS>:"~"       ³ 
+³              L.MESS<1,2> = ""                                               ³ 
+³              L.MESS<1,3> = "Apportionment Details have not been entered."   ³ 
+³              L.MESS<1,4> = "Do you wish to enter?"                          ³ 
+³              DISP 4,L.MESS:"\Select,[Y]es,[N]o\1,Y,0\R"                     ³ 
+³              IF @RTN.FLAG = "1" THEN GOTO 100                               ³ 
+³              IF @RTN.FLAG = "Y" THEN EXIT {RFGLCODE}                        ³ 
+³           END                                                               ³ 
+³        END                                                                  ³ 
+³        L.POS = L.POS + 1                                                    ³ 
+³     REPEAT                                                                  ³ 
+³ **  DES1002-                                                                ³ 
+³     @VALUE = DTOTAL ; EXEC "DOCTOTAL" ; IF @RTN.FLAG THEN EXIT 1            ³ 
+³     @VALUE = DTOTAL ; EXEC "DOCTOTAL2" ; IF @RTN.FLAG THEN EXIT 1           ³ 
+³     L.PARAM = @PARAM                                ;*15721                 ³ 
+³     IF VATCD1 = "" THEN                                                     ³ 
+³        ERROR "VATCD1 MUST NOT EQUAL NULL"                                   ³ 
+³        EXIT 1                                                               ³ 
+³     END                                                                     ³ 
+³ *   Test for duplicate itemref                                              ³ 
+³     IF F("COMPANY","1")<160> = "Y" AND F("COMPANY","1")<161> = "Y" THEN     ³ 
+³        READ L.REC FROM "PLSUPINV",<39>:"*":<37>                             ³ 
+³        IF NOT(@RTN.FLAG) AND L.REC<3> = L.PARAM THEN                        ³ 
+³           L.DOCREF = L.REC<5>                                               ³ 
+³           L.DOCDATE = OCONV(L.REC<6>,"D2/")                                 ³ 
+³           DISP 4,"PLEASE NOTE - THIS ITEM REFERENCE HAS ALREADY BEEN USED F ³ 
+³           IF @RTN.FLAG = "1" THEN EXIT {ITEMREF}                            ³ 
+³        ELSE                                                                 ³ 
+³           @RTN.FLAG = 0                                                     ³ 
+³        END                                                                  ³ 
+³     END                                                                     ³ 
+³     @VALUE = INVDUE ; EXEC "INVDUE" ; IF @RTN.FLAG THEN EXIT 1              ³ 
+³     @VALUE = PLINVREG ; CALL PINVREG,2 ; IF @RTN.FLAG THEN EXIT 1           ³ 
+³     @VALUE = PIDOCDATE; CALL PLCHKDATE ; IF @RTN.FLAG THEN EXIT 1           ³ 
+³     POSTDATE = @DATE                                                        ³ 
+³ *   Restore Genuine Action as Saved in PARMS(2)...                          ³ 
+³     @ACTION = @PARMS(2)                                                     ³ 
+³     CALL PINVREG,4                                                          ³ 
+³     L.CNT = @CNT                                                            ³ 
+³     @CNT = 1                                                                ³ 
+³     L.TEMP = F("COMPANY","1")<83>                                           ³ 
+³     IF L.TEMP = "" THEN L.TEMP = "STG"                                      ³ 
+³     L.TEMP = ",":L.TEMP:",162,":CURRENCY:",N,R"                             ³ 
+³     WHILE VATCODE # "" DO                                                   ³ 
+³        VATTAX.CUR = P("PG.EXCHANGE,":VATTAX:L.TEMP)                         ³ 
+³        @CNT = @CNT + 1                                                      ³ 
+³     REPEAT                                                                  ³ 
+³     @CNT = L.CNT                                                            ³ 
+³     DISCADIS.CUR = P("PG.EXCHANGE,":DISCAMT:L.TEMP)                         ³ 
+³     EXEC "PG.EEC.WARN" ;*16656                                              ³ 
+³     EXIT                                                                    ³ 
+³                                                                             ³ 
+ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ 
+                                                                                
+F2-Save F4-Del F6-Reformat F8-Goto Line F9-Process F10-Action                   

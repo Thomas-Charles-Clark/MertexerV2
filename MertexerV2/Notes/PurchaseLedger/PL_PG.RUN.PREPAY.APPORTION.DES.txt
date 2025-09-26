@@ -1,0 +1,31 @@
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄProcess Defn - ParagraphÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ 
+³ Process Name    PG.RUN.PREPAY.APPORT                                        ³ 
+³ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ ³ 
+³                                                              			      ³ 
+³ LOCAL L.TRANSNO, L.SUPREF, L.SVPARMS1, L.SVPARMS2, L.PPKEYS, L.MAX, L.POS   ³ 
+³ LOCAL L.SVRTNFLAG                                                           ³ 
+³ *                                                                           ³ 
+³ L.SVRTNFLAG = @RTN.FLAG ; @RTN.FLAG = 0                                     ³ 
+³ L.TRANSNO = @PARAM"G0,1"                                                    ³ 
+³ L.SUPREF  = @PARAM"G1,1"                                                    ³ 
+³ *                                                                           ³ 
+³ L.SVPARMS1 = @PARMS(1) ; @PARMS(1) = ""                                     ³ 
+³ L.SVPARMS2 = @PARMS(2) ; @PARMS(2) = ""                                     ³ 
+³ *                                                                           ³ 
+³ @PARMS(1) = 'PREPAY.TRANSNO = "':L.TRANSNO:'"'                              ³ 
+³ L.PPKEYS = P("PS.SEL.GLPPTRANS.DES")                                        ³ 
+³ IF NOT(@RTN.FLAG) THEN                                                      ³ 
+³    L.MAX = DCOUNT(L.PPKEYS,@VM)                                             ³ 
+³    L.POS = 1                                                                ³ 
+³    IF L.MAX > "0" THEN                                                      ³ 
+³       *DISP 4,"Do you wish to Apportion Prepayments now?\[Y]es,[N]o\0,1\C"  ³ 
+³       *IF @RTN.FLAG THEN GOTO 999                                           ³ 
+³       EXEC "RSP,GL,PG.POST.PREPAY.DES,":L.PPKEYS                            ³ 
+³    END                                                                      ³ 
+³ END                                                                         ³ 
+³ 999                                                                         ³ 
+³ @PARMS(1) = L.SVPARMS1                                                      ³ 
+³ @PARMS(2) = L.SVPARMS2                                                      ³ 
+³ @RTN.FLAG = L.SVRTNFLAG                                                     ³ 
+³                                                                             ³ 
+ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ 

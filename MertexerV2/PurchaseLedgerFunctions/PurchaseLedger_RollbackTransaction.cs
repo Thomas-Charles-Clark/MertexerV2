@@ -68,7 +68,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
             var companyVATEntries = Selector<CompanyVAT>.Select(registerEntry.VATCodes, true, false, 1, UniVerseAccount);
 
-            var currentPeriod = companyEntry.ThisPurchaseLedgerPeriod ?? companyEntry.ThisGeneralLedgerPeriod;
+            var currentPeriod = companyEntry.ThisPurchaseLedgerPeriod; // WARNING WARNING DANGER ARE YOU SURE
 
             #endregion
 

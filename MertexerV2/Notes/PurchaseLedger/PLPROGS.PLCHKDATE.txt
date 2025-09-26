@@ -1,0 +1,142 @@
+     PLCHKDATE                                                                  
+0001     SUBROUTINE PLCHKDATE                                                   
+0002 *   GENERALISED DATE VALIDATION LOGIC FOR PURCHASE LEDGER TO HANDLE FUTURE 
+0003 *   POSTING IF PURCHASE LEDGER IN ADVANCE OF GENERAL LEDGER                
+0004 *   ENTRY POINTS:-                                                         
+0005 *   AMENDMENT HISTORY :-                                                   
+0006 *   DATE      BY    REASON                                                 
+0007 *   09/04/02  PT    JOB 10575 - ALLOW POSTING DATE UP TO END OF NEXT P/L PERIOD                                                                       
+0008 *                   EVEN WHEN P/L IS 1 PERIOD AHEAD OF G/L                 
+0009 *                                                                          
+0010     $INCLUDE RFPROGS COMMON                                                
+0011 *                                                                          
+0012     EQUATE VM TO CHAR(253)                                                 
+0013     EQUATE UPDATE.REC TO PARMS(2)                                          
+0014     RTN.FLAG=1                                                             
+0015     IF VALUE='' THEN RETURN                                                
+0016     IF VALUE > DATE() THEN                                                 
+0017       MSG='Date Should Be Less Than Or Equal To Current Date Of '          
+0018       MSG=MSG:OCONV(DATE(),'D2/')                                          
+0019       CALL SB.DISP(3,MSG)                                                  
+0020       RETURN           
+0021	 END	
+0022     OPEN '','PERIODS' TO F.PERIODS ELSE             
+0023		CALL SB.DISP(3,'Cannot Open PERIODS')                                      
+0024       RETURN                                                               
+0025     END                                                                    
+0026     READ PERIOD.REC FROM F.PERIODS,"1" ELSE
+0027       CALL SB.DISP(3,'Record 1 Not Found On PERIODS')                      
+0028       RETURN                                                               
+0029     END                                                                    
+0030     * Job 7721 Start (Added 30/03/01 by MSD)                               
+0031     * Add 'sensibility' check to date entered. This is based on new        
+0032     * field added to Company file to indicate max no of years that entry   
+0033     * may be before current financial year. If the field has not been      
+0034     * set up then 2 years is assumed.                                      
+0035     L.YEAR = PERIOD.REC<2,1>                ;*Get start of current GL year.
+                                                                                
+0036     L.YEAR = OCONV(L.YEAR,"DY")             ;*Convert to year only ie 2001 
+0037     L.INPYR = OCONV(VALUE,"DY")             ;*Convert input to year ie 1984
+                                                                                
+0038     L.SENSEYR = OCONV("1",'TCOMPANY;X;;165');*Get no of yrs allowed ie 3   
+0039     IF L.SENSEYR = "" THEN                                                 
+0040         L.SENSEYR = 2                       ;*Limit to 2                   
+0041     END                                                                    
+0042     L.VALYR = L.YEAR - L.SENSEYR            ;*Set to start of year - accept
+                                                                                
+     able yrs ie 2001 - 3                                                       
+Press any key to continue...                                                    
+0044         CALL SB.DISP(3,"Date Must Be Within ":L.SENSEYR:" Year(s) Of The Cu
+                                                                                
+     rrent Financial Year : ":L.YEAR)                                           
+0045         RETURN                                                             
+0046     END                                                                    
+0047     * Job 7721 end                                                         
+0048     PERIODS=OCONV("1",'TCOMPANY;X;;11')                                    
+0049 *-                                                                         
+0050 * Use PL PERIOD for separate PL or GL period if GL/PL combined             
+0051 *-                                                                         
+0052     THIS.PD=OCONV("1",'TCOMPANY;X;;134')                                   
+0053 * Job 2000 MH                                                              
+0054     PLPER = THIS.PD                                                        
+0055 *   IF THIS.PD = "" THEN                                                   
+0056     THIS.PD=OCONV("1",'TCOMPANY;X;;10')                                    
+0057     GLPER = THIS.PD                                                        
+0058 *   END                                                                    
+0059 * Job 2000 End                                                             
+0060 *-                                                                         
+0061     RECORD<154>=''                                                         
+0062     IF PERIODS='' OR THIS.PD='' THEN                                       
+0063       CALL SB.DISP(3,'Invalid No Of Periods/Period No. On COMPANY')        
+0064       RETURN                                                               
+Press any key to continue...                                                    
+0066 * Job 2000 MH                                                              
+0067 * Job 2573 MH                                                              
+0068 *    IF PLPER > GLPER THEN                                                 
+0069     PLCLOSE = OCONV("1",'TCOMPANY;X;;135')                                 
+0070     IF VALUE > PLCLOSE THEN                                                
+0071 * Job 2573 End                                                             
+0072       RECORD<154>='Y'                                                      
+0073       ** Job 7535 +                                                        
+0074       IF RECORD<154>='Y' THEN                                              
+0075         SAVE.RTN.FLAG = RTN.FLAG ;*10170                                   
+0076         CALL SB.DISP(4,'Warning! This date is in advance of the current P/L
+                                                                                
+      period')                                                                  
+0077         RTN.FLAG = SAVE.RTN.FLAG ;*10170                                   
+0078       END                                                                  
+0079     ** Job 7535 -                                                          
+0080     END                                                                    
+0081 * Job 2000 End                                                             
+0082 *                                                                          
+0083 * CALCULATE THIS OR NEXT                                                   
+0084     GLFLAG=0                                                               
+0085 * Job 2573 MH                                                              
+0086 *    IF VALUE > PERIOD.REC<2,THIS.PD> THEN RECORD<154>="Y" ELSE GOTO 999   
+Press any key to continue...                                                    
+0089 * JOB 10575                                                                
+0090 *    IF THIS.PD = PERIODS THEN                                             
+0091     IF THIS.PD = PERIODS OR (PLPER + 1) > PERIODS THEN                     
+0092       IF PERIOD.REC<3> = '' THEN                                           
+0093         CALL SB.DISP(3,'Next Year GL Period dates not set')                
+0094         RETURN                                                             
+0095       END                                                                  
+0096 *      IF VALUE > PERIOD.REC<3,1> THEN GLFLAG=1; GLDATE=PERIOD.REC<3,1>    
+0097       IF PLPER = PERIODS THEN PD = 1 ELSE PD = 2                           
+0098       IF VALUE > PERIOD.REC<3,PD> THEN GLFLAG=1; GLDATE=PERIOD.REC<3,PD>   
+0099     END ELSE                                                               
+0100 *      IF VALUE > PERIOD.REC<2,THIS.PD+1> THEN GLFLAG=1; GLDATE=PERIOD.REC<
+                                                                                
+     2,THIS.PD+1>                                                               
+0101       IF VALUE > PERIOD.REC<2,PLPER+1> THEN GLFLAG=1; GLDATE=PERIOD.REC<2,P
+                                                                                
+     LPER+1>                                                                    
+0102     END                                                                    
+0103     IF GLFLAG=1 THEN                                                       
+0104       GLD=OCONV(GLDATE,"D2/")                                              
+0105 *      CALL SB.DISP(3,"Cannot Post Past Next Pd GL ":GLD)                  
+0106       CALL SB.DISP(3,"Cannot Post Past Next Pd PL ":GLD)                   
+0107 * JOB 10575 END                                                            
+Press any key to continue...                                                    
+0096 *      IF VALUE > PERIOD.REC<3,1> THEN GLFLAG=1; GLDATE=PERIOD.REC<3,1>    
+0097       IF PLPER = PERIODS THEN PD = 1 ELSE PD = 2                           
+0098       IF VALUE > PERIOD.REC<3,PD> THEN GLFLAG=1; GLDATE=PERIOD.REC<3,PD>   
+0099     END ELSE                                                               
+0100 *      IF VALUE > PERIOD.REC<2,THIS.PD+1> THEN GLFLAG=1; GLDATE=PERIOD.REC<
+                                                                                
+     2,THIS.PD+1>                                                               
+0101       IF VALUE > PERIOD.REC<2,PLPER+1> THEN GLFLAG=1; GLDATE=PERIOD.REC<2,P
+                                                                                
+     LPER+1>                                                                    
+0102     END                                                                    
+0103     IF GLFLAG=1 THEN                                                       
+0104       GLD=OCONV(GLDATE,"D2/")                                              
+0105 *      CALL SB.DISP(3,"Cannot Post Past Next Pd GL ":GLD)                  
+0106       CALL SB.DISP(3,"Cannot Post Past Next Pd PL ":GLD)                   
+0107 * JOB 10575 END                                                            
+Press any key to continue...                                                    
+0108       RETURN                                                               
+0109     END                                                                    
+0110 *                                                                          
+0111 999 RTN.FLAG=0                                                             
+0112     RETURN        

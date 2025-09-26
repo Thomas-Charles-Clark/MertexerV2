@@ -27,7 +27,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
         public static IEnumerable Insert(string UniVerseAccount, string PurchaseLedgerCreditRegisterJSON)
         {
-            var CreditRegisterEntry = JsonConvert.DeserializeObject<PurchaseLedgerCreditRegister>(PurchaseLedgerCreditRegisterJSON);
+            var creditRegisterEntry = JsonConvert.DeserializeObject<PurchaseLedgerCreditRegister>(PurchaseLedgerCreditRegisterJSON);
 
             var fileName = typeof(PurchaseLedgerCreditRegister).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
                     .Cast<UniVerseFileNameAttribute>()
@@ -40,11 +40,33 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                 try
                 {
-                    var extantRecord = uniVerseFile.ReadField(CreditRegisterEntry.Key, 0).StringValue;
+                    var controlFile = ce.Session.CreateUniFile("PLCONTROL");
+
+                    var gennoRecords = controlFile.ReadRecords(new[] { "GENNO" });
+
+                    var gennoRecord = gennoRecords.GetRecord(0);
+
+                    var fieldPosition = 8;
+
+                    var numberField = gennoRecord.Record.Extract(fieldPosition);
+
+                    var currentKey = Convert.ToInt32(numberField.StringValue);
+
+                    var newKey = currentKey += 1;
+
+                    gennoRecord.Record.Replace(fieldPosition, $"{newKey}");
+
+                    controlFile.WriteRecords(gennoRecords);
+
+                    creditRegisterEntry.Key = $"{newKey}";
+
+                    creditRegisterEntry.RegisterKey = creditRegisterEntry.Key;
+
+                    var extantRecord = uniVerseFile.ReadField(creditRegisterEntry.Key, 0).StringValue;
 
                     if (!String.IsNullOrEmpty(extantRecord))
                     {
-                        throw new Exception($"{CreditRegisterEntry.Key} exists on {fileName}, INSERT fails");
+                        throw new Exception($"{creditRegisterEntry.Key} exists on {fileName}, INSERT fails");
                     }
                 }
                 catch (IBMU2.UODOTNET.UniFileException)
@@ -55,22 +77,22 @@ namespace MertexerV2.PurchaseLedgerFunctions
                     // then write all the fields
                     // then unlock the record
                     var dataSet = new IBMU2.UODOTNET.UniDataSet(ce.Session);
-                    dataSet.Insert(CreditRegisterEntry.Key);
+                    dataSet.Insert(creditRegisterEntry.Key);
 
                     //slcustFile.LockFile();
                     uniVerseFile.WriteRecords(dataSet);
                     //slcustFile.UnlockFile();
                 }
 
-                uniVerseFile.LockRecord(CreditRegisterEntry.Key, 1);
+                uniVerseFile.LockRecord(creditRegisterEntry.Key, 1);
 
                 UniUpsert<PurchaseLedgerCreditRegister>.Upsert(PurchaseLedgerCreditRegisterJSON, uniVerseFile, UniVerseAccount);
 
-                uniVerseFile.UnlockRecord(CreditRegisterEntry.Key);
+                uniVerseFile.UnlockRecord(creditRegisterEntry.Key);
 
             }
 
-            return new ArrayList() { CreditRegisterEntry };
+            return new ArrayList() { creditRegisterEntry };
         }
 
         public static void CreditRegisterInsert_FillRow(

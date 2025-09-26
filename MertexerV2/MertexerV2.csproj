@@ -143,6 +143,7 @@
     <Compile Include="GeneralFunctions\OrderCategory_Upsert.cs" />
     <Compile Include="GeneralFunctions\Operator_Select.cs" />
     <Compile Include="GeneralFunctions\Operator_Upsert.cs" />
+    <Compile Include="GeneralFunctions\Periods_Select.cs" />
     <Compile Include="GeneralFunctions\Reason_Upsert.cs" />
     <Compile Include="GeneralFunctions\Reason_Select.cs" />
     <Compile Include="GeneralLedgerFunctions\GeneralLedgerPrePaymentTransaction_Select.cs" />
@@ -183,12 +184,17 @@
     <Compile Include="Models\General\DeliveryTerms.cs" />
     <Compile Include="Models\General\FieldIndices.cs" />
     <Compile Include="Models\General\Operator.cs" />
+    <Compile Include="Models\General\PeriodExplosion.cs" />
+    <Compile Include="Models\General\Periods.cs" />
     <Compile Include="Models\General\Reason.cs" />
     <Compile Include="Models\Invoices\InvoiceTerms.cs" />
     <Compile Include="Models\PurchaseLedger\PurchaseLedger.cs" />
+    <Compile Include="Models\PurchaseLedger\PurchaseLedgerAdjustmentAudit1_QPointer.cs" />
     <Compile Include="Models\PurchaseLedger\PurchaseLedgerCreditNoteRegister.cs" />
     <Compile Include="Models\PurchaseLedger\PurchaseLedgerSupplierInvoice.cs" />
     <Compile Include="Models\PurchaseLedger\PurchaseLedgerAdjustmentAudit.cs" />
+    <Compile Include="Models\PurchaseLedger\PurchaseLedgerTransaction1_QPointer.cs" />
+    <Compile Include="Models\PurchaseLedger\PurchaseLedgerTransactionCurrency1_QPointer.cs" />
     <Compile Include="Models\PurchaseLedger\PurchaseLedgerTransactionCurrencyHistory.cs" />
     <Compile Include="Models\PurchaseLedger\PurchaseLedgerTransactionHistory.cs" />
     <Compile Include="Models\PurchaseLedger\PurchaseLedgerTransactionRollbackResult.cs" />
@@ -197,6 +203,7 @@
     <Compile Include="Models\PurchaseLedger\PurchaseLedgerRegisterHistory.cs" />
     <Compile Include="Models\SalesLedger\SalesLedgerTransactionHistoryCurrency.cs" />
     <Compile Include="Models\Stock\StockValuation.cs" />
+    <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerCreditRegister_Delete.cs" />
     <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerTransactionCurrencyHistory_Upsert.cs" />
     <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerTransactionHistoryCurrency_Select.cs" />
     <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerTransactionHistory_Upsert.cs" />

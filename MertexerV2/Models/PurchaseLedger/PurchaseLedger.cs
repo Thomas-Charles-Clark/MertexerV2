@@ -49,6 +49,8 @@ namespace MertexerV2.Models.PurchaseLedger
         //[UniVerseFieldName("CODE")]
         //public string Code { get; set; }
 
+        // This one isn't even named in the dictionary, I've just...
+        // read the data enough to know that it ought to be set appropriately.
         [UniVerseIndex(2)]
         [UniVerseFieldName("TRANSACTIONDEFINITION")]
         public string SourceTransactionDefinition { get; set; }
@@ -987,7 +989,7 @@ namespace MertexerV2.Models.PurchaseLedger
 
         [UniVerseIndex(123)]
         [UniVerseFieldName("RF134")]
-        public string Rfplufo01 { get; set; }
+        public string RFPLUFO01 { get; set; }
 
         [UniVerseIndex(124)]
         [UniVerseFieldName("ZA124")]
@@ -1031,6 +1033,10 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseFieldName("TOTCSHALL")]
         [UniVerseConversion("MR22")]
         public decimal? TotalCashAllocated { get; set; }
+
+        [UniVerseIndex(151)]
+        [UniVerseFieldName("ZA151")]
+        public decimal ZaplcashallRF { get; set; }
 
         [UniVerseIndex(152)]
         [UniVerseFieldName("ALLOCCHEQUE")]
@@ -1171,7 +1177,7 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseIndex(234)]
         [UniVerseFieldName("EXDIFFS.CUR")]
         [UniVerseConversion("MR22")]
-        public decimal? ExchangeRateDifferencesInCurrency { get; set; }
+        public decimal ExchangeRateDifferencesInCurrency { get; set; }
 
         [UniVerseIndex(241)]
         [UniVerseFieldName("DISCREC.CUR")]
@@ -1192,17 +1198,23 @@ namespace MertexerV2.Models.PurchaseLedger
 
         [UniVerseIndex(250)]
         [UniVerseFieldName("CURAMT")]
-        [UniVerseConversion("MR22")] // ERGH...JUST USE MR22!!!
+        // [UniVerseConversion("MR22")] // ERGH...JUST USE MR22!!! = NO DON'T
         // There are no XRATE records where <4> (NO.DP) = "Y", so... BLEEEHHH. this is horrid!
         // (IF(F("XRATE",CURRENCY)<4> = "Y",
         // OCONV(OCONV(@VALUE,"MR02,"),"MR#":F("DICT TPLEDG",".CURAMT")<10>),
         // OCONV(OCONV(@VALUE,"MR22"),"MR#":F("DICT TPLEDG",".CURAMT")<10>))) <<< This branch wins, but... what does it result in? DUNNO!
+        // Looking at the data, this is stored as an integer with no conversion.
         public decimal AmountInCurrency { get; set; }
+
+        [UniVerseIndex(264)]
+        [UniVerseFieldName("CNBAL.CUR")]
+        [UniVerseConversion("MR22")]
+        public decimal? UnallocatedCreditNoteAmountInCurrency { get; set; }
 
         [UniVerseIndex(265)]
         [UniVerseFieldName("UNALLOC.CUR")]
         [UniVerseConversion("MR22")]
-        public decimal? UnallocatedAmountInCurrency { get; set; }
+        public decimal UnallocatedAmountInCurrency { get; set; }
 
         [UniVerseIndex(267)]
         [UniVerseFieldName("TRANTYPE")]

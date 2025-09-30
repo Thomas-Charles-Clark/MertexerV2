@@ -28,6 +28,8 @@ namespace MertexerV2.PurchaseLedgerFunctions
         {
             var results = new List<PurchaseLedgerTransactionRollbackResult>();
 
+            int f = 0;
+
             // Oh, my...
 
             #region Properties & Initialisation
@@ -177,14 +179,14 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                 #region Step 03. Create the given Purchase Ledger Invoice Register entry (INSERT to PLINVREG)
 
-                var purchaseLedgerInvoiceRegisterInsertionResultKey = PurchaseLedgerInvoiceRegisterFunctions.InsertViaTransaction(ref session, JsonConvert.SerializeObject(registerEntry));
+                var purchaseLedgerRegisterInsertionResult = PurchaseLedgerInvoiceRegisterFunctions.Insert(UniVerseAccount, JsonConvert.SerializeObject(registerEntry)).OfType<PurchaseLedgerInvoiceRegister>().FirstOrDefault();
 
                 results.Add(new PurchaseLedgerTransactionRollbackResult(
                     purchaseLedgerInvoiceRegistryKey: registerEntry.Key,
                     fileKey: purchaseLedgerInvoiceRegisterKey,
                     fileName: "PLINVREG",
                     operationsPerformed: new[] { "INSERT" },
-                    success: !String.IsNullOrEmpty(purchaseLedgerInvoiceRegisterInsertionResultKey),
+                    success: !String.IsNullOrEmpty(purchaseLedgerRegisterInsertionResult?.Key),
                     uniVerseResponse: null,
                     uniVerseCommandStatus: null
                 ));

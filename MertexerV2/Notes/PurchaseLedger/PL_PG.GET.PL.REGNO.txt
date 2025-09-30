@@ -15,10 +15,13 @@
 ³     END                                                                     ³ 
 ³ END                                                                         ³ 
 ³ @VALUE = L.REC<120>                                                         ³ 
-³ @RTN.FLAG = 0______________________________________________________________ ³ 
+³ @RTN.FLAG = 0                                                               ³ 
 ³                                                                             ³ 
 ³                                                                             ³ 
 ³ Source Code Id                                                              ³ 
 ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ 
                                                                                 
-F2-Save F4-Del F6-Reformat F8-Goto Line F9-Process F10-Action                   
+F2-Save F4-Del F6-Reformat F8-Goto Line F9-Process F10-Action                   +
+
+
+

@@ -156,49 +156,18 @@ namespace Tester.Utilities
             }
         }
 
-        public static string FetchPurchaseOrderInvoiceRegisterJson()
+        public static string FetchPurchaseOrderInvoiceRegisterJson(string invoiceRegisterKey, string databaseName = "Flock")
         {
-#if DEBUG
-            using (var conn = new SqlConnection("Data Source=vm-sql;Initial Catalog=Flock;Integrated Security=True"))
-#else
-            using (var conn = new SqlConnection("context connection=true"))
-#endif
+            using (var conn = new SqlConnection($"Data Source=vm-sql;Initial Catalog={databaseName};Integrated Security=True"))
             {
                 try
                 {
-                    return String.Join("", conn.Query<string>($@"
-	SELECT TOP 1
-		N'DELETEME' AS [Code],
-       [DocumentDT],
-       [OnFileDT],
-       [ItemReference],
-       [DueDT],
-       [SupplierReference],
-       JSON_QUERY([AmountsExVAT]) AS AmountsExVat,
-       JSON_QUERY([GeneralLedgerCodes]) AS GeneralLedgerCodes,
-       JSON_QUERY([VATCodes]) AS VATCodes,
-       JSON_QUERY([VATTaxes]) AS VATTaxes,
-       JSON_QUERY([VATValues]) AS VATValues,
-       [AmountSterling],
-       [PaymentTermsCode],
-       [Memo],
-       [VATBalance],
-       [DocumentBalance],
-       JSON_QUERY([OtherMemos]) AS OtherMemos,
-       [ReceivedDT],
-       [PassedTo],
-       [PassedToDT],
-       [AmountCurrency],
-       JSON_QUERY([ExchangeRates]) AS ExchangeRates
-	FROM clr.[fnc_Mertex_PurchaseLedgerCreditNoteRegister_Select](
-        N'MERTEX', 
-        NULL, 
-        NULL, 
-        NULL, 
-        NULL, 
-        NULL, 
-        NULL
-    ) FOR JSON PATH, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER"));
+                    var result = String.Join("", conn.QueryAsync<string>("IncomingEmail.InvoiceRegisterEntry_SubmitToPurchaseLedger_Select", new
+                    {
+                        InvoiceRegisterKey = invoiceRegisterKey
+                    }, null, 30, CommandType.StoredProcedure).Result);
+
+                    return result;
                 }
                 finally
                 {
@@ -328,6 +297,26 @@ FOR JSON PATH, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER"));
                 try
                 {
                     var result = String.Join("", conn.QueryAsync<string>("IncomingEmail.InvoiceRegisterEntry_SubmitToPurchaseLedger_Select", new
+                    {
+                        InvoiceRegisterKey = invoiceRegisterKey
+                    }, null, 30, CommandType.StoredProcedure).Result);
+
+                    return result;
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+        }
+
+        public static string FetchInvoiceRollbackJSON(string invoiceRegisterKey, string databaseName = "Flock")
+        {
+            using (var conn = new SqlConnection($"Data Source=vm-sql;Initial Catalog={databaseName};Integrated Security=True"))
+            {
+                try
+                {
+                    var result = String.Join("", conn.QueryAsync<string>("IncomingEmail.InvoiceRegisterEntry_RemoveFromPurchaseLedger_Select", new
                     {
                         InvoiceRegisterKey = invoiceRegisterKey
                     }, null, 30, CommandType.StoredProcedure).Result);

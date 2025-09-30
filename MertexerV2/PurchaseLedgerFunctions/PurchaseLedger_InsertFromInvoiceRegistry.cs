@@ -20,6 +20,10 @@ using Newtonsoft.Json.Linq;
 using System.Web.UI.WebControls;
 using MertexerV2.Models.General;
 
+#region Notes from Mertex Screens & Transactions
+
+#region TPLEDG TPINVIR.CUR.DES1
+
 /*
  * /SD TPLEDG TPINVIR.CUR.DES1  >  Requires of the user an Invoice Register key
  * 
@@ -93,7 +97,7 @@ It is called multiple times subsequently during this transaction process, with v
 058           END                                                               
 059         * V1.2-                                                             
 060           VALUE = RECORD<199>                                                 
-061           WRITEV "Y" ON PLINV,RECORD<199>,1                 * If we reach here, we're updating PLINVREG [TPLEDG<199>]<1> to "Y" ✔
+061           WRITEV "Y" ON PLINV,RECORD<199>,1                 * If we reach here, we're updating PLINVREG [TPLEDG<199>]<1> to "Y" ✔:674
 062           NEWITEM = 1                                                   
 063        *; CHECK THAT INV REGISTER STILL OK TO PROCEED OR IF DELETE BATCH TRANSACTION  // Eh?
 
@@ -114,7 +118,7 @@ It is called multiple times subsequently during this transaction process, with v
                                                                * 
                                                                * Essentially this case statement determines "Does this PurchaseLedgerRegisterKey exist on PLINVREG and is it as-yet not posted?
                                                                * 
-                                                               * ✔
+                                                               * ✔:664,669
 071      CASE ENTRY = 4                                                         
 072           IF ACTION = 3 THEN     ;* DELETE FRONM BATCH                      
 073              GOSUB 30                                                       
@@ -133,13 +137,21 @@ It is called multiple times subsequently during this transaction process, with v
 086 *-------------------------------------------                                
 087 30*                                                                         
 088      OPEN '',"PLINVREG" TO PLINV ELSE                                       
-089        CALL SB.DISP(3,'PLINVREG FILE NOT FOUND')                            
+089        CALL SB.DISP(3,'PLINVREG FILE NOT FOUND')           ;* Holy cow, that wouldn't be good.                 
 090        RTN.FLAG = 1                                                         
 091        END                                                                  
 092      RETURN                                                                 
 093     END                  
+*/
+
+#endregion
+
+#region TPLEDG TPINVIR.CUR.DES2
+
+#endregion
 
 
+/*
  * /SD TPLEDG TPINVIR.CUR.DES2  >  Requires the user to review the Invoice Register entry having provided a valid, non-posted key to Screen 1
  * 
  * Process after screen accept: TPLEDG*TPINVIR.CUR2.DES,INV
@@ -154,17 +166,17 @@ It is called multiple times subsequently during this transaction process, with v
  * 
  * @VALUE = INVDUE ; EXEC INVDUE
  *  INVDUE is a paragraph existing in the PL subsystem, it's fairly simple:                                                 Catered for by validation step?
- *      ³ IF @VALUE < <33> THEN                                 * If INVDUE less than DOCDATE then throw                    ✔
+ *      ³ IF @VALUE < <33> THEN                                 * If INVDUE less than DOCDATE then throw                    ✔:681
         ³    ERROR 'INVOICE DUE DATE IS BEFORE DOCUMENT DATE'
         ³    EXIT 1
         ³ END
-        ³ IF <55> < <33> THEN                                   * If OBALDUED less than DOCDATE then throw                  ✔
+        ³ IF <55> < <33> THEN                                   * If OBALDUED less than DOCDATE then throw                  ✔:684
         ³    ERROR 'SETTLEMENT DATE IS BEFORE DOCUMENT DATE'
         ³    EXIT 1
         ³ END
  * 
  * @VALUE = PLINVREG ; CALL PLINVREG,2
- *  Ensures that <199> can be read from PLINVREG, and if so it updates PLINVREG<1> WITH @ID = <199> to be "Y".              ✔
+ *  Ensures that <199> can be read from PLINVREG, and if so it updates PLINVREG<1> WITH @ID = <199> to be "Y".              ✔{various,:722}
  * 
  * 
  * @VALUE = PIDOCDATE ; CALL PLCHKDATE
@@ -187,12 +199,12 @@ It is called multiple times subsequently during this transaction process, with v
 0014     RTN.FLAG = 1                                                             
 0015     IF VALUE='' THEN RETURN                                                
 0016     IF VALUE > DATE() THEN                                                 
-0017       MSG = 'Date Should Be Less Than Or Equal To Current Date Of '                                ;* DOCDATE<33> should be LTE DateTime.Now.Date ✔
+0017       MSG = 'Date Should Be Less Than Or Equal To Current Date Of '                                ;* DOCDATE<33> should be LTE DateTime.Now.Date ✔:689
 0018       MSG = MSG:OCONV(DATE(),'D2/')                                          
 0019       CALL SB.DISP(3,MSG)                                                  
 0020       RETURN           
 0021	 END	
-0022     OPEN '','PERIODS' TO F.PERIODS ELSE                                                            ;* Must be able to open PERIODS ✔
+0022     OPEN '','PERIODS' TO F.PERIODS ELSE                                                            ;* Must be able to open PERIODS ✔:640
 0023		CALL SB.DISP(3,'Cannot Open PERIODS')                                      
 0024       RETURN                                                               
 0025     END                                                                    
@@ -218,7 +230,7 @@ It is called multiple times subsequently during this transaction process, with v
 0044         CALL SB.DISP(3,"Date Must Be Within ":L.SENSEYR:" Year(s) Of The Current Financial Year : ":L.YEAR)
 0045         RETURN                                                                                     ;* RETURN (RTN.FLAG currently == 1)
 0046     END                                                                                            ;*
-                                                                                                        ;* ✔
+                                                                                                        ;* ✔:707
 0047     * Job 7721 end                                                         
 0048     PERIODS = OCONV("1",'TCOMPANY;X;;11')     ;* Pull the number of General Ledger Periods from COMPANY<11> @ID = "1"  (we already have this mapped); we have 12 GL periods.     
 0049 *-                                            ;* Companies vary; you might have quarterly ledgering and then this number would be 4 (one financial year of 12 months divided into 4 periods, each of 3 months)
@@ -233,13 +245,13 @@ It is called multiple times subsequently during this transaction process, with v
                                                                          ;* at this point, THIS.PD is set to THIS GENERAL LEDGER PERIOD
                                                                          ;* and PLPER is the only definitive grab we have on PurchaseLedgerPeriod
 0058 *   END                                                                    
-0059 * Job 2000 End                                                      ;* ✔
+0059 * Job 2000 End                                                      ;*
 0060 *-                                                                         
 0061     RECORD<154> = ''                                                ;* Set Future on TPLEDG entry to ''
 
                                                                          ;* Sanity checks incoming...
 0062     IF PERIODS = '' OR THIS.PD = '' THEN                            ;* Check if CountOfGeneralLedgerPeriods = '' or CurrentGeneralLedgerPeriod = '' 
-0063       CALL SB.DISP(3,'Invalid No Of Periods/Period No. On COMPANY') ;* Kaboom, we've got bigger problems.    ✔
+0063       CALL SB.DISP(3,'Invalid No Of Periods/Period No. On COMPANY') ;* Kaboom, we've got bigger problems.    ✔:712,717
 0064       RETURN                                                        ;*
 0065	 END                                                             ;* Still sane? Right, good...
 
@@ -250,7 +262,7 @@ It is called multiple times subsequently during this transaction process, with v
 0069     PLCLOSE = OCONV("1",'TCOMPANY;X;;135')                          ;* read PLCLOSE from COMPANY<135> "Purchase Ledger Current Period End"
 0070     IF VALUE > PLCLOSE THEN                                         ;* If the incoming Value is greater than the currently PL period close
 0071 * Job 2573 End                                                      ;* This line is an annoyingly placed comment, ignore it   
-0072       RECORD<154> = 'Y'                                             ;* Set TPLEDG<154> "FUTURE" to be equal to "Y".     ✔ See This document circa:700
+0072       RECORD<154> = 'Y'                                             ;* Set TPLEDG<154> "FUTURE" to be equal to "Y".     ✔:722
 0073       ** Job 7535 +                                                        
 0074       IF RECORD<154> = 'Y' THEN                                     ;* If TPLEDG<154> "FUTURE" == "Y" (come on, guys... we literally just set this value...)
 0075         SAVE.RTN.FLAG = RTN.FLAG ;*10170                            ;* SAVE.RTN.FLAG must be a temporary... I don't know why. Possibly because the user can do X to the display, changing RTN.FLAG.
@@ -277,7 +289,7 @@ It is called multiple times subsequently during this transaction process, with v
                                                                          ;* THEN we're looking to next year...
 0092       IF PERIOD.REC<3> = '' THEN                                           ;*     and... if next year doesn't exist (accounts haven't yet sorted out the GL dates for next financial year)
 0093         CALL SB.DISP(3,'Next Year GL Period dates not set')                    ;*      then explodey kaboom; you're not POSTing this.
-0094         RETURN                                                                     ;*  Exit, stage left. ✔
+0094         RETURN                                                                     ;*  Exit, stage left. ✔:735
 0095       END                                                                          ;*     
 0096 *                                                                                  ;*  
                                                                                         ;*  PERIOD.REC<3,PD> is "NEXTYEAR", subvalue PD. 
@@ -288,16 +300,18 @@ It is called multiple times subsequently during this transaction process, with v
                                                                                         ;*  else
                                                                                         ;*     PD = 2
                                                                                         ;*     
-0098       IF VALUE > PERIOD.REC<3,PD> THEN GLFLAG = 1; GLDATE = PERIOD.REC<3,PD>       ;*  Bad times. ✔
+0098       IF VALUE > PERIOD.REC<3,PD> THEN GLFLAG = 1; GLDATE = PERIOD.REC<3,PD>       ;*  Bad times. Your document is dated past the end of the first period of next year. ✔
                                                                                         ;*  
-0099     END ELSE                                                                       ;*
+0099     END
+         ELSE                                                                       ;*
 0100 *                                                                                  ;*
-0101       IF VALUE > PERIOD.REC<2,PLPER+1> THEN GLFLAG = 1; GLDATE = PERIOD.REC<2,PLPER+1>    ;* This is all to determine whether or not we are attempting to ledger a document dated in the future: past the next period on the General Ledger.                                        
+0101       IF VALUE > PERIOD.REC<2,PLPER+1> THEN GLFLAG = 1; GLDATE = PERIOD.REC<2,PLPER+1>    ;* Your document is dated past the end of the NEXT purchase ledger period. 
+                                                                                               ;* This is all to determine whether or not we are attempting to ledger a document dated in the future: past the next period on the General Ledger.                                        
 0102     END                                                                                   ;* It's all but (and possibly actually) illegal to post into future periods, for a number of reasons.
 0103     IF GLFLAG = 1 THEN                                                                    ;*
 0104       GLD = OCONV(GLDATE,"D2/")                                                           ;*                                             
 0105 *                                                                                         ;*
-0106       CALL SB.DISP(3,"Cannot Post Past Next Pd PL ":GLD)                                  ;*    
+0106       CALL SB.DISP(3,"Cannot Post Past Next Pd PL ":GLD)                                  ;* ✔:745,750
 0107 * JOB 10575 END                                                                           ;*
 0108       RETURN                                                                              ;*                                                      
 0109     END                                                                                   ;*                                               
@@ -541,6 +555,8 @@ It is called multiple times subsequently during this transaction process, with v
  * 
  */
 
+#endregion
+
 namespace MertexerV2.PurchaseLedgerFunctions
 {
     public static partial class PurchaseLedgerFunctions
@@ -693,12 +709,12 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                 if (currentGeneralLedgerPeriod == 0)
                 {
-                    throw new Exception("currentPeriod may not be 0");
+                    throw new Exception("CurrentPeriod may not be 0");
                 }
 
                 if (generalLedgerPeriodsCount == 0)
                 {
-                    throw new Exception("generalLedgerPeriods may not be 0");
+                    throw new Exception("Count of GeneralLedgerPeriods may not be 0");
                 }
 
                 if (registerEntry.DocumentDT > companyEntry.ThisPurchaseLedgerPeriodEndDT)
@@ -716,19 +732,28 @@ namespace MertexerV2.PurchaseLedgerFunctions
                     {
                         if (!periods.GeneralLedgerPeriodDatesNextYearDTs.Any())
                         {
-                            throw new Exception("Next Year's General Ledger Dates have not been set!"); // see PLCHKDATE:0093
+                            throw new Exception($"Period {currentPurchaseLedgerPeriod} closed {companyEntry.ThisPurchaseLedgerPeriodEndDT} and next Year's General Ledger Dates have not been set!"); // see PLCHKDATE:0093
                         }
                     }
 
                     var periodAdjustment = currentPurchaseLedgerPeriod == generalLedgerPeriodsCount ? 1 : 2; // see PLCHKDATE:0097
 
-                    if (purchaseLedgerInvoiceRegisterEntry.DocumentDT > periods.GeneralLedgerPeriodDatesNextYearDTs.ElementAt(periodAdjustment))
+                    if (session.Account != "PLAY")
                     {
-                        throw new Exception($"RegisterEntry.DocumentDT > GeneralLedgerPeriodDatesNextYearDTs[{periodAdjustment}] ({periods.GeneralLedgerPeriodDatesNextYearDTs.ElementAt(periodAdjustment)})");
+                        if (purchaseLedgerInvoiceRegisterEntry.DocumentDT > periods.GeneralLedgerPeriodDatesNextYearDTs.ElementAt(periodAdjustment))
+                        {
+                            throw new Exception($"RegisterEntry.DocumentDT > GeneralLedgerPeriodDatesNextYearDTs[{periodAdjustment}] ({periods.GeneralLedgerPeriodDatesNextYearDTs.ElementAt(periodAdjustment)})");
+                        }
+
+                        if (purchaseLedgerInvoiceRegisterEntry.DocumentDT > periods.GeneralLedgerPeriodDatesThisYearDTs.ElementAt(currentPurchaseLedgerPeriod + 1))
+                        {
+                            throw new Exception($"RegisterEntry.DocumentDT > GeneralLedgerPeriodDatesNextYearDTs[{currentPurchaseLedgerPeriod + 1}] ({periods.GeneralLedgerPeriodDatesThisYearDTs.ElementAt(currentPurchaseLedgerPeriod + 1)})");
+                        }
                     }
 
                     // Essentially here we must ensure that we forbid posting past the NEXT period. UGH.
                     // Correction: we must ensure that we are DOING WHAT MERTEX DOES.
+                    // WHAT THE HELL AM I SUPPOSED TO BE DOING HERE.
                 }
 
                 #endregion
@@ -783,8 +808,6 @@ namespace MertexerV2.PurchaseLedgerFunctions
                     AmountInCurrency = registerEntry.AmountCurrency,
                     UnallocatedAmountInCurrency = registerEntry.AmountCurrency,
                     UnallocatedCreditNoteAmountInCurrency = 0.0m,
-                    // Prognostication: is this for some future period to worry about, or is it in the current period?
-                    // All I can do is compare the Invoice Date (DocumentDT) with the current Month.
                     Future = purchaseLedgerEntryIsInTheFuture
                 };
 
@@ -805,7 +828,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 {
                     purchaseLedgerTransactionPeriod += 1;
 
-                    if (currentGeneralLedgerPeriod > companyEntry.NumberOfFinancialPeriods)
+                    if (purchaseLedgerTransactionPeriod > companyEntry.NumberOfFinancialPeriods)
                     {
                         purchaseLedgerTransactionPeriod = 1;
                     }
@@ -1354,7 +1377,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 var generalLedgerBatchEntry = new GeneralLedgerBatch(purchaseLedgerEntry.DocumentReference)
                 {
                     TransactionType = "RFPOST",
-                    DataKeys = purchaseLedgerEntry.DocumentReferences,
+                    DataKeys = new List<string>() { purchaseLedgerEntry.DocumentReference },
                     NumberOfRecords = 1
                 };
 

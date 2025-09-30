@@ -31,6 +31,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
         public static IEnumerable Select(
             string UniVerseAccount,
             string PurchaseLedgerRegisterHistoryCodes,
+            string PurchaseLedgerRegistryKey,
             string SupplierCode,
             DateTime? OnFileDT_From,
             DateTime? OnFileDT_To,
@@ -90,6 +91,11 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 if (ConvertedDT_To.HasValue)
                 {
                     filters.Add(new Tuple<string, string, string>("SS.CONVDATE.INT", "<=", Framework.UniVerseDateString(ConvertedDT_To.Value)));
+                }
+
+                if (!String.IsNullOrEmpty(PurchaseLedgerRegistryKey))
+                {
+                    filters.Add(new Tuple<string, string, string>("REGNO", "eq", PurchaseLedgerRegistryKey));
                 }
 
                 if (filters.Any())

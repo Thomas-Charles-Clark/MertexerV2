@@ -2,6 +2,8 @@
 using MertexerV2.Models;
 using MertexerV2.Models.Bank;
 using MertexerV2.Models.GeneralLedger;
+using MertexerV2.Models.PurchaseLedger;
+using MertexerV2.SupplierFunctions;
 using MertexerV2.Utilities;
 
 using Microsoft.SqlServer.Server;
@@ -26,17 +28,41 @@ namespace MertexerV2.GeneralLedgerFunctions
             DataAccess = DataAccessKind.Read,
             FillRowMethodName = "GeneralLedgerPrePaymentTransactionSelect_FillRow")]
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
-        public static IEnumerable Select(string UniVerseAccount, string GeneralLedgerPrePaymentTransactionCodes)
+        public static IEnumerable Select(string UniVerseAccount, string GeneralLedgerPrePaymentTransactionCodes, string PurchaseLedgerKey)
         {
             if (String.IsNullOrEmpty(GeneralLedgerPrePaymentTransactionCodes))
             {
-                foreach (var r in Selector<GeneralLedgerPrePaymentTransaction>.SelectAllNonParallel(
-                    true,
-                    false,
-                    50,
-                    UniVerseAccount))
+                var filters = new List<Tuple<string, string, string>>();
+
+                if (!String.IsNullOrEmpty(PurchaseLedgerKey))
                 {
-                    yield return r;
+                    filters.Add(new Tuple<string, string, string>("PREPAY.TRANSNO", "eq", PurchaseLedgerKey));
+                }
+
+
+int f = 0;
+                if (filters.Any())
+                {
+                    foreach (var r in Selector<GeneralLedgerPrePaymentTransaction>.FilterNonParallel(
+                        filters,
+                        true,
+                        false,
+                        50,
+                        UniVerseAccount))
+                    {
+                        yield return r;
+                    }
+                }
+                else
+                {
+                    foreach (var r in Selector<GeneralLedgerPrePaymentTransaction>.SelectAllNonParallel(
+                        true,
+                        false,
+                        50,
+                        UniVerseAccount))
+                    {
+                        yield return r;
+                    }
                 }
             }
             else

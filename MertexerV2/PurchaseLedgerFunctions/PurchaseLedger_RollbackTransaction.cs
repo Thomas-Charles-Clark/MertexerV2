@@ -477,7 +477,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 foreach (var vatEntry in companyVATEntries)
                 {
                     var purchasesInvoicesTaxReduction = CalculatePurchaseLedgerAmount(
-                        amounts: purchaseLedgerEntry.VATTaxes, // <48> "VATTAX"
+                        amounts: purchaseLedgerEntry.VATableAmounts, // <48> "VATTAX"
                         currentPeriod: currentPeriod,
                         numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
                         operationPeriod: null,
@@ -489,7 +489,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
 
                     var purchasesInvoicesValueReduction = CalculatePurchaseLedgerAmount(
-                        amounts: purchaseLedgerEntry.VATableValues, // <49> "VATVALUE"
+                        amounts: purchaseLedgerEntry.VATValues, // <49> "VATVALUE"
                         currentPeriod: currentPeriod,
                         numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
                         operationPeriod: null,
@@ -501,7 +501,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
 
                     var purchasesQuarterTaxTotalReduction = CalculatePurchaseLedgerAmount(
-                        amounts: purchaseLedgerEntry.VATTaxes, // <48> "VATTAX"
+                        amounts: purchaseLedgerEntry.VATableAmounts, // <48> "VATTAX"
                         currentPeriod: currentPeriod,
                         numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
                         operationPeriod: null,
@@ -513,7 +513,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
 
                     var purchasesQuarterValueTotalReduction = CalculatePurchaseLedgerAmount(
-                        amounts: purchaseLedgerEntry.VATableValues, // <49> "VATVALUE"
+                        amounts: purchaseLedgerEntry.VATValues, // <49> "VATVALUE"
                         currentPeriod: currentPeriod,
                         numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
                         operationPeriod: null,
@@ -524,7 +524,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
                     vatEntry.PurchasesQuarterValueTotal -= purchasesQuarterValueTotalReduction;
 
                     var purchasesNextPeriodInvoicesTaxReduction = CalculatePurchaseLedgerAmount(
-                        amounts: purchaseLedgerEntry.VATTaxes, // <48> "VATTAX"
+                        amounts: purchaseLedgerEntry.VATableAmounts, // <48> "VATTAX"
                         currentPeriod: currentPeriod,
                         numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
                         operationPeriod: "N",
@@ -535,7 +535,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
                     vatEntry.PurchasesNextPeriodInvoicesTax -= purchasesNextPeriodInvoicesTaxReduction;
 
                     var purchasesNextPeriodInvoicesValueReduction = CalculatePurchaseLedgerAmount(
-                        amounts: purchaseLedgerEntry.VATableValues, // <49> "VATVALUE"
+                        amounts: purchaseLedgerEntry.VATValues, // <49> "VATVALUE"
                         currentPeriod: currentPeriod,
                         numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
                         operationPeriod: "N",

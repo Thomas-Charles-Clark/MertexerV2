@@ -175,7 +175,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
             VATTaxes = result.VATTaxes.Any() ? JsonConvert.SerializeObject(result.VATTaxes) : SqlString.Null;
 
-            VATableValues = result.VATableValues.Any() ? JsonConvert.SerializeObject(result.VATableValues) : SqlString.Null;
+            VATableValues = result.VATValues.Any() ? JsonConvert.SerializeObject(result.VATValues) : SqlString.Null;
 
             AmountSterling = result.AmountSterling;
 

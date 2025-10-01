@@ -404,7 +404,7 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseFieldName("VATTAX")]
         [UniVerseConversion("MR22")]
         [UniVerseMultiValue]
-        public IEnumerable<decimal> VATTaxes { get; set; }
+        public IEnumerable<decimal> VATableAmounts { get; set; }
 
         /// <summary>
         /// Default Value: SUM<43.n> (PAMOUNT)
@@ -413,7 +413,7 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseFieldName("VATVALUE")]
         [UniVerseConversion("MR22")]
         [UniVerseMultiValue]
-        public IEnumerable<decimal> VATableValues { get; set; }
+        public IEnumerable<decimal> VATValues { get; set; }
 
         [UniVerseIndex(50)]
         [UniVerseFieldName("TOTDUE")] // "CHQTOTAL/DTOTAL/RDTOTAL/STGAMT/STGCHQTOTAL/TOTDUE"

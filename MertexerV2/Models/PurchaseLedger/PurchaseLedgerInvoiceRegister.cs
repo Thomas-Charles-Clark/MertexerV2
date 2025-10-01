@@ -185,7 +185,7 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseFieldName("VATVALUE")]
         [UniVerseConversion("MR22")]
         [UniVerseMultiValue]
-        public IEnumerable<decimal> VATableValues { get; set; } = new List<decimal>();
+        public IEnumerable<decimal> VATValues { get; set; } = new List<decimal>();
 
         /// <summary>
         /// Default: IF(FOREIGN # "Y",STGAMT[S],STGAMT)[M]

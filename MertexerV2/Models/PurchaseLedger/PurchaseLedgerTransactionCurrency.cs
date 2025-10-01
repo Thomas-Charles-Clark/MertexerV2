@@ -140,7 +140,7 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseIndex(6)]
         [UniVerseFieldName("VATDIS")]
         [UniVerseConversion("MR22")] 
-        public decimal VATTaxesTotal { get; set; }
+        public decimal VATTotal { get; set; }
 
         [UniVerseIndex(7)]
         [UniVerseFieldName("DEBIT")]

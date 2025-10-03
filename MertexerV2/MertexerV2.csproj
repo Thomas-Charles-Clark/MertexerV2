@@ -191,6 +191,7 @@
     <Compile Include="Models\PurchaseLedger\PurchaseLedger.cs" />
     <Compile Include="Models\PurchaseLedger\PurchaseLedgerAdjustmentAudit1_QPointer.cs" />
     <Compile Include="Models\PurchaseLedger\PurchaseLedgerCreditNoteRegister.cs" />
+    <Compile Include="Models\PurchaseLedger\PurchaseLedgerInvoiceRegister.cs" />
     <Compile Include="Models\PurchaseLedger\PurchaseLedgerSupplierInvoice.cs" />
     <Compile Include="Models\PurchaseLedger\PurchaseLedgerAdjustmentAudit.cs" />
     <Compile Include="Models\PurchaseLedger\PurchaseLedgerTransaction1_QPointer.cs" />
@@ -239,7 +240,6 @@
     <Compile Include="Models\Stock\B2CEnquiryStockLocation.cs" />
     <Compile Include="Models\Stock\ProductCodeStockCheckMinimum.cs" />
     <Compile Include="Models\Stock\StockLocation.cs" />
-    <Compile Include="Models\PurchaseLedger\PurchaseLedgerInvoiceRegister.cs" />
     <Compile Include="Models\Supplier\PLSEL2.cs" />
     <Compile Include="Models\Supplier\PLSEL3.cs" />
     <Compile Include="Models\Supplier\SupplierCurrency.cs" />

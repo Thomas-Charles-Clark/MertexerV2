@@ -1,0 +1,26 @@
+// Using EVAL in a TCL statement e.g.  EVAL "OCONV(OCONV("1","TPERIODS;X;;2,3"), "D4")"
+
+LIST PERIODS "1" EVAL "OCONV(OCONV("1","TPERIODS;X;;2,3"), "D4")" 11:12:09am    
+26 Sep 2025  PAGE    1                                                          
+PERIODS... OCONV(OCONV('1','TPE                                                 
+           RIODS;X;;2,3'), 'D4'                                                 
+           )...................                                                 
+                                                                                
+1          30 SEP 2025                                                          
+                                                                                
+1 records listed.                                                               
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+MERTEX>                                                                         
+F2-Save F4-Del F5-List F6-Menu F7-Edit                                          

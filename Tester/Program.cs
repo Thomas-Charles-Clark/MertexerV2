@@ -88,7 +88,7 @@ namespace Tester
 
             var sw = new System.Diagnostics.Stopwatch();
 
-            var uniVerseAccount = "MERTEX";
+            var uniVerseAccount = "PLAY";
 
             sw.Start();
 
@@ -173,20 +173,87 @@ namespace Tester
              */
 
             var registerKeys = new[] {
-                317829
+                306726
             };
 
-            //var now = DateTime.Now;
+            var now = DateTime.Now;
 
             var invoiceRegisterKey = registerKeys.First().ToString();
 
-            Console.WriteLine($"Calling PurchaseLedgerFunctions.InsertFromInvoiceRegister for PLINVREG key {invoiceRegisterKey} in {uniVerseAccount}");
+            Console.WriteLine($"Calling PurchaseLedgerInvoiceRegisterFunctions.Select for PLINVREG key {invoiceRegisterKey} in {uniVerseAccount}");
 
-            var json = TesterFramework.FetchInvoiceRegistrationJSON(invoiceRegisterKey, "Flock");
+            var rec = Selector<PurchaseLedgerInvoiceRegister>.Select(invoiceRegisterKey, true, false, 1, uniVerseAccount);
+
+            var json = TesterFramework.FetchInvoiceRegistrationJSON(invoiceRegisterKey, "FlockDev");
 
             var transactionResults = PurchaseLedgerFunctions.InsertFromInvoiceRegistry(uniVerseAccount, json).OfType<PurchaseLedgerInsertionResult>().ToList();
 
             Console.WriteLine(JsonConvert.SerializeObject(transactionResults));
+
+
+
+            //SqlString Key;
+            //SqlDateTime DocumentDT;
+            //SqlDateTime OnFileDT;
+            //SqlString ItemReference;
+            //SqlDateTime DueDT;
+            //SqlString SupplierReference;
+            //SqlString AmountsExVAT;
+            //SqlString GeneralLedgerCodes;
+            //SqlString VATCodes;
+            //SqlString VATTaxes;
+            //SqlString VATableValues;
+            //SqlDecimal AmountSterling;
+            //SqlString PaymentTermsCode;
+            //SqlString Memo;
+            //SqlDecimal VATBalance;
+            //SqlDecimal DocumentBalance;
+            //SqlString OtherMemos;
+            //SqlDateTime ReceivedDT;
+            //SqlString PassedTo;
+            //SqlDateTime PassedToDT;
+            //SqlDecimal AmountCurrency;
+            //SqlDecimal ExchangeRate;
+            //SqlString Dispute;
+            //SqlString DisputeMemo;
+            //SqlDateTime SettlementDT;
+            //SqlString MertexCurrencyCode;
+            //SqlDecimal DiscountPercentage;
+            //SqlDecimal DiscountAmount;
+            //SqlString RegisterKey;
+
+            //PurchaseLedgerInvoiceRegisterFunctions.InvoiceRegisterSelect_FillRow(
+            //    (object)rec,
+            //    out Key,
+            //    out DocumentDT,
+            //    out OnFileDT,
+            //    out ItemReference,
+            //    out DueDT,
+            //    out SupplierReference,
+            //    out AmountsExVAT,
+            //    out GeneralLedgerCodes,
+            //    out VATCodes,
+            //    out VATTaxes,
+            //    out VATableValues,
+            //    out AmountSterling,
+            //    out PaymentTermsCode,
+            //    out Memo,
+            //    out VATBalance,
+            //    out DocumentBalance,
+            //    out OtherMemos,
+            //    out ReceivedDT,
+            //    out PassedTo,
+            //    out PassedToDT,
+            //    out AmountCurrency,
+            //    out ExchangeRate,
+            //    out Dispute,
+            //    out DisputeMemo,
+            //    out SettlementDT,
+            //    out MertexCurrencyCode,
+            //    out DiscountPercentage,
+            //    out DiscountAmount,
+            //    out RegisterKey
+            //    );
 
 
             //var invoiceRegisterKey = "306697";
@@ -230,100 +297,112 @@ namespace Tester
 
             //Test between for SQL DateTime Overflow: 2024 / 11 / 30 and 2024 / 12 / 31
 
+            //var postDt_From = DateTime.ParseExact("2024/08/31", "yyyy/MM/dd", DateTimeFormatInfo.InvariantInfo);
 
-            //var postDt_From = DateTime.ParseExact("2023/08/26", "yyyy/MM/dd", DateTimeFormatInfo.InvariantInfo);
+            //var postDt_To = DateTime.ParseExact("2024/10/01", "yyyy/MM/dd", DateTimeFormatInfo.InvariantInfo);
 
-            //var postDt_To = DateTime.ParseExact("2023/08/31", "yyyy/MM/dd", DateTimeFormatInfo.InvariantInfo);
-
-            //var results = SalesLedgerTransactionHistoryFunctions.Select("MERTEX", null, null, null, null, null, null, postDt_From, postDt_To).OfType<SalesLedgerTransactionHistory>().ToList();
+            //var results = SalesLedgerTransactionHistoryFunctions
+            //    .Select("MERTEX", null, null, null, null, null, null, postDt_From, postDt_To)
+            //    .OfType<SalesLedgerTransactionHistory>()
+            //    .ToList();
 
             //Console.WriteLine($"Saw {results.Count} results between PostDT {postDt_From:dd/MM/yyyy} and {postDt_To:dd/MM/yyyy}");
+
+            //var bits = new int[4] { 0, 0, 0, 0 };
 
             //SqlString Key;
             //SqlDateTime DocumentDT;
             //SqlDateTime DueDT;
             //SqlString TransactionType;
             //SqlString ItemReference;
-            //SqlDecimal OriginalValue;
+            //SqlDecimal OriginalValue = new SqlDecimal(28, 4, true, bits);
             //SqlString DocumentReference;
-            //SqlDecimal VATDiscount;
-            //SqlDecimal Debit;
-            //SqlDecimal Credit;
-            //SqlDecimal Balance;
+            //SqlDecimal VATDiscount = new SqlDecimal(28, 4, true, bits);
+            //SqlDecimal Debit = new SqlDecimal(28, 4, true, bits);
+            //SqlDecimal Credit = new SqlDecimal(28, 4, true, bits);
+            //SqlDecimal Balance = new SqlDecimal(28, 4, true, bits);
             //SqlByte Period;
             //SqlString Status;
             //SqlString TradeAccountCode;
             //SqlInt32 Age;
-            //SqlDecimal OriginalValueABS;
+            //SqlDecimal OriginalValueABS = new SqlDecimal(28, 4, true, bits);
             //SqlString DisputeMemo;
             //SqlString Dispute;
             //SqlString Adjust;
-            //SqlDecimal Unallocated;
-            //SqlDecimal OutstandingAmount;
+            //SqlDecimal Unallocated = new SqlDecimal(28, 4, true, bits);
+            //SqlDecimal OutstandingAmount = new SqlDecimal(28, 4, true, bits);
             //SqlDateTime PostDT;
             //SqlDateTime CSDT;
-            //SqlDecimal CSAmount;
+            //SqlDecimal CSAmount = new SqlDecimal(28, 4, true, bits);
             //SqlString CSAction;
             //SqlString AllocatedFromDocuments;
             //SqlString AllocatedToDocuments;
             //SqlString InvoiceAccount;
             //SqlString CustomerOrderNumber;
-            //SqlDecimal ExchangeRateDifferences;
+            //SqlDecimal ExchangeRateDifferences = new SqlDecimal(28, 4, true, bits);
             //SqlDateTime PaidDT;
-            //SqlDecimal RoundingErrors;
+            //SqlDecimal RoundingErrors = new SqlDecimal(28, 4, true, bits);
             //SqlString SourceDocument;
             //SqlInt32 Version;
-            //SqlDecimal SettlementDiscount;
+            //SqlDecimal SettlementDiscount = new SqlDecimal(28, 4, true, bits);
             //SqlDateTime SettlementDT;
-            //SqlDecimal SettlementDiscountTaken;
+            //SqlDecimal SettlementDiscountTaken = new SqlDecimal(28, 4, true, bits);
             //SqlString CreditClaimNumber;
             //SqlString SellingCompany;
             //SqlInt32 PostTime;
 
             //foreach (var r in results)
             //{
-            //    SalesLedgerTransactionHistoryFunctions.SalesLedgerTransactionHistorySelect_FillRow(r,
-            //        out Key,
-            //        out DocumentDT,
-            //        out DueDT,
-            //        out TransactionType,
-            //        out ItemReference,
-            //        out OriginalValue,
-            //        out DocumentReference,
-            //        out VATDiscount,
-            //        out Debit,
-            //        out Credit,
-            //        out Balance,
-            //        out Period,
-            //        out Status,
-            //        out TradeAccountCode,
-            //        out Age,
-            //        out OriginalValueABS,
-            //        out DisputeMemo,
-            //        out Dispute,
-            //        out Adjust,
-            //        out Unallocated,
-            //        out OutstandingAmount,
-            //        out PostDT,
-            //        out CSDT,
-            //        out CSAmount,
-            //        out CSAction,
-            //        out AllocatedFromDocuments,
-            //        out AllocatedToDocuments,
-            //        out InvoiceAccount,
-            //        out CustomerOrderNumber,
-            //        out ExchangeRateDifferences,
-            //        out PaidDT,
-            //        out RoundingErrors,
-            //        out SourceDocument,
-            //        out Version,
-            //        out SettlementDiscount,
-            //        out SettlementDT,
-            //        out SettlementDiscountTaken,
-            //        out CreditClaimNumber,
-            //        out SellingCompany,
-            //        out PostTime
-            //    );
+            //    try
+            //    {
+            //        SalesLedgerTransactionHistoryFunctions.SalesLedgerTransactionHistorySelect_FillRow(r,
+            //            out Key,
+            //            out DocumentDT,
+            //            out DueDT,
+            //            out TransactionType,
+            //            out ItemReference,
+            //            out OriginalValue,
+            //            out DocumentReference,
+            //            out VATDiscount,
+            //            out Debit,
+            //            out Credit,
+            //            out Balance,
+            //            out Period,
+            //            out Status,
+            //            out TradeAccountCode,
+            //            out Age,
+            //            out OriginalValueABS,
+            //            out DisputeMemo,
+            //            out Dispute,
+            //            out Adjust,
+            //            out Unallocated,
+            //            out OutstandingAmount,
+            //            out PostDT,
+            //            out CSDT,
+            //            out CSAmount,
+            //            out CSAction,
+            //            out AllocatedFromDocuments,
+            //            out AllocatedToDocuments,
+            //            out InvoiceAccount,
+            //            out CustomerOrderNumber,
+            //            out ExchangeRateDifferences,
+            //            out PaidDT,
+            //            out RoundingErrors,
+            //            out SourceDocument,
+            //            out Version,
+            //            out SettlementDiscount,
+            //            out SettlementDT,
+            //            out SettlementDiscountTaken,
+            //            out CreditClaimNumber,
+            //            out SellingCompany,
+            //            out PostTime
+            //        );
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        CFramework.SetConsoleColourError();
+            //        Console.WriteLine($"HISTTSLTRANS key: {r.Key}\r\n\r\n{ex}");
+            //    }
             //}
 
             //Console.WriteLine(JsonConvert.SerializeObject(results));

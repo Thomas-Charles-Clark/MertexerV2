@@ -404,7 +404,7 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseFieldName("VATTAX")]
         [UniVerseConversion("MR22")]
         [UniVerseMultiValue]
-        public IEnumerable<decimal> VATableAmounts { get; set; }
+        public IEnumerable<decimal> VATTaxes { get; set; }
 
         /// <summary>
         /// Default Value: SUM<43.n> (PAMOUNT)
@@ -413,7 +413,7 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseFieldName("VATVALUE")]
         [UniVerseConversion("MR22")]
         [UniVerseMultiValue]
-        public IEnumerable<decimal> VATValues { get; set; }
+        public IEnumerable<decimal> VATableValues { get; set; }
 
         [UniVerseIndex(50)]
         [UniVerseFieldName("TOTDUE")] // "CHQTOTAL/DTOTAL/RDTOTAL/STGAMT/STGCHQTOTAL/TOTDUE"
@@ -712,6 +712,7 @@ namespace MertexerV2.Models.PurchaseLedger
 
         /// <summary>
         /// Default Value: P("DMEMO") == If and only if 87 == D, read 88. If 87 != D, read "".
+        /// Which... smells.
         /// </summary>
         [UniVerseIndex(88)]
         [UniVerseFieldName("DISPMEM")]
@@ -741,11 +742,6 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseFieldName("GOODS")]
         [UniVerseConversion("MR22")]
         public decimal? GoodsValue { get; set; }
-
-        [UniVerseIndex(95)]
-        [UniVerseFieldName("VATAMT")]
-        [UniVerseConversion("MR22")]
-        public decimal? VATAmount { get; set; }
 
         /// <summary>
         /// Default Value: <94>+<95>[S][M]
@@ -1081,8 +1077,27 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseFieldName("CURRENCY")]
         public string CurrencyCode { get; set; }
 
+        /// <summary>
+        /// "XRATE" or "AXRATE"; both are the same field... but have differing defaults?
+        /// 
+        /// XRATE default: P("PG.DXRATE")
+        /// 
+        ///                     IF (FOREIGN = "Y")
+        ///                         @VALUE = F("XRATE"<161>)<2>
+        ///                     ELSE
+        ///                         @VALUE = 1
+        ///                     END
+        /// 
+        /// AXRATE default: P("DAXRATE") // "XRATE IN AMEND AUTO PAY"
+        ///                 
+        ///                     IF (F("PLCHQ.CUR",<39>)<25> # "")
+        ///                         F("PLCHQ.CUR",<39>)<25>
+        ///                     ELSE
+        ///                         F("XRATE", ACURRENCY)<2>)
+        ///                         
+        /// </summary>
         [UniVerseIndex(162)]
-        [UniVerseFieldName("AXRATE")]
+        [UniVerseFieldName("XRATE")]
         [UniVerseConversion("MR66")]
         [UniVerseMultiValue]
         public IEnumerable<decimal> ExchangeRates { get; set; }

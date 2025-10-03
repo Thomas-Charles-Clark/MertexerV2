@@ -128,7 +128,7 @@ namespace MertexerV2.Models.GeneralLedger
         [UniVerseIndex(13)]
         [UniVerseFieldName("SS.VATTAX")]
         [UniVerseConversion("MR22")]
-        public decimal VATTax { get; set; }
+        public decimal VATTotal { get; set; }
 
         [UniVerseIndex(14)]
         [UniVerseFieldName("SS.DOCTOT")]

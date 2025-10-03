@@ -147,7 +147,7 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseFieldName("PAMOUNT")]
         [UniVerseMultiValue]
         [UniVerseConversion("MR22")]
-        public IEnumerable<decimal> AmountsExVAT { get; set; } = new List<decimal>();
+        public IEnumerable<decimal> AmountsExVAT { get; set; }
 
         /// <summary>
         /// Default: B("PL.B.DEFGLCODE")
@@ -156,7 +156,7 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseIndex(44)]
         [UniVerseFieldName("RFGLCODERG")]
         [UniVerseMultiValue]
-        public IEnumerable<string> GeneralLedgerCodes { get; set; } = new List<string>();
+        public IEnumerable<string> GeneralLedgerCodes { get; set; }
 
         /// <summary>
         /// Default: P("PG.DPLVATCODE,39")
@@ -165,7 +165,7 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseIndex(47)]
         [UniVerseFieldName("VATCODE")]
         [UniVerseMultiValue]
-        public IEnumerable<string> VATCodes { get; set; } = new List<string>();
+        public IEnumerable<string> VATCodes { get; set; }
 
         /// <summary>
         /// Default: P("PG.PLVATTAX,D.47.49..160")[M]
@@ -175,7 +175,7 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseFieldName("VATTAX")]
         [UniVerseConversion("MR22")]
         [UniVerseMultiValue]
-        public IEnumerable<decimal> VATTaxes { get; set; } = new List<decimal>();
+        public IEnumerable<decimal> VATTaxes { get; set; }
 
         /// <summary>
         /// [no default]
@@ -185,7 +185,7 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseFieldName("VATVALUE")]
         [UniVerseConversion("MR22")]
         [UniVerseMultiValue]
-        public IEnumerable<decimal> VATValues { get; set; } = new List<decimal>();
+        public IEnumerable<decimal> VATableValues { get; set; }
 
         /// <summary>
         /// Default: IF(FOREIGN # "Y",STGAMT[S],STGAMT)[M]
@@ -273,7 +273,7 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseIndex(82)]
         [UniVerseFieldName("MEMO1")]
         [UniVerseMultiValue]
-        public IEnumerable<string> OtherMemos { get; set; } = new List<string>();
+        public IEnumerable<string> OtherMemos { get; set; }
 
         [UniVerseIndex(87)]
         [UniVerseFieldName("DISPUTE")]

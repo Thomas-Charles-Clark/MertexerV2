@@ -611,13 +611,13 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                 var currentKey = Convert.ToInt32(numberField.StringValue);
 
-                var newKey = currentKey += 1;
+                var newPurchaseLedgerKeyNum = currentKey += 1;
 
-                numberGeneratorRecord.Record.Replace(purchaseLedgerControlFileFieldPosition, $"{newKey}");
+                numberGeneratorRecord.Record.Replace(purchaseLedgerControlFileFieldPosition, $"{newPurchaseLedgerKeyNum}");
 
                 purchaseLedgerControlFile.WriteRecords(numberGeneratorRecords);
 
-                var purchaseLedgerKey = $"PI{newKey.ToString().PadLeft(6, '0')}";
+                var purchaseLedgerKey = $"PI{newPurchaseLedgerKeyNum.ToString().PadLeft(6, '0')}";
 
                 #endregion
 
@@ -654,20 +654,6 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 #endregion
 
                 #endregion
-
-
-                #region DEBUG STUFF FOR PLAY
-
-#if DEBUG
-
-                //purchaseLedgerTransactionPeriod = 4;
-                //registerEntry.DocumentDT = DateTime.ParseExact("2024/08/15", "yyyy/MM/dd", System.Globalization.CultureInfo.InvariantCulture);
-
-#endif
-
-                #endregion
-
-
 
                 #region Validation (Preflight Checks)
 
@@ -731,7 +717,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
                     throw new Exception("Count of GeneralLedgerPeriods may not be 0");
                 }
 
-                if (registerEntry.DocumentDT > companyEntry.ThisPurchaseLedgerPeriodEndDT)
+                if (registerEntry.DocumentDT > companyEntry.ThisPurchaseLedgerPeriodEndDT) // This definitely holds water
                 {
                     purchaseLedgerEntryIsInTheFuture = true;
                 }
@@ -744,15 +730,15 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                     if ((currentGeneralLedgerPeriod == generalLedgerPeriodsCount) || ((currentPurchaseLedgerPeriod + 1) > generalLedgerPeriodsCount)) // see PLCHKDATE:0091 
                     {
-                        if (!periods.GeneralLedgerPeriodDatesNextYearDTs.Any())
+                        if (!periods.GeneralLedgerPeriodDatesNextYearDTs.Any()) // Dhruti has promised me that GL periods for the coming year are set about a year in advance, so that's nice
                         {
                             throw new Exception($"Period {currentPurchaseLedgerPeriod} closed {companyEntry.ThisPurchaseLedgerPeriodEndDT} and next Year's General Ledger Dates have not been set!"); // see PLCHKDATE:0093
                         }
                     }
 
-                    var periodAdjustment = currentPurchaseLedgerPeriod == generalLedgerPeriodsCount ? 1 : 2; // see PLCHKDATE:0097
+                    var periodAdjustment = currentPurchaseLedgerPeriod == generalLedgerPeriodsCount ? 1 : 2; // see PLCHKDATE:0097, then try to make sense of it...
 
-                    if (session.Account != "PLAY")
+                    if (session.Account != "PLAY") // no point executing these checks in PLAY: PLAY is currently about four years behind the times.
                     {
                         if (purchaseLedgerInvoiceRegisterEntry.DocumentDT > periods.GeneralLedgerPeriodDatesNextYearDTs.ElementAt(periodAdjustment))
                         {
@@ -764,6 +750,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
                             throw new Exception($"RegisterEntry.DocumentDT > GeneralLedgerPeriodDatesNextYearDTs[{currentPurchaseLedgerPeriod + 1}] ({periods.GeneralLedgerPeriodDatesThisYearDTs.ElementAt(currentPurchaseLedgerPeriod + 1)})");
                         }
                     }
+                    // All being well, these exceptions should never be raised.
 
                     // Essentially here we must ensure that we forbid posting past the NEXT period. UGH.
                     // Correction: we must ensure that we are DOING WHAT MERTEX DOES.
@@ -781,7 +768,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                 var purchaseLedgerEntry = new PurchaseLedger(purchaseLedgerKey)
                 {
-                    DocumentNumber = $"{newKey}",                    // Field 34 DOCNO is set to the ledger key without the PI prefix
+                    DocumentNumber = $"{newPurchaseLedgerKeyNum}",                    // Field 34 DOCNO is set to the ledger key without the PI prefix
                     DocumentReference = purchaseLedgerKey,           // Field 53 PINVDOC is set to the @ID of the TPLEDG record
                     PurchaseLedgerRegisterKey = registerEntry.Key,   // Field 199 PLINVREG is set to the registry entry's key
                     SourceTransactionDefinition = "PINVIR.CUR.DES",  // Not described by the dictionary, but reading the data tells us it should be set accordingly.
@@ -796,7 +783,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
                     Amounts = registerEntry.AmountsExVAT,            // 
                     GeneralLedgerCodes = registerEntry.GeneralLedgerCodes,
                     VATCodes = registerEntry.VATCodes,
-                    VATValues = registerEntry.VATValues,
+                    VATableValues = registerEntry.VATableValues,
                     TotalDueInSterling = registerEntry.AmountSterling,
                     SettlementTerms = registerEntry.PaymentTermsCode,
                     PostDT = now,                                    // See comments above
@@ -805,7 +792,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
                                                                                              // later it's a cleaner way of pulling it, instead of asking for SettlementDTs.First()
                     Memo = registerEntry.Memo,
                     VATBalance = registerEntry.VATBalance,
-                    VATableAmounts = registerEntry.VATTaxes,
+                    VATTaxes = registerEntry.VATTaxes,
                     VATTaxesInCurrency = vatTaxesInCurrency,
                     DocumentBalance = registerEntry.DocumentBalance,
                     DiscountAmount = 0.0m, // we don't do discounts here: LIST PLTERMS DISC
@@ -822,7 +809,8 @@ namespace MertexerV2.PurchaseLedgerFunctions
                     AmountInCurrency = registerEntry.AmountCurrency,
                     UnallocatedAmountInCurrency = registerEntry.AmountCurrency,
                     UnallocatedCreditNoteAmountInCurrency = 0.0m,
-                    Future = purchaseLedgerEntryIsInTheFuture
+                    Future = purchaseLedgerEntryIsInTheFuture, // Hope that I've got this right, if not we'll find out next year I guess
+                    Foreign = registerEntry.MertexCurrencyCode != "STG"
                 };
 
                 var purchaseLedgerEntryJson = JsonConvert.SerializeObject(purchaseLedgerEntry);
@@ -907,27 +895,37 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 // Key == TPLEDG<53> "Document Reference"
                 var purchaseLedgerTransactionEntry = new PurchaseLedgerTransaction(purchaseLedgerEntry.DocumentReference)
                 {
-                    DocumentDT = purchaseLedgerEntry.DocumentDT,
-                    DueDT = purchaseLedgerEntry.InvoiceDueDT,
-                    DiscountPercentage = purchaseLedgerEntry.DiscountPercentage_Again,
-                    TransactionType = "INV",
-                    ItemReference = purchaseLedgerEntry.SupplierInvoiceReference,
-                    DocumentNumber = purchaseLedgerEntry.DocumentNumber,
-                    VATTotal = purchaseLedgerEntry.VATableAmounts.Sum(),
-                    Credit = purchaseLedgerEntry.Amounts.Sum(),
-                    Balance = purchaseLedgerEntry.TotalDueInSterling,
-                    OriginalValueABS = purchaseLedgerEntry.TotalDueInSterling,
-                    Period = purchaseLedgerTransactionPeriod,
-                    SupplierReference = purchaseLedgerEntry.SupplierCode,
-                    Age = purchaseLedgerEntry.Future == true ? 0 : 1,
-                    Unallocated = 0.0m,
-                    DiscountAmount = purchaseLedgerEntry.DiscountAmount,
-                    PostDT = purchaseLedgerEntry.PostDT,
-                    Memo = purchaseLedgerEntry.Memo,
-                    DiscountCutOffDT = purchaseLedgerEntry.DueDT,
-                    Dispute = purchaseLedgerEntry.DisputeIndicator,
-                    DisputeMemo = purchaseLedgerEntry.DisputeMemo,
-                    PurchaseLedgerRegisterNumber = $"INV*{purchaseLedgerEntry.PurchaseLedgerRegisterKey}"
+                    DocumentDT = purchaseLedgerEntry.DocumentDT,                                                //   <33>  "DOCDATE"
+                    DueDT = purchaseLedgerEntry.InvoiceDueDT,                                                   //   <38>  "INVDUE"
+                    DiscountPercentage = purchaseLedgerEntry.DiscountPercentage_Again,                          //  <160>  "DISCPERC"
+                    TransactionType = "INV",                                                                    //    n/a  "INV"
+                    ItemReference = purchaseLedgerEntry.SupplierInvoiceReference,                               //   <37>  "SUPINVNO"
+                    DocumentNumber = purchaseLedgerEntry.DocumentNumber,                                        //   <34>  "DOCNO"
+                    VATTotal = purchaseLedgerEntry.VATTaxes.Sum(),                                              // S(<48>) "VATTAX"
+                    Credit = purchaseLedgerEntry.Amounts.Sum(),                                                 // S(<43>) "PAMOUNT"
+                    Balance = purchaseLedgerEntry.TotalDueInSterling,                                           //   <50>  "TOTDUE"
+                    OriginalValueABS = purchaseLedgerEntry.TotalDueInSterling,                                  //   <50>  "TOTDUE"
+
+                    Period = purchaseLedgerTransactionPeriod,                                                   // B("PL.B.PERIOD") -- This is a lot of buggering about, essentially to say: read the PL period if the company uses
+                                                                                                                // separate PL to GL periods. If GL&PL periods are combined, just use the GL period.
+                                                                                                                // It further asks "is this TPLEDG entry in the Future? See purchaseLedgerEntry.Future
+                                                                                                                // if it IS in the future, then read the total count of periods from COMPANY<11>, which for us is currently 12.
+                                                                                                                // LIST COMPANY "1" EVAL "OCONV('1','TCOMPANY;X;;11)" 
+                                                                                                                // Add 1 to the period determined above; if the result is greater than the total count of periods the set period to 1.
+                                                                                                                // See the reconstruction of this behaviour around lines 827-835.
+
+                    SupplierReference = purchaseLedgerEntry.SupplierCode,                                       //  <39> "PSUPREF"
+
+                    Age = purchaseLedgerEntry.Future == true ? 0 : 1,                                           //  [=> PL /PD D] "AGE" == IF(<154> = "",1,0) which, translated, means "If future is false, return the value 1."
+                    
+                    Unallocated = 0.0m,                                                                         //    n/a  0
+                    DiscountAmount = purchaseLedgerEntry.DiscountAmount,                                        //   <80>  "DISCAMT"
+                    PostDT = purchaseLedgerEntry.PostDT,                                                        //   <35>  "POSTDATE"
+                    Memo = purchaseLedgerEntry.Memo,                                                            //   <56>  "MEMO"
+                    DiscountCutOffDT = purchaseLedgerEntry.DueDT,                                               //   <55>  "DUEDATE"  ==  Apparently paying by the due date might have at some point incurred discounts for our customers!
+                    Dispute = purchaseLedgerEntry.DisputeIndicator,                                             //   <87>  "DISPIND"
+                    DisputeMemo = purchaseLedgerEntry.DisputeMemo,                                              // P("DMEMO") == Only read field <88> from TPLEDG if <87> == "D", otherwise return empty string (null).
+                    PurchaseLedgerRegisterNumber = $"INV*{purchaseLedgerEntry.PurchaseLedgerRegisterKey}"       // "INV*<199>" 
                 };
 
                 var purchaseLedgerTransactionEntryJson = JsonConvert.SerializeObject(purchaseLedgerTransactionEntry);
@@ -950,29 +948,29 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 // Key == TPLEDG<53> "Document Reference"
                 var purchaseLedgerTransactionCurrencyEntry = new PurchaseLedgerTransactionCurrency(purchaseLedgerEntry.DocumentReference)
                 {
-                    DocumentDT = purchaseLedgerEntry.DocumentDT,
-                    DueDT = purchaseLedgerEntry.InvoiceDueDT,
-                    DiscountPercentage = purchaseLedgerEntry.DiscountPercentage_Again,
-                    TransactionType = "INV",
-                    ItemReference = purchaseLedgerEntry.SupplierInvoiceReference,
-                    DocumentNumber = purchaseLedgerEntry.DocumentNumber,
-                    VATTotal = purchaseLedgerEntry.VATTaxesInCurrency.Sum(),
-                    Credit = purchaseLedgerEntry.AmountInCurrency - purchaseLedgerEntry.VATTaxesInCurrency.Sum(),
-                    Balance = purchaseLedgerEntry.AmountInCurrency,
-                    OriginalValueABS = purchaseLedgerEntry.AmountInCurrency,
-                    Period = purchaseLedgerTransactionPeriod,
-                    SupplierReference = purchaseLedgerEntry.SupplierCode,
-                    Age = purchaseLedgerEntry.Future == true ? 0 : 1,
-                    Unallocated = 0.0m,
-                    DiscountAmount = purchaseLedgerEntry.DiscountAmountInCurrency,
-                    PostDT = purchaseLedgerEntry.PostDT,
-                    Memo = purchaseLedgerEntry.Memo,
-                    DiscountCutOffDT = purchaseLedgerEntry.DueDT,
-                    Dispute = purchaseLedgerEntry.DisputeIndicator,
-                    DisputeMemo = purchaseLedgerEntry.DisputeMemo,
-                    CurrencyCode = purchaseLedgerEntry.CurrencyCode,
-                    ExchangeRates = purchaseLedgerEntry.ExchangeRates,
-                    PurchaseLedgerRegisterNumber = $"INV*{purchaseLedgerEntry.PurchaseLedgerRegisterKey}"
+                    DocumentDT = purchaseLedgerEntry.DocumentDT,                                                    //    <33>            "DOCDATE"
+                    DueDT = purchaseLedgerEntry.InvoiceDueDT,                                                       //    <38>            "INVDUE"
+                    DiscountPercentage = purchaseLedgerEntry.DiscountPercentage_Again,                              //   <160>            "DISCPERC"
+                    TransactionType = "INV",                                                                        //    n/a             "INV"
+                    ItemReference = purchaseLedgerEntry.SupplierInvoiceReference,                                   //    <37>            "SUPINVNO"
+                    DocumentNumber = purchaseLedgerEntry.DocumentNumber,                                            //    <34>            "DOCNO"
+                    VATTotal = purchaseLedgerEntry.VATTaxesInCurrency.Sum(),                                        // S(<248>)           "VATTAX.CUR"
+                    Credit = purchaseLedgerEntry.AmountInCurrency - purchaseLedgerEntry.VATTaxesInCurrency.Sum(),   //   <250> - S(<248>) "CURAMT" - S"VATTAX.CUR"
+                    Balance = purchaseLedgerEntry.AmountInCurrency,                                                 //   <250>            "CURAMT"
+                    OriginalValueABS = purchaseLedgerEntry.AmountInCurrency,                                        //   <250>            "CURAMT"
+                    Period = purchaseLedgerTransactionPeriod,                                                       //                    As above; see TPLTRANS entry
+                    SupplierReference = purchaseLedgerEntry.SupplierCode,                                           //    <39>  "PSUPREF"
+                    Age = purchaseLedgerEntry.Future == true ? 0 : 1,                                               //                    As above; see TPLTRANS entry
+                    Unallocated = 0.0m,                                                                             //     n/a            0
+                    DiscountAmount = purchaseLedgerEntry.DiscountAmountInCurrency,                                  //   <180>            "DISCADIS.CUR"
+                    PostDT = purchaseLedgerEntry.PostDT,                                                            //    <35>            "POSTDATE"
+                    Memo = purchaseLedgerEntry.Memo,                                                                //    <56>            "MEMO"
+                    DiscountCutOffDT = purchaseLedgerEntry.DueDT,                                                   //    <55>            "DUEDATE"
+                    Dispute = purchaseLedgerEntry.DisputeIndicator,                                                 //    <87>            "DISPIND"
+                    DisputeMemo = purchaseLedgerEntry.DisputeMemo,                                                  //                    As above; see TPLTRANS entry
+                    CurrencyCode = purchaseLedgerEntry.CurrencyCode,                                                //   <161>            "CURRENCY" -- How TF is this not recorded on a normal TPLTRANS record...? Why... What? WHY DO YOU NEED TWO FILES AT ALL
+                    ExchangeRates = purchaseLedgerEntry.ExchangeRates,                                              //   <162>            "XRATE" or "AXRATE"; both are the same field... but have differing defaults?
+                    PurchaseLedgerRegisterNumber = $"INV*{purchaseLedgerEntry.PurchaseLedgerRegisterKey}"           // "INV*<199>"      
                 };
 
                 var purchaseLedgerTransactionCurrencyEntryJson = JsonConvert.SerializeObject(purchaseLedgerTransactionCurrencyEntry);
@@ -997,7 +995,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 supplierEntry.Balance += purchaseLedgerEntry.DocumentBalance;
 
                 var supplierEntryNextPeriodBalance = CalculatePurchaseLedgerAmount(
-                    amounts: new[] { purchaseLedgerEntry.TotalDueInSterling }, // <50> "CHQTOTAL/DTOTAL/RDTOTAL/STGAMT/STGCHQTOTAL/TOTDUE"
+                    amounts: new[] { purchaseLedgerEntry.TotalDueInSterling }, // <50> "TOTDUE"
                                                                                // the subroutine itself explicitly returns early on line 40 if you're in the final period: IF PER=NOPER THEN RETURN        
                     currentPeriod: currentGeneralLedgerPeriod,
                     numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
@@ -1006,10 +1004,10 @@ namespace MertexerV2.PurchaseLedgerFunctions
                     mvOperationType: null
                 );
 
-                supplierEntry.NextPeriodBalance += supplierEntryNextPeriodBalance; // PLAMOUNT,N50
+                supplierEntry.NextPeriodBalance += supplierEntryNextPeriodBalance;                                      // B("PLAMOUNT,N50")
 
                 var supplierEntryThisPeriodBalance = CalculatePurchaseLedgerAmount(
-                    amounts: new[] { purchaseLedgerEntry.TotalDueInSterling },
+                    amounts: new[] { purchaseLedgerEntry.TotalDueInSterling }, // <50> "TOTDUE"
                     currentPeriod: currentGeneralLedgerPeriod,
                     numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
                     operationPeriod: null,
@@ -1017,9 +1015,9 @@ namespace MertexerV2.PurchaseLedgerFunctions
                     mvOperationType: null
                 );
 
-                supplierEntry.ThisPeriodBalance += supplierEntryThisPeriodBalance; // PLAMOUNT,50
+                supplierEntry.ThisPeriodBalance += supplierEntryThisPeriodBalance;                                      // B("PLAMOUNT,50")
 
-                supplierEntry.DocumentReferences = supplierEntry.DocumentReferences.Prepend(purchaseLedgerEntry.Key);
+                supplierEntry.DocumentReferences = supplierEntry.DocumentReferences.Prepend(purchaseLedgerEntry.Key);   // I<53>
 
                 var supplierEntryPurchasesNextPeriod = CalculatePurchaseLedgerAmount(
                     amounts: purchaseLedgerEntry.Amounts, // <43> "PAMOUNT"
@@ -1030,10 +1028,10 @@ namespace MertexerV2.PurchaseLedgerFunctions
                     mvOperationType: "A"
                 );
 
-                supplierEntry.PurchasesNextPeriod += supplierEntryPurchasesNextPeriod; // PLAMOUNT,N43.A
+                supplierEntry.PurchasesNextPeriod += supplierEntryPurchasesNextPeriod;                                  // B("PLAMOUNT,N43.A")
 
                 var supplierEntryPurchasesThisPeriod = CalculatePurchaseLedgerAmount(
-                    amounts: purchaseLedgerEntry.Amounts,
+                    amounts: purchaseLedgerEntry.Amounts,  // <43> "PAMOUNT"
                     currentPeriod: currentGeneralLedgerPeriod,
                     numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
                     operationPeriod: null,
@@ -1041,10 +1039,10 @@ namespace MertexerV2.PurchaseLedgerFunctions
                     mvOperationType: "A"
                 );
 
-                supplierEntry.PurchasesThisPeriod += supplierEntryPurchasesThisPeriod; // PLAMOUNT,43.A
+                supplierEntry.PurchasesThisPeriod += supplierEntryPurchasesThisPeriod;                                  // B("PLAMOUNT,43.A")
 
                 var supplierEntryPurchasesYearToDate = CalculatePurchaseLedgerAmount(
-                    amounts: purchaseLedgerEntry.Amounts,
+                    amounts: purchaseLedgerEntry.Amounts,   // <43> "PAMOUNT"
                     currentPeriod: currentGeneralLedgerPeriod,
                     numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
                     operationPeriod: "Y",
@@ -1052,10 +1050,10 @@ namespace MertexerV2.PurchaseLedgerFunctions
                     mvOperationType: "A"
                 );
 
-                supplierEntry.PurchasesYearToDate += supplierEntryPurchasesYearToDate; // PLAMOUNT,Y43.A
+                supplierEntry.PurchasesYearToDate += supplierEntryPurchasesYearToDate;                                  // B("PLAMOUNT,Y43.A")
 
                 // P("INACT")
-                supplierEntry.PeriodsInactive = purchaseLedgerEntry.Future == true ? null : (sbyte?)-1;
+                supplierEntry.PeriodsInactive = purchaseLedgerEntry.Future == true ? null : (sbyte?)-1;                 // P("INACT")
 
                 var supplierEntryJson = JsonConvert.SerializeObject(supplierEntry);
 
@@ -1087,9 +1085,11 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                 /* Update the Supplier Currency record */
 
-                var supplierCurrencyEntryBalanceAddition = purchaseLedgerEntry.AmountInCurrency;
+                var supplierCurrencyEntryBalanceAddition = purchaseLedgerEntry.AmountInCurrency;                    
 
-                supplierCurrencyEntry.Balance += supplierCurrencyEntryBalanceAddition; // <250> "CURAMT"
+                supplierCurrencyEntry.Balance += supplierCurrencyEntryBalanceAddition;                                  // <250> "CURAMT"
+
+
 
                 var supplierCurrencyEntryNextPeriodBalanceAddition = CalculatePurchaseLedgerAmount(
                     amounts: new[] { purchaseLedgerEntry.AmountInCurrency }, // <250> "CURAMT"
@@ -1101,7 +1101,9 @@ namespace MertexerV2.PurchaseLedgerFunctions
                     mvOperationType: null
                 );
 
-                supplierCurrencyEntry.NextPeriodBalance += supplierCurrencyEntryNextPeriodBalanceAddition; // PLAMOUNT,N250
+                supplierCurrencyEntry.NextPeriodBalance += supplierCurrencyEntryNextPeriodBalanceAddition;              // B("PLAMOUNT,N250")
+
+
 
                 var supplierCurrencyEntryThisPeriodBalanceAddition = CalculatePurchaseLedgerAmount(
                     amounts: new[] { purchaseLedgerEntry.AmountInCurrency }, // <250> "CURAMT"
@@ -1112,9 +1114,13 @@ namespace MertexerV2.PurchaseLedgerFunctions
                     mvOperationType: null
                 );
 
-                supplierCurrencyEntry.ThisPeriodBalance += supplierCurrencyEntryThisPeriodBalanceAddition; // PLAMOUNT,250
+                supplierCurrencyEntry.ThisPeriodBalance += supplierCurrencyEntryThisPeriodBalanceAddition;              // B("PLAMOUNT,250")
+
+
 
                 supplierCurrencyEntry.DocumentReferences = supplierCurrencyEntry.DocumentReferences.Prepend(purchaseLedgerEntry.Key);
+
+
 
                 var supplierCurrencyEntryPurchasesNextPeriodAddition = CalculatePurchaseLedgerAmount(
                     amounts: new[] { purchaseLedgerEntry.AmountInCurrency }, // <250> "CURAMT"
@@ -1125,7 +1131,9 @@ namespace MertexerV2.PurchaseLedgerFunctions
                     mvOperationType: null
                 );
 
-                supplierCurrencyEntry.PurchasesNextPeriod += supplierCurrencyEntryPurchasesNextPeriodAddition; // PLAMOUNT,N250
+                supplierCurrencyEntry.PurchasesNextPeriod += supplierCurrencyEntryPurchasesNextPeriodAddition;          // B("PLAMOUNT,N250")
+
+
 
                 var supplierCurrencyEntryPurchasesNextPeriodReduction = CalculatePurchaseLedgerAmount(
                     amounts: purchaseLedgerEntry.VATTaxesInCurrency, // <248> "VATTAX.CUR"
@@ -1136,7 +1144,9 @@ namespace MertexerV2.PurchaseLedgerFunctions
                     mvOperationType: "A"
                 );
 
-                supplierCurrencyEntry.PurchasesNextPeriod -= supplierCurrencyEntryPurchasesNextPeriodReduction; // PLAMOUNT,N248.A
+                supplierCurrencyEntry.PurchasesNextPeriod -= supplierCurrencyEntryPurchasesNextPeriodReduction;         // B("PLAMOUNT,N248.A")
+
+
 
                 var supplierCurrencyEntryPurchasesThisPeriodAddition = CalculatePurchaseLedgerAmount(
                     amounts: new[] { purchaseLedgerEntry.AmountInCurrency }, // <250> "CURAMT"
@@ -1147,7 +1157,9 @@ namespace MertexerV2.PurchaseLedgerFunctions
                     mvOperationType: null
                 );
 
-                supplierCurrencyEntry.PurchasesThisPeriod += supplierCurrencyEntryPurchasesThisPeriodAddition; // PLAMOUNT,250
+                supplierCurrencyEntry.PurchasesThisPeriod += supplierCurrencyEntryPurchasesThisPeriodAddition;          // B("PLAMOUNT,250")
+
+
 
                 var supplierCurrencyEntryPurchasesThisPeriodReduction = CalculatePurchaseLedgerAmount(
                     amounts: purchaseLedgerEntry.VATTaxesInCurrency, // <248> "VATTAX.CUR"
@@ -1158,7 +1170,9 @@ namespace MertexerV2.PurchaseLedgerFunctions
                     mvOperationType: "A"
                 );
 
-                supplierCurrencyEntry.PurchasesThisPeriod -= supplierCurrencyEntryPurchasesThisPeriodReduction; // PLAMOUNT,248.A
+                supplierCurrencyEntry.PurchasesThisPeriod -= supplierCurrencyEntryPurchasesThisPeriodReduction;         // B("PLAMOUNT,248.A")
+
+
 
                 var supplierCurrencyEntryPurchasesYearToDateAddition = CalculatePurchaseLedgerAmount(
                     amounts: new[] { purchaseLedgerEntry.AmountInCurrency }, // <250> "CURAMT"
@@ -1169,7 +1183,9 @@ namespace MertexerV2.PurchaseLedgerFunctions
                     mvOperationType: null
                 );
 
-                supplierCurrencyEntry.PurchasesYearToDate += supplierCurrencyEntryPurchasesYearToDateAddition; // PLAMOUNT,Y250
+                supplierCurrencyEntry.PurchasesYearToDate += supplierCurrencyEntryPurchasesYearToDateAddition;          // B("PLAMOUNT,Y250
+
+
 
                 var supplierCurrencyEntryPurchasesYearToDateReduction = CalculatePurchaseLedgerAmount(
                     amounts: purchaseLedgerEntry.VATTaxesInCurrency, // <248> "VATTAX.CUR"
@@ -1180,7 +1196,9 @@ namespace MertexerV2.PurchaseLedgerFunctions
                     mvOperationType: "A"
                 );
 
-                supplierCurrencyEntry.PurchasesYearToDate -= supplierCurrencyEntryPurchasesYearToDateReduction; // PLAMOUNT,Y248.A
+                supplierCurrencyEntry.PurchasesYearToDate -= supplierCurrencyEntryPurchasesYearToDateReduction;         // B("PLAMOUNT,Y248.A")
+
+
 
                 supplierCurrencyEntry.PeriodsInactive = purchaseLedgerEntry.Future == true ? null : (sbyte?)-1;
 
@@ -1222,7 +1240,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
                     var vatEntryBeforeModificationJSON = JsonConvert.SerializeObject(companyVATEntries);
 
                     var purchasesInvoicesTaxAddition = CalculatePurchaseLedgerAmount(
-                        amounts: purchaseLedgerEntry.VATableAmounts, // <48> "VATTAX"
+                        amounts: purchaseLedgerEntry.VATTaxes, // <48> "VATTAX"
                         currentPeriod: currentGeneralLedgerPeriod,
                         numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
                         operationPeriod: null,
@@ -1230,10 +1248,12 @@ namespace MertexerV2.PurchaseLedgerFunctions
                         mvOperationType: "X"
                     );
 
-                    vatEntry.PurchasesInvoicesTax += purchasesInvoicesTaxAddition; // PLAMOUNT,48X
+                    vatEntry.PurchasesInvoicesTax += purchasesInvoicesTaxAddition;                                      // B("PLAMOUNT,48X")
+
+
 
                     var purchasesInvoicesValueAddition = CalculatePurchaseLedgerAmount(
-                        amounts: purchaseLedgerEntry.VATValues, // <49> "VATVALUE"
+                        amounts: purchaseLedgerEntry.VATableValues, // <49> "VATVALUE"
                         currentPeriod: currentGeneralLedgerPeriod,
                         numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
                         operationPeriod: null,
@@ -1241,10 +1261,12 @@ namespace MertexerV2.PurchaseLedgerFunctions
                         mvOperationType: "X"
                     );
 
-                    vatEntry.PurchasesInvoicesValue += purchasesInvoicesValueAddition; // PLAMOUNT,48X
+                    vatEntry.PurchasesInvoicesValue += purchasesInvoicesValueAddition;                                  // B("PLAMOUNT,49X")
+
+
 
                     var purchasesQuarterTaxTotalAddition = CalculatePurchaseLedgerAmount(
-                        amounts: purchaseLedgerEntry.VATableAmounts, // <48> "VATTAX"
+                        amounts: purchaseLedgerEntry.VATTaxes, // <48> "VATTAX"
                         currentPeriod: currentGeneralLedgerPeriod,
                         numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
                         operationPeriod: null,
@@ -1252,10 +1274,12 @@ namespace MertexerV2.PurchaseLedgerFunctions
                         mvOperationType: "X"
                     );
 
-                    vatEntry.PurchasesQuarterTaxTotal += purchasesQuarterTaxTotalAddition; // PLAMOUNT,48X
+                    vatEntry.PurchasesQuarterTaxTotal += purchasesQuarterTaxTotalAddition;                              // B("PLAMOUNT,48X")
+
+
 
                     var purchasesQuarterValueTotalAddition = CalculatePurchaseLedgerAmount(
-                        amounts: purchaseLedgerEntry.VATValues, // <49> "VATVALUE"
+                        amounts: purchaseLedgerEntry.VATableValues, // <49> "VATVALUE"
                         currentPeriod: currentGeneralLedgerPeriod,
                         numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
                         operationPeriod: null,
@@ -1263,10 +1287,12 @@ namespace MertexerV2.PurchaseLedgerFunctions
                         mvOperationType: "X"
                     );
 
-                    vatEntry.PurchasesQuarterValueTotal += purchasesQuarterValueTotalAddition; // PLAMOUNT,48X
+                    vatEntry.PurchasesQuarterValueTotal += purchasesQuarterValueTotalAddition;                          // B("PLAMOUNT,49X")
+
+
 
                     var purchasesNextPeriodInvoicesTaxAddition = CalculatePurchaseLedgerAmount(
-                        amounts: purchaseLedgerEntry.VATableAmounts, // <48> "VATTAX"
+                        amounts: purchaseLedgerEntry.VATTaxes, // <48> "VATTAX"
                         currentPeriod: currentGeneralLedgerPeriod,
                         numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
                         operationPeriod: "N",
@@ -1274,10 +1300,12 @@ namespace MertexerV2.PurchaseLedgerFunctions
                         mvOperationType: "X"
                     );
 
-                    vatEntry.PurchasesNextPeriodInvoicesTax += purchasesNextPeriodInvoicesTaxAddition; // PLAMOUNT,N48X
+                    vatEntry.PurchasesNextPeriodInvoicesTax += purchasesNextPeriodInvoicesTaxAddition;                  // B("PLAMOUNT,N48X")
+
+
 
                     var purchasesNextPeriodInvoicesValueAddition = CalculatePurchaseLedgerAmount(
-                        amounts: purchaseLedgerEntry.VATValues, // <49> "VATVALUE"
+                        amounts: purchaseLedgerEntry.VATableValues, // <49> "VATVALUE"
                         currentPeriod: currentGeneralLedgerPeriod,
                         numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
                         operationPeriod: "N",
@@ -1285,7 +1313,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
                         mvOperationType: "X"
                     );
 
-                    vatEntry.PurchasesNextPeriodInvoicesValue += purchasesNextPeriodInvoicesValueAddition; // PLAMOUNT,N48X
+                    vatEntry.PurchasesNextPeriodInvoicesValue += purchasesNextPeriodInvoicesValueAddition;              // B("PLAMOUNT,N49X")
 
                     var vatEntryJson = JsonConvert.SerializeObject(vatEntry);
 
@@ -1300,7 +1328,8 @@ namespace MertexerV2.PurchaseLedgerFunctions
                             $"<38> \"PQTTOT\" (PurchasesQuarterTaxTotal) += {purchasesQuarterTaxTotalAddition}",
                             $"<39> \"PQVTOT\" (PurchasesQuarterValueTotal) += {purchasesQuarterValueTotalAddition}",
                             $"<40> \"PNINVT\" (PurchasesNextPeriodInvoicesTax) += {purchasesNextPeriodInvoicesTaxAddition}",
-                            $"<44> \"PNINVV\" (PurchasesNextPeriodInvoicesValue) += {purchasesNextPeriodInvoicesValueAddition}", },
+                            $"<44> \"PNINVV\" (PurchasesNextPeriodInvoicesValue) += {purchasesNextPeriodInvoicesValueAddition}",
+                        },
                         jsonBefore: vatEntryBeforeModificationJSON,
                         jsonAfterwards: vatEntryJson,
                         purchaseLedgerRegistryKey: registerEntry.Key
@@ -1312,18 +1341,19 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 #region Step 09. Create a Purchase Ledger VAT Audit entry (INSERT to PLVATAUD)
 
                 /* Insert the PurchaseLedgerVATAudit record */
-
+                var list = new List<string>();
                 // Key == TPLEDG<53> "Document Reference"
                 var purchaseLedgerVATAuditEntry = new PurchaseLedgerVATAudit(purchaseLedgerEntry.DocumentReference)
                 {
-                    DocumentDT = purchaseLedgerEntry.DocumentDT,
-                    TransactionType = "INV",
-                    SupplierCode = purchaseLedgerEntry.SupplierCode,
-                    PurchaseLedgerTotalDueInSterling = purchaseLedgerEntry.TotalDueInSterling,
-                    VATCodes = purchaseLedgerEntry.VATCodes,
-                    VATableValuesInSterling = purchaseLedgerEntry.VATValues,
-                    VATTaxesInSterling = purchaseLedgerEntry.VATableAmounts,
-                    NextPeriod = purchaseLedgerEntry.Future == true
+                    DocumentDT = purchaseLedgerEntry.DocumentDT,                                        //  <33>  "DOCDATE"
+                    TransactionType = "INV",                                                            //   n/a  "INV"
+                    SupplierCode = purchaseLedgerEntry.SupplierCode,                                    //  <39>  "PSUPREF"
+                    PurchaseLedgerTotalDueInSterling = purchaseLedgerEntry.TotalDueInSterling,          //  <50>  "TOTDUE"
+                    VATCodes = purchaseLedgerEntry.VATCodes,                                            //  <47>  "VATCODE"
+                    VATableValuesInSterling = purchaseLedgerEntry.VATableValues,                        //  <49>  "VATVALUE"
+                    VATTaxesInSterling = purchaseLedgerEntry.VATTaxes,                                  //  <48>  "VATTAX"
+                    NextPeriod = purchaseLedgerEntry.Future == true,                                    // <154>  "FUTURE"
+                    FinancialPeriod = currentGeneralLedgerPeriod                                        // PLPER
                 };
 
                 var purchaseLedgerVATAuditEntryJson = JsonConvert.SerializeObject(purchaseLedgerVATAuditEntry);
@@ -1343,10 +1373,12 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                 #region Step 10. Update the Company Statistics record (UPDATE to CFSTATS)
 
+
+
                 var companyStatsEntryBeforeModificationJSON = JsonConvert.SerializeObject(companyStatsEntry);
 
                 var companyStatsEntryPurchaseLedgerInvoicesAddition = CalculatePurchaseLedgerAmount(
-                    amounts: new[] { purchaseLedgerEntry.TotalDueInSterling },
+                    amounts: new[] { purchaseLedgerEntry.TotalDueInSterling },                      // <50> "TOTDUE"
                     currentPeriod: currentGeneralLedgerPeriod,
                     numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
                     operationPeriod: null,
@@ -1354,10 +1386,12 @@ namespace MertexerV2.PurchaseLedgerFunctions
                     mvOperationType: null
                 );
 
-                companyStatsEntry.PurchaseLedgerInvoices += companyStatsEntryPurchaseLedgerInvoicesAddition;
+                companyStatsEntry.PurchaseLedgerInvoices += companyStatsEntryPurchaseLedgerInvoicesAddition;            // B("PLAMOUNT,50")
+
+
 
                 var companyStatsEntryNextPurchaseLedgerInvoicesAddition = CalculatePurchaseLedgerAmount(
-                    amounts: new[] { purchaseLedgerEntry.TotalDueInSterling },
+                    amounts: new[] { purchaseLedgerEntry.TotalDueInSterling },                      // <50> "TOTDUE"
                     currentPeriod: currentGeneralLedgerPeriod,
                     numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
                     operationPeriod: "N",
@@ -1365,7 +1399,9 @@ namespace MertexerV2.PurchaseLedgerFunctions
                     mvOperationType: null
                 );
 
-                companyStatsEntry.NextPurchaseLedgerInvoices += companyStatsEntryNextPurchaseLedgerInvoicesAddition;
+                companyStatsEntry.NextPurchaseLedgerInvoices += companyStatsEntryNextPurchaseLedgerInvoicesAddition;    // B("PLAMOUNT,N50")
+
+
 
                 var companyStatsEntryJson = JsonConvert.SerializeObject(companyStatsEntry);
 
@@ -1385,14 +1421,16 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                 #endregion
 
+
+
                 #region Step 11. Create a General Ledger Batch entry (INSERT to GLBATCH)
 
                 // Key == TPLEDG<53> "Document Reference"
                 var generalLedgerBatchEntry = new GeneralLedgerBatch(purchaseLedgerEntry.DocumentReference)
                 {
-                    TransactionType = "RFPOST",
-                    DataKeys = new List<string>() { purchaseLedgerEntry.DocumentReference },
-                    NumberOfRecords = 1
+                    TransactionType = "RFPOST",                                                         //   n/a  "RFPOST"
+                    DataKeys = new List<string>() { purchaseLedgerEntry.DocumentReference },            //  <53>  "PINVDOC"
+                    NumberOfRecords = 1                                                                 //   n/a  "1"
                 };
 
                 var generalLedgerBatchEntryJson = JsonConvert.SerializeObject(generalLedgerBatchEntry);
@@ -1415,21 +1453,22 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 // Key == TPLEDG<53> "Document Reference"
                 var generalLedgerBatchDataEntry = new GeneralLedgerBatchData(purchaseLedgerEntry.DocumentReference)
                 {
-                    Type = "RFPOST",
-                    DocumentNumber = purchaseLedgerEntry.DocumentReference,
-                    Prefix = "P",
-                    DocumentDT = purchaseLedgerEntry.DocumentDT,
-                    PostDT = purchaseLedgerEntry.PostDT,
-                    SupplierCode = purchaseLedgerEntry.SupplierCode,
-                    GeneralLedgerCodes = purchaseLedgerEntry.GeneralLedgerCodes,
-                    VATTax = purchaseLedgerEntry.VATValues.Sum(),
-                    DocumentTotal = purchaseLedgerEntry.TotalDueInSterling,
-                    SupplierName = supplierEntry.Name,
-                    TransactionType = "PINV",
-                    GeneralLedgerSubCodes = purchaseLedgerEntry.GeneralLedgerSubCodes,
-                    Memo = purchaseLedgerEntry.Memo,
-                    OtherMemos = purchaseLedgerEntry.OtherMemos,
-                    ItemReference = purchaseLedgerEntry.SupplierInvoiceReference
+                    Type = "RFPOST",                                                                    //   n/a  "RFPOST"
+                    DocumentNumber = purchaseLedgerEntry.DocumentReference,                             //  <53>  "PINVDOC"
+                    Prefix = "P",                                                                       //   n/a  "P"
+                    DocumentDT = purchaseLedgerEntry.DocumentDT,                                        //  <33>  "DOCDATE"
+                    PostDT = purchaseLedgerEntry.PostDT,                                                //  <35>  "POSTDATE"
+                    SupplierCode = purchaseLedgerEntry.SupplierCode,                                    //  <39>  "PSUPREF"
+                    Amounts = purchaseLedgerEntry.Amounts,                                              //  <43>  "PAMOUNT"
+                    GeneralLedgerCodes = purchaseLedgerEntry.GeneralLedgerCodes,                        //  <44>  "GLCODE"
+                    VATTotal = purchaseLedgerEntry.VATTaxes.Sum(),                                      //  <48>  "VATTAXES"
+                    DocumentTotal = purchaseLedgerEntry.TotalDueInSterling,                             //  <50>  "TOTDUE"
+                    SupplierName = supplierEntry.Name,                                                  //  F("PLSUP",<39>)<1,1>
+                    TransactionType = "PINV",                                                           //   n/a  "PINV"
+                    GeneralLedgerSubCodes = purchaseLedgerEntry.GeneralLedgerSubCodes,                  // <130>  "GLSUB"
+                    Memo = purchaseLedgerEntry.Memo,                                                    //  <56>  "MEMO"
+                    OtherMemos = purchaseLedgerEntry.OtherMemos,                                        //  <82>  "MEMO1"
+                    ItemReference = purchaseLedgerEntry.SupplierInvoiceReference                        //  <37>  "SUPINVNO"
                 };
 
                 // 12. INSERT to GLBATCHDATA
@@ -1454,24 +1493,24 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 // Key == $"*{TPLEDG<53>}";
                 var purchaseLedgerAdjustmentAuditEntry = new PurchaseLedgerAdjustmentAudit($"*{purchaseLedgerEntry.DocumentReference}")
                 {
-                    DocumentTotal = purchaseLedgerEntry.TotalDueInSterling,
-                    TransactionType = "INV",
-                    DocumentDT = purchaseLedgerEntry.DocumentDT,
-                    PostDT = now,
-                    VATTaxesTotalInSterling = purchaseLedgerTransactionEntry.VATTotal,
-                    SupplierCode = purchaseLedgerEntry.SupplierCode,
-                    Balances = new[] { purchaseLedgerTransactionEntry.Balance },
-                    GeneralLedgerCodes = purchaseLedgerEntry.GeneralLedgerCodes,
-                    Discounts = new[] { purchaseLedgerTransactionEntry.DiscountAmount },
-                    GeneralLedgerAmounts = purchaseLedgerEntry.Amounts,
-                    Ports = new[] { session.HostPort },
-                    Time = now.ToString("HH:mm"),
-                    Dispute = purchaseLedgerEntry.DisputeIndicator,
-                    DueDT = purchaseLedgerEntry.InvoiceDueDT,
-                    CurrencyCode = purchaseLedgerEntry.CurrencyCode,
-                    VATTaxesTotalInCurrency = purchaseLedgerTransactionCurrencyEntry.VATTotal,
-                    DocumentTotalInCurrency = purchaseLedgerEntry.AmountInCurrency,
-                    ExchangeRates = purchaseLedgerEntry.ExchangeRates
+                    DocumentTotal = purchaseLedgerEntry.TotalDueInSterling,                             //  <50>  "TOTDUE"
+                    TransactionType = "INV",                                                            //   n/a  "INV"
+                    DocumentDT = purchaseLedgerEntry.DocumentDT,                                        //  <33>  "DOCDATE"
+                    PostDT = now,                                                                       //   n/a  @DATE
+                    VATTaxesTotalInSterling = purchaseLedgerTransactionEntry.VATTotal,                  // F("TPLTRANS",<53>)<6>    "VATDIS"
+                    SupplierCode = purchaseLedgerEntry.SupplierCode,                                    //  <39>  "PSUPREF"
+                    Balances = new[] { purchaseLedgerTransactionEntry.Balance },                        // F("TPLTRANS",<53>)<9>    "BALANCE"
+                    GeneralLedgerCodes = purchaseLedgerEntry.GeneralLedgerCodes,                        //  <44>  "GLCODE"
+                    Discounts = new[] { purchaseLedgerTransactionEntry.DiscountAmount },                // F("TPLTRANS",<53>)<20>   "DISCAMT"
+                    GeneralLedgerAmounts = purchaseLedgerEntry.Amounts,                                 //  <43>  "PAMOUNT" -- Intentional direct copy of MV field
+                    Ports = new[] { session.HostPort },                                                 //   n/a  {Connection Port}
+                    Time = now.ToString(format: "HH:mm"),                                               //   n/a  {DateTime.Now:HH:mm}
+                    Dispute = purchaseLedgerEntry.DisputeIndicator,                                     //  <87>  "DISPIND"
+                    DueDT = purchaseLedgerEntry.InvoiceDueDT,                                           //  <38>  "INVDUE"
+                    CurrencyCode = purchaseLedgerEntry.CurrencyCode,                                    // <161>  "CURRENCY"
+                    VATTaxesTotalInCurrency = purchaseLedgerTransactionCurrencyEntry.VATTotal,          // F("TPLTRANS.CUR",<53>)<6>
+                    DocumentTotalInCurrency = purchaseLedgerEntry.AmountInCurrency,                     // <250>  "CURAMT"
+                    ExchangeRates = purchaseLedgerEntry.ExchangeRates                                   // <162>  "XRATE"
                 };
 
                 var purchaseLedgerAdjustmentAuditEntryJson = JsonConvert.SerializeObject(purchaseLedgerAdjustmentAuditEntry);
@@ -1494,12 +1533,12 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 // Key == TPLEDG<39>*TPLEDG<37>
                 var purchaseLedgerSupplierInvoiceEntry = new PurchaseLedgerSupplierInvoice($"{purchaseLedgerEntry.SupplierCode}*{purchaseLedgerEntry.SupplierInvoiceReference}")
                 {
-                    SupplierCode = purchaseLedgerEntry.SupplierCode,
-                    SupplierInvoiceReference = purchaseLedgerEntry.SupplierInvoiceReference,
-                    TransactionType = "INV",
-                    DocumentDT = purchaseLedgerEntry.DocumentDT,
-                    DocumentNumber = purchaseLedgerEntry.DocumentReference,
-                    PostDT = purchaseLedgerEntry.PostDT
+                    SupplierCode = purchaseLedgerEntry.SupplierCode,                                    //  <39>  "PSUPREF"
+                    SupplierInvoiceReference = purchaseLedgerEntry.SupplierInvoiceReference,            //  <37>  "SUPINVNO"
+                    TransactionType = "INV",                                                            //   n/a  "INV"
+                    DocumentDT = purchaseLedgerEntry.DocumentDT,                                        //  <33>  "DOCDATE"
+                    DocumentNumber = purchaseLedgerEntry.DocumentReference,                             //  <53>  "DOCNO"
+                    PostDT = purchaseLedgerEntry.PostDT                                                 //  <35>  "POSTDATE"
                 };
 
                 var purchaseLedgerSupplierInvoiceEntryJson = JsonConvert.SerializeObject(purchaseLedgerSupplierInvoiceEntry);

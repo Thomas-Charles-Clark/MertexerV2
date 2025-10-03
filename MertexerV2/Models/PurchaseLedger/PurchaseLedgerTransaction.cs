@@ -137,6 +137,9 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseFieldName("DOCNO")]
         public string DocumentNumber { get; set; }
 
+        /// <summary>
+        /// Just don't ask me why it's named "VATDIS", ok?
+        /// </summary>
         [UniVerseIndex(6)]
         [UniVerseFieldName("VATDIS")]
         [UniVerseConversion("MR22")] 

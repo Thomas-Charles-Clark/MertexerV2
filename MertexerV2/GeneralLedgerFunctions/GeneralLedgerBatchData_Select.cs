@@ -66,7 +66,7 @@ namespace MertexerV2.GeneralLedgerFunctions
             out SqlString SupplierCode,
             out SqlString Amounts,
             out SqlString GeneralLedgerCodes,
-            out SqlDecimal VATTax,
+            out SqlDecimal VATTotal,
             out SqlDecimal DocumentTotal,
             out SqlString SupplierName,
             out SqlString Memo,
@@ -96,7 +96,7 @@ namespace MertexerV2.GeneralLedgerFunctions
 
             GeneralLedgerCodes = result.GeneralLedgerCodes?.Any() == true ? JsonConvert.SerializeObject(result.GeneralLedgerCodes) : SqlString.Null;
 
-            VATTax = result.VATTax;
+            VATTotal = result.VATTotal;
 
             DocumentTotal = result.DocumentTotal;
 

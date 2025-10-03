@@ -1,14 +1,8 @@
-ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄProcess Defn - ParagraphÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ 
-³ Process Name    INVDUE                                                      ³ 
-³ Description     SB+ conversion                                              ³ 
-³ Dict File Name                                                              ³ 
-³ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ ³ 
-³ Paragraph Lines                                                             ³ 
-³ * 6756+____________________________________________________________________ ³ 
-³ *IF @VALUE < <33> OR <55> < <33> THEN                                       ³ 
-³ *   IF @VALUE # @VALUE THEN @RTN.FLAG = 0 ELSE @RTN.FLAG = 1                ³ 
-³ *END                                                                        ³ 
-³ *                                                                           ³ 
+[PL]
+/PD
+P
+INVDUE
+
 ³ IF @VALUE < <33> THEN                                                       ³ 
 ³    ERROR 'INVOICE DUE DATE IS BEFORE DOCUMENT DATE'                         ³ 
 ³    EXIT 1                                                                   ³ 
@@ -16,9 +10,4 @@
 ³ IF <55> < <33> THEN                                                         ³ 
 ³    ERROR 'SETTLEMENT DATE IS BEFORE DOCUMENT DATE'                          ³ 
 ³    EXIT 1                                                                   ³ 
-³ END                                                                         ³ 
-³ * 6756-                                                                     ³ 
-³ Source Code Id                                                              ³ 
-ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ 
-                                                                                
-F2-Save F4-Del F6-Reformat F8-Goto Line F9-Process F10-Action                   
+³ END

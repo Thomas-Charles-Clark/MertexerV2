@@ -7,11 +7,9 @@
 ³³                          GLBATCHDATA1              ³           
 ³                           GLPPTRANS.DES             ³           
 ³                                                     ³           
-³                                                     ³    
-
-See below for secondary file update definitions.        
-				   
-ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄSecondary File UpdateÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿   
+³                                                     ³          
+³                                                     ³   
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ Secondary File Update ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿   
 ³ File Update (Dict) : GLBATCH                                              ³   
 ³                                                                           ³   
 ³ Update/Delete (U/D)  U                                                    ³   
@@ -24,13 +22,10 @@ See below for secondary file update definitions.
 ³ DATAKEYS                       I      <104>                               ³   
 ³ NORECS                         R      <62>                                ³   
 ³                                                                           ³   
-³                                                                           ³   
-³                                                                           ³   
-³                                                                           ³   
-ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ   
-                                                                               
-                                                                                
-ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄSecondary File UpdateÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿   
+ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ          
+³                                                     ³          
+³                                                     ³   
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ Secondary File Update ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿   
 ³ File Update (Dict) : GLBATCHDATA1                                         ³   
 ³                                                                           ³   
 ³ Update/Delete (U/D)  U                                                    ³   
@@ -56,10 +51,10 @@ See below for secondary file update definitions.
 ³ USERID                         R      @USER.ID                            ³   
 ³ POSTTIME                       R      @TIME                               ³   
 ³                                                                           ³   
-ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ   
-                               
-
-ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄSecondary File UpdateÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿   
+ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ          
+³                                                     ³          
+³                                                     ³   
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ Secondary File Update ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿   
 ³ File Update (Dict) : GLPPTRANS.DES                                        ³   
 ³                                                                           ³   
 ³ Update/Delete (U/D)  U                                                    ³   

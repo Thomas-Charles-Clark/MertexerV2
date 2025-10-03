@@ -214,7 +214,6 @@ namespace MertexerV2.PurchaseLedgerFunctions
             out SqlString Details,
             out SqlDecimal TransferAmount,
             out SqlDecimal GoodsValue,
-            out SqlDecimal VATAmount,
             out SqlDecimal TotalValue,
             out SqlBoolean SetOpen,
             out SqlString OpeningDTs,
@@ -320,10 +319,10 @@ namespace MertexerV2.PurchaseLedgerFunctions
             GeneralLedgerCode = p.GeneralLedgerCodes?.Any() == true ? p.GeneralLedgerCodes.First() : SqlString.Null;
             VATCodes = p.VATCodes?.Any() == true ? JsonConvert.SerializeObject(p.VATCodes) : SqlString.Null;
             VATCode = p.VATCodes?.Any() == true ? p.VATCodes.First() : SqlString.Null;
-            VATTaxes = p.VATableAmounts?.Any() == true ? JsonConvert.SerializeObject(p.VATableAmounts) : SqlString.Null;
-            VATTax = p.VATableAmounts?.Any() == true ? Convert.ToDecimal(p.VATableAmounts.First()) : SqlDecimal.Null;
-            VATableValues = p.VATValues?.Any() == true ? JsonConvert.SerializeObject(p.VATValues) : SqlString.Null;
-            VATableValue = p.VATValues?.Any() == true ? Convert.ToDecimal(p.VATValues.First()) : SqlDecimal.Null;
+            VATTaxes = p.VATTaxes?.Any() == true ? JsonConvert.SerializeObject(p.VATTaxes) : SqlString.Null;
+            VATTax = p.VATTaxes?.Any() == true ? Convert.ToDecimal(p.VATTaxes.First()) : SqlDecimal.Null;
+            VATableValues = p.VATableValues?.Any() == true ? JsonConvert.SerializeObject(p.VATableValues) : SqlString.Null;
+            VATableValue = p.VATableValues?.Any() == true ? Convert.ToDecimal(p.VATableValues.First()) : SqlDecimal.Null;
             DocumentTotal = p.TotalDueInSterling;
             SterlingOriginalValue = p.SterlingOriginalValue;
             ExchangeRateDifference = p.ExchangeRateDifference;
@@ -364,7 +363,6 @@ namespace MertexerV2.PurchaseLedgerFunctions
             Details = p.Details;
             TransferAmount = p.TransferAmount ?? SqlDecimal.Null;
             GoodsValue = p.GoodsValue ?? SqlDecimal.Null;
-            VATAmount = p.VATAmount ?? SqlDecimal.Null;
             TotalValue = p.TotalValue ?? SqlDecimal.Null;
             SetOpen = p.SetOpen ?? SqlBoolean.Null;
             OpeningDTs = p.OpeningDTs?.Any() == true ? JsonConvert.SerializeObject(p.OpeningDTs) : SqlString.Null;

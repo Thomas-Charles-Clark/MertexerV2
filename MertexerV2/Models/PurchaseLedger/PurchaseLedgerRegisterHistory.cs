@@ -159,6 +159,8 @@ namespace MertexerV2.Models.PurchaseLedger
 
         [UniVerseIndex(9)]
         [UniVerseFieldName("DOCBAL")]
+        [UniVerseConversion("MR22")]
+
         public decimal DocumentTotal { get; set; }
     }
 }

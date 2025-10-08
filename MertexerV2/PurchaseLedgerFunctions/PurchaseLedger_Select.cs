@@ -44,8 +44,6 @@ namespace MertexerV2.PurchaseLedgerFunctions
         {
             if (String.IsNullOrEmpty(PurchaseLedgerCodes))
             {
-                int p = 0;
-
                 var filters = new List<Tuple<string, string, string>>();
 
                 if (!String.IsNullOrEmpty(SupplierCode))

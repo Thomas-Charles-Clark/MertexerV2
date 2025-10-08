@@ -88,22 +88,14 @@ namespace MertexerV2.Models.Supplier
         [UniVerseFieldName("BALANCE")]
         public decimal Balance { get; set; }
 
-        [UniVerseIndex(18)]
-        [UniVerseFieldName("ACBAL")]
-        [UniVerseConversion("MR22")]
-        [UniVerseMultiValue]
-        public IEnumerable<decimal> AccountPeriodBalances { get; set; }
-
         [UniVerseIndex(18,1)]
         [UniVerseFieldName("NEXT")]
         [UniVerseConversion("MR22")]
-        [UniVerseMultiValue]
         public decimal NextPeriodBalance { get; set; }
 
         [UniVerseIndex(18, 2)]
         [UniVerseFieldName("CURR")]
         [UniVerseConversion("MR22")]
-        [UniVerseMultiValue]
         public decimal ThisPeriodBalance { get; set; }
 
         /// <summary>
@@ -113,12 +105,6 @@ namespace MertexerV2.Models.Supplier
         [UniVerseFieldName("TLINK")]
         [UniVerseMultiValue]
         public IEnumerable<string> DocumentReferences { get; set; }
-
-        [UniVerseIndex(21)]
-        [UniVerseFieldName("PURCH")]
-        [UniVerseConversion("MR22")]
-        [UniVerseMultiValue]
-        public IEnumerable<decimal> Purchases { get; set; }
 
         [UniVerseIndex(21, 1)]
         [UniVerseFieldName("PNEXT")]
@@ -134,12 +120,6 @@ namespace MertexerV2.Models.Supplier
         [UniVerseFieldName("PYTD")]
         [UniVerseConversion("MR22")]
         public decimal PurchasesYearToDate { get; set; }
-
-        [UniVerseIndex(22)]
-        [UniVerseFieldName("PAY")]
-        [UniVerseConversion("MR22")]
-        [UniVerseMultiValue]
-        public IEnumerable<decimal> Payments { get; set; }
 
         [UniVerseIndex(22, 1)]
         [UniVerseFieldName("PAYNEXT")]

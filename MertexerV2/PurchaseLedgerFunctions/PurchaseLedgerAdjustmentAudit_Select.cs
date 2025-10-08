@@ -115,6 +115,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
             out SqlString Ports,
             out SqlDateTime DocumentDT,
             out SqlDateTime PostDT,
+            out SqlByte Period,
             out SqlDecimal VATTaxesInSterling,
             out SqlString SupplierCode,
             out SqlString UnallocatedAmounts,
@@ -142,6 +143,8 @@ namespace MertexerV2.PurchaseLedgerFunctions
             DocumentDT = result.DocumentDT ?? SqlDateTime.Null;
 
             PostDT = result.PostDT ?? SqlDateTime.Null;
+
+            Period = result.FinancialPeriod;
 
             VATTaxesInSterling = result.VATTaxesTotalInSterling;
 

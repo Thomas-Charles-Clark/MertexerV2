@@ -958,7 +958,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
                     Credit = purchaseLedgerEntry.AmountInCurrency - purchaseLedgerEntry.VATTaxesInCurrency.Sum(),   //   <250> - S(<248>) "CURAMT" - S"VATTAX.CUR"
                     Balance = purchaseLedgerEntry.AmountInCurrency,                                                 //   <250>            "CURAMT"
                     OriginalValueABS = purchaseLedgerEntry.AmountInCurrency,                                        //   <250>            "CURAMT"
-                    Period = purchaseLedgerTransactionPeriod,                                                       //                    As above; see TPLTRANS entry
+                    Period = purchaseLedgerTransactionEntry.Period,                                                       //                    As above; see TPLTRANS entry
                     SupplierReference = purchaseLedgerEntry.SupplierCode,                                           //    <39>  "PSUPREF"
                     Age = purchaseLedgerEntry.Future == true ? 0 : 1,                                               //                    As above; see TPLTRANS entry
                     Unallocated = 0.0m,                                                                             //     n/a            0
@@ -997,7 +997,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 var supplierEntryNextPeriodBalance = CalculatePurchaseLedgerAmount(
                     amounts: new[] { purchaseLedgerEntry.TotalDueInSterling }, // <50> "TOTDUE"
                                                                                // the subroutine itself explicitly returns early on line 40 if you're in the final period: IF PER=NOPER THEN RETURN        
-                    currentPeriod: currentGeneralLedgerPeriod,
+                    currentPeriod: purchaseLedgerTransactionEntry.Period,
                     numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
                     operationPeriod: "N",
                     future: purchaseLedgerEntry.Future == true,
@@ -1008,7 +1008,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                 var supplierEntryThisPeriodBalance = CalculatePurchaseLedgerAmount(
                     amounts: new[] { purchaseLedgerEntry.TotalDueInSterling }, // <50> "TOTDUE"
-                    currentPeriod: currentGeneralLedgerPeriod,
+                    currentPeriod: purchaseLedgerTransactionEntry.Period,
                     numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
                     operationPeriod: null,
                     future: purchaseLedgerEntry.Future == true,
@@ -1021,7 +1021,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                 var supplierEntryPurchasesNextPeriod = CalculatePurchaseLedgerAmount(
                     amounts: purchaseLedgerEntry.Amounts, // <43> "PAMOUNT"
-                    currentPeriod: currentGeneralLedgerPeriod,
+                    currentPeriod: purchaseLedgerTransactionEntry.Period,
                     numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
                     operationPeriod: "N",
                     future: purchaseLedgerEntry.Future == true,
@@ -1032,7 +1032,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                 var supplierEntryPurchasesThisPeriod = CalculatePurchaseLedgerAmount(
                     amounts: purchaseLedgerEntry.Amounts,  // <43> "PAMOUNT"
-                    currentPeriod: currentGeneralLedgerPeriod,
+                    currentPeriod: purchaseLedgerTransactionEntry.Period,
                     numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
                     operationPeriod: null,
                     future: purchaseLedgerEntry.Future == true,
@@ -1043,7 +1043,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                 var supplierEntryPurchasesYearToDate = CalculatePurchaseLedgerAmount(
                     amounts: purchaseLedgerEntry.Amounts,   // <43> "PAMOUNT"
-                    currentPeriod: currentGeneralLedgerPeriod,
+                    currentPeriod: purchaseLedgerTransactionEntry.Period,
                     numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
                     operationPeriod: "Y",
                     future: purchaseLedgerEntry.Future == true,
@@ -1094,7 +1094,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 var supplierCurrencyEntryNextPeriodBalanceAddition = CalculatePurchaseLedgerAmount(
                     amounts: new[] { purchaseLedgerEntry.AmountInCurrency }, // <250> "CURAMT"
                                                                              // the subroutine itself explicitly returns early on line 40 if you're in the final period: IF PER=NOPER THEN RETURN        
-                    currentPeriod: currentGeneralLedgerPeriod,
+                    currentPeriod: purchaseLedgerTransactionEntry.Period,
                     numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
                     operationPeriod: "N",
                     future: purchaseLedgerEntry.Future == true,
@@ -1107,7 +1107,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                 var supplierCurrencyEntryThisPeriodBalanceAddition = CalculatePurchaseLedgerAmount(
                     amounts: new[] { purchaseLedgerEntry.AmountInCurrency }, // <250> "CURAMT"
-                    currentPeriod: currentGeneralLedgerPeriod,
+                    currentPeriod: purchaseLedgerTransactionEntry.Period,
                     numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
                     operationPeriod: null,
                     future: purchaseLedgerEntry.Future == true,
@@ -1124,7 +1124,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                 var supplierCurrencyEntryPurchasesNextPeriodAddition = CalculatePurchaseLedgerAmount(
                     amounts: new[] { purchaseLedgerEntry.AmountInCurrency }, // <250> "CURAMT"
-                    currentPeriod: currentGeneralLedgerPeriod,
+                    currentPeriod: purchaseLedgerTransactionEntry.Period,
                     numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
                     operationPeriod: "N",
                     future: purchaseLedgerEntry.Future == true,
@@ -1137,7 +1137,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                 var supplierCurrencyEntryPurchasesNextPeriodReduction = CalculatePurchaseLedgerAmount(
                     amounts: purchaseLedgerEntry.VATTaxesInCurrency, // <248> "VATTAX.CUR"
-                    currentPeriod: currentGeneralLedgerPeriod,
+                    currentPeriod: purchaseLedgerTransactionEntry.Period,
                     numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
                     operationPeriod: "N",
                     future: purchaseLedgerEntry.Future == true,
@@ -1150,7 +1150,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                 var supplierCurrencyEntryPurchasesThisPeriodAddition = CalculatePurchaseLedgerAmount(
                     amounts: new[] { purchaseLedgerEntry.AmountInCurrency }, // <250> "CURAMT"
-                    currentPeriod: currentGeneralLedgerPeriod,
+                    currentPeriod: purchaseLedgerTransactionEntry.Period,
                     numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
                     operationPeriod: null,
                     future: purchaseLedgerEntry.Future == true,
@@ -1163,7 +1163,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                 var supplierCurrencyEntryPurchasesThisPeriodReduction = CalculatePurchaseLedgerAmount(
                     amounts: purchaseLedgerEntry.VATTaxesInCurrency, // <248> "VATTAX.CUR"
-                    currentPeriod: currentGeneralLedgerPeriod,
+                    currentPeriod: purchaseLedgerTransactionEntry.Period,
                     numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
                     operationPeriod: null,
                     future: purchaseLedgerEntry.Future == true,
@@ -1176,7 +1176,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                 var supplierCurrencyEntryPurchasesYearToDateAddition = CalculatePurchaseLedgerAmount(
                     amounts: new[] { purchaseLedgerEntry.AmountInCurrency }, // <250> "CURAMT"
-                    currentPeriod: currentGeneralLedgerPeriod,
+                    currentPeriod: purchaseLedgerTransactionEntry.Period,
                     numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
                     operationPeriod: "Y",
                     future: purchaseLedgerEntry.Future == true,
@@ -1189,7 +1189,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                 var supplierCurrencyEntryPurchasesYearToDateReduction = CalculatePurchaseLedgerAmount(
                     amounts: purchaseLedgerEntry.VATTaxesInCurrency, // <248> "VATTAX.CUR"
-                    currentPeriod: currentGeneralLedgerPeriod,
+                    currentPeriod: purchaseLedgerTransactionEntry.Period,
                     numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
                     operationPeriod: "Y",
                     future: purchaseLedgerEntry.Future == true,
@@ -1241,7 +1241,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                     var purchasesInvoicesTaxAddition = CalculatePurchaseLedgerAmount(
                         amounts: purchaseLedgerEntry.VATTaxes, // <48> "VATTAX"
-                        currentPeriod: currentGeneralLedgerPeriod,
+                        currentPeriod: purchaseLedgerTransactionEntry.Period,
                         numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
                         operationPeriod: null,
                         future: purchaseLedgerEntry.Future == true,
@@ -1254,7 +1254,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                     var purchasesInvoicesValueAddition = CalculatePurchaseLedgerAmount(
                         amounts: purchaseLedgerEntry.VATableValues, // <49> "VATVALUE"
-                        currentPeriod: currentGeneralLedgerPeriod,
+                        currentPeriod: purchaseLedgerTransactionEntry.Period,
                         numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
                         operationPeriod: null,
                         future: purchaseLedgerEntry.Future == true,
@@ -1267,7 +1267,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                     var purchasesQuarterTaxTotalAddition = CalculatePurchaseLedgerAmount(
                         amounts: purchaseLedgerEntry.VATTaxes, // <48> "VATTAX"
-                        currentPeriod: currentGeneralLedgerPeriod,
+                        currentPeriod: purchaseLedgerTransactionEntry.Period,
                         numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
                         operationPeriod: null,
                         future: purchaseLedgerEntry.Future == true,
@@ -1280,7 +1280,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                     var purchasesQuarterValueTotalAddition = CalculatePurchaseLedgerAmount(
                         amounts: purchaseLedgerEntry.VATableValues, // <49> "VATVALUE"
-                        currentPeriod: currentGeneralLedgerPeriod,
+                        currentPeriod: purchaseLedgerTransactionEntry.Period,
                         numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
                         operationPeriod: null,
                         future: purchaseLedgerEntry.Future == true,
@@ -1293,7 +1293,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                     var purchasesNextPeriodInvoicesTaxAddition = CalculatePurchaseLedgerAmount(
                         amounts: purchaseLedgerEntry.VATTaxes, // <48> "VATTAX"
-                        currentPeriod: currentGeneralLedgerPeriod,
+                        currentPeriod: purchaseLedgerTransactionEntry.Period,
                         numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
                         operationPeriod: "N",
                         future: purchaseLedgerEntry.Future == true,
@@ -1306,7 +1306,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                     var purchasesNextPeriodInvoicesValueAddition = CalculatePurchaseLedgerAmount(
                         amounts: purchaseLedgerEntry.VATableValues, // <49> "VATVALUE"
-                        currentPeriod: currentGeneralLedgerPeriod,
+                        currentPeriod: purchaseLedgerTransactionEntry.Period,
                         numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
                         operationPeriod: "N",
                         future: purchaseLedgerEntry.Future == true,
@@ -1353,7 +1353,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
                     VATableValuesInSterling = purchaseLedgerEntry.VATableValues,                        //  <49>  "VATVALUE"
                     VATTaxesInSterling = purchaseLedgerEntry.VATTaxes,                                  //  <48>  "VATTAX"
                     NextPeriod = purchaseLedgerEntry.Future == true,                                    // <154>  "FUTURE"
-                    FinancialPeriod = currentGeneralLedgerPeriod                                        // PLPER
+                    FinancialPeriod = purchaseLedgerTransactionEntry.Period                                        // PLPER
                 };
 
                 var purchaseLedgerVATAuditEntryJson = JsonConvert.SerializeObject(purchaseLedgerVATAuditEntry);
@@ -1379,7 +1379,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                 var companyStatsEntryPurchaseLedgerInvoicesAddition = CalculatePurchaseLedgerAmount(
                     amounts: new[] { purchaseLedgerEntry.TotalDueInSterling },                      // <50> "TOTDUE"
-                    currentPeriod: currentGeneralLedgerPeriod,
+                    currentPeriod: purchaseLedgerTransactionEntry.Period,
                     numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
                     operationPeriod: null,
                     future: purchaseLedgerEntry.Future == true,
@@ -1392,7 +1392,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                 var companyStatsEntryNextPurchaseLedgerInvoicesAddition = CalculatePurchaseLedgerAmount(
                     amounts: new[] { purchaseLedgerEntry.TotalDueInSterling },                      // <50> "TOTDUE"
-                    currentPeriod: currentGeneralLedgerPeriod,
+                    currentPeriod: purchaseLedgerTransactionEntry.Period,
                     numberOfPeriods: companyEntry.NumberOfFinancialPeriods,
                     operationPeriod: "N",
                     future: purchaseLedgerEntry.Future == true,
@@ -1496,7 +1496,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
                     DocumentTotal = purchaseLedgerEntry.TotalDueInSterling,                             //  <50>  "TOTDUE"
                     TransactionType = "INV",                                                            //   n/a  "INV"
                     DocumentDT = purchaseLedgerEntry.DocumentDT,                                        //  <33>  "DOCDATE"
-                    PostDT = now,                                                                       //   n/a  @DATE
+                    PostDT = purchaseLedgerEntry.PostDT,                                                                       //   n/a  @DATE
                     VATTaxesTotalInSterling = purchaseLedgerTransactionEntry.VATTotal,                  // F("TPLTRANS",<53>)<6>    "VATDIS"
                     SupplierCode = purchaseLedgerEntry.SupplierCode,                                    //  <39>  "PSUPREF"
                     Balances = new[] { purchaseLedgerTransactionEntry.Balance },                        // F("TPLTRANS",<53>)<9>    "BALANCE"
@@ -1510,7 +1510,8 @@ namespace MertexerV2.PurchaseLedgerFunctions
                     CurrencyCode = purchaseLedgerEntry.CurrencyCode,                                    // <161>  "CURRENCY"
                     VATTaxesTotalInCurrency = purchaseLedgerTransactionCurrencyEntry.VATTotal,          // F("TPLTRANS.CUR",<53>)<6>
                     DocumentTotalInCurrency = purchaseLedgerEntry.AmountInCurrency,                     // <250>  "CURAMT"
-                    ExchangeRates = purchaseLedgerEntry.ExchangeRates                                   // <162>  "XRATE"
+                    ExchangeRates = purchaseLedgerEntry.ExchangeRates,                                  // <162>  "XRATE"
+                    FinancialPeriod = purchaseLedgerTransactionEntry.Period
                 };
 
                 var purchaseLedgerAdjustmentAuditEntryJson = JsonConvert.SerializeObject(purchaseLedgerAdjustmentAuditEntry);

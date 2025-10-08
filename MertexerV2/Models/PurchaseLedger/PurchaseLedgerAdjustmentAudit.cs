@@ -226,5 +226,9 @@ namespace MertexerV2.Models.PurchaseLedger
                 }
             }
         }
+
+        [UniVerseIndex(40)]
+        [UniVerseFieldName("PERIOD")]
+        public byte FinancialPeriod { get; set; }
     }
 }

@@ -173,7 +173,7 @@ namespace Tester
              */
 
             var registerKeys = new[] {
-                306726
+                306734
             };
 
             var now = DateTime.Now;
@@ -182,15 +182,13 @@ namespace Tester
 
             Console.WriteLine($"Calling PurchaseLedgerInvoiceRegisterFunctions.Select for PLINVREG key {invoiceRegisterKey} in {uniVerseAccount}");
 
-            var rec = Selector<PurchaseLedgerInvoiceRegister>.Select(invoiceRegisterKey, true, false, 1, uniVerseAccount);
+            //var rec = Selector<PurchaseLedgerInvoiceRegister>.Select(invoiceRegisterKey, true, false, 1, uniVerseAccount);
 
             var json = TesterFramework.FetchInvoiceRegistrationJSON(invoiceRegisterKey, "FlockDev");
 
             var transactionResults = PurchaseLedgerFunctions.InsertFromInvoiceRegistry(uniVerseAccount, json).OfType<PurchaseLedgerInsertionResult>().ToList();
 
             Console.WriteLine(JsonConvert.SerializeObject(transactionResults));
-
-
 
             //SqlString Key;
             //SqlDateTime DocumentDT;

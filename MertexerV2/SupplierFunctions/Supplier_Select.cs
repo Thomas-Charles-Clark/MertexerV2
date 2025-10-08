@@ -87,6 +87,9 @@ namespace MertexerV2.SupplierFunctions
             string sourceFileName,
             PurchaseLedgerTransaction plt) : base(supRef, supName, supCur, plt.Key, sourceFileName)
         {
+
+            int f = 0;
+
             Sel1 = sel1;
             Sel1D = sel1d;
             Sel2 = sel2;
@@ -231,7 +234,6 @@ namespace MertexerV2.SupplierFunctions
             out SqlString CountryCode,
             out SqlString Currency,
             out SqlDecimal Balance,
-            out SqlString AccountPeriodBalances,
             out SqlDecimal ThisPeriodBalance,
             out SqlDecimal NextPeriodBalance,
             out SqlString PhoneNumber,
@@ -263,7 +265,6 @@ namespace MertexerV2.SupplierFunctions
             CountryCode = p.CountryCode?.TrimReduceTruncate(3);
             Currency = p.Currency?.TrimReduceTruncate(10);
             Balance = p.Balance;
-            AccountPeriodBalances = p.AccountPeriodBalances?.Any() == true ? JsonConvert.SerializeObject(p.AccountPeriodBalances) : SqlString.Null;
             ThisPeriodBalance = p.ThisPeriodBalance;
             NextPeriodBalance = p.NextPeriodBalance;
             DutyPercentage = p.DutyPercentage ?? SqlDecimal.Null;

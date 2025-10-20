@@ -172,6 +172,15 @@ namespace Tester
              * 
              */
 
+
+
+            //Console.WriteLine($"SS.SETDATE.INT: {Framework.DateTimeFromUniVerseOffset(19359)}");
+            //Console.WriteLine($"SS.POSTDATE.INT: {Framework.DateTimeFromUniVerseOffset(19322)}");
+            //Console.WriteLine($"SS.DUEDATE.INT: {Framework.DateTimeFromUniVerseOffset(19359)}");
+            //Console.WriteLine($"SS.DOCDATE.INT: {Framework.DateTimeFromUniVerseOffset(19322)}");
+
+
+
             var registerKeys = new[] {
                 306734
             };
@@ -180,15 +189,58 @@ namespace Tester
 
             var invoiceRegisterKey = registerKeys.First().ToString();
 
-            Console.WriteLine($"Calling PurchaseLedgerInvoiceRegisterFunctions.Select for PLINVREG key {invoiceRegisterKey} in {uniVerseAccount}");
+            var creditRegisterJson = @"{
+  ""ReceivedDT"": ""2025-09-26"",
+  ""OnFileDT"": ""2025-09-26"",
+  ""DocumentDT"": ""2025-09-25"",
+  ""PassedToDT"": ""2025-09-26"",
+  ""PassedTo"": ""Amber Turner"",
+  ""SupplierCode"": ""P0401"",
+  ""ItemReference"": ""589608"",
+  ""PaymentTermsCode"": ""MN"",
+  ""AmountCurrency"": 33.0,
+  ""ExchangeRate"": 1.0,
+  ""AmountSterling"": 33.0,
+  ""VATBalance"": 33.0,
+  ""DocumentBalance"": 33.0,
+  ""Disputed"": null,
+  ""DisputeMemo"": null,
+  ""GeneralLedgerCodes"": [
+    ""9999999999""
+  ],
+  ""AmountsExVAT"": [
+    27.5
+  ],
+  ""VATCodes"": [
+    ""S""
+  ],
+  ""VATableValues"": [
+    27.5
+  ],
+  ""VATTaxes"": [
+    5.5
+  ],
+  ""Memo"": null,
+  ""OtherMemos"": null,
+  ""MertexCurrencyCode"": ""STG"",
+  ""discountAmount"": 0.0,
+  ""discountPercentage"": 0.0
+}";
 
-            //var rec = Selector<PurchaseLedgerInvoiceRegister>.Select(invoiceRegisterKey, true, false, 1, uniVerseAccount);
+            PurchaseLedgerCreditRegisterFunctions.Insert(uniVerseAccount, creditRegisterJson);
 
-            var json = TesterFramework.FetchInvoiceRegistrationJSON(invoiceRegisterKey, "FlockDev");
+            //Console.WriteLine($"Calling PurchaseLedgerInvoiceRegisterFunctions.Select for PLINVREG key {invoiceRegisterKey} in {uniVerseAccount}");
 
-            var transactionResults = PurchaseLedgerFunctions.InsertFromInvoiceRegistry(uniVerseAccount, json).OfType<PurchaseLedgerInsertionResult>().ToList();
+            ////var rec = Selector<PurchaseLedgerInvoiceRegister>.Select(invoiceRegisterKey, true, false, 1, uniVerseAccount);
 
-            Console.WriteLine(JsonConvert.SerializeObject(transactionResults));
+            //var json = TesterFramework.FetchInvoiceRegistrationJSON(invoiceRegisterKey, "FlockDev");
+
+            //var transactionResults = PurchaseLedgerFunctions.InsertFromInvoiceRegistry(uniVerseAccount, json).OfType<PurchaseLedgerInsertionResult>().ToList();
+
+            //Console.WriteLine(JsonConvert.SerializeObject(transactionResults));
+
+
+
 
             //SqlString Key;
             //SqlDateTime DocumentDT;

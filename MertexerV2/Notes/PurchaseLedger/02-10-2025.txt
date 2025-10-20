@@ -1,0 +1,73 @@
+GL
+VAT Return Version 2
+
+VAT Audit Reports
+
+S/L
+
+P/L VAT AUDIT Reports
+
+Give period e.g. 03
+
+PI325353 UPS interesting double VAT coded entry
+
+
+LIST CFSTATS SLBFWD SLCRS SLCRN SLCSH SLADJ STCSH PLBFWD PLINV PLCRN PLPAY PLADJ PLPETTY PLOTHER NPLINV NPLCRN NPLPAY NPLADJ NPLPETTY NPLOTHER WITH @ID = "1"
+
+                                                                               
+CFSTATS.......... 1                                                             
+           ...... 4503746.05                                                    
+           ......    8035.00                                                    
+           ......       0.00                                                    
+           ......    8035.00-                                                   
+           ......       0.00                                                    
+Total Cash Sales.       0.00                                                    
+           ...... 5137623.77                                                    
+           ......    3643.20                                                    
+           ......       0.00                                                    
+           ......     839.27                                                    
+           ......      25.00                                                    
+           ......       0.00                                                    
+           ......       0.00                                                    
+           ......    9055.47                                                    
+           ......       0.00                                                    
+           ......      10.20                                                    
+           ......       0.00                                                    
+           ......       0.00                                                 
+           ......       0.00      
+
+
+LIST PLSUP BALANCE ACBAL NEXT CURR TLINK PURCH PNEXT PCURR PYTD PAY PAYNEXT PAYCURR PAYYTD INACT WITH @ID = S0048
+
+                                                                                
+URR PAYYTD INACT WITH @ID = S0048 03:03:57pm  02 Oct 2025  PAGE    1            
+                                                                                
+PLSUP....... S0048                                                              
+  Total Due.    4000.00                                                         
+  Balances..      0.00                                                          
+           .      0.00                                                          
+           .      0.00                                                          
+           .      0.00                                                          
+Next Period.       0.00                                                         
+This Period.      0.00                                                          
+Doc Ref. ... PI313559                                                           
+           . PI313558                                                           
+           . PI313556                                                           
+           . PI313557                                                           
+ Purchases..   3333.32                                                          
+           .    833.33                                                          
+           .   2499.99                                                          
+           .      0.00                                                          
+Pur Next Pd.    3333.32                                                         
+          ..     833.33                                                         
+          ..    2499.99                                                         
+  Payments..      0.00
+           .      0.00                                                          
+           .      0.00                                                          
+           .      0.00                                                          
+Pay Next Pd.       0.00                                                         
+          ..       0.00                                                         
+          ..       0.00                     
+
+
+		  

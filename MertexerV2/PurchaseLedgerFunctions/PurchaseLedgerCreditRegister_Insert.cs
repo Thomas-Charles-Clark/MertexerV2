@@ -86,7 +86,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
                 uniVerseFile.LockRecord(creditRegisterEntry.Key, 1);
 
-                UniUpsert<PurchaseLedgerCreditRegister>.Upsert(PurchaseLedgerCreditRegisterJSON, uniVerseFile, UniVerseAccount);
+                UniUpsert<PurchaseLedgerCreditRegister>.Upsert(JsonConvert.SerializeObject(creditRegisterEntry), uniVerseFile, UniVerseAccount);
 
                 uniVerseFile.UnlockRecord(creditRegisterEntry.Key);
 

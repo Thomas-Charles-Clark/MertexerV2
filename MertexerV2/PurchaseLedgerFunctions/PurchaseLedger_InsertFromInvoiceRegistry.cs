@@ -904,7 +904,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
                     VATTotal = purchaseLedgerEntry.VATTaxes.Sum(),                                              // S(<48>) "VATTAX"
                     Credit = purchaseLedgerEntry.Amounts.Sum(),                                                 // S(<43>) "PAMOUNT"
                     Balance = purchaseLedgerEntry.TotalDueInSterling,                                           //   <50>  "TOTDUE"
-                    OriginalValueABS = purchaseLedgerEntry.TotalDueInSterling,                                  //   <50>  "TOTDUE"
+                    OriginalValue = purchaseLedgerEntry.TotalDueInSterling,                                  //   <50>  "TOTDUE"
 
                     Period = purchaseLedgerTransactionPeriod,                                                   // B("PL.B.PERIOD") -- This is a lot of buggering about, essentially to say: read the PL period if the company uses
                                                                                                                 // separate PL to GL periods. If GL&PL periods are combined, just use the GL period.
@@ -957,7 +957,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
                     VATTotal = purchaseLedgerEntry.VATTaxesInCurrency.Sum(),                                        // S(<248>)           "VATTAX.CUR"
                     Credit = purchaseLedgerEntry.AmountInCurrency - purchaseLedgerEntry.VATTaxesInCurrency.Sum(),   //   <250> - S(<248>) "CURAMT" - S"VATTAX.CUR"
                     Balance = purchaseLedgerEntry.AmountInCurrency,                                                 //   <250>            "CURAMT"
-                    OriginalValueABS = purchaseLedgerEntry.AmountInCurrency,                                        //   <250>            "CURAMT"
+                    OriginalValue = purchaseLedgerEntry.AmountInCurrency,                                        //   <250>            "CURAMT"
                     Period = purchaseLedgerTransactionEntry.Period,                                                       //                    As above; see TPLTRANS entry
                     SupplierReference = purchaseLedgerEntry.SupplierCode,                                           //    <39>  "PSUPREF"
                     Age = purchaseLedgerEntry.Future == true ? 0 : 1,                                               //                    As above; see TPLTRANS entry

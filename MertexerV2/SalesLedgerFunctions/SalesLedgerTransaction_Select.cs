@@ -127,7 +127,7 @@ namespace MertexerV2.SalesLedgerFunctions
             out SqlString TransactionType,
             out SqlString ItemReference,
             out SqlString Terms,
-            out SqlDecimal OriginalValue,
+			out SqlDecimal OriginalValue,
             out SqlString DocumentReference,
             out SqlDecimal VATDiscount,
             out SqlDecimal Debit,
@@ -137,8 +137,8 @@ namespace MertexerV2.SalesLedgerFunctions
             out SqlString Status,
             out SqlString TradeAccountCode,
             out SqlInt32 Age,
-            out SqlDecimal OriginalValueABS,
-            out SqlString DisputeMemo,
+			out SqlDecimal OriginalValueABS,
+			out SqlString DisputeMemo,
             out SqlString Dispute,
             out SqlString Adjust,
             out SqlDecimal Unallocated,
@@ -169,10 +169,10 @@ namespace MertexerV2.SalesLedgerFunctions
             Key = result.Key?.TrimReduceTruncate(50);
             DocumentDT = result.DocumentDT ?? SqlDateTime.Null;
             DueDT = result.DueDT ?? SqlDateTime.Null;
-            TransactionType = result.TransactionType?.TrimReduceTruncate(10) ?? SqlString.Null;
+			TransactionType = result.TransactionType?.TrimReduceTruncate(10) ?? SqlString.Null;
             ItemReference = result.ItemReference?.TrimReduceTruncate(50) ?? SqlString.Null;
             Terms = result.Terms?.TrimReduceTruncate(10) ?? SqlString.Null;
-            OriginalValue = result.OriginalValue;
+			OriginalValue = result.OriginalValue;
             DocumentReference = result.DocumentReference?.TrimReduceTruncate(50) ?? SqlString.Null;
             VATDiscount = result.VATDiscount;
             Debit = result.Debit;
@@ -182,7 +182,7 @@ namespace MertexerV2.SalesLedgerFunctions
             Status = result.Status;
             TradeAccountCode = result.TradeAccountCode?.TrimReduceTruncate(50) ?? SqlString.Null;
             Age = result.Age;
-            OriginalValueABS = result.OriginalValueABS;
+			OriginalValueABS = result.OriginalValueABS;
             DisputeMemo = result.Reason?.TrimReduceTruncate(200) ?? SqlString.Null;
             Dispute = result.Dispute?.TrimReduceTruncate(10) ?? SqlString.Null;
             Adjust = result.Adjust?.TrimReduceTruncate(10) ?? SqlString.Null;

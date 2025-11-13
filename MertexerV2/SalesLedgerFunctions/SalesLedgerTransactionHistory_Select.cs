@@ -164,8 +164,8 @@ namespace MertexerV2.SalesLedgerFunctions
             DueDT = result.DueDT ?? SqlDateTime.Null;
             TransactionType = result.TransactionType?.TrimReduceTruncate(10) ?? SqlString.Null;
             ItemReference = result.ItemReference?.TrimReduceTruncate(50) ?? SqlString.Null;
-            OriginalValue = result.OriginalValue;
-            DocumentReference = result.DocumentReference?.TrimReduceTruncate(50) ?? SqlString.Null;
+			OriginalValue = result.OriginalValue;
+			DocumentReference = result.DocumentReference?.TrimReduceTruncate(50) ?? SqlString.Null;
             VATDiscount = result.VATDiscount;
             Debit = result.Debit;
             Credit = result.Credit;
@@ -174,8 +174,8 @@ namespace MertexerV2.SalesLedgerFunctions
             Status = result.Status;
             TradeAccountCode = result.TradeAccountCode?.TrimReduceTruncate(50) ?? SqlString.Null;
             Age = result.Age;
-            OriginalValueABS = result.OriginalValueABS;
-            DisputeMemo = result.Reason?.TrimReduceTruncate(200) ?? SqlString.Null;
+			OriginalValueABS = result.OriginalValueABS;
+			DisputeMemo = result.Reason?.TrimReduceTruncate(200) ?? SqlString.Null;
             Dispute = result.Dispute?.TrimReduceTruncate(10) ?? SqlString.Null;
             Adjust = result.Adjust?.TrimReduceTruncate(10) ?? SqlString.Null;
             Unallocated = result.Unallocated;

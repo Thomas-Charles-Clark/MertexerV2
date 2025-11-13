@@ -4236,11 +4236,11 @@ namespace MertexerV2.EDAReplacement
                     "CLAIMNO",
                     "SORDERNO",
                     "DOC.NO",
-                    "INVOICE1",
-                    "SS.ONFILE.INT",
+                    "INVOICE1",                    "SS.ONFILE.INT",
                     "ONTIME",
                     "CUSREF",
                     "SS.MARKET",
+
                     "CONTACT1",
                     "COLNAME",
                     "COLADDR",

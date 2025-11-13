@@ -118,17 +118,17 @@ namespace MertexerV2.Models.PurchaseLedger
         // This is NOT mapped to a concrete field;
         // it is built as part of a Mertex internal report
         // and so I have transposed it for use in a report I re-built for Sarah
-        public decimal OriginalValue
+        public decimal OriginalValueABS
         {
             get
             {
                 if (Credit + Debit > 0)
                 {
-                    return OriginalValueABS;
+                    return OriginalValue;
                 }
                 else
                 {
-                    return OriginalValueABS * -1;
+                    return OriginalValue * -1;
                 }
             }
         }
@@ -184,7 +184,7 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseIndex(14)]
         [UniVerseFieldName("ORIGVAL")]
         [UniVerseConversion("MR22")]
-        public decimal OriginalValueABS { get; set; }
+        public decimal OriginalValue { get; set; }
 
         [UniVerseIndex(15)]
         [UniVerseFieldName("DISPMEMO")]

@@ -100,7 +100,7 @@ namespace MertexerV2.SupplierFunctions
             DocumentDate = plt.DocumentDT;
             DueDate = plt.DueDT;
             ItemReference = plt.ItemReference;
-            OriginalValue = plt.OriginalValue;
+            OriginalValue = plt.OriginalValueABS;
             Balance = plt.Balance;
             Disputed = plt.Dispute == "D";
             Division = plt.Division;

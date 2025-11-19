@@ -125,7 +125,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
             out SqlDateTime DocumentDT,
             out SqlDateTime OnFileDT,
             out SqlString ItemReference,
-            out SqlString SupplierReference,
+            out SqlString SupplierCode,
             out SqlString AmountsExVAT,
             out SqlString GeneralLedgerCodes,
             out SqlString VATCodes,
@@ -160,7 +160,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
 
             ItemReference = result.ItemReference?.TrimReduceTruncate(50);
 
-            SupplierReference = result.SupplierReference?.TrimReduceTruncate(50);
+            SupplierCode = result.SupplierReference?.TrimReduceTruncate(50);
 
             AmountsExVAT = result.AmountsExVAT.Any() ? JsonConvert.SerializeObject(result.AmountsExVAT) : SqlString.Null;
 

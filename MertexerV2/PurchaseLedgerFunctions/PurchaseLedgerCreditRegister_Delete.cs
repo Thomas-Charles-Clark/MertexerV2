@@ -20,13 +20,13 @@ using Newtonsoft.Json;
 
 namespace MertexerV2.PurchaseLedgerFunctions
 {
-    public static partial class PurchaseLedgerCreditNoteRegisterFunctions
+    public static partial class PurchaseLedgerCreditRegisterFunctions
     {
         internal static bool DeleteViaTransaction(
             ref UniSession session,
             string invoiceRegisterJSON)
         {
-            var creditNoteRegisterEntry = JsonConvert.DeserializeObject<PurchaseLedgerCreditNoteRegister>(invoiceRegisterJSON);
+            var creditNoteRegisterEntry = JsonConvert.DeserializeObject<PurchaseLedgerCreditRegister>(invoiceRegisterJSON);
 
             if (!String.IsNullOrEmpty(creditNoteRegisterEntry.Key))
             {

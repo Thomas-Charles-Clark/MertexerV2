@@ -136,7 +136,7 @@ namespace MertexerV2.SalesLedgerFunctions
         {
             var result = (SalesLedgerTransactionCurrency)obj;
             
-            Key = result.Key?.TrimReduceTruncate(50);
+            Key = result.Key;
             CurrencyCode = result.CurrencyCode?.TrimReduceTruncate(10);
             ExchangeRate = result.ExchangeRate;
             OriginalValue = result.OriginalValue;

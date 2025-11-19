@@ -166,7 +166,7 @@ namespace MertexerV2.SalesLedgerFunctions
         {
             var result = (SalesLedgerTransaction)obj;
 
-            Key = result.Key?.TrimReduceTruncate(50);
+            Key = result.Key;
             DocumentDT = result.DocumentDT ?? SqlDateTime.Null;
             DueDT = result.DueDT ?? SqlDateTime.Null;
 			TransactionType = result.TransactionType?.TrimReduceTruncate(10) ?? SqlString.Null;

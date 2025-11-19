@@ -221,7 +221,7 @@ namespace MertexerV2.InvoiceFunctions
 
             QuantityOrdered = result.QuantityOrdered ?? SqlDecimal.Null;
 
-            StockUnitCode = result.StockUnitCode?.TrimReduceTruncate(10);
+            StockUnitCode = result.StockUnitCode;
 
             SalesValueCurrency = result.SalesValueCurrency ?? SqlDecimal.Null;
 

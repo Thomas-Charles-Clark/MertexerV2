@@ -88,7 +88,7 @@ namespace Tester
 
             var sw = new System.Diagnostics.Stopwatch();
 
-            var uniVerseAccount = "PLAY";
+            var uniVerseAccount = "MERTEX";
 
             sw.Start();
 
@@ -181,53 +181,53 @@ namespace Tester
 
 
 
-            var registerKeys = new[] {
-                306734
-            };
+            //            var registerKeys = new[] {
+            //                306734
+            //            };
 
-            var now = DateTime.Now;
+            //            var now = DateTime.Now;
 
-            var invoiceRegisterKey = registerKeys.First().ToString();
+            //            var invoiceRegisterKey = registerKeys.First().ToString();
 
-            var creditRegisterJson = @"{
-  ""ReceivedDT"": ""2025-09-26"",
-  ""OnFileDT"": ""2025-09-26"",
-  ""DocumentDT"": ""2025-09-25"",
-  ""PassedToDT"": ""2025-09-26"",
-  ""PassedTo"": ""Amber Turner"",
-  ""SupplierCode"": ""P0401"",
-  ""ItemReference"": ""589608"",
-  ""PaymentTermsCode"": ""MN"",
-  ""AmountCurrency"": 33.0,
-  ""ExchangeRate"": 1.0,
-  ""AmountSterling"": 33.0,
-  ""VATBalance"": 33.0,
-  ""DocumentBalance"": 33.0,
-  ""Disputed"": null,
-  ""DisputeMemo"": null,
-  ""GeneralLedgerCodes"": [
-    ""9999999999""
-  ],
-  ""AmountsExVAT"": [
-    27.5
-  ],
-  ""VATCodes"": [
-    ""S""
-  ],
-  ""VATableValues"": [
-    27.5
-  ],
-  ""VATTaxes"": [
-    5.5
-  ],
-  ""Memo"": null,
-  ""OtherMemos"": null,
-  ""MertexCurrencyCode"": ""STG"",
-  ""discountAmount"": 0.0,
-  ""discountPercentage"": 0.0
-}";
+            //            var creditRegisterJson = @"{
+            //  ""ReceivedDT"": ""2025-09-26"",
+            //  ""OnFileDT"": ""2025-09-26"",
+            //  ""DocumentDT"": ""2025-09-25"",
+            //  ""PassedToDT"": ""2025-09-26"",
+            //  ""PassedTo"": ""Amber Turner"",
+            //  ""SupplierCode"": ""P0401"",
+            //  ""ItemReference"": ""589608"",
+            //  ""PaymentTermsCode"": ""MN"",
+            //  ""AmountCurrency"": 33.0,
+            //  ""ExchangeRate"": 1.0,
+            //  ""AmountSterling"": 33.0,
+            //  ""VATBalance"": 33.0,
+            //  ""DocumentBalance"": 33.0,
+            //  ""Disputed"": null,
+            //  ""DisputeMemo"": null,
+            //  ""GeneralLedgerCodes"": [
+            //    ""9999999999""
+            //  ],
+            //  ""AmountsExVAT"": [
+            //    27.5
+            //  ],
+            //  ""VATCodes"": [
+            //    ""S""
+            //  ],
+            //  ""VATableValues"": [
+            //    27.5
+            //  ],
+            //  ""VATTaxes"": [
+            //    5.5
+            //  ],
+            //  ""Memo"": null,
+            //  ""OtherMemos"": null,
+            //  ""MertexCurrencyCode"": ""STG"",
+            //  ""discountAmount"": 0.0,
+            //  ""discountPercentage"": 0.0
+            //}";
 
-            PurchaseLedgerCreditRegisterFunctions.Insert(uniVerseAccount, creditRegisterJson);
+            //            PurchaseLedgerCreditRegisterFunctions.Insert(uniVerseAccount, creditRegisterJson);
 
             //Console.WriteLine($"Calling PurchaseLedgerInvoiceRegisterFunctions.Select for PLINVREG key {invoiceRegisterKey} in {uniVerseAccount}");
 
@@ -457,7 +457,55 @@ namespace Tester
 
             //Console.WriteLine(JsonConvert.SerializeObject(results));
 
-            CFramework.SetConsoleColourSuccess();
+            var partPaymentResults = TradeAccountPartPaymentPlanFunctions.Select(uniVerseAccount, null).OfType<TradeAccountPartPaymentPlan>().ToList();
+
+            Console.WriteLine($"Saw {partPaymentResults.Count} results");
+
+            SqlString Key;
+            SqlString TradeAccountCode;
+            SqlString PayReason;
+            SqlString ContractNumber;
+            SqlString ContractDescription;
+            SqlDecimal TotalAmountToBill;
+            SqlDecimal TotalBilledToDate;
+            SqlInt32 NumberOfPeriods;
+            SqlDecimal CurrentPeriodAmount;
+            SqlDateTime PaymentStartDT;
+            SqlDateTime LastInvoiceRaisedDT;
+            SqlString PaymentAmountsJSON;
+            SqlString InvoiceNumbersJSON;
+            SqlString InvoicePaymentDTsJSON;
+            SqlString InvoiceSequenceNumbersJSON;
+            SqlString InvoiceTextContentsJSON;
+            SqlBoolean ActivePlan;
+            SqlDateTime CreatedDT;
+
+            foreach(var ppr in partPaymentResults)
+            {
+                TradeAccountPartPaymentPlanFunctions.TradeAccountPartPaymentPlanSelect_FillRow(ppr,
+                    out Key,
+                    out TradeAccountCode,
+                    out PayReason,
+                    out ContractNumber,
+                    out ContractDescription,
+                    out TotalAmountToBill,
+                    out TotalBilledToDate,
+                    out NumberOfPeriods,
+                    out CurrentPeriodAmount,
+                    out PaymentStartDT,
+                    out LastInvoiceRaisedDT,
+                    out PaymentAmountsJSON,
+                    out InvoiceNumbersJSON,
+                    out InvoicePaymentDTsJSON,
+                    out InvoiceSequenceNumbersJSON,
+                    out InvoiceTextContentsJSON,
+                    out ActivePlan,
+                    out CreatedDT);
+            }
+
+			Console.WriteLine($"TradeAccountPartPaymentPlanSelect_FillRow processed {partPaymentResults.Count} records successfully.");
+
+			CFramework.SetConsoleColourSuccess();
 
             sw.Stop();
 

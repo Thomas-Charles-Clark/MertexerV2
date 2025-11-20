@@ -48,8 +48,7 @@ namespace MertexerV2.TradeAccountFunctions
                     true,
                     false,
                     50,
-                    UniVerseAccount)
-                    .ToList();
+                    UniVerseAccount);
 
                 foreach (var r in results)
                 {
@@ -60,14 +59,46 @@ namespace MertexerV2.TradeAccountFunctions
 
         public static void TradeAccountPartPaymentPlanSelect_FillRow(
             object obj,
-            out SqlString Code,
-            out SqlString Name
-            )
+            out SqlString Key,
+            out SqlString TradeAccountCode,
+            out SqlString PayReason,
+            out SqlString ContractNumber,
+			out SqlString ContractDescription,
+			out SqlDecimal TotalAmountToBill,
+			out SqlDecimal TotalBilledToDate,
+			out SqlInt32 NumberOfPeriods,
+            out SqlDecimal CurrentPeriodAmount,
+            out SqlDateTime PaymentStartDT,
+            out SqlDateTime LastInvoiceRaisedDT,
+            out SqlString PaymentAmountsJSON,
+            out SqlString InvoiceNumbersJSON,
+            out SqlString InvoicePaymentDTsJSON,
+            out SqlString InvoiceSequenceNumbersJSON,
+            out SqlString InvoiceTextContentsJSON,
+            out SqlBoolean ActivePlan,
+            out SqlDateTime CreatedDT
+			)
         {
             var p = (TradeAccountPartPaymentPlan)obj;
 
-            Code = p.Key;
-            Name = p.Name;
+            Key = p.Key;
+            TradeAccountCode = p.TradeAccountCode;
+            PayReason = p.PayReason;
+            ContractNumber = p.ContractNumber;
+            ContractDescription = p.ContractDescription;
+            TotalAmountToBill = p.TotalAmountToBill;
+            TotalBilledToDate = p.TotalBilledToDate;
+            NumberOfPeriods = p.NumberOfPeriods;
+            CurrentPeriodAmount = p.CurrentPeriodAmount;
+            PaymentStartDT = p.PaymentStartDT ?? SqlDateTime.Null;
+            LastInvoiceRaisedDT = p.LastInvoiceRaisedDT ?? SqlDateTime.Null;
+            PaymentAmountsJSON = p.PaymentAmounts?.Any() == true ? JsonConvert.SerializeObject(p.PaymentAmounts) : SqlString.Null;
+            InvoiceNumbersJSON = p.InvoiceNumbers?.Any() == true ? JsonConvert.SerializeObject(p.InvoiceNumbers) : SqlString.Null;
+            InvoicePaymentDTsJSON = p.InvoicePaymentDTs?.Any() == true ? JsonConvert.SerializeObject(p.InvoicePaymentDTs) : SqlString.Null;
+            InvoiceSequenceNumbersJSON = p.InvoiceSequenceNumbers?.Any() == true ? JsonConvert.SerializeObject(p.InvoiceSequenceNumbers) : SqlString.Null;
+            InvoiceTextContentsJSON = p.InvoiceTextContents?.Any() == true ? JsonConvert.SerializeObject(p.InvoiceTextContents) : SqlString.Null;
+            ActivePlan = p.ActivePlan;
+            CreatedDT = p.CreatedDT ?? SqlDateTime.Null;
         }
     }
 }

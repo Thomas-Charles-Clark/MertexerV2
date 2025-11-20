@@ -1,4 +1,5 @@
-﻿using MertexerV2.Models.General;
+﻿using MertexerV2.Models;
+using MertexerV2.Models.General;
 using MertexerV2.Utilities;
 
 using Microsoft.SqlServer.Server;
@@ -16,7 +17,7 @@ namespace MertexerV2.TradeAccountFunctions
         [SqlFunction]
         public static string Upsert(string UniVerseAccount, string TradeAccountPartPaymentPlanJSON)
         {
-            var TradeAccountPartPaymentPlan = JsonConvert.DeserializeObject<TradeAccountPartPaymentPlanCode>(TradeAccountPartPaymentPlanJSON);
+            var obj = JsonConvert.DeserializeObject<TradeAccountPartPaymentPlanCode>(TradeAccountPartPaymentPlanJSON);
 
             var fileName = typeof(TradeAccountPartPaymentPlan).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
                     .Cast<UniVerseFileNameAttribute>()
@@ -29,7 +30,7 @@ namespace MertexerV2.TradeAccountFunctions
 
                 try
                 {
-                    var extantRecord = uniVerseFile.ReadField(TradeAccountPartPaymentPlan.Code, 0).StringValue;
+                    var extantRecord = uniVerseFile.ReadField(obj.Code, 0).StringValue;
                 }
                 catch (IBMU2.UODOTNET.UniFileException)
                 {
@@ -39,22 +40,22 @@ namespace MertexerV2.TradeAccountFunctions
                     // then write all the fields
                     // then unlock the record
                     var dataSet = new IBMU2.UODOTNET.UniDataSet(ce.Session);
-                    dataSet.Insert(TradeAccountPartPaymentPlan.Code);
+                    dataSet.Insert(obj.Code);
 
                     //slcustFile.LockFile();
                     uniVerseFile.WriteRecords(dataSet);
                     //slcustFile.UnlockFile();
                 }
 
-                uniVerseFile.LockRecord(TradeAccountPartPaymentPlan.Code, 1);
+                uniVerseFile.LockRecord(obj.Code, 1);
 
                 UniUpsert<TradeAccountPartPaymentPlan>.Upsert(TradeAccountPartPaymentPlanJSON, uniVerseFile, UniVerseAccount);
 
-                uniVerseFile.UnlockRecord(TradeAccountPartPaymentPlan.Code);
+                uniVerseFile.UnlockRecord(obj.Code);
 
             }
 
-            return TradeAccountPartPaymentPlan.Code;
+            return obj.Code;
         }
     }
 }

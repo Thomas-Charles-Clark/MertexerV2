@@ -160,7 +160,112 @@ namespace MertexerV2.Models
 			}
 		}
 
+		/// <summary>
+		/// "Pay Amount"
+		/// </summary>
+		[UniVerseIndex(11)]
+		[UniVerseFieldName("PAY.AMOUNT")]
+		[UniVerseConversion("MR23")]
+		[UniVerseMultiValue]
+		public IEnumerable<decimal> PaymentAmounts { get; set; }
 
+		/// <summary>
+		/// Invoice Numbers
+		/// </summary>
+		[UniVerseIndex(12)]
+		[UniVerseFieldName("INVOICE.NO")]
+		[UniVerseMultiValue]
+		public IEnumerable<string> InvoiceNumbers { get; set; }
 		// Continue mapping fields 11m, 12m, 13m, 14m, 15m, 16b, 17d
+
+		/// <summary>
+		/// Invoice Payment Dates
+		/// </summary>
+		[UniVerseIndex(13)]
+		[UniVerseFieldName("SS.INV.PAY.DATE.INT")]
+		[UniVerseMultiValue]
+		public IEnumerable<string> InvoicePaymentDates
+		{
+			get
+			{
+				if (InvoicePaymentDTs.Any())
+				{
+					return InvoicePaymentDTs.Select(dt => Framework.UniVerseDateString(dt));
+				}
+				else
+				{
+					return new List<string>();
+				}
+			}
+			set
+			{
+				if (value != null)
+				{
+					InvoicePaymentDTs = value.Select(v => Framework.DateTimeFromUniVerseOffset(Convert.ToInt32(v)));
+				}
+				else
+				{
+					InvoicePaymentDTs = new List<DateTime>();
+				}
+			}
+		}
+
+		public IEnumerable<DateTime> InvoicePaymentDTs { get; set; }
+
+		/// <summary>
+		/// Invoice Sequence Numbers
+		/// </summary>
+		[UniVerseIndex(14)]
+		[UniVerseFieldName("INV.SEQ.NO")]
+		[UniVerseMultiValue]
+		public IEnumerable<int> InvoiceSequenceNumbers { get; set; }
+
+		/// <summary>
+		/// Invoice Text
+		/// </summary>
+		[UniVerseIndex(15)]
+		[UniVerseFieldName("INVOICE.TEXT")]
+		[UniVerseMultiValue]
+		public IEnumerable<string> InvoiceTextContents { get; set; }
+
+		/// <summary>
+		/// Active Plan
+		/// </summary>
+		[UniVerseIndex(16)]
+		[UniVerseFieldName("ACTIVE.PLAN")]
+		public bool ActivePlan { get; set; }
+
+		public DateTime? CreatedDT { get; set; }
+
+		[UniVerseIndex(17)]
+		[UniVerseFieldName("SS.CREATED.DATE.INT")]
+		public string CreatedDate
+		{
+			get
+			{
+				if (CreatedDT.HasValue)
+				{
+					return Framework.UniVerseDateString(CreatedDT.Value);
+				}
+				else
+				{
+					return null;
+				}
+			}
+			set
+			{
+				if (!String.IsNullOrEmpty(value))
+				{
+					if (Int32.TryParse(value, out int valInt))
+					{
+						CreatedDT = Framework.DateTimeFromUniVerseOffset(valInt);
+					}
+					else
+					{
+						CreatedDT = null;
+					}
+				}
+			}
+		}
 	}
 }

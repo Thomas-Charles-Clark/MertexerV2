@@ -538,14 +538,14 @@ namespace MertexerV2.SupplierFunctions
                     }
 
                     foreach (var inv in r.PurchaseLedgerRegisterEntries_Invoice?.Select(d => new SupplierAccountDetail(r.Key, r.Name, r.Currency,
-                        r.SEL1, r.DSEL1, r.SEL2, r.DSEL2, r.BudgetHolderCode, r.DSEL3,"PLINVREG", d, false
+                        r.SEL1, r.DSEL1, r.SEL2, r.DSEL2, r.BudgetHolderCode, r.DSEL3,"PLINVREG", d, true
                         )))
                     {
                         yield return inv;
                     }
 
                     foreach (var crn in r.PurchaseLedgerRegisterEntries_Credit?.Select(d => new SupplierAccountDetail(r.Key, r.Name, r.Currency,
-                        r.SEL1, r.DSEL1, r.SEL2, r.DSEL2, r.BudgetHolderCode, r.DSEL3, "PLCRNREG", d, false
+                        r.SEL1, r.DSEL1, r.SEL2, r.DSEL2, r.BudgetHolderCode, r.DSEL3, "PLCRNREG", d, true
                         )))
                     {
                         yield return crn;
@@ -572,14 +572,14 @@ namespace MertexerV2.SupplierFunctions
                 }
 
                 foreach (var inv in result.PurchaseLedgerRegisterEntries_Invoice?.Select(d => new SupplierAccountDetail(result.Key, result.Name, result.Currency,
-                   result.SEL1, result.DSEL1, result.SEL2, result.DSEL2, result.BudgetHolderCode, result.DSEL3, "PLINVREG", d, false
+                   result.SEL1, result.DSEL1, result.SEL2, result.DSEL2, result.BudgetHolderCode, result.DSEL3, "PLINVREG", d, true
                     )))
                 {
                     yield return inv;
                 }
 
                 foreach (var crn in result.PurchaseLedgerRegisterEntries_Credit?.Select(d => new SupplierAccountDetail(result.Key, result.Name, result.Currency,
-                   result.SEL1, result.DSEL1, result.SEL2, result.DSEL2, result.BudgetHolderCode, result.DSEL3, "PLCRNREG", d, false
+                   result.SEL1, result.DSEL1, result.SEL2, result.DSEL2, result.BudgetHolderCode, result.DSEL3, "PLCRNREG", d, true
                     )))
                 {
                     yield return crn;

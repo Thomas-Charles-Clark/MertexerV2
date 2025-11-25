@@ -882,7 +882,8 @@ For further assistance, please contact <a href=""mailto:itsupport@designersguild
                             {
                                 using (var comm = new SqlCommand(@"SELECT   OrderImportHeadID 
                                                                     FROM    portal.OrderImportHead 
-                                                                    WHERE   TradeAccountNumber = @TradeAccountNumber AND 
+                                                                    WHERE   DeletedDT = NULL AND
+                                                                            TradeAccountNumber = @TradeAccountNumber AND 
                                                                             OrderReference = @OrderReference AND
                                                                             FailedValidationDT IS NULL", conn))
                                 {

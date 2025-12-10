@@ -1654,7 +1654,7 @@ namespace MertexerV2.Models
         /// </summary>
         [UniVerseIndex(1016)]
         [UniVerseFieldName("SS.FIELD1")]
-        public bool eCommerceCustomer { get; set; }
+        public string DebtCollector { get; set; }
 
         /// <summary>
         /// Site-Specific Field 2 (?)

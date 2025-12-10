@@ -224,7 +224,7 @@ namespace MertexerV2.TradeAccountFunctions
             out SqlString HaulierForConsolidatedInvoice,
             out SqlInt32 CutOffValue,
             out SqlByte DaysForwardForReservations,
-            out SqlBoolean eCommerceCustomer,
+            out SqlString DebtCollector,
             out SqlString SSField2,
             out SqlString CreditControlRegion,
             out SqlString SSField5,
@@ -425,7 +425,7 @@ namespace MertexerV2.TradeAccountFunctions
             PrintJLPEanLabels = result.PrintJLPEanLabels;
             RFScannerMemos = result.RFScannerMemos.Any() ? JsonConvert.SerializeObject(result.RFScannerMemos) : SqlString.Null;
             ConfirmationMemos = result.ConfirmationMemos.Any() ? JsonConvert.SerializeObject(result.ConfirmationMemos) : SqlString.Null;
-            eCommerceCustomer = result.eCommerceCustomer;
+            DebtCollector = result.DebtCollector;
             SSField2 = result.DeliveryAlertEmail?.TrimReduceTruncate(50);
             CreditControlRegion = result.CreditControlRegion?.TrimReduceTruncate(50);
             SSField5 = result.SSField5?.TrimReduceTruncate(50);

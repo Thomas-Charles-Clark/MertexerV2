@@ -273,11 +273,13 @@ namespace MertexerV2.Models.SalesLedger
 
         [UniVerseIndex(23)]
         [UniVerseFieldName("DOCLINKS")]
-        public IEnumerable<string> AllocatedFromDocuments { get; set; }
+		[UniVerseMultiValue]
+		public IEnumerable<string> AllocatedFromDocuments { get; set; }
 
         [UniVerseIndex(24)]
         [UniVerseFieldName("XDOCLINKS")]
-        public IEnumerable<string> AllocatedToDocuments { get; set; }
+		[UniVerseMultiValue]
+		public IEnumerable<string> AllocatedToDocuments { get; set; }
 
         [UniVerseIndex(25)]
         [UniVerseFieldName("INV.ACCOUNT")]

@@ -94,68 +94,68 @@ namespace Tester
 
             CFramework.WriteSubHeading($"Working in {uniVerseAccount}");
 
-            //CFramework.WriteSubHeading("Company VAT Records");
+			//CFramework.WriteSubHeading("Company VAT Records");
 
-            //Console.WriteLine();
+			//Console.WriteLine();
 
-            //var cfVatRecords = Selector<CompanyVAT>.SelectAll(true, false, 1000, uniVerseAccount);
+			//var cfVatRecords = Selector<CompanyVAT>.SelectAll(true, false, 1000, uniVerseAccount);
 
-            //File.WriteAllText("CFVAT.txt", JsonConvert.SerializeObject(cfVatRecords));
+			//File.WriteAllText("CFVAT.txt", JsonConvert.SerializeObject(cfVatRecords));
 
-            //Console.WriteLine();
+			//Console.WriteLine();
 
-            //CFramework.WriteSubHeading("End of Company VAT Records");
+			//CFramework.WriteSubHeading("End of Company VAT Records");
 
-            //var results = PurchaseLedgerInvoiceRegisterFunctions.Insert(uniVerseAccount, @"{
-            //    ""ReceivedDT"": ""2025-09-12"",
-            //    ""OnFileDT"": ""2025-09-23"",
-            //    ""DocumentDT"": ""2025-08-06"",
-            //    ""DueDT"": ""2025-09-30"",
-            //    ""SettlementDT"": ""2025-09-30"",
-            //    ""PassedToDT"": ""2025-09-23"",
-            //    ""PassedTo"": ""Sarah Waller"",
-            //    ""SupplierCode"": ""C0307"",
-            //    ""ItemReference"": ""123456"",
-            //    ""PaymentTermsCode"": ""MN"",
-            //    ""AmountCurrency"": 96.0,
-            //    ""ExchangeRate"": 1.0,
-            //    ""AmountSterling"": 96.0,
-            //    ""VATBalance"": 96.0,
-            //    ""DocumentBalance"": 96.0,
-            //    ""Disputed"": null,
-            //    ""DisputeMemo"": null,
-            //    ""GeneralLedgerCodes"": [
-            //    ""9999999999""
-            //    ],
-            //    ""AmountsExVAT"": [
-            //    80.0
-            //    ],
-            //    ""VATCodes"": [
-            //    ""S""
-            //    ],
-            //    ""VATableValues"": [
-            //    80.0
-            //    ],
-            //    ""VATTaxes"": [
-            //    16.0
-            //    ],
-            //    ""Memo"": null,
-            //    ""OtherMemos"": null,
-            //    ""MertexCurrencyCode"": ""STG"",
-            //    ""discountAmount"": 0.0,
-            //    ""discountPercentage"": 0.0
-            //}").OfType<PurchaseLedgerInvoiceRegister>().ToList();
+			//var results = PurchaseLedgerInvoiceRegisterFunctions.Insert(uniVerseAccount, @"{
+			//    ""ReceivedDT"": ""2025-09-12"",
+			//    ""OnFileDT"": ""2025-09-23"",
+			//    ""DocumentDT"": ""2025-08-06"",
+			//    ""DueDT"": ""2025-09-30"",
+			//    ""SettlementDT"": ""2025-09-30"",
+			//    ""PassedToDT"": ""2025-09-23"",
+			//    ""PassedTo"": ""Sarah Waller"",
+			//    ""SupplierCode"": ""C0307"",
+			//    ""ItemReference"": ""123456"",
+			//    ""PaymentTermsCode"": ""MN"",
+			//    ""AmountCurrency"": 96.0,
+			//    ""ExchangeRate"": 1.0,
+			//    ""AmountSterling"": 96.0,
+			//    ""VATBalance"": 96.0,
+			//    ""DocumentBalance"": 96.0,
+			//    ""Disputed"": null,
+			//    ""DisputeMemo"": null,
+			//    ""GeneralLedgerCodes"": [
+			//    ""9999999999""
+			//    ],
+			//    ""AmountsExVAT"": [
+			//    80.0
+			//    ],
+			//    ""VATCodes"": [
+			//    ""S""
+			//    ],
+			//    ""VATableValues"": [
+			//    80.0
+			//    ],
+			//    ""VATTaxes"": [
+			//    16.0
+			//    ],
+			//    ""Memo"": null,
+			//    ""OtherMemos"": null,
+			//    ""MertexCurrencyCode"": ""STG"",
+			//    ""discountAmount"": 0.0,
+			//    ""discountPercentage"": 0.0
+			//}").OfType<PurchaseLedgerInvoiceRegister>().ToList();
 
-            //Console.WriteLine(JsonConvert.SerializeObject(results));
-
-
-
-            //var periods = PeriodsFunctions.Select("MERTEX", null).OfType<PeriodExplosion>().ToList();
-
-            //Console.WriteLine(JsonConvert.SerializeObject(periods));
+			//Console.WriteLine(JsonConvert.SerializeObject(results));
 
 
-            /*
+
+			//var periods = PeriodsFunctions.Select("MERTEX", null).OfType<PeriodExplosion>().ToList();
+
+			//Console.WriteLine(JsonConvert.SerializeObject(periods));
+
+
+			/*
              * 
              * 
                 306687
@@ -174,336 +174,386 @@ namespace Tester
 
 
 
-            //Console.WriteLine($"SS.SETDATE.INT: {Framework.DateTimeFromUniVerseOffset(19359)}");
-            //Console.WriteLine($"SS.POSTDATE.INT: {Framework.DateTimeFromUniVerseOffset(19322)}");
-            //Console.WriteLine($"SS.DUEDATE.INT: {Framework.DateTimeFromUniVerseOffset(19359)}");
-            //Console.WriteLine($"SS.DOCDATE.INT: {Framework.DateTimeFromUniVerseOffset(19322)}");
+			//Console.WriteLine($"SS.SETDATE.INT: {Framework.DateTimeFromUniVerseOffset(19359)}");
+			//Console.WriteLine($"SS.POSTDATE.INT: {Framework.DateTimeFromUniVerseOffset(19322)}");
+			//Console.WriteLine($"SS.DUEDATE.INT: {Framework.DateTimeFromUniVerseOffset(19359)}");
+			//Console.WriteLine($"SS.DOCDATE.INT: {Framework.DateTimeFromUniVerseOffset(19322)}");
 
 
 
-            //            var registerKeys = new[] {
-            //                306734
-            //            };
+			//            var registerKeys = new[] {
+			//                306734
+			//            };
 
-            //            var now = DateTime.Now;
+			//            var now = DateTime.Now;
 
-            //            var invoiceRegisterKey = registerKeys.First().ToString();
+			//            var invoiceRegisterKey = registerKeys.First().ToString();
 
-            //            var creditRegisterJson = @"{
-            //  ""ReceivedDT"": ""2025-09-26"",
-            //  ""OnFileDT"": ""2025-09-26"",
-            //  ""DocumentDT"": ""2025-09-25"",
-            //  ""PassedToDT"": ""2025-09-26"",
-            //  ""PassedTo"": ""Amber Turner"",
-            //  ""SupplierCode"": ""P0401"",
-            //  ""ItemReference"": ""589608"",
-            //  ""PaymentTermsCode"": ""MN"",
-            //  ""AmountCurrency"": 33.0,
-            //  ""ExchangeRate"": 1.0,
-            //  ""AmountSterling"": 33.0,
-            //  ""VATBalance"": 33.0,
-            //  ""DocumentBalance"": 33.0,
-            //  ""Disputed"": null,
-            //  ""DisputeMemo"": null,
-            //  ""GeneralLedgerCodes"": [
-            //    ""9999999999""
-            //  ],
-            //  ""AmountsExVAT"": [
-            //    27.5
-            //  ],
-            //  ""VATCodes"": [
-            //    ""S""
-            //  ],
-            //  ""VATableValues"": [
-            //    27.5
-            //  ],
-            //  ""VATTaxes"": [
-            //    5.5
-            //  ],
-            //  ""Memo"": null,
-            //  ""OtherMemos"": null,
-            //  ""MertexCurrencyCode"": ""STG"",
-            //  ""discountAmount"": 0.0,
-            //  ""discountPercentage"": 0.0
-            //}";
+			//            var creditRegisterJson = @"{
+			//  ""ReceivedDT"": ""2025-09-26"",
+			//  ""OnFileDT"": ""2025-09-26"",
+			//  ""DocumentDT"": ""2025-09-25"",
+			//  ""PassedToDT"": ""2025-09-26"",
+			//  ""PassedTo"": ""Amber Turner"",
+			//  ""SupplierCode"": ""P0401"",
+			//  ""ItemReference"": ""589608"",
+			//  ""PaymentTermsCode"": ""MN"",
+			//  ""AmountCurrency"": 33.0,
+			//  ""ExchangeRate"": 1.0,
+			//  ""AmountSterling"": 33.0,
+			//  ""VATBalance"": 33.0,
+			//  ""DocumentBalance"": 33.0,
+			//  ""Disputed"": null,
+			//  ""DisputeMemo"": null,
+			//  ""GeneralLedgerCodes"": [
+			//    ""9999999999""
+			//  ],
+			//  ""AmountsExVAT"": [
+			//    27.5
+			//  ],
+			//  ""VATCodes"": [
+			//    ""S""
+			//  ],
+			//  ""VATableValues"": [
+			//    27.5
+			//  ],
+			//  ""VATTaxes"": [
+			//    5.5
+			//  ],
+			//  ""Memo"": null,
+			//  ""OtherMemos"": null,
+			//  ""MertexCurrencyCode"": ""STG"",
+			//  ""discountAmount"": 0.0,
+			//  ""discountPercentage"": 0.0
+			//}";
 
-            //            PurchaseLedgerCreditRegisterFunctions.Insert(uniVerseAccount, creditRegisterJson);
+			//            PurchaseLedgerCreditRegisterFunctions.Insert(uniVerseAccount, creditRegisterJson);
 
-            //Console.WriteLine($"Calling PurchaseLedgerInvoiceRegisterFunctions.Select for PLINVREG key {invoiceRegisterKey} in {uniVerseAccount}");
+			//Console.WriteLine($"Calling PurchaseLedgerInvoiceRegisterFunctions.Select for PLINVREG key {invoiceRegisterKey} in {uniVerseAccount}");
 
-            ////var rec = Selector<PurchaseLedgerInvoiceRegister>.Select(invoiceRegisterKey, true, false, 1, uniVerseAccount);
+			////var rec = Selector<PurchaseLedgerInvoiceRegister>.Select(invoiceRegisterKey, true, false, 1, uniVerseAccount);
 
-            //var json = TesterFramework.FetchInvoiceRegistrationJSON(invoiceRegisterKey, "FlockDev");
+			//var json = TesterFramework.FetchInvoiceRegistrationJSON(invoiceRegisterKey, "FlockDev");
 
-            //var transactionResults = PurchaseLedgerFunctions.InsertFromInvoiceRegistry(uniVerseAccount, json).OfType<PurchaseLedgerInsertionResult>().ToList();
+			//var transactionResults = PurchaseLedgerFunctions.InsertFromInvoiceRegistry(uniVerseAccount, json).OfType<PurchaseLedgerInsertionResult>().ToList();
 
-            //Console.WriteLine(JsonConvert.SerializeObject(transactionResults));
-
-
-
-
-            //SqlString Key;
-            //SqlDateTime DocumentDT;
-            //SqlDateTime OnFileDT;
-            //SqlString ItemReference;
-            //SqlDateTime DueDT;
-            //SqlString SupplierReference;
-            //SqlString AmountsExVAT;
-            //SqlString GeneralLedgerCodes;
-            //SqlString VATCodes;
-            //SqlString VATTaxes;
-            //SqlString VATableValues;
-            //SqlDecimal AmountSterling;
-            //SqlString PaymentTermsCode;
-            //SqlString Memo;
-            //SqlDecimal VATBalance;
-            //SqlDecimal DocumentBalance;
-            //SqlString OtherMemos;
-            //SqlDateTime ReceivedDT;
-            //SqlString PassedTo;
-            //SqlDateTime PassedToDT;
-            //SqlDecimal AmountCurrency;
-            //SqlDecimal ExchangeRate;
-            //SqlString Dispute;
-            //SqlString DisputeMemo;
-            //SqlDateTime SettlementDT;
-            //SqlString MertexCurrencyCode;
-            //SqlDecimal DiscountPercentage;
-            //SqlDecimal DiscountAmount;
-            //SqlString RegisterKey;
-
-            //PurchaseLedgerInvoiceRegisterFunctions.InvoiceRegisterSelect_FillRow(
-            //    (object)rec,
-            //    out Key,
-            //    out DocumentDT,
-            //    out OnFileDT,
-            //    out ItemReference,
-            //    out DueDT,
-            //    out SupplierReference,
-            //    out AmountsExVAT,
-            //    out GeneralLedgerCodes,
-            //    out VATCodes,
-            //    out VATTaxes,
-            //    out VATableValues,
-            //    out AmountSterling,
-            //    out PaymentTermsCode,
-            //    out Memo,
-            //    out VATBalance,
-            //    out DocumentBalance,
-            //    out OtherMemos,
-            //    out ReceivedDT,
-            //    out PassedTo,
-            //    out PassedToDT,
-            //    out AmountCurrency,
-            //    out ExchangeRate,
-            //    out Dispute,
-            //    out DisputeMemo,
-            //    out SettlementDT,
-            //    out MertexCurrencyCode,
-            //    out DiscountPercentage,
-            //    out DiscountAmount,
-            //    out RegisterKey
-            //    );
-
-
-            //var invoiceRegisterKey = "306697";
-
-
-            //Console.WriteLine($"Calling IncomingEmail.InvoiceRegisterEntry_RemoveFromPurchaseLedger_Select for @InvoiceRegisterKey {invoiceRegisterKey} in FlockDev");
-
-            //var rollbackJson = TesterFramework.FetchInvoiceRegistrationRollbackJSON(invoiceRegisterKey, "FlockDev");
-
-            //Console.WriteLine($"Calling PurchaseLedgerFunctions.RollbackInvoiceRegistryInsertionTransaction for PLINVREG key {invoiceRegisterKey} in {uniVerseAccount}");
-
-            //var transactionUndoResults = PurchaseLedgerFunctions.RollbackInvoiceRegistryInsertionTransaction(uniVerseAccount, rollbackJson).OfType<PurchaseLedgerTransactionRollbackResult>().ToList();
-
-            //Console.WriteLine(JsonConvert.SerializeObject(transactionUndoResults));
+			//Console.WriteLine(JsonConvert.SerializeObject(transactionResults));
 
 
 
 
-            //using (var qe = new QueryExecutor(uniVerseAccount))
-            //{
-            //    var controlFile = qe.Session.CreateUniFile("PLCONTROL");
+			//SqlString Key;
+			//SqlDateTime DocumentDT;
+			//SqlDateTime OnFileDT;
+			//SqlString ItemReference;
+			//SqlDateTime DueDT;
+			//SqlString SupplierReference;
+			//SqlString AmountsExVAT;
+			//SqlString GeneralLedgerCodes;
+			//SqlString VATCodes;
+			//SqlString VATTaxes;
+			//SqlString VATableValues;
+			//SqlDecimal AmountSterling;
+			//SqlString PaymentTermsCode;
+			//SqlString Memo;
+			//SqlDecimal VATBalance;
+			//SqlDecimal DocumentBalance;
+			//SqlString OtherMemos;
+			//SqlDateTime ReceivedDT;
+			//SqlString PassedTo;
+			//SqlDateTime PassedToDT;
+			//SqlDecimal AmountCurrency;
+			//SqlDecimal ExchangeRate;
+			//SqlString Dispute;
+			//SqlString DisputeMemo;
+			//SqlDateTime SettlementDT;
+			//SqlString MertexCurrencyCode;
+			//SqlDecimal DiscountPercentage;
+			//SqlDecimal DiscountAmount;
+			//SqlString RegisterKey;
 
-            //    var gennoRecords = controlFile.ReadRecords(new[] { "GENNO" });
+			//PurchaseLedgerInvoiceRegisterFunctions.InvoiceRegisterSelect_FillRow(
+			//    (object)rec,
+			//    out Key,
+			//    out DocumentDT,
+			//    out OnFileDT,
+			//    out ItemReference,
+			//    out DueDT,
+			//    out SupplierReference,
+			//    out AmountsExVAT,
+			//    out GeneralLedgerCodes,
+			//    out VATCodes,
+			//    out VATTaxes,
+			//    out VATableValues,
+			//    out AmountSterling,
+			//    out PaymentTermsCode,
+			//    out Memo,
+			//    out VATBalance,
+			//    out DocumentBalance,
+			//    out OtherMemos,
+			//    out ReceivedDT,
+			//    out PassedTo,
+			//    out PassedToDT,
+			//    out AmountCurrency,
+			//    out ExchangeRate,
+			//    out Dispute,
+			//    out DisputeMemo,
+			//    out SettlementDT,
+			//    out MertexCurrencyCode,
+			//    out DiscountPercentage,
+			//    out DiscountAmount,
+			//    out RegisterKey
+			//    );
 
-            //    var gennoRecord = gennoRecords.GetRecord(0);
 
-            //    var fieldPosition = 5; // PLINVREG
+			//var invoiceRegisterKey = "306697";
 
-            //    var numberField = gennoRecord.Record.Extract(fieldPosition);
 
-            //    var currentKey = Convert.ToInt32(numberField.StringValue);
+			//Console.WriteLine($"Calling IncomingEmail.InvoiceRegisterEntry_RemoveFromPurchaseLedger_Select for @InvoiceRegisterKey {invoiceRegisterKey} in FlockDev");
 
-            //    var newKey = currentKey += 1;
+			//var rollbackJson = TesterFramework.FetchInvoiceRegistrationRollbackJSON(invoiceRegisterKey, "FlockDev");
 
-            //    gennoRecord.Record.Replace(5, $"{newKey}");
+			//Console.WriteLine($"Calling PurchaseLedgerFunctions.RollbackInvoiceRegistryInsertionTransaction for PLINVREG key {invoiceRegisterKey} in {uniVerseAccount}");
 
-            //    controlFile.WriteRecords(gennoRecords);
+			//var transactionUndoResults = PurchaseLedgerFunctions.RollbackInvoiceRegistryInsertionTransaction(uniVerseAccount, rollbackJson).OfType<PurchaseLedgerTransactionRollbackResult>().ToList();
 
-            //    Console.WriteLine($"Read PLCONTROL<5> @ID = \"GENNO\", saw: {numberField}. New key is: {newKey}; has been written back to same.");
-            //}
+			//Console.WriteLine(JsonConvert.SerializeObject(transactionUndoResults));
 
-            //Test between for SQL DateTime Overflow: 2024 / 11 / 30 and 2024 / 12 / 31
 
-            //var postDt_From = DateTime.ParseExact("2024/08/31", "yyyy/MM/dd", DateTimeFormatInfo.InvariantInfo);
 
-            //var postDt_To = DateTime.ParseExact("2024/10/01", "yyyy/MM/dd", DateTimeFormatInfo.InvariantInfo);
 
-            //var results = SalesLedgerTransactionHistoryFunctions
-            //    .Select("MERTEX", null, null, null, null, null, null, postDt_From, postDt_To)
-            //    .OfType<SalesLedgerTransactionHistory>()
-            //    .ToList();
+			//using (var qe = new QueryExecutor(uniVerseAccount))
+			//{
+			//    var controlFile = qe.Session.CreateUniFile("PLCONTROL");
 
-            //Console.WriteLine($"Saw {results.Count} results between PostDT {postDt_From:dd/MM/yyyy} and {postDt_To:dd/MM/yyyy}");
+			//    var gennoRecords = controlFile.ReadRecords(new[] { "GENNO" });
 
-            //var bits = new int[4] { 0, 0, 0, 0 };
+			//    var gennoRecord = gennoRecords.GetRecord(0);
 
-            //SqlString Key;
-            //SqlDateTime DocumentDT;
-            //SqlDateTime DueDT;
-            //SqlString TransactionType;
-            //SqlString ItemReference;
-            //SqlDecimal OriginalValue = new SqlDecimal(28, 4, true, bits);
-            //SqlString DocumentReference;
-            //SqlDecimal VATDiscount = new SqlDecimal(28, 4, true, bits);
-            //SqlDecimal Debit = new SqlDecimal(28, 4, true, bits);
-            //SqlDecimal Credit = new SqlDecimal(28, 4, true, bits);
-            //SqlDecimal Balance = new SqlDecimal(28, 4, true, bits);
-            //SqlByte Period;
-            //SqlString Status;
-            //SqlString TradeAccountCode;
-            //SqlInt32 Age;
-            //SqlDecimal OriginalValueABS = new SqlDecimal(28, 4, true, bits);
-            //SqlString DisputeMemo;
-            //SqlString Dispute;
-            //SqlString Adjust;
-            //SqlDecimal Unallocated = new SqlDecimal(28, 4, true, bits);
-            //SqlDecimal OutstandingAmount = new SqlDecimal(28, 4, true, bits);
-            //SqlDateTime PostDT;
-            //SqlDateTime CSDT;
-            //SqlDecimal CSAmount = new SqlDecimal(28, 4, true, bits);
-            //SqlString CSAction;
-            //SqlString AllocatedFromDocuments;
-            //SqlString AllocatedToDocuments;
-            //SqlString InvoiceAccount;
-            //SqlString CustomerOrderNumber;
-            //SqlDecimal ExchangeRateDifferences = new SqlDecimal(28, 4, true, bits);
-            //SqlDateTime PaidDT;
-            //SqlDecimal RoundingErrors = new SqlDecimal(28, 4, true, bits);
-            //SqlString SourceDocument;
-            //SqlInt32 Version;
-            //SqlDecimal SettlementDiscount = new SqlDecimal(28, 4, true, bits);
-            //SqlDateTime SettlementDT;
-            //SqlDecimal SettlementDiscountTaken = new SqlDecimal(28, 4, true, bits);
-            //SqlString CreditClaimNumber;
-            //SqlString SellingCompany;
-            //SqlInt32 PostTime;
+			//    var fieldPosition = 5; // PLINVREG
 
-            //foreach (var r in results)
-            //{
-            //    try
-            //    {
-            //        SalesLedgerTransactionHistoryFunctions.SalesLedgerTransactionHistorySelect_FillRow(r,
-            //            out Key,
-            //            out DocumentDT,
-            //            out DueDT,
-            //            out TransactionType,
-            //            out ItemReference,
-            //            out OriginalValue,
-            //            out DocumentReference,
-            //            out VATDiscount,
-            //            out Debit,
-            //            out Credit,
-            //            out Balance,
-            //            out Period,
-            //            out Status,
-            //            out TradeAccountCode,
-            //            out Age,
-            //            out OriginalValueABS,
-            //            out DisputeMemo,
-            //            out Dispute,
-            //            out Adjust,
-            //            out Unallocated,
-            //            out OutstandingAmount,
-            //            out PostDT,
-            //            out CSDT,
-            //            out CSAmount,
-            //            out CSAction,
-            //            out AllocatedFromDocuments,
-            //            out AllocatedToDocuments,
-            //            out InvoiceAccount,
-            //            out CustomerOrderNumber,
-            //            out ExchangeRateDifferences,
-            //            out PaidDT,
-            //            out RoundingErrors,
-            //            out SourceDocument,
-            //            out Version,
-            //            out SettlementDiscount,
-            //            out SettlementDT,
-            //            out SettlementDiscountTaken,
-            //            out CreditClaimNumber,
-            //            out SellingCompany,
-            //            out PostTime
-            //        );
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        CFramework.SetConsoleColourError();
-            //        Console.WriteLine($"HISTTSLTRANS key: {r.Key}\r\n\r\n{ex}");
-            //    }
-            //}
+			//    var numberField = gennoRecord.Record.Extract(fieldPosition);
 
-            //Console.WriteLine(JsonConvert.SerializeObject(results));
+			//    var currentKey = Convert.ToInt32(numberField.StringValue);
 
-            var partPaymentResults = TradeAccountPartPaymentPlanFunctions.Select(uniVerseAccount, null).OfType<TradeAccountPartPaymentPlan>().ToList();
+			//    var newKey = currentKey += 1;
 
-            Console.WriteLine($"Saw {partPaymentResults.Count} results");
+			//    gennoRecord.Record.Replace(5, $"{newKey}");
 
-            SqlString Key;
-            SqlString TradeAccountCode;
-            SqlString PayReason;
-            SqlString ContractNumber;
-            SqlString ContractDescription;
-            SqlDecimal TotalAmountToBill;
-            SqlDecimal TotalBilledToDate;
-            SqlInt32 NumberOfPeriods;
-            SqlDecimal CurrentPeriodAmount;
-            SqlDateTime PaymentStartDT;
-            SqlDateTime LastInvoiceRaisedDT;
-            SqlString PaymentAmountsJSON;
-            SqlString InvoiceNumbersJSON;
-            SqlString InvoicePaymentDTsJSON;
-            SqlString InvoiceSequenceNumbersJSON;
-            SqlString InvoiceTextContentsJSON;
-            SqlBoolean ActivePlan;
-            SqlDateTime CreatedDT;
+			//    controlFile.WriteRecords(gennoRecords);
 
-            foreach(var ppr in partPaymentResults)
-            {
-                TradeAccountPartPaymentPlanFunctions.TradeAccountPartPaymentPlanSelect_FillRow(ppr,
-                    out Key,
-                    out TradeAccountCode,
-                    out PayReason,
-                    out ContractNumber,
-                    out ContractDescription,
-                    out TotalAmountToBill,
-                    out TotalBilledToDate,
-                    out NumberOfPeriods,
-                    out CurrentPeriodAmount,
-                    out PaymentStartDT,
-                    out LastInvoiceRaisedDT,
-                    out PaymentAmountsJSON,
-                    out InvoiceNumbersJSON,
-                    out InvoicePaymentDTsJSON,
-                    out InvoiceSequenceNumbersJSON,
-                    out InvoiceTextContentsJSON,
-                    out ActivePlan,
-                    out CreatedDT);
-            }
+			//    Console.WriteLine($"Read PLCONTROL<5> @ID = \"GENNO\", saw: {numberField}. New key is: {newKey}; has been written back to same.");
+			//}
 
-			Console.WriteLine($"TradeAccountPartPaymentPlanSelect_FillRow processed {partPaymentResults.Count} records successfully.");
+			//Test between for SQL DateTime Overflow: 2024 / 11 / 30 and 2024 / 12 / 31
+
+			//var postDt_From = DateTime.ParseExact("2024/08/31", "yyyy/MM/dd", DateTimeFormatInfo.InvariantInfo);
+
+			//var postDt_To = DateTime.ParseExact("2024/10/01", "yyyy/MM/dd", DateTimeFormatInfo.InvariantInfo);
+
+			//var results = SalesLedgerTransactionHistoryFunctions
+			//    .Select("MERTEX", null, null, null, null, null, null, postDt_From, postDt_To)
+			//    .OfType<SalesLedgerTransactionHistory>()
+			//    .ToList();
+
+			//Console.WriteLine($"Saw {results.Count} results between PostDT {postDt_From:dd/MM/yyyy} and {postDt_To:dd/MM/yyyy}");
+
+			//var bits = new int[4] { 0, 0, 0, 0 };
+
+			//SqlString Key;
+			//SqlDateTime DocumentDT;
+			//SqlDateTime DueDT;
+			//SqlString TransactionType;
+			//SqlString ItemReference;
+			//SqlDecimal OriginalValue = new SqlDecimal(28, 4, true, bits);
+			//SqlString DocumentReference;
+			//SqlDecimal VATDiscount = new SqlDecimal(28, 4, true, bits);
+			//SqlDecimal Debit = new SqlDecimal(28, 4, true, bits);
+			//SqlDecimal Credit = new SqlDecimal(28, 4, true, bits);
+			//SqlDecimal Balance = new SqlDecimal(28, 4, true, bits);
+			//SqlByte Period;
+			//SqlString Status;
+			//SqlString TradeAccountCode;
+			//SqlInt32 Age;
+			//SqlDecimal OriginalValueABS = new SqlDecimal(28, 4, true, bits);
+			//SqlString DisputeMemo;
+			//SqlString Dispute;
+			//SqlString Adjust;
+			//SqlDecimal Unallocated = new SqlDecimal(28, 4, true, bits);
+			//SqlDecimal OutstandingAmount = new SqlDecimal(28, 4, true, bits);
+			//SqlDateTime PostDT;
+			//SqlDateTime CSDT;
+			//SqlDecimal CSAmount = new SqlDecimal(28, 4, true, bits);
+			//SqlString CSAction;
+			//SqlString AllocatedFromDocuments;
+			//SqlString AllocatedToDocuments;
+			//SqlString InvoiceAccount;
+			//SqlString CustomerOrderNumber;
+			//SqlDecimal ExchangeRateDifferences = new SqlDecimal(28, 4, true, bits);
+			//SqlDateTime PaidDT;
+			//SqlDecimal RoundingErrors = new SqlDecimal(28, 4, true, bits);
+			//SqlString SourceDocument;
+			//SqlInt32 Version;
+			//SqlDecimal SettlementDiscount = new SqlDecimal(28, 4, true, bits);
+			//SqlDateTime SettlementDT;
+			//SqlDecimal SettlementDiscountTaken = new SqlDecimal(28, 4, true, bits);
+			//SqlString CreditClaimNumber;
+			//SqlString SellingCompany;
+			//SqlInt32 PostTime;
+
+			//foreach (var r in results)
+			//{
+			//    try
+			//    {
+			//        SalesLedgerTransactionHistoryFunctions.SalesLedgerTransactionHistorySelect_FillRow(r,
+			//            out Key,
+			//            out DocumentDT,
+			//            out DueDT,
+			//            out TransactionType,
+			//            out ItemReference,
+			//            out OriginalValue,
+			//            out DocumentReference,
+			//            out VATDiscount,
+			//            out Debit,
+			//            out Credit,
+			//            out Balance,
+			//            out Period,
+			//            out Status,
+			//            out TradeAccountCode,
+			//            out Age,
+			//            out OriginalValueABS,
+			//            out DisputeMemo,
+			//            out Dispute,
+			//            out Adjust,
+			//            out Unallocated,
+			//            out OutstandingAmount,
+			//            out PostDT,
+			//            out CSDT,
+			//            out CSAmount,
+			//            out CSAction,
+			//            out AllocatedFromDocuments,
+			//            out AllocatedToDocuments,
+			//            out InvoiceAccount,
+			//            out CustomerOrderNumber,
+			//            out ExchangeRateDifferences,
+			//            out PaidDT,
+			//            out RoundingErrors,
+			//            out SourceDocument,
+			//            out Version,
+			//            out SettlementDiscount,
+			//            out SettlementDT,
+			//            out SettlementDiscountTaken,
+			//            out CreditClaimNumber,
+			//            out SellingCompany,
+			//            out PostTime
+			//        );
+			//    }
+			//    catch (Exception ex)
+			//    {
+			//        CFramework.SetConsoleColourError();
+			//        Console.WriteLine($"HISTTSLTRANS key: {r.Key}\r\n\r\n{ex}");
+			//    }
+			//}
+
+			//Console.WriteLine(JsonConvert.SerializeObject(results));
+
+			//         var partPaymentResults = TradeAccountPartPaymentPlanFunctions.Select(uniVerseAccount, null).OfType<TradeAccountPartPaymentPlan>().ToList();
+
+			//         Console.WriteLine($"Saw {partPaymentResults.Count} results");
+
+			//         SqlString Key;
+			//         SqlString TradeAccountCode;
+			//         SqlString PayReason;
+			//         SqlString ContractNumber;
+			//         SqlString ContractDescription;
+			//         SqlDecimal TotalAmountToBill;
+			//         SqlDecimal TotalBilledToDate;
+			//         SqlInt32 NumberOfPeriods;
+			//         SqlDecimal CurrentPeriodAmount;
+			//         SqlDateTime PaymentStartDT;
+			//         SqlDateTime LastInvoiceRaisedDT;
+			//         SqlString PaymentAmountsJSON;
+			//         SqlString InvoiceNumbersJSON;
+			//         SqlString InvoicePaymentDTsJSON;
+			//         SqlString InvoiceSequenceNumbersJSON;
+			//         SqlString InvoiceTextContentsJSON;
+			//         SqlBoolean ActivePlan;
+			//         SqlDateTime CreatedDT;
+
+			//         foreach(var ppr in partPaymentResults)
+			//         {
+			//             TradeAccountPartPaymentPlanFunctions.TradeAccountPartPaymentPlanSelect_FillRow(ppr,
+			//                 out Key,
+			//                 out TradeAccountCode,
+			//                 out PayReason,
+			//                 out ContractNumber,
+			//                 out ContractDescription,
+			//                 out TotalAmountToBill,
+			//                 out TotalBilledToDate,
+			//                 out NumberOfPeriods,
+			//                 out CurrentPeriodAmount,
+			//                 out PaymentStartDT,
+			//                 out LastInvoiceRaisedDT,
+			//                 out PaymentAmountsJSON,
+			//                 out InvoiceNumbersJSON,
+			//                 out InvoicePaymentDTsJSON,
+			//                 out InvoiceSequenceNumbersJSON,
+			//                 out InvoiceTextContentsJSON,
+			//                 out ActivePlan,
+			//                 out CreatedDT);
+			//         }
+
+			//Console.WriteLine($"TradeAccountPartPaymentPlanSelect_FillRow processed {partPaymentResults.Count} records successfully.");
+
+			var batchKeys = new[] {
+				//"FDG2701/04*1658466",
+				//"FDG2581/21*146450",
+				//"F1736/97*P248064",
+				"BEDDG3287*NA"
+			}.Select(q => new BatchCode() { Code = q });
+
+			var batchKeysJson = JsonConvert.SerializeObject(batchKeys);
+
+			var batchResults = BatchFunctions.Select(uniVerseAccount, batchKeysJson, DateTime.Now.AddMonths(-3), null).OfType<Batch>().ToList();
+
+			Console.WriteLine($"Saw {batchResults.Count} results");
+
+			if (batchResults.Count <= 50)
+			{
+				Console.WriteLine(JsonConvert.SerializeObject(batchResults));
+			}
+
+			SqlString Key;
+			SqlString ProductCode;
+			SqlString BatchNumber;
+			SqlString Racks;
+			SqlString StockLocationCodes;
+			SqlString RacksAndLocationsCombined;
+			SqlString ProductLocationBatchKeys;
+			SqlDecimal CurrentUnitValue;
+			SqlDateTime ReceivedDT;
+			SqlString RackQuantityPhysicalJSON;
+			SqlString RackQuantityDemandsJSON;
+			SqlString RackQuantityFreeJSON;
+
+			foreach (var ppr in batchResults)
+			{
+				BatchFunctions.BatchSelect_FillRow(ppr,
+					out Key,
+					out ProductCode,
+					out BatchNumber,
+					out Racks,
+					out StockLocationCodes,
+					out RacksAndLocationsCombined,
+					out ProductLocationBatchKeys,
+					out CurrentUnitValue,
+					out ReceivedDT,
+					out RackQuantityPhysicalJSON,
+					out RackQuantityDemandsJSON,
+					out RackQuantityFreeJSON);
+			}
+
+			Console.WriteLine($"BatchSelect_FillRow processed {batchResults.Count} records successfully.");
 
 			CFramework.SetConsoleColourSuccess();
 

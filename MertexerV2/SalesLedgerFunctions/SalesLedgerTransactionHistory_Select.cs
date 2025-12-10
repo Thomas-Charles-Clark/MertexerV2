@@ -36,8 +36,6 @@ namespace MertexerV2.SalesLedgerFunctions
         {
             if (String.IsNullOrEmpty(SalesLedgerCodes))
             {
-                int p = 0;
-
                 var filters = new List<Tuple<string, string, string>>();
 
                 if (!String.IsNullOrEmpty(TradeAccountCode))

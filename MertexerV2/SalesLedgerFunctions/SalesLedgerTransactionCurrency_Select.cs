@@ -129,6 +129,9 @@ namespace MertexerV2.SalesLedgerFunctions
             out SqlDecimal Unallocated,
             out SqlDecimal OutstandingAmount,
             out SqlDecimal CSAmount,
+            out SqlString CSAction,
+            out SqlString AllocatedFromDocuments,
+            out SqlString AllocatedToDocuments,
             out SqlDecimal RoundingErrors,
             out SqlDecimal SettlementDiscount,
             out SqlDecimal SettlementDiscountTaken
@@ -149,7 +152,10 @@ namespace MertexerV2.SalesLedgerFunctions
             Unallocated = result.Unallocated;
             OutstandingAmount = result.OustandingAmount;
             CSAmount = result.CSAmount;
-            RoundingErrors = result.RoundingErrors;
+            CSAction = result.CSAction;
+            AllocatedFromDocuments = result.AllocatedFromDocuments?.Any() == true ? JsonConvert.SerializeObject(result.AllocatedFromDocuments) : null;
+            AllocatedToDocuments = result.AllocatedToDocuments?.Any() == true ? JsonConvert.SerializeObject(result.AllocatedToDocuments) : null;
+			RoundingErrors = result.RoundingErrors;
             SettlementDiscount = result.SettlementDiscount;
             SettlementDiscountTaken = result.SettlementDiscountTaken;
         }

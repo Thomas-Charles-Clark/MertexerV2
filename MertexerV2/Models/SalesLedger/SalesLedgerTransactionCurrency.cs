@@ -85,7 +85,21 @@ namespace MertexerV2.Models.SalesLedger
         [UniVerseConversion("MR22")]
         public decimal CSAmount { get; set; }
 
-        [UniVerseIndex(30)]
+		[UniVerseIndex(22)]
+		[UniVerseFieldName("CS.ACTION")]
+		public string CSAction { get; set; }
+
+		[UniVerseIndex(23)]
+		[UniVerseFieldName("DOCLINKS")]
+		[UniVerseMultiValue]
+		public IEnumerable<string> AllocatedFromDocuments { get; set; }
+
+		[UniVerseIndex(24)]
+		[UniVerseFieldName("XDOCLINKS")]
+		[UniVerseMultiValue]
+		public IEnumerable<string> AllocatedToDocuments { get; set; }
+
+		[UniVerseIndex(30)]
         [UniVerseFieldName("CURR.CODE")]
         public string CurrencyCode { get; set; }
 

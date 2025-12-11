@@ -16,6 +16,8 @@ namespace MertexerV2.TradeAccountFunctions
         [SqlFunction]
         public static string Upsert(string UniVerseAccount, string TradeAccountTypeJSON)
         {
+            int p = 0;
+
             var tradeAccountType = JsonConvert.DeserializeObject<TradeAccountType>(TradeAccountTypeJSON);
 
             var fileName = typeof(TradeAccountType).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)

@@ -57,7 +57,7 @@ namespace MertexerV2.SalesLedgerArchiveFunctions
 						filters,
 						true,
 						false,
-						500,
+						100,
 						UniVerseAccount))
 					{
 						yield return invoice;
@@ -68,7 +68,7 @@ namespace MertexerV2.SalesLedgerArchiveFunctions
 					foreach (var invoice in Selector<SalesLedgerArchive>.SelectAllNonParallel(
 						true,
 						false,
-						500,
+						100,
 						UniVerseAccount))
 					{
 						yield return invoice;

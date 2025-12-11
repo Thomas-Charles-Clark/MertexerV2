@@ -99,7 +99,25 @@ namespace MertexerV2.SupplierFunctions
             DueDate = plt.DueDT;
             ItemReference = plt.ItemReference;
             OriginalValue = plt.OriginalValueABS;
-            Balance = (DocumentType == "CRN" || DocumentType == "CRJ") ? plt.Balance * -1 : plt.Balance;
+
+            switch (DocumentType)
+            {
+                case "CRN":
+				case "DBN":
+				case "DBJ":
+				case "CSH":
+                    Balance = plt.Balance * -1;
+					break;
+				case "CRJ":
+				case "INV":
+				case "STC":
+					Balance = plt.Balance;
+					break;
+				default:
+					Balance = plt.Balance;
+					break;
+            }
+
             Disputed = plt.Dispute == "D";
             Division = plt.Division;
             Unallocated = plt.Unallocated == 0 ? 0 : plt.Unallocated * -1;

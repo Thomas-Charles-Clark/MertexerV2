@@ -216,7 +216,7 @@ namespace MertexerV2.Models.Supplier
         {
             get
             {
-                return PLSEL1?.Description;
+                return SupplierType?.Description;
             }
         }
 
@@ -257,22 +257,22 @@ namespace MertexerV2.Models.Supplier
         [UniVerseFieldName("PERM.FAX")]
         public bool AccountClosed { get; set; }
 
-        [UniVerseForeignKey("SEL1", "MertexerV2.Models.Supplier.PLSEL1")]
-        public virtual SupplierType PLSEL1 { get; set; }
+        [UniVerseForeignKey("SupplierType", "MertexerV2.Models.Supplier.SupplierType")]
+        public virtual SupplierType SupplierType { get; set; }
 
-        [UniVerseForeignKey("SEL2", "MertexerV2.Models.Supplier.PLSEL2")]
+        [UniVerseForeignKey("PLSEL2", "MertexerV2.Models.Supplier.PLSEL2")]
         public virtual PLSEL2 PLSEL2 { get; set; }
 
-        [UniVerseForeignKey("SEL3", "MertexerV2.Models.Supplier.PLSEL3")]
+        [UniVerseForeignKey("PLSEL3", "MertexerV2.Models.Supplier.PLSEL3")]
         public virtual PLSEL3 PLSEL3 { get; set; }
 
         [UniVerseForeignKey("Currency", "MertexerV2.Models.ExchangeRate.ExchangeRate")]
         public virtual ExchangeRate.ExchangeRate ExchangeRate { get; set; }
 
-        [UniVerseForeignKey("DocumentReferences", "MertexerV2.Models.PurchaseLedger.PurchaseLedgerTransfer")]
+        [UniVerseForeignKey("DocumentReferences", "MertexerV2.Models.PurchaseLedger.PurchaseLedgerTransaction")]
         public virtual IEnumerable<PurchaseLedgerTransaction> PurchaseLedgerTransferRecords { get; set; } = new List<PurchaseLedgerTransaction>();
 
-        [UniVerseForeignKey("DocumentReferences", "MertexerV2.Models.PurchaseLedger.PurchaseLedgerTransfer")]
+        [UniVerseForeignKey("DocumentReferences", "MertexerV2.Models.PurchaseLedger.PurchaseLedgerTransaction")]
         public virtual IEnumerable<PurchaseLedgerTransaction> PurchaseLedgerTransferRecordsCurrency { get; set; } = new List<PurchaseLedgerTransaction>();
 
         public virtual IEnumerable<PurchaseLedgerInvoiceRegister> PurchaseLedgerRegisterEntries_Invoice { get; set; } = new List<PurchaseLedgerInvoiceRegister>();

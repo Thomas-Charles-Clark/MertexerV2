@@ -505,55 +505,64 @@ namespace Tester
 
 			//Console.WriteLine($"TradeAccountPartPaymentPlanSelect_FillRow processed {partPaymentResults.Count} records successfully.");
 
-			var batchKeys = new[] {
-				//"FDG2701/04*1658466",
-				//"FDG2581/21*146450",
-				//"F1736/97*P248064",
-				"BEDDG3287*NA"
-			}.Select(q => new BatchCode() { Code = q });
+			var accountDetails = SupplierFunctions.AccountDetailsSelect("MERTEX", "B0245").OfType<SupplierAccountDetail>().ToList();
+			var accountDetailsCurrency = SupplierFunctions.AccountDetails_Currency_Select("MERTEX", "B0245").OfType<SupplierAccountDetail>().ToList();
 
-			var batchKeysJson = JsonConvert.SerializeObject(batchKeys);
+			var interest = accountDetails.Where(ad => ad.SupplierReference == "1625002311").SingleOrDefault();
+			var interestCurrency = accountDetailsCurrency.Where(ad => ad.SupplierReference == "1625002311").SingleOrDefault();
 
-			var batchResults = BatchFunctions.Select(uniVerseAccount, batchKeysJson, DateTime.Now.AddMonths(-3), null).OfType<Batch>().ToList();
+			//Console.WriteLine(JsonConvert.SerializeObject(accountDetails));
+			//Console.WriteLine(JsonConvert.SerializeObject(accountDetailsCurrency));
 
-			Console.WriteLine($"Saw {batchResults.Count} results");
+			//var batchKeys = new[] {
+			//	//"FDG2701/04*1658466",
+			//	//"FDG2581/21*146450",
+			//	//"F1736/97*P248064",
+			//	"BEDDG3287*NA"
+			//}.Select(q => new BatchCode() { Code = q });
 
-			if (batchResults.Count <= 50)
-			{
-				Console.WriteLine(JsonConvert.SerializeObject(batchResults));
-			}
+			//var batchKeysJson = JsonConvert.SerializeObject(batchKeys);
 
-			SqlString Key;
-			SqlString ProductCode;
-			SqlString BatchNumber;
-			SqlString Racks;
-			SqlString StockLocationCodes;
-			SqlString RacksAndLocationsCombined;
-			SqlString ProductLocationBatchKeys;
-			SqlDecimal CurrentUnitValue;
-			SqlDateTime ReceivedDT;
-			SqlString RackQuantityPhysicalJSON;
-			SqlString RackQuantityDemandsJSON;
-			SqlString RackQuantityFreeJSON;
+			//var batchResults = BatchFunctions.Select(uniVerseAccount, batchKeysJson, DateTime.Now.AddMonths(-3), null).OfType<Batch>().ToList();
 
-			foreach (var ppr in batchResults)
-			{
-				BatchFunctions.BatchSelect_FillRow(ppr,
-					out Key,
-					out ProductCode,
-					out BatchNumber,
-					out Racks,
-					out StockLocationCodes,
-					out RacksAndLocationsCombined,
-					out ProductLocationBatchKeys,
-					out CurrentUnitValue,
-					out ReceivedDT,
-					out RackQuantityPhysicalJSON,
-					out RackQuantityDemandsJSON,
-					out RackQuantityFreeJSON);
-			}
+			//Console.WriteLine($"Saw {batchResults.Count} results");
 
-			Console.WriteLine($"BatchSelect_FillRow processed {batchResults.Count} records successfully.");
+			//if (batchResults.Count <= 50)
+			//{
+			//	Console.WriteLine(JsonConvert.SerializeObject(batchResults));
+			//}
+
+			//SqlString Key;
+			//SqlString ProductCode;
+			//SqlString BatchNumber;
+			//SqlString Racks;
+			//SqlString StockLocationCodes;
+			//SqlString RacksAndLocationsCombined;
+			//SqlString ProductLocationBatchKeys;
+			//SqlDecimal CurrentUnitValue;
+			//SqlDateTime ReceivedDT;
+			//SqlString RackQuantityPhysicalJSON;
+			//SqlString RackQuantityDemandsJSON;
+			//SqlString RackQuantityFreeJSON;
+
+			//foreach (var ppr in batchResults)
+			//{
+			//	BatchFunctions.BatchSelect_FillRow(ppr,
+			//		out Key,
+			//		out ProductCode,
+			//		out BatchNumber,
+			//		out Racks,
+			//		out StockLocationCodes,
+			//		out RacksAndLocationsCombined,
+			//		out ProductLocationBatchKeys,
+			//		out CurrentUnitValue,
+			//		out ReceivedDT,
+			//		out RackQuantityPhysicalJSON,
+			//		out RackQuantityDemandsJSON,
+			//		out RackQuantityFreeJSON);
+			//}
+
+			//Console.WriteLine($"BatchSelect_FillRow processed {batchResults.Count} records successfully.");
 
 			CFramework.SetConsoleColourSuccess();
 

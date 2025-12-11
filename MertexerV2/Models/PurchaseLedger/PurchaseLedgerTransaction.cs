@@ -151,7 +151,7 @@ namespace MertexerV2.Models.PurchaseLedger
         public decimal Debit { get; set; }
 
         [UniVerseIndex(8)]
-        [UniVerseFieldName("CREDIT")]
+        [UniVerseFieldName(n: "CREDIT")]
         [UniVerseConversion("MR22")]
         public decimal Credit { get; set; }
 

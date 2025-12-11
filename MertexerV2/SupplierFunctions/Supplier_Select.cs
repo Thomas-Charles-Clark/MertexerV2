@@ -15,6 +15,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
 using System.Linq;
+using System.ServiceModel.Configuration;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -87,9 +88,6 @@ namespace MertexerV2.SupplierFunctions
             string sourceFileName,
             PurchaseLedgerTransaction plt) : base(supRef, supName, supCur, plt.Key, sourceFileName)
         {
-
-            int f = 0;
-
             Sel1 = sel1;
             Sel1D = sel1d;
             Sel2 = sel2;
@@ -101,7 +99,7 @@ namespace MertexerV2.SupplierFunctions
             DueDate = plt.DueDT;
             ItemReference = plt.ItemReference;
             OriginalValue = plt.OriginalValueABS;
-            Balance = plt.Balance;
+            Balance = (DocumentType == "CRN" || DocumentType == "CRJ") ? plt.Balance * -1 : plt.Balance;
             Disputed = plt.Dispute == "D";
             Division = plt.Division;
             Unallocated = plt.Unallocated == 0 ? 0 : plt.Unallocated * -1;
@@ -167,7 +165,7 @@ namespace MertexerV2.SupplierFunctions
             DueDate = plt.DueDT;
             ItemReference = plt.ItemReference;
             OriginalValue = 0.0m;
-            Balance = sterling ? plt.AmountSterling : plt.AmountCurrency;
+            Balance = (sterling ? plt.AmountSterling : plt.AmountCurrency) * -1;
             Disputed = false;
             Division = null;
             Unallocated = 0;
@@ -291,6 +289,8 @@ namespace MertexerV2.SupplierFunctions
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
         public static IEnumerable AccountDetailsSelect(string UniVerseAccount, string SupplierCode)
         {
+            bool sterling = true;
+
             var invReg = Selector<PurchaseLedgerInvoiceRegister>.SelectAllNonParallel(
                     applyConversions: true,
                     selectChildEntities: false,
@@ -305,36 +305,36 @@ namespace MertexerV2.SupplierFunctions
                     UniVerseAccount
                 ).ToList();
 
-            if (String.IsNullOrEmpty(SupplierCode))
+			var tpltrans = Selector<PurchaseLedgerTransaction>.SelectAllNonParallel(
+					applyConversions: true,
+					selectChildEntities: false,
+					batchSize: 1000,
+					UniVerseAccount
+				).ToList();
+
+			var sel1 = Selector<SupplierType>.SelectAllNonParallel(
+					applyConversions: true,
+					selectChildEntities: false,
+					batchSize: 1000,
+					UniVerseAccount
+				).ToList();
+
+			var sel2 = Selector<PLSEL2>.SelectAllNonParallel(
+					applyConversions: true,
+					selectChildEntities: false,
+					batchSize: 1000,
+					UniVerseAccount
+				).ToList();
+
+			var sel3 = Selector<PLSEL3>.SelectAllNonParallel(
+					applyConversions: true,
+					selectChildEntities: false,
+					batchSize: 1000,
+					UniVerseAccount
+				).ToList();
+
+			if (String.IsNullOrEmpty(SupplierCode))
             {
-                var tpltrans = Selector<PurchaseLedgerTransaction>.SelectAllNonParallel(
-                        applyConversions: true,
-                        selectChildEntities: false,
-                        batchSize: 1000,
-                        UniVerseAccount
-                    ).ToList();
-
-                var sel1 = Selector<SupplierType>.SelectAllNonParallel(
-                        applyConversions: true,
-                        selectChildEntities: false,
-                        batchSize: 1000,
-                        UniVerseAccount
-                    ).ToList();
-
-                var sel2 = Selector<PLSEL2>.SelectAllNonParallel(
-                        applyConversions: true,
-                        selectChildEntities: false,
-                        batchSize: 1000,
-                        UniVerseAccount
-                    ).ToList();
-
-                var sel3 = Selector<PLSEL3>.SelectAllNonParallel(
-                        applyConversions: true,
-                        selectChildEntities: false,
-                        batchSize: 1000,
-                        UniVerseAccount
-                    ).ToList();
-
                 foreach (var r in Selector<Supplier>.SelectAllNonParallel(
                     true,
                     false,
@@ -343,7 +343,7 @@ namespace MertexerV2.SupplierFunctions
                 {
                     r.PurchaseLedgerTransferRecords = tpltrans.Where(p => p.SupplierReference == r.Key).ToList();
 
-                    r.PLSEL1 = sel1.FirstOrDefault(p => p.Key == r.SEL1);
+                    r.SupplierType = sel1.FirstOrDefault(p => p.Key == r.SEL1);
 
                     r.PLSEL2 = sel2.FirstOrDefault(p => p.Key == r.SEL2);
 
@@ -360,15 +360,15 @@ namespace MertexerV2.SupplierFunctions
                     }
 
                     foreach (var inv in r.PurchaseLedgerRegisterEntries_Invoice?.Select(d => new SupplierAccountDetail(r.Key, r.Name, r.Currency,
-                        r.SEL1, r.DSEL1, r.SEL2, r.DSEL2, r.BudgetHolderCode, r.DSEL3, "PLINVREG", d, false
-                        )))
+                        r.SEL1, r.DSEL1, r.SEL2, r.DSEL2, r.BudgetHolderCode, r.DSEL3, "PLINVREG", d, sterling
+						)))
                     {
                         yield return inv;
                     }
 
                     foreach (var crn in r.PurchaseLedgerRegisterEntries_Credit?.Select(d => new SupplierAccountDetail(r.Key, r.Name, r.Currency,
-                        r.SEL1, r.DSEL1, r.SEL2, r.DSEL2, r.BudgetHolderCode, r.DSEL3, "PLCRNREG", d, false
-                        )))
+                        r.SEL1, r.DSEL1, r.SEL2, r.DSEL2, r.BudgetHolderCode, r.DSEL3, "PLCRNREG", d, sterling
+						)))
                     {
                         yield return crn;
                     }
@@ -393,15 +393,15 @@ namespace MertexerV2.SupplierFunctions
                 }
 
                 foreach (var inv in result.PurchaseLedgerRegisterEntries_Invoice?.Select(d => new SupplierAccountDetail(result.Key, result.Name, result.Currency,
-                    result.SEL1, result.DSEL1, result.SEL2, result.DSEL2, result.BudgetHolderCode, result.DSEL3, "PLINVREG", d, false
-                    )))
+                    result.SEL1, result.DSEL1, result.SEL2, result.DSEL2, result.BudgetHolderCode, result.DSEL3, "PLINVREG", d, sterling
+					)))
                 {
                     yield return inv;
                 }
 
                 foreach (var crn in result.PurchaseLedgerRegisterEntries_Credit?.Select(d => new SupplierAccountDetail(result.Key, result.Name, result.Currency,
-                    result.SEL1, result.DSEL1, result.SEL2, result.DSEL2, result.BudgetHolderCode, result.DSEL3, "PLCRNREG", d, false
-                    )))
+                    result.SEL1, result.DSEL1, result.SEL2, result.DSEL2, result.BudgetHolderCode, result.DSEL3, "PLCRNREG", d, sterling
+					)))
                 {
                     yield return crn;
                 }
@@ -451,7 +451,7 @@ namespace MertexerV2.SupplierFunctions
             DocumentDT = result.DocumentDate.HasValue ? result.DocumentDate.Value : SqlDateTime.Null; 
             DueDT = result.DueDate.HasValue ? result.DueDate.Value : SqlDateTime.Null;
             ItemReference = result.ItemReference?.TrimReduceTruncate(50);
-            OriginalValue = result.OriginalValue;
+            OriginalValue = result.DocumentType == "CRN" ? result.OriginalValue * -1 : result.OriginalValue;
             Balance = result.Balance;
             Disputed = result.Disputed;
             Division = result.Division?.TrimReduceTruncate(10);
@@ -469,6 +469,8 @@ namespace MertexerV2.SupplierFunctions
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
         public static IEnumerable AccountDetails_Currency_Select(string UniVerseAccount, string SupplierCode)
         {
+            bool sterling = false;
+
             var invReg = Selector<PurchaseLedgerInvoiceRegister>.SelectAllNonParallel(
                     applyConversions: true,
                     selectChildEntities: false,
@@ -521,7 +523,7 @@ namespace MertexerV2.SupplierFunctions
                 {
                     r.PurchaseLedgerTransferRecordsCurrency = tpltrans.Where(p => p.SupplierReference == r.Key).ToList();
 
-                    r.PLSEL1 = sel1.FirstOrDefault(p => p.Key == r.SEL1);
+                    r.SupplierType = sel1.FirstOrDefault(p => p.Key == r.SEL1);
 
                     r.PLSEL2 = sel2.FirstOrDefault(p => p.Key == r.SEL2);
 
@@ -538,15 +540,15 @@ namespace MertexerV2.SupplierFunctions
                     }
 
                     foreach (var inv in r.PurchaseLedgerRegisterEntries_Invoice?.Select(d => new SupplierAccountDetail(r.Key, r.Name, r.Currency,
-                        r.SEL1, r.DSEL1, r.SEL2, r.DSEL2, r.BudgetHolderCode, r.DSEL3,"PLINVREG", d, true
-                        )))
+                        r.SEL1, r.DSEL1, r.SEL2, r.DSEL2, r.BudgetHolderCode, r.DSEL3,"PLINVREG", d, sterling
+						)))
                     {
                         yield return inv;
                     }
 
                     foreach (var crn in r.PurchaseLedgerRegisterEntries_Credit?.Select(d => new SupplierAccountDetail(r.Key, r.Name, r.Currency,
-                        r.SEL1, r.DSEL1, r.SEL2, r.DSEL2, r.BudgetHolderCode, r.DSEL3, "PLCRNREG", d, true
-                        )))
+                        r.SEL1, r.DSEL1, r.SEL2, r.DSEL2, r.BudgetHolderCode, r.DSEL3, "PLCRNREG", d, sterling
+						)))
                     {
                         yield return crn;
                     }
@@ -572,15 +574,15 @@ namespace MertexerV2.SupplierFunctions
                 }
 
                 foreach (var inv in result.PurchaseLedgerRegisterEntries_Invoice?.Select(d => new SupplierAccountDetail(result.Key, result.Name, result.Currency,
-                   result.SEL1, result.DSEL1, result.SEL2, result.DSEL2, result.BudgetHolderCode, result.DSEL3, "PLINVREG", d, true
-                    )))
+                   result.SEL1, result.DSEL1, result.SEL2, result.DSEL2, result.BudgetHolderCode, result.DSEL3, "PLINVREG", d, sterling
+					)))
                 {
                     yield return inv;
                 }
 
                 foreach (var crn in result.PurchaseLedgerRegisterEntries_Credit?.Select(d => new SupplierAccountDetail(result.Key, result.Name, result.Currency,
-                   result.SEL1, result.DSEL1, result.SEL2, result.DSEL2, result.BudgetHolderCode, result.DSEL3, "PLCRNREG", d, true
-                    )))
+                   result.SEL1, result.DSEL1, result.SEL2, result.DSEL2, result.BudgetHolderCode, result.DSEL3, "PLCRNREG", d, sterling
+					)))
                 {
                     yield return crn;
                 }
@@ -630,7 +632,7 @@ namespace MertexerV2.SupplierFunctions
             DocumentDT = result.DocumentDate.HasValue ? result.DocumentDate.Value : SqlDateTime.Null;
             DueDT = result.DueDate.HasValue ? result.DueDate.Value : SqlDateTime.Null;
             ItemReference = result.ItemReference?.TrimReduceTruncate(50);
-            OriginalValue = result.OriginalValue;
+            OriginalValue = result.DocumentType == "CRN" ? result.OriginalValue * -1 : result.OriginalValue;
             Balance = result.Balance;
             Disputed = result.Disputed;
             Division = result.Division?.TrimReduceTruncate(10);

@@ -9,8 +9,10 @@ using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data.SqlTypes;
 using System.Linq;
+using System.ServiceModel;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Xml.XPath;
@@ -229,7 +231,8 @@ namespace MertexerV2.TradeAccountFunctions
             out SqlString CreditControlRegion,
             out SqlString SSField5,
             out SqlString StockistCategory,
-            out SqlString ExitCodeEmail)
+            out SqlString ExitCodeEmail,
+            out SqlString CreditStopChangesJSON)
         {
             var result = (TradeAccount)obj;
 
@@ -436,6 +439,21 @@ namespace MertexerV2.TradeAccountFunctions
             UPSReturnsLabel = result.UPSReturnsLabel;
             ExitCodeEmail = result.ExitCodeEmail?.TrimReduceTruncate(254);
             NoEmail = result.NoEmail;
+
+            CreditStopChangesJSON = result.CreditStopChangedTo.Any() ?
+                JsonConvert.SerializeObject(
+                    new
+                    {
+                        Code = result.Key,
+                        result.CreditStopped,
+						result.CreditStopChangedFrom,
+						result.CreditStopChangedTo,
+						result.CreditStopChangedDTs,
+						result.CreditStopChangedBy,
+						result.CreditStopChangedReasons
+					}
+                )
+                : SqlString.Null;
         }
 
         [Microsoft.SqlServer.Server.SqlFunction(
@@ -452,7 +470,7 @@ namespace MertexerV2.TradeAccountFunctions
 
             using (var qe = new CommandExecutor(UniVerseAccount))
             {
-                accounts = qe.Arbitrary($"LIST SLCUST @ID FMT\"60L\" WITH INV.ACCOUNTS # \"\" COUNT.SUP ID.SUPP COL.HDR.SUPP")
+                accounts = qe.Arbitrary($"LIST SLCUST @ID FMT\"80L\" WITH INV.ACCOUNTS # \"\" COUNT.SUP ID.SUPP COL.HDR.SUPP")
                     .Split(Framework.EnvironmentNewLineDelimiter, StringSplitOptions.RemoveEmptyEntries)
                     .ToList();
             }

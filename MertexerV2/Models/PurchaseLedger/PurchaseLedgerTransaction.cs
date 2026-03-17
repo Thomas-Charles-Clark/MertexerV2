@@ -401,24 +401,4 @@ namespace MertexerV2.Models.PurchaseLedger
         [UniVerseConversion("MR22")]
         public decimal? OutstandingAmount { get; set; }
     }
-
-    [UniVerseFileName("TPLTRANS.CUR")]
-    public class PurchaseLedgerTransferCurrency : PurchaseLedgerTransaction
-    {
-        [JsonConstructor]
-        public PurchaseLedgerTransferCurrency(string key) : base(key)
-        {
-            Initialise();
-        }
-
-        public PurchaseLedgerTransferCurrency() : base()
-        {
-            Initialise();
-        }
-
-        public override void Initialise()
-        {
-            typeof(PurchaseLedgerTransferCurrency).GetProperties().ToList().ForEach(p => Framework.InitialiseUniProperty(this, p));
-        }
-    }
 }

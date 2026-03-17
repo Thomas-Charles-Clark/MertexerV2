@@ -120,7 +120,7 @@ namespace MertexerV2.GeneralFunctions
                     }
                     else
                     {
-                        keys = ce.Arbitrary($"LIST {fileName} @ID FMT\"60L\" ID.SUPP COL.HDR.SUPP COUNT.SUP")
+                        keys = ce.Arbitrary($"LIST {fileName} @ID FMT\"80L\" ID.SUPP COL.HDR.SUPP COUNT.SUP")
                        .Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
                        .Distinct()
                        .ToList();
@@ -294,7 +294,7 @@ namespace MertexerV2.GeneralFunctions
 
                 var results = new List<T>();
 
-                var query = $"LIST @ID FMT\"60L\" {fileName} ";
+                var query = $"LIST @ID FMT\"80L\" {fileName} ";
 
                 query += $"WITH {String.Join(" AND ", fieldsAndValues.Select(f => $"{f.Item1} {f.Item2} {f.Item3}"))} ";
 
@@ -390,7 +390,7 @@ namespace MertexerV2.GeneralFunctions
 
                 var results = new List<T>();
 
-                var query = $"LIST @ID FMT\"60L\" {fileName} ";
+                var query = $"LIST @ID FMT\"80L\" {fileName} ";
 
                 query += $"WITH {String.Join(" AND ", fieldsAndValues.Select(f => $"{f.Item1} {f.Item2} {f.Item3}"))} ";
 
@@ -515,11 +515,11 @@ namespace MertexerV2.GeneralFunctions
 
                 var results = new List<T>();
 
-                var keysCommand = $"LIST {fileName} @ID FMT\"60L\" ID.SUPP COL.HDR.SUPP COUNT.SUP";
+                var keysCommand = $"LIST {fileName} @ID FMT\"80L\" ID.SUPP COL.HDR.SUPP COUNT.SUP";
 
                 if (sampleSize != null)
                 {
-                    keysCommand = $"LIST {fileName} @ID FMT\"60L\" SAMPLE {sampleSize} ID.SUPP COL.HDR.SUPP COUNT.SUP";
+                    keysCommand = $"LIST {fileName} @ID FMT\"80L\" SAMPLE {sampleSize} ID.SUPP COL.HDR.SUPP COUNT.SUP";
                 }
 
                 var keys = ce.Arbitrary(keysCommand)

@@ -272,8 +272,8 @@ namespace MertexerV2.Models.Supplier
         [UniVerseForeignKey("DocumentReferences", "MertexerV2.Models.PurchaseLedger.PurchaseLedgerTransaction")]
         public virtual IEnumerable<PurchaseLedgerTransaction> PurchaseLedgerTransferRecords { get; set; } = new List<PurchaseLedgerTransaction>();
 
-        [UniVerseForeignKey("DocumentReferences", "MertexerV2.Models.PurchaseLedger.PurchaseLedgerTransaction")]
-        public virtual IEnumerable<PurchaseLedgerTransaction> PurchaseLedgerTransferRecordsCurrency { get; set; } = new List<PurchaseLedgerTransaction>();
+        [UniVerseForeignKey("DocumentReferences", "MertexerV2.Models.PurchaseLedger.PurchaseLedgerTransactionCurrency")]
+        public virtual IEnumerable<PurchaseLedgerTransactionCurrency> PurchaseLedgerTransferRecordsCurrency { get; set; } = new List<PurchaseLedgerTransactionCurrency>();
 
         public virtual IEnumerable<PurchaseLedgerInvoiceRegister> PurchaseLedgerRegisterEntries_Invoice { get; set; } = new List<PurchaseLedgerInvoiceRegister>();
 

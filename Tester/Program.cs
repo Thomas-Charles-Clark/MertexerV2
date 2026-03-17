@@ -60,6 +60,7 @@ using MertexerV2.Models.ExchangeRate;
 using Newtonsoft.Json.Linq;
 using static System.Collections.Specialized.BitVector32;
 using MertexerV2.CompanyFileFunctions;
+using System.Linq.Expressions;
 
 namespace Tester
 {
@@ -90,7 +91,9 @@ namespace Tester
 
             var uniVerseAccount = "MERTEX";
 
-            sw.Start();
+			var tradeAccountCode = "K0098";
+
+			sw.Start();
 
             CFramework.WriteSubHeading($"Working in {uniVerseAccount}");
 
@@ -505,11 +508,72 @@ namespace Tester
 
 			//Console.WriteLine($"TradeAccountPartPaymentPlanSelect_FillRow processed {partPaymentResults.Count} records successfully.");
 
-			var accountDetails = SupplierFunctions.AccountDetailsSelect("MERTEX", "B0245").OfType<SupplierAccountDetail>().ToList();
-			var accountDetailsCurrency = SupplierFunctions.AccountDetails_Currency_Select("MERTEX", "B0245").OfType<SupplierAccountDetail>().ToList();
+			//var accountDetails = SupplierFunctions.AccountDetailsSelect("MERTEX", "B0245").OfType<SupplierAccountDetail>().ToList();
+			//var accountDetailsCurrency = SupplierFunctions.AccountDetails_Currency_Select("MERTEX", "B0245").OfType<SupplierAccountDetail>().ToList();
 
-			var interest = accountDetails.Where(ad => ad.SupplierReference == "1625002311").SingleOrDefault();
-			var interestCurrency = accountDetailsCurrency.Where(ad => ad.SupplierReference == "1625002311").SingleOrDefault();
+			//var a = accountDetails.Where(p => p.DocumentReference == "PI329705").Single();
+			//var b = accountDetailsCurrency.Where(p => p.DocumentReference == "PI329705").Single();
+
+			//Console.WriteLine(JsonConvert.SerializeObject(a));
+			//Console.WriteLine(JsonConvert.SerializeObject(b));
+
+			//var interest = accountDetails.Where(ad => ad.SupplierReference == "1625002311").SingleOrDefault();
+			//var interestCurrency = accountDetailsCurrency.Where(ad => ad.SupplierReference == "1625002311").SingleOrDefault();
+
+			//var endOfFeb2026 = Framework.UniVerseDateString(DateTime.Parse("2026/02/28"));
+
+
+			//Console.WriteLine(endOfFeb2026);
+
+			//var salesLedgerTransactions = SalesLedgerTransactionFunctions.Select("MERTEX", null, null, null, null, null, null, null, null).OfType<SalesLedgerTransaction>().ToList();
+
+			//foreach (var s in salesLedgerTransactions)
+			//{
+			//	SalesLedgerTransactionFunctions.SalesLedgerTransactionSelect_FillRow(s,
+			//		out SqlString Key,
+			//		out SqlDateTime DocumentDT,
+			//		out SqlDateTime DueDT,
+			//		out SqlString TransactionType,
+			//		out SqlString ItemReference,
+			//		out SqlString Terms,
+			//		out SqlDecimal OriginalValue,
+			//		out SqlString DocumentReference,
+			//		out SqlDecimal VATDiscount,
+			//		out SqlDecimal Debit,
+			//		out SqlDecimal Credit,
+			//		out SqlDecimal Balance,
+			//		out SqlByte Period,
+			//		out SqlString Status,
+			//		out SqlString TradeAccountCode,
+			//		out SqlInt32 Age,
+			//		out SqlDecimal OriginalValueABS,
+			//		out SqlString DisputeMemo,
+			//		out SqlString Dispute,
+			//		out SqlString Adjust,
+			//		out SqlDecimal Unallocated,
+			//		out SqlDecimal OutstandingAmount,
+			//		out SqlDateTime PostDT,
+			//		out SqlDateTime CSDT,
+			//		out SqlDecimal CSAmount,
+			//		out SqlString CSAction,
+			//		out SqlString AllocatedFromDocuments,
+			//		out SqlString AllocatedToDocuments,
+			//		out SqlString InvoiceAccount,
+			//		out SqlString CustomerOrderNumber,
+			//		out SqlDecimal ExchangeRateDifferences,
+			//		out SqlDateTime PaidDT,
+			//		out SqlDecimal RoundingErrors,
+			//		out SqlString SourceDocument,
+			//		out SqlInt32 Version,
+			//		out SqlDecimal SettlementDiscount,
+			//		out SqlDateTime SettlementDT,
+			//		out SqlDecimal SettlementDiscountTaken,
+			//		out SqlString CreditClaimNumber,
+			//		out SqlString SellingCompany,
+			//		out SqlInt32 PostTime);
+			//}
+
+
 
 			//Console.WriteLine(JsonConvert.SerializeObject(accountDetails));
 			//Console.WriteLine(JsonConvert.SerializeObject(accountDetailsCurrency));
@@ -563,6 +627,152 @@ namespace Tester
 			//}
 
 			//Console.WriteLine($"BatchSelect_FillRow processed {batchResults.Count} records successfully.");
+
+			Console.WriteLine(MertexerV2.Utilities.Framework.UniVerseDateString(DateTime.Parse("2026/02/27")));
+
+			//var sltrans = Selector<SalesLedgerTransaction>.SelectAllNonParallel(
+			//	true,
+			//	false,
+			//	100,
+			//	uniVerseAccount,
+			//	null);
+
+			//foreach (var s in sltrans)
+			//{
+			//	try
+			//	{
+			//		SalesLedgerTransactionFunctions.SalesLedgerTransactionSelect_FillRow(
+			//			s,
+			//			out SqlString Key,
+			//			out SqlDateTime DocumentDT,
+			//			out SqlDateTime DueDT,
+			//			out SqlString TransactionType,
+			//			out SqlString ItemReference,
+			//			out SqlString Terms,
+			//			out SqlDecimal OriginalValue,
+			//			out SqlString DocumentReference,
+			//			out SqlDecimal VATDiscount,
+			//			out SqlDecimal Debit,
+			//			out SqlDecimal Credit,
+			//			out SqlDecimal Balance,
+			//			out SqlByte Period,
+			//			out SqlString Status,
+			//			out SqlString TradeAccountCode,
+			//			out SqlInt32 Age,
+			//			out SqlDecimal OriginalValueABS,
+			//			out SqlString DisputeMemo,
+			//			out SqlString Dispute,
+			//			out SqlString Adjust,
+			//			out SqlDecimal Unallocated,
+			//			out SqlDecimal OutstandingAmount,
+			//			out SqlDateTime PostDT,
+			//			out SqlDateTime CSDT,
+			//			out SqlDecimal CSAmount,
+			//			out SqlString CSAction,
+			//			out SqlString AllocatedFromDocuments,
+			//			out SqlString AllocatedToDocuments,
+			//			out SqlString InvoiceAccount,
+			//			out SqlString CustomerOrderNumber,
+			//			out SqlDecimal ExchangeRateDifferences,
+			//			out SqlDateTime PaidDT,
+			//			out SqlDecimal RoundingErrors,
+			//			out SqlString SourceDocument,
+			//			out SqlInt32 Version,
+			//			out SqlDecimal SettlementDiscount,
+			//			out SqlDateTime SettlementDT,
+			//			out SqlDecimal SettlementDiscountTaken,
+			//			out SqlString CreditClaimNumber,
+			//			out SqlString SellingCompany,
+			//			out SqlInt32 PostTime,
+			//			out SqlDateTime ActualReceiptDT,
+			//			out SqlString ActualBank,
+			//			out SqlString PaymentType,
+			//			out SqlString PaymentReason,
+			//			out SqlString OrderID,
+			//			out SqlString Spare1,
+			//			out SqlString Spare2,
+			//			out SqlString Spare3,
+			//			out SqlString Spare4,
+			//			out SqlString CashOwner
+			//		);
+			//	}
+			//	catch (Exception ex)
+			//	{
+			//	CFramework.SetConsoleColourError();
+			//		Console.WriteLine(ex);
+			//	}
+			//}
+
+			var codes = new List<TradeAccountCode>()
+			{
+				new TradeAccountCode()
+				{
+					Code = tradeAccountCode
+				}
+			};
+
+			var result = TradeAccountFunctions.Select(uniVerseAccount, JsonConvert.SerializeObject(codes)).OfType<TradeAccount>().ToList();
+
+			foreach(var r in result)
+			{
+				//Console.WriteLine(r);
+
+				var json = r.CreditStopChangedTo.Any() ?
+				JsonConvert.SerializeObject(r.CreditStopChangedTo.Select((q, i) =>
+				{
+					return new
+					{
+						ChangedFrom = r.CreditStopChangedFrom.ElementAtOrDefault(i),
+						ChangedTo = q,
+						ChangeDT = r.CreditStopChangedDTs.ElementAtOrDefault(i),
+						ChangedBy = r.CreditStopChangedBy.ElementAtOrDefault(i),
+						ChangedBecause = r.CreditStopChangedReasons.ElementAtOrDefault(i)
+					};
+				})) : (string)null;
+
+				Console.WriteLine(json);
+			}
+
+			//var creditData = new
+			//{
+			//	ChangedFrom = "Y",
+			//	ChangedTo = "N"
+			//};
+
+			// Trade Account Credit Stop Testing
+			//var now = DateTime.Now;
+
+			//var zeroSeconds = TimeSpan.FromSeconds(0);
+			//var oneSecond = TimeSpan.FromSeconds(1);
+			//var twoSeconds = TimeSpan.FromSeconds(2);
+			//var threeSeconds = TimeSpan.ParseExact("07:42:54", "hh\\:mm\\:ss", System.Globalization.CultureInfo.InvariantCulture);
+
+			//var test = new TimeSpan(4);
+
+			//var tradeAccountJson = JsonConvert.SerializeObject(new
+			//{
+			//	Code = "K0098",
+			//	CreditStopped = false,
+			//	CreditStopChangedFrom = new List<bool>() { false, true, false, true },
+			//	CreditStopChangedTo = new List<bool>() { true, false, true, false },
+			//	CreditStopChangedDTs = new List<DateTime> { 
+			//		now, 
+			//		now + oneSecond, 
+			//		now + twoSeconds, 
+			//		now + threeSeconds 
+			//	},
+			//	CreditStopChangedTimeSpans = new List<TimeSpan>
+			//	{
+			//		zeroSeconds,
+			//		oneSecond,
+			//		twoSeconds,
+			//		threeSeconds
+			//	},
+			//	CreditStopChangedReasons = new List<string> { "Potatoes", "Stole", "My", "Shoelaces" },
+			//	CreditStopChangedBy = new List<string> { "A", "B", "C", "D" }
+			//});
+
+			//TradeAccountFunctions.Upsert(uniVerseAccount, tradeAccountJson);
 
 			CFramework.SetConsoleColourSuccess();
 

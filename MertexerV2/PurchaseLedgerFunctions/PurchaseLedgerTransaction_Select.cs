@@ -130,7 +130,8 @@ namespace MertexerV2.PurchaseLedgerFunctions
             object obj,
             out SqlString Key,
             out SqlDateTime DocumentDT,
-            out SqlString TransactionType,
+            out SqlDateTime DueDT,
+			out SqlString TransactionType,
             out SqlString ItemReference,
             out SqlDecimal OriginalValue,
             out SqlString DocumentNumber,
@@ -177,6 +178,8 @@ namespace MertexerV2.PurchaseLedgerFunctions
             Key = result.Key?.TrimReduceTruncate(50);
 
             DocumentDT = result.DocumentDT ?? SqlDateTime.Null;
+			DueDT = result.DueDT ?? SqlDateTime.Null;
+
 
             TransactionType = result.TransactionType?.TrimReduceTruncate(10) ?? SqlString.Null;
             ItemReference = result.ItemReference?.TrimReduceTruncate(50) ?? SqlString.Null;

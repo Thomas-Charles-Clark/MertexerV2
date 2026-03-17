@@ -68,7 +68,9 @@ namespace MertexerV2.InvoiceFunctions
             object obj,
             out SqlString InvoiceID,
             out SqlDateTime InvoiceDT,
-            out SqlString TradeAccountCode,
+            out SqlDateTime DueDT,
+            out SqlDateTime DespatchedDT,
+			out SqlString TradeAccountCode,
             out SqlString OrderID,
             out SqlByte InvoiceOrCredit,
             out SqlDecimal CarriageValue,
@@ -109,7 +111,9 @@ namespace MertexerV2.InvoiceFunctions
 
             InvoiceID = p.Key?.TrimReduceTruncate(25);
             InvoiceDT = p.InvoiceDT ?? SqlDateTime.Null;
-            TradeAccountCode = p.TradeAccountCode?.TrimReduceTruncate(50);
+            DueDT = p.DueDT ?? SqlDateTime.Null;
+            DespatchedDT = p.DespatchedDT ?? SqlDateTime.Null;
+			TradeAccountCode = p.TradeAccountCode?.TrimReduceTruncate(50);
             OrderID = p.OrderID?.TrimReduceTruncate(25);
             InvoiceOrCredit = p.InvoiceOrCredit;
             CarriageValue = p.CarriageValue ?? SqlDecimal.Null;
@@ -160,7 +164,7 @@ namespace MertexerV2.InvoiceFunctions
                 {
                     var uniFile = ce.Session.CreateUniFile("OEINVHEAD");
 
-                    var keys = ce.Arbitrary($"LIST OEINVHEAD @ID FMT\"60L\" ID.SUPP COL.HDR.SUPP COUNT.SUP")
+                    var keys = ce.Arbitrary($"LIST OEINVHEAD @ID FMT\"80L\" ID.SUPP COL.HDR.SUPP COUNT.SUP")
                     .Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
                     .Distinct()
                     .ToList();
@@ -185,7 +189,7 @@ namespace MertexerV2.InvoiceFunctions
                     filters.Add(new Tuple<string, string, string>("SS.DOCDATE.INT", "<=", Framework.UniVerseDateString(ToDT.Value)));
                 }
 
-                var query = $"LIST OEINVHEAD @ID FMT\"60L\" ";
+                var query = $"LIST OEINVHEAD @ID FMT\"80L\" ";
 
                 query += $"WITH {String.Join(" AND ", filters.Select(f => $"{f.Item1} {f.Item2} {f.Item3}"))} ";
 

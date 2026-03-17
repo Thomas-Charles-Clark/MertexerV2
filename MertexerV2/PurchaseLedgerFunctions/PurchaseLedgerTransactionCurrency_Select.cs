@@ -23,8 +23,8 @@ namespace MertexerV2.PurchaseLedgerFunctions
     public static partial class PurchaseLedgerTransactionCurrencyFunctions
     {
         [SqlFunction(
-        DataAccess = DataAccessKind.Read,
-        FillRowMethodName = "PurchaseLedgerTransactionCurrencySelect_FillRow")]
+            DataAccess = DataAccessKind.Read,
+            FillRowMethodName = "PurchaseLedgerTransactionCurrencySelect_FillRow")]
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
         public static IEnumerable Select(
             string UniVerseAccount,
@@ -126,7 +126,8 @@ namespace MertexerV2.PurchaseLedgerFunctions
             object obj,
             out SqlString Key,
             out SqlDateTime DocumentDT,
-            out SqlString TransactionType,
+            out SqlDateTime DueDT,
+			out SqlString TransactionType,
             out SqlString ItemReference,
             out SqlDecimal OriginalValue,
             out SqlString DocumentReference,
@@ -173,6 +174,7 @@ namespace MertexerV2.PurchaseLedgerFunctions
             Key = result.Key?.TrimReduceTruncate(50);
 
             DocumentDT = result.DocumentDT ?? SqlDateTime.Null;
+            DueDT = result.DueDT ?? SqlDateTime.Null;
 
             TransactionType = result.TransactionType?.TrimReduceTruncate(10) ?? SqlString.Null;
             ItemReference = result.ItemReference?.TrimReduceTruncate(50) ?? SqlString.Null;

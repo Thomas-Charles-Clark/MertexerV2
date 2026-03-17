@@ -151,6 +151,7 @@
     <Compile Include="ProductFunctions\Batch_Upsert.cs" />
     <Compile Include="ProductFunctions\ProductBatch_Upsert.cs" />
     <Compile Include="ProductFunctions\ProductBatch_Select.cs" />
+    <Compile Include="PurchaseLedgerFunctions\PurchaseLedgerTransactionCurrency.cs" />
     <Compile Include="SalesLedgerFunctions\SalesLedgerArchive_Select.cs" />
     <Compile Include="SalesLedgerFunctions\SalesLedger_Select.cs" />
     <Compile Include="TradeAccountFunctions\TradeAccountPartPaymentPlan_Select.cs" />

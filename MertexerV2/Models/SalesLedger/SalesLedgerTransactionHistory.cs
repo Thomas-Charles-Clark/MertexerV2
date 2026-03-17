@@ -408,9 +408,79 @@ namespace MertexerV2.Models.SalesLedger
         [UniVerseFieldName("POSTTIME")]
         public int PostTime { get; set; }
 
-        #region Derived Fields 
+		[JsonAlsoUpdates("ActualReceiptDate")]
+		public DateTime? ActualReceiptDT { get; set; }
 
-        public decimal OustandingAmount
+		[UniVerseIndex(201)]
+		[UniVerseFieldName("SS.REC.DATE.DES.INT")]
+		public string ActualReceiptDate
+		{
+			get
+			{
+				if (ActualReceiptDT.HasValue)
+				{
+					return Framework.UniVerseDateString(ActualReceiptDT.Value);
+				}
+				else
+				{
+					return null;
+				}
+			}
+			set
+			{
+				if (!String.IsNullOrEmpty(value))
+				{
+					if (Int32.TryParse(value, out int valInt))
+					{
+						ActualReceiptDT = Framework.DateTimeFromUniVerseOffset(valInt);
+					}
+					else
+					{
+						ActualReceiptDT = null;
+					}
+				}
+			}
+		}
+
+		[UniVerseIndex(202)]
+		[UniVerseFieldName("ACT.BANK.DES")]
+		public string ActualBank { get; set; }
+
+		[UniVerseIndex(203)]
+		[UniVerseFieldName("PAYMENT.TYPE.DES")]
+		public string PaymentType { get; set; }
+
+		[UniVerseIndex(204)]
+		[UniVerseFieldName("PAYMENT.REASON.DES")]
+		public string PaymentReason { get; set; }
+
+		[UniVerseIndex(205)]
+		[UniVerseFieldName("ORDER.NO.DES")]
+		public string OrderID { get; set; }
+
+		[UniVerseIndex(206)]
+		[UniVerseFieldName("SPARE1.DES")]
+		public string Spare1 { get; set; }
+
+		[UniVerseIndex(207)]
+		[UniVerseFieldName("SPARE2.DES")]
+		public string Spare2 { get; set; }
+
+		[UniVerseIndex(208)]
+		[UniVerseFieldName("SPARE3.DES")]
+		public string Spare3 { get; set; }
+
+		[UniVerseIndex(209)]
+		[UniVerseFieldName("SPARE4.DES")]
+		public string Spare4 { get; set; }
+
+		[UniVerseIndex(210)]
+		[UniVerseFieldName("CASH.OWNER.DES")]
+		public string CashOwner { get; set; }
+
+		#region Derived Fields 
+
+		public decimal OustandingAmount
         {
             get
             {

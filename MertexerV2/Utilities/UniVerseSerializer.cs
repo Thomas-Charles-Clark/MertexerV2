@@ -86,6 +86,21 @@ namespace MertexerV2.Utilities
                 {
                     values = ((List<byte?>)pi.GetValue(source)).Select(p => $"{p}").ToList();
                 }
+                else if (pi.PropertyType == typeof(IEnumerable<bool>))
+                {
+					var truthCondition = pi.GetCustomAttributes(typeof(UniVerseBooleanTrueWhen), false)
+						.Cast<UniVerseBooleanTrueWhen>()
+						.SingleOrDefault();
+
+					if (truthCondition != null)
+					{
+                        values = ((List<bool>)pi.GetValue(source)).Select(b => b ? truthCondition.Value : "").ToList();
+					}
+					else
+					{
+						values = ((List<bool>)pi.GetValue(source)).Select(b => b ? "Y" : "").ToList();
+					}
+                }
 
                 if (conversion != null && values.Any()) // we have some conversion to deal with...
                 {

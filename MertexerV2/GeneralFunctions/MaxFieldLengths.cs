@@ -224,7 +224,7 @@ namespace MertexerV2.GeneralFunctions
                 {
                     if (keys == null || !keys.Any())
                     {
-                        keys = ce.Arbitrary($"LIST {fileName} @ID FMT\"60L\" ID.SUPP COL.HDR.SUPP COUNT.SUP")
+                        keys = ce.Arbitrary($"LIST {fileName} @ID FMT\"80L\" ID.SUPP COL.HDR.SUPP COUNT.SUP")
                            .Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
                            .Distinct()
                             .ToList();

@@ -6,6 +6,7 @@ using MertexerV2.TradeAccountFunctions;
 using MertexerV2.Utilities;
 using Newtonsoft.Json;
 using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -1462,12 +1463,137 @@ namespace MertexerV2.Models
         [UniVerseFieldName("TAX.EXEMPT.CERT.DES")]
         public string USSalesTaxExemptionCertificate { get; set; }
 
+        // >>>>>>> Credit Stop Related Fields <<<<<<<
+
         /// <summary>
-        /// UPS Returns Label (?)
-        /// No idea what this does
-        /// Optional; 'Y' or 'N' if given
+        /// On Stop Change History: Changed To
         /// </summary>
-        [UniVerseIndex(824)]
+        [UniVerseIndex(796)]
+        [UniVerseFieldName("CRED.STOP.CHANGE.TO.DES")]
+        [UniVerseMultiValue]
+        public IEnumerable<string>  CreditStopChangedToStrings { get; set; }
+
+		[JsonAlsoUpdates("CreditStopChangedToStrings")]
+		public IEnumerable<bool> CreditStopChangedTo
+        {
+            get
+            {
+                return CreditStopChangedToStrings.Select(p => p == "Y").ToList();
+            }
+            set
+            {
+                CreditStopChangedToStrings = value.Select(p => p ? "Y" : "N").ToList();
+			}
+        }
+
+        [UniVerseIndex(797)]
+        [UniVerseFieldName("CRED.STOP.CHANGE.FROM.DES")]
+        [UniVerseMultiValue]
+        public IEnumerable<string> CreditStopChangedFromStrings { get; set; }
+
+        [JsonAlsoUpdates("CreditStopChangedFromStrings")]
+		public IEnumerable<bool> CreditStopChangedFrom
+		{
+			get
+			{
+				return CreditStopChangedFromStrings.Select(p => p == "Y").ToList();
+			}
+			set
+			{
+				CreditStopChangedFromStrings = value.Select(p => p ? "Y" : "N").ToList();
+			}
+		}
+
+		/// <summary>
+		/// Sales Ledger End of Period Times
+		/// </summary>
+		[UniVerseIndex(799)]
+		[UniVerseFieldName("SS.CRED.STOP.CHANGE.TIME.DES.INT")]
+		[UniVerseMultiValue]
+		public IEnumerable<string> CreditStopChangedTimes
+		{
+			get
+			{
+				if (CreditStopChangedTimeSpans.Any())
+				{
+					return CreditStopChangedTimeSpans.Select(ts => $"{ts:hh\\:mm\\:ss}").ToList();
+				}
+				else
+				{
+					return new List<string>();
+				}
+			}
+			set
+			{
+				if (value != null)
+				{
+					CreditStopChangedTimeSpans = value.Select(v => TimeSpan.Parse(v)).ToList();
+				}
+				else
+				{
+					CreditStopChangedTimeSpans = new List<TimeSpan>();
+				}
+			}
+		}
+
+		[UniVerseIndex(798)]
+		[UniVerseFieldName("SS.CRED.STOP.CHANGE.DATE.DES.INT")]
+		[UniVerseMultiValue]
+		public IEnumerable<string> CreditStopChangedDates
+		{
+			get
+			{
+				if (CreditStopChangedDTs.Any())
+				{
+					return CreditStopChangedDTs.Select(dt => Framework.UniVerseDateString(dt.Date)).ToList();
+				}
+				else
+				{
+					return new List<string>();
+				}
+			}
+			set
+			{
+				if (value != null)
+				{
+					if (CreditStopChangedTimes.Any())
+					{
+						CreditStopChangedDTs = value.Select((v, i) => Framework.DateTimeFromUniVerseOffset(Convert.ToInt32(v)) + CreditStopChangedTimeSpans.ElementAtOrDefault(i));
+					}
+					else
+					{
+						CreditStopChangedDTs = value.Select(v => Framework.DateTimeFromUniVerseOffset(Convert.ToInt32(v)));
+					}
+				}
+				else
+				{
+					CreditStopChangedDTs = new List<DateTime>();
+				}
+			}
+		}
+
+		[JsonAlsoUpdates("CreditStopChangedDates")]
+		public IEnumerable<DateTime> CreditStopChangedDTs { get; set; }
+
+		[JsonAlsoUpdates("CreditStopChangedTimes")]
+		public IEnumerable<TimeSpan> CreditStopChangedTimeSpans { get; set; }
+
+		[UniVerseIndex(800)]
+		[UniVerseFieldName("CRED.STOP.CHANGE.USER.DES")]
+		[UniVerseMultiValue]
+		public IEnumerable<string> CreditStopChangedBy { get; set; }
+
+		[UniVerseIndex(801)]
+		[UniVerseFieldName("CRED.STOP.CHANGE.REASON.DES")]
+		[UniVerseMultiValue]
+		public IEnumerable<string> CreditStopChangedReasons { get; set; }
+
+		/// <summary>
+		/// UPS Returns Label (?)
+		/// No idea what this does
+		/// Optional; 'Y' or 'N' if given
+		/// </summary>
+		[UniVerseIndex(824)]
         [UniVerseFieldName("UPS.RET.LAB")]
         public bool UPSReturnsLabel { get; set; }
 

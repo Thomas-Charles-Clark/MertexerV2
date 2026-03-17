@@ -152,8 +152,18 @@ namespace MertexerV2.SalesLedgerFunctions
             out SqlDecimal SettlementDiscountTaken,
             out SqlString CreditClaimNumber,
             out SqlString SellingCompany,
-            out SqlInt32 PostTime
-            )
+            out SqlInt32 PostTime,
+			out SqlDateTime ActualReceiptDT,
+			out SqlString ActualBank,
+			out SqlString PaymentType,
+			out SqlString PaymentReason,
+			out SqlString OrderID,
+			out SqlString Spare1,
+			out SqlString Spare2,
+			out SqlString Spare3,
+			out SqlString Spare4,
+			out SqlString CashOwner
+			)
         {
             var result = (SalesLedgerTransactionHistory)obj;
 
@@ -197,6 +207,16 @@ namespace MertexerV2.SalesLedgerFunctions
             CreditClaimNumber = result.CreditClaimNumber?.TrimReduceTruncate(50) ?? SqlString.Null;
             SellingCompany = result.SellingCompany?.TrimReduceTruncate(50) ?? SqlString.Null;
             PostTime = result.PostTime;
-        }
+			ActualReceiptDT = result.ActualReceiptDT ?? SqlDateTime.Null;
+			ActualBank = result.ActualBank;
+			PaymentType = result.PaymentType;
+			PaymentReason = result.PaymentReason;
+			OrderID = result.OrderID;
+			Spare1 = result.Spare1;
+			Spare2 = result.Spare2;
+			Spare3 = result.Spare3;
+			Spare4 = result.Spare4;
+			CashOwner = result.CashOwner;
+		}
     }
 }

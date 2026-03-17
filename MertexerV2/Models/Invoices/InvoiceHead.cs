@@ -115,10 +115,84 @@ namespace MertexerV2.Models.Invoices
         [UniVerseFieldName("CARRIAGE.CUR")]
         public decimal? CarriageValueCurrency { get; set; }
 
-        /// <summary>
-        /// Currency Code
-        /// </summary>
-        [UniVerseIndex(45)]
+		// Emit <40> SS.DUEDATE.INT
+		public DateTime? DueDT { get; set; }
+
+		/// <summary>
+		/// Invoice Date
+		/// </summary>
+		[UniVerseIndex(40)]
+		[UniVerseFieldName("SS.DUEDATE.INT")]
+		public string DueDate
+		{
+			get
+			{
+				if (DueDT.HasValue)
+				{
+					return Framework.UniVerseDateString(DueDT.Value);
+				}
+				else
+				{
+					return null;
+				}
+			}
+			set
+			{
+				if (!String.IsNullOrEmpty(value))
+				{
+					if (Int32.TryParse(value, out int valInt))
+					{
+						DueDT = Framework.DateTimeFromUniVerseOffset(valInt);
+					}
+					else
+					{
+						DueDT = null;
+					}
+				}
+			}
+		}
+
+		// Emit <42> SS.DESPDATE.INT
+		public DateTime? DespatchedDT { get; set; }
+
+		/// <summary>
+		/// Despatched Date
+		/// </summary>
+		[UniVerseIndex(42)]
+		[UniVerseFieldName("SS.DESPDATE.INT")]
+		public string DespatchedDate
+		{
+			get
+			{
+				if (DespatchedDT.HasValue)
+				{
+					return Framework.UniVerseDateString(DespatchedDT.Value);
+				}
+				else
+				{
+					return null;
+				}
+			}
+			set
+			{
+				if (!String.IsNullOrEmpty(value))
+				{
+					if (Int32.TryParse(value, out int valInt))
+					{
+						DespatchedDT = Framework.DateTimeFromUniVerseOffset(valInt);
+					}
+					else
+					{
+						DespatchedDT = null;
+					}
+				}
+			}
+		}
+
+		/// <summary>
+		/// Currency Code
+		/// </summary>
+		[UniVerseIndex(45)]
         [UniVerseFieldName("CURRENCY")]
         public string CurrencyCode { get; set; }
 

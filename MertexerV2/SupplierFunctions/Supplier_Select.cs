@@ -4,6 +4,7 @@ using MertexerV2.Models.Product;
 using MertexerV2.Models.PurchaseLedger;
 using MertexerV2.Models.SalesAnalysis;
 using MertexerV2.Models.Supplier;
+using MertexerV2.PurchaseLedgerFunctions;
 using MertexerV2.Utilities;
 
 using Microsoft.SqlServer.Server;
@@ -123,9 +124,59 @@ namespace MertexerV2.SupplierFunctions
             Unallocated = plt.Unallocated == 0 ? 0 : plt.Unallocated * -1;
             Approved = true;
             PassedTo = null;
-        }
+		}
 
-        public SupplierAccountDetail(
+		public SupplierAccountDetail(
+			string supRef,
+			string supName,
+			string supCur,
+			string sel1,
+			string sel1d,
+			string sel2,
+			string sel2d,
+			string sel3,
+			string sel3d,
+			string sourceFileName,
+			PurchaseLedgerTransactionCurrency plt) : base(supRef, supName, supCur, plt.Key, sourceFileName)
+		{
+			Sel1 = sel1;
+			Sel1D = sel1d;
+			Sel2 = sel2;
+			Sel2D = sel2d;
+			Sel3 = sel3;
+			Sel3D = sel3d;
+			DocumentType = plt.TransactionType;
+			DocumentDate = plt.DocumentDT;
+			DueDate = plt.DueDT;
+			ItemReference = plt.ItemReference;
+			OriginalValue = plt.OriginalValueABS;
+
+			switch (DocumentType)
+			{
+				case "CRN":
+				case "DBN":
+				case "DBJ":
+				case "CSH":
+					Balance = plt.Balance * -1;
+					break;
+				case "CRJ":
+				case "INV":
+				case "STC":
+					Balance = plt.Balance;
+					break;
+				default:
+					Balance = plt.Balance;
+					break;
+			}
+
+			Disputed = plt.Dispute == "D";
+			Division = plt.Division;
+			Unallocated = plt.Unallocated == 0 ? 0 : plt.Unallocated * -1;
+			Approved = true;
+			PassedTo = null;
+		}
+
+		public SupplierAccountDetail(
             string supRef,
             string supName,
             string supCur,
@@ -526,7 +577,7 @@ namespace MertexerV2.SupplierFunctions
 
             if (String.IsNullOrEmpty(SupplierCode))
             {
-                var tpltrans = Selector<PurchaseLedgerTransferCurrency>.SelectAllNonParallel(
+                var tpltrans = Selector<PurchaseLedgerTransactionCurrency>.SelectAllNonParallel(
                         applyConversions: true,
                         selectChildEntities: false,
                         batchSize: 1000,
@@ -539,7 +590,7 @@ namespace MertexerV2.SupplierFunctions
                     50,
                     UniVerseAccount))
                 {
-                    r.PurchaseLedgerTransferRecordsCurrency = tpltrans.Where(p => p.SupplierReference == r.Key).ToList();
+                    r.PurchaseLedgerTransferRecordsCurrency = tpltrans.Where(p => p.SupplierReference == r.Key);
 
                     r.SupplierType = sel1.FirstOrDefault(p => p.Key == r.SEL1);
 

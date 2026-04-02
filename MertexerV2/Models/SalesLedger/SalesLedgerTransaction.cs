@@ -495,7 +495,7 @@ namespace MertexerV2.Models.SalesLedger
 
         #region Derived Fields 
 
-        public decimal OustandingAmount
+        public decimal OutstandingAmount
         {
             get
             {

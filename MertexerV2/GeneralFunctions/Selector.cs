@@ -201,7 +201,37 @@ namespace MertexerV2.GeneralFunctions
             }
         }
 
-        public static IEnumerable<T> Search(string searchTerm, IEnumerable<string> fieldsToSearch, string searchType = "startsWith", bool applyConversions = true, bool selectChildEntities = true, short batchSize = 1000, string uniVerseAccount = "MERTEX")
+		public static IEnumerable<string> SelectKeys(string uniVerseAccount = "MERTEX")
+		{
+
+#if DEBUG
+			var previousColour = Console.ForegroundColor;
+
+			Console.ForegroundColor = ConsoleColor.Yellow;
+
+			var sw = new System.Diagnostics.Stopwatch();
+
+			sw.Start();
+#endif
+
+			using (var ce = new CommandExecutor(uniVerseAccount))
+			{
+				var keys = ce.Arbitrary($"LIST {fileName} @ID FMT\"80L\" ID.SUPP COL.HDR.SUPP COUNT.SUP")
+				.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
+				.Distinct()
+				.ToList();
+
+#if DEBUG
+				sw.Stop();
+
+				Console.WriteLine($"SelectKeys<{typeof(T).Name}> returned {keys.Count} keys in {sw.Elapsed}");
+#endif
+
+                return keys;
+            }
+		}
+
+		public static IEnumerable<T> Search(string searchTerm, IEnumerable<string> fieldsToSearch, string searchType = "startsWith", bool applyConversions = true, bool selectChildEntities = true, short batchSize = 1000, string uniVerseAccount = "MERTEX")
         {
             using (var ce = new CommandExecutor(uniVerseAccount))
             {

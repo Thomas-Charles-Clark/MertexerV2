@@ -197,7 +197,7 @@ namespace MertexerV2.SalesLedgerFunctions
             Dispute = result.Dispute?.TrimReduceTruncate(10) ?? SqlString.Null;
             Adjust = result.Adjust?.TrimReduceTruncate(10) ?? SqlString.Null;
             Unallocated = result.Unallocated;
-            OutstandingAmount = result.OustandingAmount;
+            OutstandingAmount = result.OutstandingAmount;
             PostDT = result.PostDT ?? SqlDateTime.Null;
             CSDT = result.CSDT ?? SqlDateTime.Null;
             CSAmount = result.CSAmount;

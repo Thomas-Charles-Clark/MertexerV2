@@ -175,6 +175,7 @@ namespace MertexerV2.TradeAccountFunctions
             out SqlString GroupageType,
             out SqlBoolean DirectDelivery,
             out SqlByte PackingListCopiesCount,
+            out SqlString InvoiceClauseCodes,
             out SqlBoolean ApplyMinimumCarriageValueSurcharge,
             out SqlBoolean DeliveryChargeReconfirmation,
             out SqlByte MinimumOrderQuantity,
@@ -226,7 +227,7 @@ namespace MertexerV2.TradeAccountFunctions
             out SqlString HaulierForConsolidatedInvoice,
             out SqlInt32 CutOffValue,
             out SqlByte DaysForwardForReservations,
-            out SqlString DebtFunder,
+            out SqlString SSField1,
             out SqlString SSField2,
             out SqlString CreditControlRegion,
             out SqlString SSField5,
@@ -366,6 +367,7 @@ namespace MertexerV2.TradeAccountFunctions
             GroupageType = result.GroupageType?.TrimReduceTruncate(1);
             DirectDelivery = result.DirectDelivery;
             PackingListCopiesCount = result.PackingListCopiesCount ?? SqlByte.Null;
+            InvoiceClauseCodes = result.InvoiceClauseCodes?.Any() == true ? JsonConvert.SerializeObject(result.InvoiceClauseCodes) : SqlString.Null;
             CreditNoteCopiesCount = result.CreditNoteCopiesCount ?? SqlByte.Null;
             ABCPricing = result.ABCPricing;
             StandardRollLength = result.StandardRollLength ?? SqlDecimal.Null;
@@ -428,7 +430,7 @@ namespace MertexerV2.TradeAccountFunctions
             PrintJLPEanLabels = result.PrintJLPEanLabels;
             RFScannerMemos = result.RFScannerMemos.Any() ? JsonConvert.SerializeObject(result.RFScannerMemos) : SqlString.Null;
             ConfirmationMemos = result.ConfirmationMemos.Any() ? JsonConvert.SerializeObject(result.ConfirmationMemos) : SqlString.Null;
-            DebtFunder = result.DebtFunder;
+            SSField1 = result.SSField1.TrimReduceTruncate(50);
             SSField2 = result.DeliveryAlertEmail?.TrimReduceTruncate(50);
             CreditControlRegion = result.CreditControlRegion?.TrimReduceTruncate(50);
             SSField5 = result.SSField5?.TrimReduceTruncate(50);

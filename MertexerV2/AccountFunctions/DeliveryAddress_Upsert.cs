@@ -71,7 +71,7 @@ namespace MertexerV2.AccountFunctions
                             }
                         });
 
-                        var nextReference = NumericReferences.Max() + 1;
+                        var nextReference = NumericReferences.Any() ? NumericReferences.Max() + 1 : 1;
 
                         var newDeliveryReference = $"{DeliveryAddress.TradeAccountCode}-{nextReference}";
 

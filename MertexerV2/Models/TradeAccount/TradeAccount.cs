@@ -707,6 +707,15 @@ namespace MertexerV2.Models
         public byte? PackingListCopiesCount { get; set; }
 
         /// <summary>
+        /// Invoice Clause Code(s):
+        /// Codes which cross reference to OECLAUSES and get printed on customers' invoice documents.
+        /// </summary>
+        [UniVerseIndex(202)]
+        [UniVerseFieldName("INVCLCODE")]
+        [UniVerseMultiValue]
+        public IEnumerable<string> InvoiceClauseCodes { get; set; }
+
+        /// <summary>
         /// Check for Duplicates
         /// Optional, 'Y' or '' if given
         /// </summary>
@@ -1775,18 +1784,18 @@ namespace MertexerV2.Models
         public string TaxID { get; set; }
 
         /// <summary>
-        /// Site-Specific Field 1 (?)
-        /// No idea what this does
+        /// Site-Specific Field 1
+        /// As of 2026/03/19, this holds "DebtFunder"
         /// </summary>
         [UniVerseIndex(1016)]
         [UniVerseFieldName("SS.FIELD1")]
-        public string DebtFunder { get; set; }
+        public string SSField1 { get; set; }
 
-        /// <summary>
-        /// Site-Specific Field 2 (?)
-        /// No idea what this does
-        /// </summary>
-        [UniVerseIndex(1017)]
+		/// <summary>
+		/// Site-Specific Field 1
+		/// As of 2026/03/19, this holds "DebtFunder"
+		/// </summary>
+		[UniVerseIndex(1017)]
         [UniVerseFieldName("SS.FIELD2")]
         public string DeliveryAlertEmail { get; set; }
 

@@ -2,6 +2,8 @@
 using MertexerV2.Utilities;
 using Newtonsoft.Json;
 
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace MertexerV2.Models.Bank
@@ -33,5 +35,10 @@ namespace MertexerV2.Models.Bank
         [UniVerseIndex(1)]
         [UniVerseFieldName("TITLE")]
         public string Name { get; set; }
+
+        [UniVerseIndex(20)]
+        [UniVerseFieldName("FREE.LONG")]
+        [UniVerseMultiValue]
+        public IEnumerable<string> DescriptionLines { get; set; }
     }
 }

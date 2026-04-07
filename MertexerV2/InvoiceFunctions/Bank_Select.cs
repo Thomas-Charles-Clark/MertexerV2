@@ -58,12 +58,14 @@ namespace MertexerV2.InvoiceFunctions
         public static void BankSelect_FillRow(
             object obj,
             out SqlString Code,
-            out SqlString Name)
+            out SqlString Name,
+            out SqlString DescriptionLines)
         {
             var result = (Bank)obj;
 
-            Code = result.Key.TrimReduceTruncate(10);
-            Name = result.Name.TrimReduceTruncate(50);
+            Code = result.Key;
+            Name = result.Name;
+            DescriptionLines = result.DescriptionLines?.Any() == true ? JsonConvert.SerializeObject(result.DescriptionLines) : SqlString.Null;
         }
     }
 }

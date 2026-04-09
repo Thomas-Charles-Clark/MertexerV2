@@ -708,18 +708,36 @@ namespace MertexerV2.Models
 
         /// <summary>
         /// Invoice Clause Code(s):
-        /// Codes which cross reference to OECLAUSES and get printed on customers' invoice documents.
+        /// Codes from OECLAUSES
         /// </summary>
         [UniVerseIndex(202)]
         [UniVerseFieldName("INVCLCODE")]
         [UniVerseMultiValue]
         public IEnumerable<string> InvoiceClauseCodes { get; set; }
 
-        /// <summary>
-        /// Check for Duplicates
-        /// Optional, 'Y' or '' if given
-        /// </summary>
-        [UniVerseIndex(206)]
+		/// <summary>
+		/// Invoice Clause Lines:
+		/// Clause text lifted at point of creation / modification of InvoiceClauseCodes
+		/// </summary>
+		[UniVerseIndex(203)]
+		[UniVerseFieldName("INVCLAUSE")]
+		[UniVerseMultiValue]
+		public IEnumerable<string> InvoiceClauseLines { get; set; }
+
+		/// <summary>
+		/// Invoice Clause Code(s):
+		/// Codes which cross reference to OECLAUSES and get printed on customers' invoice documents.
+		/// </summary>
+		[UniVerseIndex(203)]
+		[UniVerseFieldName("INVCLAUSE")]
+		[UniVerseMultiValue]
+		public IEnumerable<string> InvoiceClauses { get; set; }
+
+		/// <summary>
+		/// Check for Duplicates
+		/// Optional, 'Y' or '' if given
+		/// </summary>
+		[UniVerseIndex(206)]
         [UniVerseFieldName("CHKDUPLICATE")]
         public bool CheckForDuplicates { get; set; }
 

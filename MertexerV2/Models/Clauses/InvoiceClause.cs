@@ -26,12 +26,7 @@ namespace MertexerV2.Models.Bank
         {
             typeof(InvoiceClause).GetProperties().ToList().ForEach(p => Framework.InitialiseUniProperty(this, p));
         }
-
-        public void Upsert(string uniVerseAccount = "MERTEX")
-        {
-            BankFunctions.Upsert(uniVerseAccount, JsonConvert.SerializeObject(this));
-        }
-
+        
         [UniVerseIndex(1)]
         [UniVerseFieldName("DESCRIPTION")]
         public string Description { get; set; }
@@ -39,7 +34,7 @@ namespace MertexerV2.Models.Bank
 		[UniVerseIndex(2)]
 		[UniVerseFieldName("CLAUSES")]
         [UniVerseMultiValue]
-		public IEnumerable<string> Clauses { get; set; }
+		public IEnumerable<string> ClauseLines { get; set; }
 
 		[UniVerseIndex(3)]
 		[UniVerseFieldName("DOCUMENTS.DES")]

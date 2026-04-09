@@ -210,8 +210,8 @@ namespace MertexerV2.Models.EDAReplacement
                 AllocationPriority = ap;
             }
 
-            HoldOrder = holdOrder == "Y" ? true : false;
-            HoldDelivery = holdDelivery == "Y" ? true : false;
+            HoldOrder = holdOrder == "Y";
+            HoldDelivery = holdDelivery == "Y";
 
             DeliveryName = String.IsNullOrEmpty(deliveryName) ? null : deliveryName;
             DeliveryAddressLine1 = String.IsNullOrEmpty(deliveryAddressLine1) ? null : deliveryAddressLine1;
@@ -333,7 +333,7 @@ namespace MertexerV2.Models.EDAReplacement
 
             CarriageExempt = String.IsNullOrEmpty(carriageExempt) ? null : carriageExempt;
 
-            CustomerHeldForFullDespatch = customerHeldForFullDespatch == "Y" ? true : false;
+            CustomerHeldForFullDespatch = customerHeldForFullDespatch == "Y";
 
             JLEdgeAtlasDeliveryAnaNo = jLEdgeAtlasDeliveryAnaNo;
 

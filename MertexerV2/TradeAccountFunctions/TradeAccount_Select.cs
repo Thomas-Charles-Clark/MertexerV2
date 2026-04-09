@@ -176,7 +176,8 @@ namespace MertexerV2.TradeAccountFunctions
             out SqlBoolean DirectDelivery,
             out SqlByte PackingListCopiesCount,
             out SqlString InvoiceClauseCodes,
-            out SqlBoolean ApplyMinimumCarriageValueSurcharge,
+            out SqlString InvoiceClauseLines,
+			out SqlBoolean ApplyMinimumCarriageValueSurcharge,
             out SqlBoolean DeliveryChargeReconfirmation,
             out SqlByte MinimumOrderQuantity,
             out SqlString ReceivingLocation,
@@ -236,11 +237,6 @@ namespace MertexerV2.TradeAccountFunctions
             out SqlString CreditStopChangesJSON)
         {
             var result = (TradeAccount)obj;
-
-            if (result == null)
-            {
-                result = new TradeAccount(null);
-            }
 
             TradeAccountCode = result.Key?.TrimReduceTruncate(50);
             Name = result.Name?.TrimReduceTruncate(100);
@@ -368,6 +364,7 @@ namespace MertexerV2.TradeAccountFunctions
             DirectDelivery = result.DirectDelivery;
             PackingListCopiesCount = result.PackingListCopiesCount ?? SqlByte.Null;
             InvoiceClauseCodes = result.InvoiceClauseCodes?.Any() == true ? JsonConvert.SerializeObject(result.InvoiceClauseCodes) : SqlString.Null;
+            InvoiceClauseLines = result.InvoiceClauseLines?.Any() == true ? JsonConvert.SerializeObject(result.InvoiceClauseLines) : SqlString.Null;
             CreditNoteCopiesCount = result.CreditNoteCopiesCount ?? SqlByte.Null;
             ABCPricing = result.ABCPricing;
             StandardRollLength = result.StandardRollLength ?? SqlDecimal.Null;

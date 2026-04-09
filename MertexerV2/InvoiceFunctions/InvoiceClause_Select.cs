@@ -59,6 +59,7 @@ namespace MertexerV2.InvoiceFunctions
             object obj,
             out SqlString Code,
             out SqlString Description,
+            out SqlString ClauseLines,
             out SqlString AppliesToDocuments,
             out SqlString OrderEntryReferences
             )
@@ -67,6 +68,7 @@ namespace MertexerV2.InvoiceFunctions
 
             Code = result.Key;
             Description = result.Description;
+			ClauseLines = result.ClauseLines?.Any() == true ? JsonConvert.SerializeObject(result.ClauseLines) : SqlString.Null;
             AppliesToDocuments = result.AppliesToDocuments?.Any() == true ? JsonConvert.SerializeObject(result.AppliesToDocuments) : SqlString.Null;
             OrderEntryReferences = result.OrderEntryReferences?.Any() == true ? JsonConvert.SerializeObject(result.OrderEntryReferences) : SqlString.Null;
         }

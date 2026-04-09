@@ -61,6 +61,9 @@ using Newtonsoft.Json.Linq;
 using static System.Collections.Specialized.BitVector32;
 using MertexerV2.CompanyFileFunctions;
 using System.Linq.Expressions;
+using static System.Net.Mime.MediaTypeNames;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
+using System.Windows.Forms;
 
 namespace Tester
 {
@@ -97,9 +100,38 @@ namespace Tester
 
             CFramework.WriteSubHeading($"Working in {uniVerseAccount}");
 
-            var tradeAccountJson = $@"{{ ""Code"": ""K0098"", ""InvoiceClauseCodes"": [""CB4""] }}";
+			//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+			//
+			//  INVCLCODE / INVCLDESC / INVCLAUSE issue:
+			//  
+			//  SLCUST<0> "INVCLDESC" derives F(OECLAUSES<1> "DESCRIPTION")<202>
+			//  SLCUST<202.M> "INVCLCODE" holds keys into OECLAUSES
+			//  SLCUST<203.M> "INVCLAUSE"*** holds the result of the lookup F(OECLAUSES<2.M>)<202.M>
+			//
+			//  ***THIS IS NOT A DERIVED FIELD* because of unforgivably stupid reasons
+			//                  
+			/* 
+			 *  If you want to be really really stupid and **** up my afternoon, you'd program it to do this:
+
+			    INVCLDESC < 0.M >   (field position 0 because it is a derived field, reading from OECLAUSES)
+                INVCLCODE < 202.M > (must hold key(s) to OECLAUSES)
+                INVCLAUSE < 203.M > (ACTUALLY HOLDS THE TEXT VALUE FROM THE OECLAUSE TABLE BASED ON THE KEY LOOKUP WHEN FIRST CREATED)
+			*/
+			//  So to repair the damage / bring any historical SLCUST records' INVCLAUSE fields up-to-date, 
+			//  we'd need to run a fix routine to:
+			//      a) var allClauses = OECLAUSES
+			//      b) foreach (var i = 0; i < customer.InvoiceClauseCodes.length; i++) {
+			//      c)  customer.InvoiceClauses[i] = allClauses.FirstOrDefault(c => c.Code == customer.InvoiceClauseCodes[i]).Clause;
+			//      d) }
+			//
+			//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+			var tradeAccountJson = $@"{{ ""Code"": ""K0098"", ""InvoiceClauseCodes"": [""CB4""] }}";
 
             var result = TradeAccountFunctions.Upsert(uniVerseAccount, tradeAccountJson);
+
+
+
 
             CFramework.SetConsoleColourSuccess();
 

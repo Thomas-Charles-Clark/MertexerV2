@@ -364,7 +364,13 @@ namespace MertexerV2.TradeAccountFunctions
             DirectDelivery = result.DirectDelivery;
             PackingListCopiesCount = result.PackingListCopiesCount ?? SqlByte.Null;
             InvoiceClauseCodes = result.InvoiceClauseCodes?.Any() == true ? JsonConvert.SerializeObject(result.InvoiceClauseCodes) : SqlString.Null;
-            InvoiceClauseLines = result.InvoiceClauseLines?.Any() == true ? JsonConvert.SerializeObject(result.InvoiceClauseLines) : SqlString.Null;
+            InvoiceClauseLines = result.InvoiceClauseLines?.Any() == true ? JsonConvert.SerializeObject(
+                result.InvoiceClauseLines
+                        .Select(c => 
+                            c.Replace("”", "ö")
+							 .Replace("á", "ß")
+							 .Replace('\u0081', 'ü')
+						)) : SqlString.Null;
             CreditNoteCopiesCount = result.CreditNoteCopiesCount ?? SqlByte.Null;
             ABCPricing = result.ABCPricing;
             StandardRollLength = result.StandardRollLength ?? SqlDecimal.Null;
@@ -428,7 +434,7 @@ namespace MertexerV2.TradeAccountFunctions
             RFScannerMemos = result.RFScannerMemos.Any() ? JsonConvert.SerializeObject(result.RFScannerMemos) : SqlString.Null;
             ConfirmationMemos = result.ConfirmationMemos.Any() ? JsonConvert.SerializeObject(result.ConfirmationMemos) : SqlString.Null;
             SSField1 = result.SSField1.TrimReduceTruncate(50);
-            SSField2 = result.DeliveryAlertEmail?.TrimReduceTruncate(50);
+            SSField2 = result.DebtFunder?.TrimReduceTruncate(50);
             CreditControlRegion = result.CreditControlRegion?.TrimReduceTruncate(50);
             SSField5 = result.SSField5?.TrimReduceTruncate(50);
             ContractOrDisplay = result.ContractOrDisplay?.TrimReduceTruncate(1);

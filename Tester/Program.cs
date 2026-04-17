@@ -64,6 +64,7 @@ using System.Linq.Expressions;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
 using System.Windows.Forms;
+using MertexerV2.Models.Bank;
 
 namespace Tester
 {
@@ -126,12 +127,13 @@ namespace Tester
 			//
 			//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-			var tradeAccountJson = $@"{{ ""Code"": ""K0098"", ""InvoiceClauseCodes"": [""CB4""] }}";
+			//var tradeAccountJson = $@"{{ ""Code"": ""K0098"", ""InvoiceClauseCodes"": [""CB4""] }}";
 
-            var result = TradeAccountFunctions.Upsert(uniVerseAccount, tradeAccountJson);
+            //var result = TradeAccountFunctions.Upsert(uniVerseAccount, tradeAccountJson);
 
+            var results = InvoiceClauseFunctions.Select(uniVerseAccount, null).OfType<InvoiceClause>().ToList();
 
-
+            Console.WriteLine(JsonConvert.SerializeObject(results));
 
             CFramework.SetConsoleColourSuccess();
 

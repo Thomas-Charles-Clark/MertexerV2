@@ -329,9 +329,18 @@ namespace MertexerV2.Models.Invoices
         [UniVerseFieldName("TOTVAT.CUR")]
         public decimal TotalVATCurrency { get; set; }
 
-        /// Miscellaneous Charge Code
-        /// </summary>
-        [UniVerseIndex(160)]
+		/// <summary>
+		/// Invoice Clause Lines:
+		/// Clause text lifted at point of creation / modification of InvoiceClauseCodes
+		/// </summary>
+		[UniVerseIndex(134)]
+		[UniVerseFieldName("INVCLAUSE")]
+		[UniVerseMultiValue]
+		public IEnumerable<string> InvoiceClauseLines { get; set; }
+
+		/// Miscellaneous Charge Code
+		/// </summary>
+		[UniVerseIndex(160)]
         [UniVerseFieldName("MCHRG.CODE")]
         public string MiscellaneousChargeCode { get; set; }
 

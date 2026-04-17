@@ -1803,19 +1803,19 @@ namespace MertexerV2.Models
 
         /// <summary>
         /// Site-Specific Field 1
-        /// As of 2026/03/19, this holds "DebtFunder"
+        /// As of 2026/04/17, this holds "ECOMM.CUST.DES"
         /// </summary>
         [UniVerseIndex(1016)]
         [UniVerseFieldName("SS.FIELD1")]
         public string SSField1 { get; set; }
 
 		/// <summary>
-		/// Site-Specific Field 1
-		/// As of 2026/03/19, this holds "DebtFunder"
+		/// Delivery Alert Email
+		/// As of 2026/04/17, this holds "DebtFunder"
 		/// </summary>
 		[UniVerseIndex(1017)]
         [UniVerseFieldName("SS.FIELD2")]
-        public string DeliveryAlertEmail { get; set; }
+        public string DebtFunder { get; set; }
 
         /// <summary>
         /// Wrapping (?)

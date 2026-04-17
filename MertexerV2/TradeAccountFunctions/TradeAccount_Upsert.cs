@@ -56,6 +56,7 @@ namespace MertexerV2.TradeAccountFunctions
                 // need to find some way to call 
                 // REGEN.INDEX SLCUST SORTNAME
                 // so that the SB+ index gets rebuilt.
+                // ^ That got done, yay! See MertexSSH solution.
 
                 //#if DEBUG
                 //                Console.WriteLine(indexRebuildResult);

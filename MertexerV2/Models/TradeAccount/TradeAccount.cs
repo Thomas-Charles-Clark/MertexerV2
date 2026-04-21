@@ -1824,7 +1824,9 @@ namespace MertexerV2.Models
         /// </summary>
         [UniVerseIndex(1018)]
         [UniVerseFieldName("GROUPAGE.TYPE")]
-        public string GroupageType { get; set; }
+        public string SSField3 { get; set; } // 21/04/2026 this field was found to contain data completely unrelated to Groupage Type.
+                                            // the Portal Lead to Trade Account Creation process DOES actively set this with the intention of it being Groupage Type.
+                                            // Though that may be soon to change.
 
         /// <summary>
         /// Credit Control Region - SL.CONTROLLER <3> CONT.REGION

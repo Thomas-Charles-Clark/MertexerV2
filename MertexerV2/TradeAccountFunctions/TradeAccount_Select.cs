@@ -172,7 +172,6 @@ namespace MertexerV2.TradeAccountFunctions
             out SqlString DHLAccountNumber,
             out SqlString TNTAccountNumber,
             out SqlString DeliveryTerms,
-            out SqlString GroupageType,
             out SqlBoolean DirectDelivery,
             out SqlByte PackingListCopiesCount,
             out SqlString InvoiceClauseCodes,
@@ -230,7 +229,8 @@ namespace MertexerV2.TradeAccountFunctions
             out SqlByte DaysForwardForReservations,
             out SqlString SSField1,
             out SqlString SSField2,
-            out SqlString CreditControlRegion,
+			out SqlString SSField3,
+			out SqlString CreditControlRegion,
             out SqlString SSField5,
             out SqlString StockistCategory,
             out SqlString ExitCodeEmail,
@@ -360,7 +360,6 @@ namespace MertexerV2.TradeAccountFunctions
             FreeOfChargePromotionCode = result.FreeOfChargePromotionCode?.TrimReduceTruncate(5);
             InvoiceDetailPrint = result.InvoiceDetailPrint?.TrimReduceTruncate(1);
             SellingCompany = result.SellingCompany?.TrimReduceTruncate(10);
-            GroupageType = result.GroupageType?.TrimReduceTruncate(1);
             DirectDelivery = result.DirectDelivery;
             PackingListCopiesCount = result.PackingListCopiesCount ?? SqlByte.Null;
             InvoiceClauseCodes = result.InvoiceClauseCodes?.Any() == true ? JsonConvert.SerializeObject(result.InvoiceClauseCodes) : SqlString.Null;
@@ -433,10 +432,11 @@ namespace MertexerV2.TradeAccountFunctions
             PrintJLPEanLabels = result.PrintJLPEanLabels;
             RFScannerMemos = result.RFScannerMemos.Any() ? JsonConvert.SerializeObject(result.RFScannerMemos) : SqlString.Null;
             ConfirmationMemos = result.ConfirmationMemos.Any() ? JsonConvert.SerializeObject(result.ConfirmationMemos) : SqlString.Null;
-            SSField1 = result.SSField1.TrimReduceTruncate(50);
-            SSField2 = result.DebtFunder?.TrimReduceTruncate(50);
-            CreditControlRegion = result.CreditControlRegion?.TrimReduceTruncate(50);
-            SSField5 = result.SSField5?.TrimReduceTruncate(50);
+            SSField1 = result.SSField1;
+            SSField2 = result.DebtFunder;
+			SSField3 = result.SSField3;
+			CreditControlRegion = result.CreditControlRegion;
+            SSField5 = result.SSField5;
             ContractOrDisplay = result.ContractOrDisplay?.TrimReduceTruncate(1);
             Advertiser = result.Advertiser;
             Stockist = result.Stockist;

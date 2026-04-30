@@ -101,37 +101,51 @@ namespace Tester
 
             CFramework.WriteSubHeading($"Working in {uniVerseAccount}");
 
-			//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-			//
-			//  INVCLCODE / INVCLDESC / INVCLAUSE issue:
-			//  
-			//  SLCUST<0> "INVCLDESC" derives F(OECLAUSES<1> "DESCRIPTION")<202>
-			//  SLCUST<202.M> "INVCLCODE" holds keys into OECLAUSES
-			//  SLCUST<203.M> "INVCLAUSE"*** holds the result of the lookup F(OECLAUSES<2.M>)<202.M>
-			//
-			//  ***THIS IS NOT A DERIVED FIELD* because of unforgivably stupid reasons
-			//                  
-			/* 
-			 *  If you want to be really really stupid and **** up my afternoon, you'd program it to do this:
-
+            //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            //
+            //  INVCLCODE / INVCLDESC / INVCLAUSE issue:
+            //  
+            //  SLCUST<0> "INVCLDESC" derives F(OECLAUSES<1> "DESCRIPTION")<202>
+            //  SLCUST<202.M> "INVCLCODE" holds keys into OECLAUSES
+            //  SLCUST<203.M> "INVCLAUSE"*** holds the result of the lookup F(OECLAUSES<2.M>)<202.M>
+            //
+            //  ***THIS IS NOT A DERIVED FIELD* because of unforgivably stupid reasons
+            //                                  actually this sort of thing was commonplace back when
+            //                                  systems were limited by hard drive read speeds - moving
+            //                                  the reading head to a different location or even a different
+            //                                  platter was so slow that it was beneficial to store data congruently
+            //                                  at the cost of it becoming stale - as long as you catered for this potential-for-staleness
+            //                                  e.g. by offering or mandating a propagation of any change across records holding the data
+            /* 
 			    INVCLDESC < 0.M >   (field position 0 because it is a derived field, reading from OECLAUSES)
                 INVCLCODE < 202.M > (must hold key(s) to OECLAUSES)
                 INVCLAUSE < 203.M > (ACTUALLY HOLDS THE TEXT VALUE FROM THE OECLAUSE TABLE BASED ON THE KEY LOOKUP WHEN FIRST CREATED)
 			*/
-			//  So to repair the damage / bring any historical SLCUST records' INVCLAUSE fields up-to-date, 
-			//  we'd need to run a fix routine to:
-			//      a) var allClauses = OECLAUSES
-			//      b) foreach (var i = 0; i < customer.InvoiceClauseCodes.length; i++) {
-			//      c)  customer.InvoiceClauses[i] = allClauses.FirstOrDefault(c => c.Code == customer.InvoiceClauseCodes[i]).Clause;
-			//      d) }
-			//
-			//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            //  So to repair the damage / bring any historical SLCUST records' INVCLAUSE fields up-to-date, 
+            //  we'd need to run a fix routine to:
+            //      a) var allClauses = OECLAUSES
+            //      b) foreach (var i = 0; i < customer.InvoiceClauseCodes.length; i++) {
+            //      c)  customer.InvoiceClauses[i] = allClauses.FirstOrDefault(c => c.Code == customer.InvoiceClauseCodes[i]).Clause;
+            //      d) }
+            //
+            //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-			//var tradeAccountJson = $@"{{ ""Code"": ""K0098"", ""InvoiceClauseCodes"": [""CB4""] }}";
+            //var tradeAccountJson = $@"{{ ""Code"": ""K0098"", ""InvoiceClauseCodes"": [""CB4""] }}";
 
             //var result = TradeAccountFunctions.Upsert(uniVerseAccount, tradeAccountJson);
 
-            var results = InvoiceClauseFunctions.Select(uniVerseAccount, null).OfType<InvoiceClause>().ToList();
+            //var results = InvoiceClauseFunctions.Select(uniVerseAccount, null).OfType<InvoiceClause>().ToList();
+
+            //         var results = TradeAccountFunctions.UpsertMultiple(uniVerseAccount, JsonConvert.SerializeObject(new[] { 
+            //             new 
+            //             {
+            //	    Code = "Q6135",
+            //	    CreditControlRegion = (string)null
+            //	}
+            //}));
+
+            var results = EDAReplacement.FetchOrderLinesForOrderHeads(uniVerseAccount, @"[{ ""OrderID"": ""1215905201"" }]", null, null, null)
+                .OfType<TOELine>().ToList();
 
             Console.WriteLine(JsonConvert.SerializeObject(results));
 

@@ -1,6 +1,7 @@
 ﻿using MertexerV2.Models;
 using MertexerV2.Models.EDAReplacement;
 using MertexerV2.Models.General;
+using MertexerV2.Models.Invoices;
 using MertexerV2.Models.Tracking_Consignments;
 using MertexerV2.SQLFunctions;
 using MertexerV2.Utilities;
@@ -122,7 +123,8 @@ namespace MertexerV2.EDAReplacement
             "MBATCH.QTY",           // 89.M // We're just... hoping? pretending? that this is the allocated quantity. For now.
             "PL.DOC.NO",            //  34
             "PL.LINE.KEY",           //  35
-            "SS.RESERVE.DATE.INT.DES" // 0 (<312>)
+            "SS.RESERVE.DATE.INT.DES", // 0 (<312>)
+            "OEINVLINEP"
         };
 
         [SqlFunction(DataAccess = DataAccessKind.Read,
@@ -942,7 +944,8 @@ namespace MertexerV2.EDAReplacement
                                 allocatedQuantities: record.Record.Extract(38).StringValue,
                                 pickingHeadId: record.Record.Extract(39).StringValue,
                                 pickingLineId: record.Record.Extract(40).StringValue,
-                                reserveExpiryDate: record.Record.Extract(41).StringValue
+                                reserveExpiryDate: record.Record.Extract(41).StringValue,
+                                invoiceLineId: record.Record.Extract(42).StringValue
                             ));
                         });
 
@@ -999,7 +1002,9 @@ namespace MertexerV2.EDAReplacement
             out SqlString AllocatedQuantities,
             out SqlString PickingHeadID,
             out SqlString PickingLineID,
-            out SqlDateTime ReserveExpiryDT
+            out SqlDateTime ReserveExpiryDT,
+            out SqlString InvoiceLineID,
+            out SqlString InvoiceID
             )
         {
             var result = (TOELine)obj;
@@ -1085,6 +1090,10 @@ namespace MertexerV2.EDAReplacement
             PickingLineID = String.IsNullOrEmpty(result.PickingLineID) ? SqlString.Null : result.PickingLineID.TrimReduceTruncate(30);
 
             ReserveExpiryDT = result.ReserveExpiryDT ?? SqlDateTime.Null;
+
+            InvoiceLineID = String.IsNullOrEmpty(result.InvoiceLineID) ? SqlString.Null : result.InvoiceLineID;
+
+            InvoiceID = String.IsNullOrEmpty(result.InvoiceID) ? SqlString.Null : result.InvoiceID;
         }
 
 

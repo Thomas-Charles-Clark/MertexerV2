@@ -434,7 +434,7 @@ namespace MertexerV2.TradeAccountFunctions
             ConfirmationMemos = result.ConfirmationMemos.Any() ? JsonConvert.SerializeObject(result.ConfirmationMemos) : SqlString.Null;
             SSField1 = result.SSField1;
             SSField2 = result.DebtFunder;
-			SSField3 = result.SSField3;
+			SSField3 = result.PreGoLiveDebtFunder;
 			CreditControlRegion = result.CreditControlRegion;
             SSField5 = result.SSField5;
             ContractOrDisplay = result.ContractOrDisplay?.TrimReduceTruncate(1);

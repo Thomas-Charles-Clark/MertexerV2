@@ -212,6 +212,16 @@ namespace MertexerV2.Models.EDAReplacement
             set { }
         }
 
+        public string InvoiceLineID { get; set; }
+
+        public string InvoiceID 
+        { 
+            get
+            {
+                return InvoiceLineID?.Split(new char[] { '*' })[0];
+            } 
+        }
+
         public TOELine(
             string key,
             string orderId,
@@ -254,7 +264,8 @@ namespace MertexerV2.Models.EDAReplacement
             string allocatedQuantities,
             string pickingHeadId,
             string pickingLineId,
-            string reserveExpiryDate)
+            string reserveExpiryDate,
+            string invoiceLineId)
         {
             Key = key;
 
@@ -396,6 +407,8 @@ namespace MertexerV2.Models.EDAReplacement
             {
                 ReserveExpiryDate = rd;
             }
+
+            InvoiceLineID = invoiceLineId;
         }
 
         public override string ToString()

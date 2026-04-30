@@ -35,12 +35,10 @@ namespace MertexerV2.PurchaseLedgerFunctions
             string SupplierCode,
             DateTime? OnFileDT_From,
             DateTime? OnFileDT_To,
-            DateTime? DocumentDT_From,
-            DateTime? DocumentDT_To,
-            DateTime? DueDT_From,
-            DateTime? DueDT_To,
             DateTime? ConvertedDT_From,
-            DateTime? ConvertedDT_To)
+            DateTime? ConvertedDT_To,
+			DateTime? DeletedDT_From,
+			DateTime? DeletedDT_To)
         {
             if (String.IsNullOrEmpty(PurchaseLedgerRegisterHistoryCodes))
             {
@@ -63,26 +61,6 @@ namespace MertexerV2.PurchaseLedgerFunctions
                     filters.Add(new Tuple<string, string, string>("SS.DATEONFILE.INT", "<=", Framework.UniVerseDateString(OnFileDT_To.Value)));
                 }
 
-                if (DocumentDT_From.HasValue)
-                {
-                    filters.Add(new Tuple<string, string, string>("SS.DOCDATE.INT", ">=", Framework.UniVerseDateString(DocumentDT_From.Value)));
-                }
-
-                if (DocumentDT_To.HasValue)
-                {
-                    filters.Add(new Tuple<string, string, string>("SS.DOCDATE.INT", "<=", Framework.UniVerseDateString(DocumentDT_To.Value)));
-                }
-
-                if (DueDT_From.HasValue)
-                {
-                    filters.Add(new Tuple<string, string, string>("SS.DUEDATE.INT", ">=", Framework.UniVerseDateString(DueDT_From.Value)));
-                }
-
-                if (DueDT_To.HasValue)
-                {
-                    filters.Add(new Tuple<string, string, string>("SS.DUEDATE.INT", "<=", Framework.UniVerseDateString(DueDT_To.Value)));
-                }
-
                 if (ConvertedDT_From.HasValue)
                 {
                     filters.Add(new Tuple<string, string, string>("SS.CONVDATE.INT", ">=", Framework.UniVerseDateString(ConvertedDT_From.Value)));
@@ -91,9 +69,19 @@ namespace MertexerV2.PurchaseLedgerFunctions
                 if (ConvertedDT_To.HasValue)
                 {
                     filters.Add(new Tuple<string, string, string>("SS.CONVDATE.INT", "<=", Framework.UniVerseDateString(ConvertedDT_To.Value)));
-                }
+				}
 
-                if (!String.IsNullOrEmpty(PurchaseLedgerRegistryKey))
+				if (DeletedDT_From.HasValue)
+				{
+					filters.Add(new Tuple<string, string, string>("SS.DELDATE.INT", ">=", Framework.UniVerseDateString(DeletedDT_From.Value)));
+				}
+
+				if (DeletedDT_To.HasValue)
+				{
+					filters.Add(new Tuple<string, string, string>("SS.DELDATE.INT", "<=", Framework.UniVerseDateString(DeletedDT_To.Value)));
+				}
+
+				if (!String.IsNullOrEmpty(PurchaseLedgerRegistryKey))
                 {
                     filters.Add(new Tuple<string, string, string>("REGNO", "eq", PurchaseLedgerRegistryKey));
                 }

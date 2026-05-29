@@ -65,6 +65,7 @@ using static System.Net.Mime.MediaTypeNames;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
 using System.Windows.Forms;
 using MertexerV2.Models.Bank;
+using Newtonsoft.Json.Schema;
 
 namespace Tester
 {
@@ -144,10 +145,12 @@ namespace Tester
             //	}
             //}));
 
-            var results = EDAReplacement.FetchOrderLinesForOrderHeads(uniVerseAccount, @"[{ ""OrderID"": ""1215905201"" }]", null, null, null)
-                .OfType<TOELine>().ToList();
+            //var results = EDAReplacement.FetchOrderLinesForOrderHeads(uniVerseAccount, @"[{ ""OrderID"": ""1215905201"" }]", null, null, null)
+            //    .OfType<TOELine>().ToList();
 
-            Console.WriteLine(JsonConvert.SerializeObject(results));
+            //Console.WriteLine(JsonConvert.SerializeObject(results));
+
+            ValidateJSON("C:\\\\Users\\tclark\\source\\repos\\MertexerV2\\MertexerV2\\Notes\\FullSalesLedgerDataSet.json");
 
             CFramework.SetConsoleColourSuccess();
 
@@ -271,6 +274,37 @@ namespace Tester
 
             return result;
         }
+
+        public static void ValidateJSON (string filePath)
+		{
+			try
+			{
+				// Stream the file from disk using minimal memory
+				using (StreamReader sr = new StreamReader(filePath))
+				using (JsonTextReader reader = new JsonTextReader(sr))
+				{
+					// Read through tokens sequentially
+					while (reader.Read())
+					{
+						// Optional: Log progress periodically based on depth or path
+					}
+				}
+				Console.WriteLine("Success: The JSON file is perfectly valid.");
+			}
+			catch (JsonReaderException ex)
+			{
+				// Catch the specific parsing error and output coordinates
+				Console.WriteLine("Breakage found in JSON structure!");
+				Console.WriteLine($"Error Message: {ex.Message}");
+				Console.WriteLine($"Line Number: {ex.LineNumber}");
+				Console.WriteLine($"Line Position (Character): {ex.LinePosition}");
+				Console.WriteLine($"Path where error occurred: {ex.Path}");
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine($"System Error: {ex.Message}");
+			}
+		}
     }
 
     public class SessionResult

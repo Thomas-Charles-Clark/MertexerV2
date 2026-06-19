@@ -214,7 +214,7 @@ namespace MertexerV2.TradeAccountFunctions
             out SqlDecimal StandardRollLength,
             out SqlString FileProtocol,
             out SqlString UserID,
-            out SqlString SampleLetterTitleText,
+            out SqlString LanguageCode,
             out SqlString ProductExclusionListCode,
             out SqlString USSalesTaxExemptionCertificate,
             out SqlString DeliveryDateCalculation,
@@ -395,7 +395,7 @@ namespace MertexerV2.TradeAccountFunctions
             FileProtocol = result.FileProtocol?.TrimReduceTruncate(1);
             UserID = result.UserID?.TrimReduceTruncate(20);
             PermitTillCreditNotes = result.PermitTillCreditNotes;
-            SampleLetterTitleText = result.SampleLetterTitleText?.TrimReduceTruncate(2);
+            LanguageCode = result.LanguageCode?.TrimReduceTruncate(2);
             EndCustomerInvoicing = result.EndCustomerInvoicing;
             ProductExclusionListCode = result.ProductExclusionListCode?.TrimReduceTruncate(3);
             USSalesTaxExemptionCertificate = result.USSalesTaxExemptionCertificate?.TrimReduceTruncate(255);

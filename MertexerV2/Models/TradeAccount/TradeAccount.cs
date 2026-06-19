@@ -759,7 +759,7 @@ namespace MertexerV2.Models
 
         /// <summary>
         /// Redundant County field (Used for searching in Mertex)
-        /// </summary>
+        /// </summary>  
         [UniVerseIndex(224)]
         [UniVerseFieldName("COUNTY")]
         public string County { get; set; }
@@ -1299,7 +1299,7 @@ namespace MertexerV2.Models
         /// </summary>
         [UniVerseIndex(694)]
         [UniVerseFieldName("TITLE.TRANS.DES")]
-        public string SampleLetterTitleText { get; set; }
+        public string LanguageCode { get; set; }
 
         /// <summary>
         /// Order Category

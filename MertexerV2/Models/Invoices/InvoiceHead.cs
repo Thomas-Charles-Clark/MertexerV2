@@ -196,10 +196,18 @@ namespace MertexerV2.Models.Invoices
         [UniVerseFieldName("CURRENCY")]
         public string CurrencyCode { get; set; }
 
-        /// <summary>
-        /// Total Value (Sterling)
-        /// </summary>
-        [UniVerseIndex(61)]
+
+		/// <summary>
+		/// Associated Invoice ID
+		/// </summary>
+		[UniVerseIndex(48)]
+		[UniVerseFieldName("CRINVNO")]
+		public string AssociatedInvoiceID { get; set; }
+
+		/// <summary>
+		/// Total Value (Sterling)
+		/// </summary>
+		[UniVerseIndex(61)]
         [UniVerseConversion("MR22")]
         [UniVerseFieldName("TOTVAL")]
         public decimal TotalValue { get; set; }
@@ -337,6 +345,24 @@ namespace MertexerV2.Models.Invoices
 		[UniVerseFieldName("INVCLAUSE")]
 		[UniVerseMultiValue]
 		public IEnumerable<string> InvoiceClauseLines { get; set; }
+
+		/// <summary>
+		/// Customer Invoice Clauses:
+		/// Pulled via reference from SLCUST<203>
+		/// </summary>
+		[UniVerseIndex(0)]
+		[UniVerseFieldName("CUSREF.INVCLAUSE")]
+		[UniVerseMultiValue]
+		public IEnumerable<string> CustomerInvoiceClauseLines { get; set; }
+
+		/// <summary>
+		/// OrderHead Invoice Clauses:
+		/// Pulled via reference from TOEHEAD<88>
+		/// </summary>
+		[UniVerseIndex(0)]
+		[UniVerseFieldName("ORD.INVOICES")]
+		[UniVerseMultiValue]
+		public IEnumerable<string> OrderHeadInvoiceLines { get; set; }
 
 		/// Miscellaneous Charge Code
 		/// </summary>

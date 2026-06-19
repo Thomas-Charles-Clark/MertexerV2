@@ -51,7 +51,7 @@ namespace MertexerV2.InvoiceFunctions
                     var results = Selector<InvoiceHead>.Select(
                         JsonConvert.DeserializeObject<IEnumerable<InvoiceIDWrapper>>(InvoiceIDs).Select(p => p.InvoiceID),
                         true,
-                        false,
+                        true,
                         50,
                         UniVerseAccount)
                         .ToList();
@@ -76,6 +76,7 @@ namespace MertexerV2.InvoiceFunctions
             out SqlDecimal CarriageValue,
             out SqlDecimal CarriageValueCurrency,
             out SqlString CurrencyCode,
+            out SqlString AssociatedInvoiceID,
             out SqlString Terms,
             out SqlDecimal TotalValue,
             out SqlDecimal TotalVAT,
@@ -104,8 +105,10 @@ namespace MertexerV2.InvoiceFunctions
             out SqlDecimal CalculatedTotalValue,
             out SqlDecimal CalculatedTotalValueCurrency,
             out SqlDecimal CalculatedTotalVAT,
-            out SqlDecimal CalculatedTotalVATCurrency
-            )
+            out SqlDecimal CalculatedTotalVATCurrency,
+            out SqlString InvoiceClauseLines,
+            out SqlString CustomerInvoiceClauses
+			)
         {
             var p = (InvoiceHead)obj;
 
@@ -119,8 +122,8 @@ namespace MertexerV2.InvoiceFunctions
             CarriageValue = p.CarriageValue ?? SqlDecimal.Null;
             CarriageValueCurrency = p.CarriageValueCurrency ?? SqlDecimal.Null;
             CurrencyCode = p.CurrencyCode ?? SqlString.Null;
+			AssociatedInvoiceID = p.AssociatedInvoiceID ?? SqlString.Null;
             Terms = p.Terms?.TrimReduceTruncate(10) ?? SqlString.Null;
-
             TotalValue = p.TotalValue;
             TotalVAT = p.TotalVAT;
             VATCodes = p.VATCodes?.Any() == true ? JsonConvert.SerializeObject(p.VATCodes) : SqlString.Null;
@@ -149,6 +152,8 @@ namespace MertexerV2.InvoiceFunctions
             CalculatedTotalValueCurrency = p.CalculatedTotalValueCurrency;
             CalculatedTotalVAT = p.CalculatedTotalVAT;
             CalculatedTotalVATCurrency = p.CalculatedTotalValueCurrency;
+            InvoiceClauseLines = p.InvoiceClauseLines?.Any() == true ? JsonConvert.SerializeObject(p.InvoiceClauseLines) : SqlString.Null;
+            CustomerInvoiceClauses = p.CustomerInvoiceClauseLines?.Any() == true ? JsonConvert.SerializeObject(p.CustomerInvoiceClauseLines) : SqlString.Null;
         }
 
         [Microsoft.SqlServer.Server.SqlFunction(

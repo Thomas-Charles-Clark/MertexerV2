@@ -131,7 +131,7 @@ namespace Tester
             //
             //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-            //var tradeAccountJson = $@"{{ ""Code"": ""K0098"", ""InvoiceClauseCodes"": [""CB4""] }}";
+            //var tradeAccountJson = $@"{{ ""Code"": ""K0098"", ""InvoiceClauseCodes"": null }}";
 
             //var result = TradeAccountFunctions.Upsert(uniVerseAccount, tradeAccountJson);
 
@@ -148,9 +148,11 @@ namespace Tester
             //var results = EDAReplacement.FetchOrderLinesForOrderHeads(uniVerseAccount, @"[{ ""OrderID"": ""1215905201"" }]", null, null, null)
             //    .OfType<TOELine>().ToList();
 
-            //Console.WriteLine(JsonConvert.SerializeObject(results));
+            //var results = .Inv
 
-            ValidateJSON("C:\\\\Users\\tclark\\source\\repos\\MertexerV2\\MertexerV2\\Notes\\FullSalesLedgerDataSet.json");
+            //Console.WriteLine(JsonConvert.SerializeObject(result));
+
+            //ValidateJSON("C:\\\\Users\\tclark\\source\\repos\\MertexerV2\\MertexerV2\\Notes\\FullSalesLedgerDataSet.json");
 
             CFramework.SetConsoleColourSuccess();
 

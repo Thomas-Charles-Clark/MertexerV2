@@ -107,10 +107,14 @@ namespace MertexerV2.InvoiceFunctions
             out SqlDecimal CalculatedTotalVAT,
             out SqlDecimal CalculatedTotalVATCurrency,
             out SqlString InvoiceClauseLines,
-            out SqlString CustomerInvoiceClauses
+            out SqlString CustomerInvoiceClauses,
+            out SqlString DeliveryTerms,
+            out SqlString InvoiceMemoLines
 			)
         {
             var p = (InvoiceHead)obj;
+
+            int f = 0;
 
             InvoiceID = p.Key?.TrimReduceTruncate(25);
             InvoiceDT = p.InvoiceDT ?? SqlDateTime.Null;
@@ -154,6 +158,8 @@ namespace MertexerV2.InvoiceFunctions
             CalculatedTotalVATCurrency = p.CalculatedTotalValueCurrency;
             InvoiceClauseLines = p.InvoiceClauseLines?.Any() == true ? JsonConvert.SerializeObject(p.InvoiceClauseLines) : SqlString.Null;
             CustomerInvoiceClauses = p.CustomerInvoiceClauseLines?.Any() == true ? JsonConvert.SerializeObject(p.CustomerInvoiceClauseLines) : SqlString.Null;
+            DeliveryTerms = p.DeliveryTerms;
+            InvoiceMemoLines = p.InvoiceMemoLines?.Any() == true ? JsonConvert.SerializeObject(p.InvoiceMemoLines) : SqlString.Null;
         }
 
         [Microsoft.SqlServer.Server.SqlFunction(

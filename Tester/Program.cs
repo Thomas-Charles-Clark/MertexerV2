@@ -66,6 +66,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
 using System.Windows.Forms;
 using MertexerV2.Models.Bank;
 using Newtonsoft.Json.Schema;
+using MertexerV2.OrderHeadFunctions;
 
 namespace Tester
 {
@@ -94,7 +95,7 @@ namespace Tester
 
             var sw = new System.Diagnostics.Stopwatch();
 
-            var uniVerseAccount = "MERTEX";
+            var uniVerseAccount = "PLAY";
 
 			//var tradeAccountCode = "K0098";
 
@@ -153,6 +154,12 @@ namespace Tester
             //Console.WriteLine(JsonConvert.SerializeObject(result));
 
             //ValidateJSON("C:\\\\Users\\tclark\\source\\repos\\MertexerV2\\MertexerV2\\Notes\\FullSalesLedgerDataSet.json");
+
+            OrderHeadFunctions.Upsert(uniVerseAccount, @"[{ 
+                ""OrderID"": ""1018236801"", 
+                ""DeliveryTerms"": ""POTATO"",
+                ""InvoiceMemoLines"": [""Hello"", ""Potato""] 
+            }]");
 
             CFramework.SetConsoleColourSuccess();
 

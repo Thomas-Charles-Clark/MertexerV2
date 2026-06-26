@@ -1,4 +1,5 @@
-﻿using MertexerV2.Models.Invoices;
+﻿using MertexerV2.Models;
+using MertexerV2.Models.Invoices;
 using MertexerV2.Models.Product;
 using MertexerV2.Utilities;
 
@@ -17,7 +18,9 @@ namespace MertexerV2.InvoiceFunctions
         [SqlFunction]
         public static string Upsert(string UniVerseAccount, string InvoiceHeadJSON)
         {
-            var invoiceHead = JsonConvert.DeserializeObject<InvoiceHead>(InvoiceHeadJSON);
+            var upsertedCount = 0;
+
+            var invoiceHeads = JsonConvert.DeserializeObject<IEnumerable<object>>(InvoiceHeadJSON);
 
             var fileName = typeof(InvoiceHead).GetCustomAttributes(typeof(UniVerseFileNameAttribute), false)
                     .Cast<UniVerseFileNameAttribute>()
@@ -28,34 +31,32 @@ namespace MertexerV2.InvoiceFunctions
             {
                 var uniVerseFile = ce.Session.CreateUniFile(fileName);
 
-                try
-                {
-                    var extantRecord = uniVerseFile.ReadField(invoiceHead.Key, 0).StringValue;
-                }
-                catch (IBMU2.UODOTNET.UniFileException)
-                {
-                    // extant record was not found: this is a creation request
-                    // create first (lock the entire file for as little time as possible)
-                    // then lock the specific record
-                    // then write all the fields
-                    // then unlock the record
-                    var dataSet = new IBMU2.UODOTNET.UniDataSet(ce.Session);
-                    dataSet.Insert(invoiceHead.Key);
+                foreach(var invoiceHead in invoiceHeads)
+				{
+					// ih carries defaults for all fields except those which were passed in as JSON.
+					// DO NOT WRITE THIS TO THE FILE! Otherwise bad people will find you and remove your swim bladder.
+					var ih = JsonConvert.DeserializeObject<InvoiceHead>(JsonConvert.SerializeObject(invoiceHead));
 
-                    //slcustFile.LockFile();
-                    uniVerseFile.WriteRecords(dataSet);
-                    //slcustFile.UnlockFile();
-                }
+					try
+					{
+						var extantRecord = uniVerseFile.ReadField(ih.Key, 0).StringValue;
+					}
+					catch (IBMU2.UODOTNET.UniFileException e)
+					{
+                        throw e;
+					}
 
-                uniVerseFile.LockRecord(invoiceHead.Key, 1);
+					uniVerseFile.LockRecord(ih.Key, 1);
 
-                UniUpsert<InvoiceHead>.Upsert(InvoiceHeadJSON, uniVerseFile, UniVerseAccount);
+					UniUpsert<InvoiceHead>.Upsert(JsonConvert.SerializeObject(invoiceHead), uniVerseFile, UniVerseAccount);
 
-                uniVerseFile.UnlockRecord(invoiceHead.Key);
+					uniVerseFile.UnlockRecord(ih.Key);
 
-            }
-
-            return invoiceHead.Key;
+                    upsertedCount++;
+				}
+			}
+            
+            return $"Upserted {upsertedCount} record{(upsertedCount > 1 ? "" : "s")}";
         }
     }
 }

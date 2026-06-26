@@ -279,7 +279,7 @@ namespace MertexerV2.EDAReplacement
                     }
                     else
                     {
-                        keys = JsonConvert.DeserializeObject<List<OrderHead>>(OrderHeadIDs).Select(p => $"{p.OrderID}").ToList();
+                        keys = JsonConvert.DeserializeObject<List<Models.EDAReplacement.OrderHead>>(OrderHeadIDs).Select(p => $"{p.OrderID}").ToList();
                     }
 
                     var batches = ListExtension.Split(keys, 1000);
@@ -778,7 +778,7 @@ namespace MertexerV2.EDAReplacement
 
             var selectStatement = "";
 
-            var orderHeadIds = new List<OrderHead>();
+            var orderHeadIds = new List<Models.EDAReplacement.OrderHead>();
 
             if (String.IsNullOrEmpty(OrderHeadIDs) && LineStatusLessThan5 == null && FromDate == null && ToDate == null)
             {
@@ -787,7 +787,7 @@ namespace MertexerV2.EDAReplacement
 
             if (!String.IsNullOrEmpty(OrderHeadIDs))
             {
-                orderHeadIds = JsonConvert.DeserializeObject<List<OrderHead>>(OrderHeadIDs);
+                orderHeadIds = JsonConvert.DeserializeObject<List<Models.EDAReplacement.OrderHead>>(OrderHeadIDs);
             }
 
             if (LineStatusLessThan5 != null)

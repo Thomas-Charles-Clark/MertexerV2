@@ -35,7 +35,10 @@ namespace MertexerV2.Models.Invoices
             InvoiceHeadFunctions.Upsert(uniVerseAccount, JsonConvert.SerializeObject(this));
         }
 
-        public DateTime? InvoiceDT { get; set; }
+        [JsonProperty("InvoiceID")]
+		public override string Key { get => base.Key; set => base.Key = value; }
+
+		public DateTime? InvoiceDT { get; set; }
 
         /// <summary>
         /// Invoice Date
@@ -91,6 +94,15 @@ namespace MertexerV2.Models.Invoices
         [UniVerseIndex(10)]
         [UniVerseFieldName("ORDENRO")]
         public string OrderID { get; set; }
+
+        
+        /// <summary>
+        /// Invoice Memo Lines
+        /// </summary>
+        [UniVerseIndex(16)]
+        [UniVerseFieldName("IMEMO")]
+        [UniVerseMultiValue]
+        public IEnumerable<string> InvoiceMemoLines { get; set; }
 
         /// <summary>
         /// Invoice or Credit
@@ -336,6 +348,13 @@ namespace MertexerV2.Models.Invoices
         [UniVerseConversion("MR22")]
         [UniVerseFieldName("TOTVAT.CUR")]
         public decimal TotalVATCurrency { get; set; }
+
+		/// <summary>
+		/// Delivery Terms Code
+		/// </summary>
+		[UniVerseIndex(97)]
+		[UniVerseFieldName("DELTERMS")]
+		public string DeliveryTerms { get; set; }
 
 		/// <summary>
 		/// Invoice Clause Lines:

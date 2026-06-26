@@ -143,6 +143,7 @@
     <Compile Include="InvoiceFunctions\InvoiceClause_Select.cs" />
     <Compile Include="Models\Clauses\InvoiceClause.cs" />
     <Compile Include="Models\CompanyFiles\Language.cs" />
+    <Compile Include="Models\Order\OrderHead.cs" />
     <Compile Include="Models\Product\ProductBatch.cs" />
     <Compile Include="Models\Product\Batch.cs" />
     <Compile Include="Models\Product\BatchRackLocation.cs" />
@@ -150,6 +151,8 @@
     <Compile Include="Models\SalesLedger\SalesLedger.cs" />
     <Compile Include="Models\TradeAccount\TradeAccountCodeStub.cs" />
     <Compile Include="Models\TradeAccount\TradeAccountPartPaymentPlan.cs" />
+    <Compile Include="OrderHeadFunctions\OrderHead_Select.cs" />
+    <Compile Include="OrderHeadFunctions\OrderHead_Upsert.cs" />
     <Compile Include="ProductFunctions\BatchRackLocation_Select.cs" />
     <Compile Include="ProductFunctions\Batch_Select.cs" />
     <Compile Include="ProductFunctions\BatchRackLocation_Upsert.cs" />

@@ -78,7 +78,8 @@ namespace MertexerV2.EDAReplacement
             "ATLAS.DELANA",
             "ATLAS.INVANA",
             "ATLAS.DTCANA",
-            "ATLAS.STORENAME"
+            "ATLAS.STORENAME",
+            "DELTERMS"
         };
 
         static readonly string[] toelineFields = new string[]
@@ -359,7 +360,8 @@ namespace MertexerV2.EDAReplacement
                                 jLEdgeAtlasDeliveryAnaNo: record.Record.Extract(52).StringValue,
                                 jLEdgeAtlasInvoiceAnaNo: record.Record.Extract(53).StringValue,
                                 jLEdgeAtlasDirectToCustomerAnaNo: record.Record.Extract(54).StringValue,
-                                jLEdgeAtlasStoreName: record.Record.Extract(55).StringValue
+                                jLEdgeAtlasStoreName: record.Record.Extract(55).StringValue,
+                                deliveryTerms: record.Record.Extract(56).StringValue
                             ));
                         });
 
@@ -488,7 +490,8 @@ namespace MertexerV2.EDAReplacement
                                     jLEdgeAtlasDeliveryAnaNo: record.Record.Extract(52).StringValue,
                                     jLEdgeAtlasInvoiceAnaNo: record.Record.Extract(53).StringValue,
                                     jLEdgeAtlasDirectToCustomerAnaNo: record.Record.Extract(54).StringValue,
-                                    jLEdgeAtlasStoreName: record.Record.Extract(55).StringValue
+                                    jLEdgeAtlasStoreName: record.Record.Extract(55).StringValue,
+                                    deliveryTerms: record.Record.Extract(56).StringValue
                                 ));
                             });
 
@@ -564,7 +567,8 @@ namespace MertexerV2.EDAReplacement
             out SqlString JLEdgeAtlasDeliveryAnaNo,
             out SqlString JLEdgeAtlasInvoiceeAnaNo,
             out SqlString JLEdgeAtlasDirectToCustomerAnaNo,
-            out SqlString JLEdgeAtlasStoreName)
+            out SqlString JLEdgeAtlasStoreName,
+            out SqlString DeliveryTerms)
         {
             var result = (TOEHead)obj;
 
@@ -629,6 +633,7 @@ namespace MertexerV2.EDAReplacement
             JLEdgeAtlasDirectToCustomerAnaNo = String.IsNullOrEmpty(result.JLEdgeAtlasDirectToCustomerAnaNo) ? SqlString.Null : result.JLEdgeAtlasDirectToCustomerAnaNo.TrimReduceTruncate(50);
             JLEdgeAtlasStoreName = String.IsNullOrEmpty(result.JLEdgeAtlasStoreName) ? SqlString.Null : result.JLEdgeAtlasStoreName.TrimReduceTruncate(50);
 
+            DeliveryTerms = String.IsNullOrEmpty(result.DeliveryTerms) ? SqlString.Null : result.DeliveryTerms;
         }
 
 

@@ -121,9 +121,10 @@ namespace MertexerV2.Models.EDAReplacement
 
         public string JLEdgeAtlasStoreName { get; set; }
 
+		public string DeliveryTerms { get; set; }
 
 
-        public TOEHead(
+		public TOEHead(
             string orderId,
             string tradeAccountCode,
             string tradeAccountName,
@@ -179,7 +180,8 @@ namespace MertexerV2.Models.EDAReplacement
             string jLEdgeAtlasDeliveryAnaNo,
             string jLEdgeAtlasDirectToCustomerAnaNo,
             string jLEdgeAtlasInvoiceAnaNo,
-            string jLEdgeAtlasStoreName)
+            string jLEdgeAtlasStoreName,
+            string deliveryTerms)
         {
             TradeAccountCode = String.IsNullOrEmpty(tradeAccountCode) ? null : tradeAccountCode;
 
@@ -342,6 +344,8 @@ namespace MertexerV2.Models.EDAReplacement
             JLEdgeAtlasInvoiceeAnaNo = jLEdgeAtlasInvoiceAnaNo;
 
             JLEdgeAtlasStoreName = jLEdgeAtlasStoreName;
+
+            DeliveryTerms = deliveryTerms;
         }
 
         public override string ToString()

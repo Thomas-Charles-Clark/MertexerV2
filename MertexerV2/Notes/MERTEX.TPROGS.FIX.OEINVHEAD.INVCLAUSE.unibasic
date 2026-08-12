@@ -1,0 +1,55 @@
+----: P                                                                         
+0001: * --- SETUP ---                                                           
+0002: FILE.NAME = "OEINVHEAD";                                                  
+0003: INVCLAUSE.POS = 134;                                                      
+0004: CUSREF.POS = 5;                                                           
+0005: DELTERMS.POS = 97;                                                        
+0006: IMEMO.POS = 16;                                                           
+0007: * -------------                                                           
+0008:                                                                           
+0009: OPEN FILE.NAME TO F.DATA ELSE STOP 201, FILE.NAME                         
+0010:                                                                           
+0011: IF @SELECTED = 0 THEN STOP "No records selected. Run SELECT first."       
+0012:                                                                           
+0013: COUNT = 0                                                                 
+0014: LOOP                                                                      
+0015:     READNEXT RECID ELSE EXIT                                              
+0016:     READ R.REC FROM F.DATA, RECID THEN                                    
+0017:                                                                           
+0018:          * 1. Read stuff from OEINVHEAD                                   
+0019:          CUSREF = R.REC<CUSREF.POS>                                       
+0020:          CUSDELTERMS = TRANS("SLCUST", CUSREF, 207, "X")                  
+0021:          IMEMO = TRANS("TOEHEAD", ORDERNO, 78, "X")                           
+                                      
+0022:          * 2. Do the translation manually, reading INVCLAUSE from SLCUST  
+0023:          DERIVED.VAL = TRANS("SLCUST", CUSREF, 203, "X")                  
+0024:                             
+0025:          * 2b. Gotcha - the TRANS function "lowers" delimiters.           
+0026:          *     This is definitely not want we want, so we must manually   
+0027:          *     promote them using the CONVERT function.                   
+0028:          CONVERT @SVM TO @VM IN DERIVED.VAL                               
+0028:          CONVERT @SVM TO @VM IN IMEMO                               
+0029:                                                                                        
+			   DEL IMEMO<1, 2>   
+			   
+0030:          * 3. Update the INVCLAUSE attribute on OEINVHEAD                 
+0031:          *    Also carry DELTERMS over and clear out IMEMO                
+0032:          R.REC<INVCLAUSE.POS> = DERIVED.VAL                               
+0033:          R.REC<DELTERMS.POS> = CUSDELTERMS                                
+0034:          R.REC<IMEMO.POS> = IMEMO                                           
+0035:                                                                           
+0036:          * 4. Write back to disk                                          
+0037:          WRITE R.REC TO F.DATA, RECID                                     
+0038:          COUNT += 1                                                       
+0039:          PRINT "Updated: ":RECID                                          
+0040:     END ELSE                                                              
+0041:          PRINT "Error: could not read ":RECID:" from OEINVHEAD"           
+0042:     END                                                                   
+0043: REPEAT                                                                   
+0044: PRINT "Done. Updated ":COUNT:" records."                                  
+Bottom at line 44.                                                              
+----:                                                                           
+
+
+
+<16.M> = IMEMO Invoice Comments

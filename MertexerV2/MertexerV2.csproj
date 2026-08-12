@@ -132,6 +132,8 @@
     <Compile Include="AccountFunctions\ExchangeRate_Select.cs" />
     <Compile Include="AccountFunctions\ExchangeRate_Upsert.cs" />
     <Compile Include="AccountFunctions\OrderReferenceCheck.cs" />
+    <Compile Include="CarriageFunctions\Carriage_Select.cs" />
+    <Compile Include="CarriageFunctions\Carriage_Upsert.cs" />
     <Compile Include="CompanyFilesFunctions\CompanyStats_Select.cs" />
     <Compile Include="CompanyFilesFunctions\CompanyLanguage_Select.cs" />
     <Compile Include="CompanyFilesFunctions\CompanyVAT_Select.cs" />
@@ -141,6 +143,7 @@
     <Compile Include="GeneralFunctions\DeliveryTerms_Select.cs" />
     <Compile Include="GeneralFunctions\DeliveryTerms_Upsert.cs" />
     <Compile Include="InvoiceFunctions\InvoiceClause_Select.cs" />
+    <Compile Include="Models\Carriage\Carriage.cs" />
     <Compile Include="Models\Clauses\InvoiceClause.cs" />
     <Compile Include="Models\CompanyFiles\Language.cs" />
     <Compile Include="Models\Order\OrderHead.cs" />

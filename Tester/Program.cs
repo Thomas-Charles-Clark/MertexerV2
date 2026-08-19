@@ -95,7 +95,7 @@ namespace Tester
 
             var sw = new System.Diagnostics.Stopwatch();
 
-            var uniVerseAccount = "PLAY";
+            var uniVerseAccount = "MERTEX";
 
 			//var tradeAccountCode = "K0098";
 
@@ -155,11 +155,15 @@ namespace Tester
 
             //ValidateJSON("C:\\\\Users\\tclark\\source\\repos\\MertexerV2\\MertexerV2\\Notes\\FullSalesLedgerDataSet.json");
 
-            OrderHeadFunctions.Upsert(uniVerseAccount, @"[{ 
-                ""OrderID"": ""1018236801"", 
-                ""DeliveryTerms"": ""POTATO"",
-                ""InvoiceMemoLines"": [""Hello"", ""Potato""] 
-            }]");
+            //OrderHeadFunctions.Upsert(uniVerseAccount, @"[{ 
+            //    ""OrderID"": ""1018236801"", 
+            //    ""DeliveryTerms"": ""POTATO"",
+            //    ""InvoiceMemoLines"": [""Hello"", ""Potato""] 
+            //}]");
+
+            var product = Selector<Product>.Select("CCDG1405", true, false, 1, uniVerseAccount);
+
+            Console.WriteLine(product);
 
             CFramework.SetConsoleColourSuccess();
 

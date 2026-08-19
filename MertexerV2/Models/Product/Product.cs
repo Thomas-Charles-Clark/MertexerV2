@@ -818,6 +818,7 @@ namespace MertexerV2.Models.Product
         [UniVerseFieldName("PRODUCT.BUYER.DES")]
         public string ProductBuyer { get; set; }
 
+        [JsonAlsoUpdates("MostRecentCarryForwardDate")]
         public DateTime? MostRecentCarryForwardDT { get; set; }
 
         /// <summary>

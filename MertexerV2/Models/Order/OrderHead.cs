@@ -39,6 +39,10 @@ namespace MertexerV2.Models
 		[JsonProperty("OrderID")]
 		public override string Key { get => base.Key; set => base.Key = value; }
 
+		[UniVerseIndex(1)]
+		[UniVerseFieldName("CUSREF")]
+		public string TradeAccountCode { get; set; }
+
 		[UniVerseIndex(78)]
 		[UniVerseFieldName("IMEMO")]
 		[UniVerseMultiValue]

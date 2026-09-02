@@ -33,7 +33,7 @@ namespace MertexerV2.OrderHeadFunctions
 
 				foreach (var orderHead in orderHeads)
 				{
-					// ih carries defaults for all fields except those which were passed in as JSON.
+					// oh carries defaults for all fields except those which were passed in as JSON.
 					// DO NOT WRITE THIS TO THE FILE! Otherwise bad people will find you and remove your swim bladder.
 					var oh = JsonConvert.DeserializeObject<OrderHead>(JsonConvert.SerializeObject(orderHead));
 

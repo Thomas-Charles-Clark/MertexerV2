@@ -68,6 +68,7 @@ namespace MertexerV2.OrderHeadFunctions
         public static void OrderSelect_FillRow(
             object obj,
             out SqlString OrderID,
+			out SqlString TradeAccountCode,
             out SqlString DeliveryTerms,
             out SqlString InvoiceMemoLines
             )
@@ -75,6 +76,8 @@ namespace MertexerV2.OrderHeadFunctions
             var result = (OrderHead)obj;
 
             OrderID = result.Key;
+
+			TradeAccountCode = result.TradeAccountCode;
 
             DeliveryTerms = result.DeliveryTerms;
 
